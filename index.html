@@ -380,7 +380,18 @@
 <body>
     <header>
         <nav>
-            <div class="logo" onclick="showPage('home')">ZIRCON INDIA</div>
+            <div class="logo" onclick="showPage('home')" style="display: flex; align-items: center; gap: 1rem;">
+                <svg width="120" height="50" viewBox="0 0 280 120" style="height: 50px; width: auto;">
+                    <path d="M50,20 L40,60 L55,60 L45,100 L70,50 L55,50 L65,20 Z" 
+                          fill="#ffd700" stroke="#fff" stroke-width="2"/>
+                    <path d="M85,40 Q95,40 95,60 Q95,80 85,80" 
+                          fill="none" stroke="#6dd5ed" stroke-width="3"/>
+                    <path d="M95,30 Q110,30 110,60 Q110,90 95,90" 
+                          fill="none" stroke="#6dd5ed" stroke-width="3"/>
+                    <text x="130" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#fff">ZIRCON</text>
+                    <text x="130" y="75" font-family="Arial, sans-serif" font-size="16" fill="#6dd5ed">INDIA</text>
+                </svg>
+            </div>
             <ul>
                 <li><a onclick="showPage('home')">Home</a></li>
                 <li><a onclick="scrollToSection('power')">Power Solutions</a></li>
