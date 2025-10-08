@@ -544,7 +544,19 @@
             <h2 class="section-title">Acoustic Engineering Solutions</h2>
             <p class="section-subtitle">Specialized acoustic materials and noise control systems</p>
             <div class="services">
-                <div class="service-card" onclick="showPage('concert')">
+                    <div class="service-card" onclick="showPage('noise')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 4rem;">🔊🎤</div>
+                            <div style="font-size: 1.2rem; margin-top: 0.5rem;">Live noise test</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Live Noise measurements</h3>
+                        <p>Know your problematic noise freqeuncies and its levels.</p>
+                    </div>
+                </div>
+                    <div class="service-card" onclick="showPage('concert')">
                     <div class="service-image" style="background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%); display: flex; align-items: center; justify-content: center;">
                         <div style="text-align: center; color: white;">
                             <div style="font-size: 4rem;">🎭</div>
@@ -1251,6 +1263,415 @@
         </div>
     </div>
 
+  <!-- liveacoustic -->
+    <div id="noise" class="page">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Acoustic Analysis - Zircon India</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .analyzer-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            margin-bottom: 2rem;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        #startBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        #stopBtn {
+            background: #e74c3c;
+            color: white;
+            display: none;
+            margin-left: 1rem;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .metric-card.db {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .metric-card.freq {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .metric-card.status {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .visualization {
+            margin-bottom: 2rem;
+        }
+
+        .visualization h3 {
+            color: #2a5298;
+            margin-bottom: 1rem;
+        }
+
+        canvas {
+            width: 100%;
+            background: #1a1a1a;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+
+        .info-box h3 {
+            color: #2a5298;
+            margin-bottom: 1rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-box li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .metric-value {
+                font-size: 2rem;
+            }
+            
+            button {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Live Acoustic Analysis</h1>
+        <p class="subtitle">Real-time Audio Monitoring & Frequency Analysis</p>
+
+        <div class="analyzer-box">
+            <div class="controls">
+                <button id="startBtn">🎤 Start Analysis</button>
+                <button id="stopBtn">⏹️ Stop Analysis</button>
+            </div>
+
+            <div class="metrics">
+                <div class="metric-card db">
+                    <div class="metric-label">Sound Level</div>
+                    <div class="metric-value" id="dbLevel">-- dB</div>
+                </div>
+                <div class="metric-card freq">
+                    <div class="metric-label">Peak Frequency</div>
+                    <div class="metric-value" id="peakFreq">-- Hz</div>
+                </div>
+                <div class="metric-card status">
+                    <div class="metric-label">Status</div>
+                    <div class="metric-value" id="status" style="font-size: 1.5rem;">Ready</div>
+                </div>
+            </div>
+
+            <div class="visualization">
+                <h3>📊 Frequency Spectrum</h3>
+                <canvas id="frequencyCanvas" width="1000" height="300"></canvas>
+            </div>
+
+            <div class="visualization">
+                <h3>〰️ Waveform</h3>
+                <canvas id="waveformCanvas" width="1000" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>Understanding the Results</h3>
+            <ul>
+                <li><strong>Sound Level (dB):</strong> Measures loudness. 30 dB is whisper-quiet, 60 dB is normal conversation, 85+ dB can cause hearing damage</li>
+                <li><strong>Peak Frequency:</strong> The dominant frequency in the sound, helps identify noise sources</li>
+                <li><strong>Frequency Spectrum:</strong> Shows the distribution of energy across different frequencies (colorful bars)</li>
+                <li><strong>Waveform:</strong> Visual representation of sound wave amplitude over time (green wave)</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h3>Technical Features</h3>
+            <ul>
+                <li>Real-time FFT frequency spectrum analysis</li>
+                <li>Sound pressure level measurement (dB)</li>
+                <li>Peak frequency detection and tracking</li>
+                <li>Live waveform visualization</li>
+                <li>Frequency range: 20 Hz - 20 kHz (full audible spectrum)</li>
+                <li>High-resolution time-domain display</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let audioContext;
+        let analyser;
+        let microphone;
+        let dataArray;
+        let bufferLength;
+        let animationId;
+        let stream;
+
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const frequencyCanvas = document.getElementById('frequencyCanvas');
+        const waveformCanvas = document.getElementById('waveformCanvas');
+        const freqCtx = frequencyCanvas.getContext('2d');
+        const waveCtx = waveformCanvas.getContext('2d');
+
+        function setupCanvas() {
+            const containerWidth = frequencyCanvas.parentElement.offsetWidth;
+            frequencyCanvas.width = containerWidth;
+            frequencyCanvas.height = 300;
+            waveformCanvas.width = containerWidth;
+            waveformCanvas.height = 200;
+        }
+
+        // Setup canvas on load
+        window.addEventListener('load', setupCanvas);
+        window.addEventListener('resize', setupCanvas);
+
+        startBtn.addEventListener('click', async () => {
+            try {
+                setupCanvas();
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.8;
+                bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                
+                microphone.connect(analyser);
+                
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'inline-block';
+                document.getElementById('status').textContent = 'Active';
+                
+                draw();
+            } catch (err) {
+                alert('❌ Microphone access denied. Please allow microphone access to use this feature.');
+                console.error('Error accessing microphone:', err);
+                document.getElementById('status').textContent = 'Error';
+            }
+        });
+
+        stopBtn.addEventListener('click', () => {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            
+            if (microphone) {
+                microphone.disconnect();
+                microphone = null;
+            }
+            
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+            
+            startBtn.style.display = 'inline-block';
+            stopBtn.style.display = 'none';
+            document.getElementById('status').textContent = 'Stopped';
+            document.getElementById('dbLevel').textContent = '-- dB';
+            document.getElementById('peakFreq').textContent = '-- Hz';
+            
+            // Clear canvases
+            freqCtx.fillStyle = '#1a1a1a';
+            freqCtx.fillRect(0, 0, frequencyCanvas.width, frequencyCanvas.height);
+            waveCtx.fillStyle = '#1a1a1a';
+            waveCtx.fillRect(0, 0, waveformCanvas.width, waveformCanvas.height);
+        });
+
+        function draw() {
+            animationId = requestAnimationFrame(draw);
+            
+            if (!analyser) return;
+            
+            analyser.getByteFrequencyData(dataArray);
+            
+            // Calculate dB level
+            let sum = 0;
+            for (let i = 0; i < bufferLength; i++) {
+                sum += dataArray[i];
+            }
+            const average = sum / bufferLength;
+            const db = Math.round(20 * Math.log10(Math.max(average / 255, 0.001)) + 100);
+            document.getElementById('dbLevel').textContent = (db > 0 && db < 120) ? db + ' dB' : '0 dB';
+            
+            // Find peak frequency
+            let maxVal = 0;
+            let maxIndex = 0;
+            for (let i = 0; i < bufferLength; i++) {
+                if (dataArray[i] > maxVal) {
+                    maxVal = dataArray[i];
+                    maxIndex = i;
+                }
+            }
+            const nyquist = audioContext.sampleRate / 2;
+            const peakFrequency = Math.round((maxIndex * nyquist) / bufferLength);
+            document.getElementById('peakFreq').textContent = peakFrequency + ' Hz';
+            
+            // Draw frequency spectrum
+            freqCtx.fillStyle = '#1a1a1a';
+            freqCtx.fillRect(0, 0, frequencyCanvas.width, frequencyCanvas.height);
+            
+            const barWidth = (frequencyCanvas.width / bufferLength) * 2.5;
+            let x = 0;
+            
+            for (let i = 0; i < bufferLength; i++) {
+                const barHeight = (dataArray[i] / 255) * frequencyCanvas.height;
+                
+                const hue = (i / bufferLength) * 280;
+                const lightness = 50 + (dataArray[i] / 255) * 20;
+                freqCtx.fillStyle = `hsl(${hue}, 100%, ${lightness}%)`;
+                freqCtx.fillRect(x, frequencyCanvas.height - barHeight, barWidth, barHeight);
+                
+                x += barWidth + 1;
+            }
+            
+            // Draw waveform
+            const waveData = new Uint8Array(analyser.fftSize);
+            analyser.getByteTimeDomainData(waveData);
+            
+            waveCtx.fillStyle = '#1a1a1a';
+            waveCtx.fillRect(0, 0, waveformCanvas.width, waveformCanvas.height);
+            
+            waveCtx.lineWidth = 2;
+            waveCtx.strokeStyle = '#00ff88';
+            waveCtx.beginPath();
+            
+            const sliceWidth = waveformCanvas.width / analyser.fftSize;
+            let wx = 0;
+            
+            for (let i = 0; i < analyser.fftSize; i++) {
+                const v = waveData[i] / 128.0;
+                const y = (v * waveformCanvas.height) / 2;
+                
+                if (i === 0) {
+                    waveCtx.moveTo(wx, y);
+                } else {
+                    waveCtx.lineTo(wx, y);
+                }
+                
+                wx += sliceWidth;
+            }
+            
+            waveCtx.stroke();
+        }
+    </script>
+</body>
+</html>
+
     <!-- BUILDING PAGE -->
     <div id="building" class="page">
         <div class="detail-hero" style="background: linear-gradient(45deg, rgba(102,126,234,0.9), rgba(118,75,162,0.9)), url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 600%22><rect fill=%22%23667eea%22 width=%221200%22 height=%22600%22/><rect fill=%22%23764ba2%22 x=%22400%22 y=%22100%22 width=%22150%22 height=%22400%22/></svg>');">
@@ -1310,6 +1731,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- INDUSTRIAL PAGE -->
     <div id="industrial" class="page">
