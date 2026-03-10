@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SONIQ — eVTOL Acoustics by Zirconique</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;600&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+/* ══════════════════════════════════════════════════
+   RESET & ROOT VARIABLES
+══════════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#020c14;
+  --s1:#061018;
+  --s2:#0a1a26;
+  --s3:#0f2236;
+  --b1:#152d44;
+  --b2:#1e4060;
+  --b3:#2d5a7a;
+  --cyan:#00eaff;
+  --cyanG:rgba(0,234,255,.12);
+  --cyanB:rgba(0,234,255,.05);
+  --green:#00ffaa;
+  --greenG:rgba(0,255,170,.1);
+  --amber:#ffbe00;
+  --amberG:rgba(255,190,0,.12);
+  --red:#ff3355;
+  --redG:rgba(255,51,85,.12);
+  --white:#dff0f8;
+  --muted:#4d7a96;
+  --dim:#2a4a60;
+  --mono:'JetBrains Mono',monospace;
+  --disp:'Orbitron',sans-serif;
+  --body:'Barlow',sans-serif;
+  --r:0px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--white);
+  font-family:var(--body);font-size:14px;line-height:1.5;
+  overflow-x:hidden;min-height:100vh;
+}
+
+/* ══ ANIMATED BG GRID */
+.bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,234,255,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,234,255,.028) 1px,transparent 1px);
+  background-size:50px 50px;
+  animation:gridDrift 20s linear infinite;
+}
+@keyframes gridDrift{to{background-position:50px 50px}}
+.bg-radial{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 50%,rgba(0,234,255,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 80% at 90% 20%,rgba(0,255,170,.04) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 100%,rgba(0,234,255,.03) 0%,transparent 60%);
+}
+.bg-scan{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,234,255,.008) 3px,rgba(0,234,255,.008) 4px);
+}
+
+/* ══════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════ */
+#hdr{
+  position:relative;z-index:200;
+  background:rgba(2,12,20,.93);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:62px;
+}
+.hdr-brand{display:flex;align-items:center;gap:16px}
+.brand-wordmark{
+  font-family:var(--disp);font-size:26px;font-weight:900;
+  letter-spacing:6px;
+  background:linear-gradient(135deg,var(--cyan) 0%,#7af0ff 50%,var(--cyan) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:none;filter:drop-shadow(0 0 18px rgba(0,234,255,.55));
+}
+.brand-tagline{
+  font-family:var(--mono);font-size:9px;letter-spacing:3px;
+  color:var(--muted);text-transform:uppercase;
+  border-left:1px solid var(--b2);padding-left:16px;
+  line-height:1.4;
+}
+.brand-tagline strong{display:block;color:var(--cyan);font-size:10px;letter-spacing:2px}
+
+.hdr-right{display:flex;align-items:center;gap:12px}
+.hdr-badge{
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;
+  padding:4px 10px;border:1px solid var(--b2);color:var(--muted);
+  text-transform:uppercase;
+}
+.hdr-badge.live{
+  border-color:var(--green);color:var(--green);
+  background:var(--greenG);animation:livePulse 2s infinite;
+}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,170,.4)}50%{box-shadow:0 0 0 6px rgba(0,255,170,0)}}
+.hdr-contact{
+  font-family:var(--mono);font-size:10px;letter-spacing:1px;
+  color:var(--cyan);text-decoration:none;
+  border:1px solid var(--cyan);padding:5px 14px;
+  background:var(--cyanG);
+  transition:all .25s;
+}
+.hdr-contact:hover{background:rgba(0,234,255,.22);box-shadow:0 0 16px rgba(0,234,255,.3)}
+
+/* ══════════════════════════════════════════════════
+   STEP FLOW — AIRCRAFT SELECTION
+══════════════════════════════════════════════════ */
+#step-select{
+  position:relative;z-index:10;
+  min-height:calc(100vh - 62px);
+  display:flex;flex-direction:column;align-items:center;
+  padding:60px 40px;
+}
+.step-hero{text-align:center;margin-bottom:56px}
+.step-hero h1{
+  font-family:var(--disp);font-size:38px;font-weight:700;
+  letter-spacing:4px;color:var(--white);
+  margin-bottom:12px;
+}
+.step-hero h1 span{color:var(--cyan);text-shadow:0 0 30px rgba(0,234,255,.5)}
+.step-hero p{font-size:16px;color:var(--muted);font-weight:300;letter-spacing:1px;max-width:560px;margin:0 auto}
+
+/* AIRCRAFT CARD GRID */
+.aircraft-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  max-width:1160px;width:100%;
+  margin-bottom:40px;
+}
+@media(max-width:900px){.aircraft-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.aircraft-grid{grid-template-columns:1fr}}
+
+.ac-card{
+  background:var(--s2);
+  border:1px solid var(--b1);
+  cursor:pointer;
+  transition:all .3s;
+  position:relative;
+  overflow:hidden;
+}
+.ac-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 60%,rgba(0,234,255,.04));
+  opacity:0;transition:opacity .3s;
+}
+.ac-card:hover{border-color:var(--b3);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,234,255,.12)}
+.ac-card:hover::before{opacity:1}
+.ac-card.selected{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 1px var(--cyan),0 0 40px rgba(0,234,255,.2),inset 0 0 30px rgba(0,234,255,.05);
+  transform:translateY(-4px);
+}
+.ac-card.selected::after{
+  content:'SELECTED ✓';
+  position:absolute;top:12px;right:12px;
+  font-family:var(--mono);font-size:8px;letter-spacing:2px;
+  color:var(--cyan);background:var(--cyanG);
+  border:1px solid var(--cyan);padding:2px 8px;
+}
+
+.ac-illustration{
+  width:100%;height:160px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--s1);
+  border-bottom:1px solid var(--b1);
+  position:relative;overflow:hidden;
+  padding:16px;
+}
+.ac-illustration svg{width:100%;height:100%;max-width:220px}
+
+/* rotor spin animations on hover */
+.ac-card:hover .blade-cw{animation:spinCW .8s linear infinite}
+.ac-card:hover .blade-ccw{animation:spinCCW .8s linear infinite}
+.ac-card.selected .blade-cw{animation:spinCW .5s linear infinite}
+.ac-card.selected .blade-ccw{animation:spinCCW .5s linear infinite}
+@keyframes spinCW{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes spinCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+
+.ac-info{padding:18px 20px 20px}
+.ac-type{
+  font-family:var(--mono);font-size:9px;letter-spacing:3px;
+  color:var(--cyan);margin-bottom:6px;text-transform:uppercase;
+}
+.ac-name{
+  font-family:var(--disp);font-size:17px;font-weight:600;
+  letter-spacing:2px;color:var(--white);margin-bottom:8px;
+}
+.ac-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.ac-specs{
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.ac-spec-tag{
+  font-family:var(--mono);font-size:9px;letter-spacing:1px;
+  padding:3px 8px;border:1px solid var(--b2);color:var(--muted);
+}
+
+/* Proceed button */
+.proceed-btn{
+  font-family:var(--disp);font-size:14px;font-weight:600;
+  letter-spacing:4px;padding:16px 60px;
+  background:transparent;border:1px solid var(--cyan);color:var(--cyan);
+  cursor:pointer;transition:all .3s;position:relative;overflow:hidden;
+  text-transform:uppercase;
+}
+.proceed-btn::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,234,255,.18),transparent);
+  transition:left .5s;
+}
+.proceed-btn:hover{background:var(--cyanG);box-shadow:0 0 30px rgba(0,234,255,.3)}
+.proceed-btn:hover::before{left:100%}
+.proceed-btn:disabled{opacity:.3;cursor:not-allowed;border-color:var(--b2);color:var(--muted)}
+.proceed-btn:disabled::before{display:none}
+
+/* ══════════════════════════════════════════════════
+   MAIN TOOL LAYOUT
+══════════════════════════════════════════════════ */
+#step-tool{display:none;position:relative;z-index:10}
+
+/* NAV BAR between steps */
+.tool-nav{
+  position:relative;z-index:50;
+  background:rgba(6,16,24,.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:48px;
+}
+.tnav-crumb{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);
+}
+.tnav-crumb span{color:var(--cyan)}
+.tnav-btn{
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;
+  padding:5px 16px;border:1px solid var(--b2);color:var(--muted);
+  background:transparent;cursor:pointer;transition:all .2s;
+}
+.tnav-btn:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyanG)}
+
+/* MAIN GRID */
+.tool-body{
+  display:grid;
+  grid-template-columns:360px 1fr;
+  min-height:calc(100vh - 62px - 48px);
+}
+
+/* ══════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════ */
+.sidebar{
+  background:var(--s1);
+  border-right:1px solid var(--b1);
+  overflow-y:auto;
+  position:relative;
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--b2)}
+
+.sec-hdr{
+  position:sticky;top:0;z-index:5;
+  background:var(--s1);
+  border-bottom:1px solid var(--b1);
+  padding:11px 20px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-hdr-icon{
+  font-size:14px;
+  width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--b2);color:var(--cyan);flex-shrink:0;
+}
+.sec-hdr-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--cyan);text-transform:uppercase;
+}
+
+/* SELECTED AIRCRAFT MINI CARD */
+.ac-mini{
+  padding:14px 20px;
+  border-bottom:1px solid var(--b1);
+  background:var(--s2);
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;
+  transition:background .2s;
+}
+.ac-mini:hover{background:var(--s3)}
+.ac-mini-svg{width:60px;height:40px;flex-shrink:0;border:1px solid var(--b2);
+  display:flex;align-items:center;justify-content:center;background:var(--s1)}
+.ac-mini-svg svg{width:54px;height:34px}
+.ac-mini-info{}
+.ac-mini-name{font-family:var(--disp);font-size:13px;letter-spacing:2px;color:var(--cyan)}
+.ac-mini-sub{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted)}
+.ac-mini-change{
+  margin-left:auto;font-family:var(--mono);font-size:9px;
+  letter-spacing:1px;color:var(--muted);border:1px solid var(--b2);
+  padding:2px 8px;white-space:nowrap;flex-shrink:0;
+}
+
+/* CONTROL GROUP */
+.ctrl{padding:12px 20px;border-bottom:1px solid var(--b1)}
+.ctrl-lbl{
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;
+  color:var(--muted);margin-bottom:7px;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ctrl-lbl .val{
+  font-size:11px;color:var(--cyan);
+  background:var(--cyanG);padding:1px 8px;
+  border:1px solid rgba(0,234,255,.25);letter-spacing:1px;
+}
+
+/* SLIDER */
+input[type=range]{
+  -webkit-appearance:none;width:100%;height:2px;
+  background:var(--b1);outline:none;cursor:pointer;display:block;margin:4px 0;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:13px;height:13px;
+  background:var(--cyan);border:2px solid var(--bg);
+  box-shadow:0 0 8px rgba(0,234,255,.7);cursor:pointer;transition:box-shadow .2s;
+}
+input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 16px rgba(0,234,255,.9)}
+input[type=range].g::-webkit-slider-thumb{background:var(--green);box-shadow:0 0 8px rgba(0,255,170,.7)}
+input[type=range].a::-webkit-slider-thumb{background:var(--amber);box-shadow:0 0 8px rgba(255,190,0,.7)}
+input[type=range].r::-webkit-slider-thumb{background:var(--red);box-shadow:0 0 8px rgba(255,51,85,.7)}
+.tick-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:7px;color:var(--dim);margin-top:1px}
+
+/* NUMBER INPUT */
+.n-inp{
+  display:flex;align-items:center;gap:8px;
+}
+.n-inp input{
+  flex:1;background:var(--s2);border:1px solid var(--b2);
+  color:var(--white);font-family:var(--mono);font-size:12px;
+  padding:6px 10px;outline:none;-moz-appearance:textfield;
+  transition:border-color .2s;
+}
+.n-inp input::-webkit-inner-spin-button{-webkit-appearance:none}
+.n-inp input:focus{border-color:var(--cyan);box-shadow:0 0 8px rgba(0,234,255,.25)}
+.n-unit{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--dim);white-space:nowrap}
+
+/* TOGGLE SWITCH */
+.tog-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:9px;
+}
+.tog-row:last-child{margin-bottom:0}
+.tog-lbl{font-size:13px;font-weight:500;color:var(--white)}
+.tog{position:relative;width:38px;height:19px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0}
+.tog-track{position:absolute;inset:0;background:var(--b1);cursor:pointer;transition:.3s}
+.tog-track::after{content:'';position:absolute;width:13px;height:13px;left:3px;top:3px;background:var(--dim);transition:.3s}
+.tog input:checked+.tog-track{background:rgba(0,234,255,.25)}
+.tog input:checked+.tog-track::after{transform:translateX(19px);background:var(--cyan);box-shadow:0 0 8px rgba(0,234,255,.7)}
+
+/* CHOICE ROW */
+.choice-row{display:flex;gap:6px;flex-wrap:wrap}
+.choice-btn{
+  font-family:var(--mono);font-size:9px;letter-spacing:1px;
+  padding:5px 12px;border:1px solid var(--b2);color:var(--muted);
+  cursor:pointer;transition:all .2s;background:transparent;
+}
+.choice-btn:hover{border-color:var(--b3);color:var(--white)}
+.choice-btn.on{border-color:var(--cyan);color:var(--cyan);background:var(--cyanG)}
+
+/* CALC BUTTON */
+.calc-btn{
+  margin:14px 20px 20px;width:calc(100% - 40px);
+  padding:13px;font-family:var(--disp);font-size:12px;
+  font-weight:600;letter-spacing:4px;
+  background:transparent;border:1px solid var(--cyan);color:var(--cyan);
+  cursor:pointer;transition:all .3s;text-transform:uppercase;
+  position:relative;overflow:hidden;
+}
+.calc-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,234,255,.15),transparent);transition:left .5s}
+.calc-btn:hover{background:var(--cyanG);box-shadow:0 0 24px rgba(0,234,255,.3)}
+.calc-btn:hover::before{left:100%}
+
+/* ══════════════════════════════════════════════════
+   MAIN CONTENT
+══════════════════════════════════════════════════ */
+.content{display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+
+/* AIRCRAFT VIEWER STRIP */
+.viewer-strip{
+  background:var(--s1);
+  border-bottom:1px solid var(--b1);
+  padding:18px 28px;
+  display:flex;gap:20px;align-items:center;
+}
+.viewer-box{
+  width:300px;height:152px;flex-shrink:0;
+  background:var(--s2);border:1px solid var(--b1);
+  position:relative;overflow:hidden;
+}
+.viewer-box svg{width:100%;height:100%}
+
+/* METRIC TILES */
+.metrics-row{
+  flex:1;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  grid-template-rows:1fr 1fr;
+  gap:8px;
+}
+.met{
+  background:var(--s2);border:1px solid var(--b1);
+  padding:10px 12px;position:relative;
+  transition:border-color .3s;
+}
+.met::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.met.c::after{background:var(--cyan)}
+.met.g::after{background:var(--green)}
+.met.a::after{background:var(--amber)}
+.met:hover{border-color:var(--b2)}
+.met-lbl{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--muted);margin-bottom:4px}
+.met-val{font-family:var(--disp);font-size:24px;letter-spacing:1px;line-height:1;transition:color .3s}
+.met.c .met-val{color:var(--cyan);text-shadow:0 0 16px rgba(0,234,255,.4)}
+.met.g .met-val{color:var(--green);text-shadow:0 0 16px rgba(0,255,170,.4)}
+.met.a .met-val{color:var(--amber);text-shadow:0 0 16px rgba(255,190,0,.4)}
+.met-unit{font-family:var(--mono);font-size:8px;color:var(--dim);margin-top:2px}
+
+/* COMPLIANCE */
+.chip{
+  font-family:var(--mono);font-size:9px;letter-spacing:1px;
+  padding:3px 8px;border:1px solid;display:inline-block;
+  transition:all .3s;
+}
+.chip.pass{border-color:var(--green);color:var(--green);background:var(--greenG)}
+.chip.warn{border-color:var(--amber);color:var(--amber);background:var(--amberG)}
+.chip.fail{border-color:var(--red);color:var(--red);background:var(--redG)}
+
+/* SOURCE BAR */
+.src-strip{
+  border-bottom:1px solid var(--b1);
+  padding:9px 28px;
+  background:var(--s1);
+  display:flex;align-items:center;gap:14px;
+}
+.src-bar-wrap{flex:1}
+.src-bar{display:flex;height:7px;gap:1px;margin-bottom:4px}
+.src-seg{height:100%;transition:flex .6s ease}
+.src-legend{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.src-dot{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:8px}
+.src-dot-sq{width:7px;height:7px}
+.src-total{
+  font-family:var(--disp);font-size:13px;letter-spacing:2px;
+  color:var(--amber);white-space:nowrap;
+}
+
+/* PLOTS GRID */
+.plots{
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+}
+.plot-panel{
+  border-right:1px solid var(--b1);
+  border-bottom:1px solid var(--b1);
+  padding:14px 16px;
+  display:flex;flex-direction:column;
+  min-height:0;position:relative;
+}
+.plot-panel:nth-child(2n){border-right:none}
+.plot-panel:nth-child(3),.plot-panel:nth-child(4){border-bottom:none}
+.plot-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:8px;flex-shrink:0;
+}
+.plot-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--cyan);text-transform:uppercase}
+.plot-sub{font-family:var(--mono);font-size:8px;color:var(--muted)}
+.plot-wrap{flex:1;position:relative;min-height:0}
+
+/* STATUS BAR */
+.status{
+  position:relative;z-index:50;
+  background:var(--s1);border-top:1px solid var(--b1);
+  padding:7px 28px;
+  display:flex;align-items:center;gap:20px;
+  font-family:var(--mono);font-size:9px;color:var(--dim);
+  flex-wrap:wrap;
+}
+.st-item{display:flex;align-items:center;gap:6px}
+.st-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:livePulse 2s infinite}
+.st-sep{width:1px;height:12px;background:var(--b1)}
+.st-val{color:var(--cyan)}
+.st-right{margin-left:auto;color:var(--dim)}
+
+/* ══════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════ */
+#footer{
+  position:relative;z-index:10;
+  background:var(--s1);border-top:1px solid var(--b1);
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.footer-brand{font-family:var(--disp);font-size:15px;letter-spacing:4px;color:var(--cyan)}
+.footer-info{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);line-height:1.8}
+.footer-info a{color:var(--cyan);text-decoration:none}
+.footer-info a:hover{text-shadow:0 0 10px rgba(0,234,255,.5)}
+.footer-models{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--dim);line-height:1.8;text-align:right}
+
+/* ══════════════════════════════════════════════════
+   FLASH ANIMATION ON VALUE CHANGE
+══════════════════════════════════════════════════ */
+@keyframes valueFlash{0%{opacity:.3}50%{opacity:1}100%{opacity:1}}
+.flash{animation:valueFlash .3s ease}
+
+/* ══════════════════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════════════════ */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--b2)}
+</style>
+</head>
+<body>
+
+<div class="bg-wrap">
+  <div class="bg-grid"></div>
+  <div class="bg-radial"></div>
+  <div class="bg-scan"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════ -->
+<div id="hdr">
+  <div class="hdr-brand">
+    <div class="brand-wordmark">SONIQ</div>
+    <div class="brand-tagline">
+      <strong>eVTOL Open Rotor Acoustics</strong>
+      Noise Prediction &amp; SPL Analysis Suite
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-badge">SAE ARP1579</div>
+    <div class="hdr-badge">ICAO Annex 16</div>
+    <div class="hdr-badge live">● LIVE</div>
+    <a class="hdr-contact" href="mailto:info@zirconique.com">info@zirconique.com</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     STEP 1 — AIRCRAFT SELECTION
+══════════════════════════════════════════════ -->
+<div id="step-select">
+  <div class="step-hero">
+    <h1>SELECT YOUR <span>eVTOL</span> PLATFORM</h1>
+    <p>Choose an aircraft configuration to begin the open-rotor acoustic analysis. Each platform loads physics-appropriate default parameters.</p>
+  </div>
+
+  <div class="aircraft-grid" id="acGrid">
+
+    <!-- CARD 1 — QUADCOPTER -->
+    <div class="ac-card selected" onclick="selectAircraft(this,'quad')" data-ac="quad">
+      <div class="ac-illustration">
+        <svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+          <!-- Body -->
+          <rect x="88" y="52" width="44" height="26" rx="5" fill="#091520" stroke="#1e4060" stroke-width="1.5"/>
+          <rect x="94" y="57" width="32" height="15" rx="2" fill="#0a1a26"/>
+          <!-- Status LEDs -->
+          <circle cx="98" cy="64" r="2" fill="#00ffaa"/><circle cx="104" cy="64" r="2" fill="#00eaff"/>
+          <!-- Arms -->
+          <line x1="110" y1="65" x2="38" y2="28" stroke="#1e4060" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="110" y1="65" x2="182" y2="28" stroke="#1e4060" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="110" y1="65" x2="38" y2="102" stroke="#1e4060" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="110" y1="65" x2="182" y2="102" stroke="#1e4060" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Motor mounts -->
+          <circle cx="38" cy="28" r="5" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="182" cy="28" r="5" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="38" cy="102" r="5" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="182" cy="102" r="5" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <!-- Rotor discs -->
+          <circle cx="38" cy="28" r="22" fill="none" stroke="#00eaff" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.5"/>
+          <circle cx="182" cy="28" r="22" fill="none" stroke="#00eaff" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.5"/>
+          <circle cx="38" cy="102" r="22" fill="none" stroke="#00ffaa" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.5"/>
+          <circle cx="182" cy="102" r="22" fill="none" stroke="#00ffaa" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.5"/>
+          <!-- Blades CW -->
+          <g class="blade-cw" style="transform-origin:38px 28px">
+            <line x1="16" y1="28" x2="60" y2="28" stroke="#00eaff" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="38" y1="6" x2="38" y2="50" stroke="#00eaff" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="22" y1="12" x2="54" y2="44" stroke="#00eaff" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          </g>
+          <g class="blade-ccw" style="transform-origin:182px 28px">
+            <line x1="160" y1="28" x2="204" y2="28" stroke="#00eaff" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="182" y1="6" x2="182" y2="50" stroke="#00eaff" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="166" y1="12" x2="198" y2="44" stroke="#00eaff" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          </g>
+          <!-- Blades CCW (green) -->
+          <g class="blade-ccw" style="transform-origin:38px 102px">
+            <line x1="16" y1="102" x2="60" y2="102" stroke="#00ffaa" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="38" y1="80" x2="38" y2="124" stroke="#00ffaa" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="22" y1="86" x2="54" y2="118" stroke="#00ffaa" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          </g>
+          <g class="blade-cw" style="transform-origin:182px 102px">
+            <line x1="160" y1="102" x2="204" y2="102" stroke="#00ffaa" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="182" y1="80" x2="182" y2="124" stroke="#00ffaa" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="166" y1="86" x2="198" y2="118" stroke="#00ffaa" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          </g>
+          <!-- Rotation indicators -->
+          <text x="38" y="7" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">↻ CW</text>
+          <text x="182" y="7" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">↺ CCW</text>
+          <text x="38" y="127" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00ffaa">↺ CCW</text>
+          <text x="182" y="127" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00ffaa">↻ CW</text>
+        </svg>
+      </div>
+      <div class="ac-info">
+        <div class="ac-type">MULTIROTOR · 4 ROTORS</div>
+        <div class="ac-name">QUADCOPTER</div>
+        <div class="ac-desc">Four open rotors in X or + configuration. Most common urban air mobility platform. Alternating CW/CCW pairs cancel torque. Moderate acoustic footprint.</div>
+        <div class="ac-specs">
+          <span class="ac-spec-tag">4 ROTORS</span>
+          <span class="ac-spec-tag">VTOL</span>
+          <span class="ac-spec-tag">HOVER-OPT</span>
+          <span class="ac-spec-tag">2–3 BLADE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 — HEXACOPTER -->
+    <div class="ac-card" onclick="selectAircraft(this,'hex')" data-ac="hex">
+      <div class="ac-illustration">
+        <svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+          <rect x="92" y="54" width="36" height="22" rx="4" fill="#091520" stroke="#1e4060" stroke-width="1.5"/>
+          <!-- 6 arms at 60° intervals -->
+          <line x1="110" y1="65" x2="24" y2="40" stroke="#1e4060" stroke-width="2"/>
+          <line x1="110" y1="65" x2="110" y2="10" stroke="#1e4060" stroke-width="2"/>
+          <line x1="110" y1="65" x2="196" y2="40" stroke="#1e4060" stroke-width="2"/>
+          <line x1="110" y1="65" x2="196" y2="90" stroke="#1e4060" stroke-width="2"/>
+          <line x1="110" y1="65" x2="110" y2="120" stroke="#1e4060" stroke-width="2"/>
+          <line x1="110" y1="65" x2="24" y2="90" stroke="#1e4060" stroke-width="2"/>
+          <!-- Motor mounts -->
+          <circle cx="24" cy="40" r="4" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="110" cy="10" r="4" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="196" cy="40" r="4" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="196" cy="90" r="4" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="110" cy="120" r="4" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="24" cy="90" r="4" fill="#0a1a26" stroke="#2d5a7a" stroke-width="1.5"/>
+          <!-- Rotor discs alternating -->
+          <circle cx="24" cy="40" r="18" fill="none" stroke="#00eaff" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.6"/>
+          <circle cx="110" cy="10" r="18" fill="none" stroke="#00ffaa" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.6"/>
+          <circle cx="196" cy="40" r="18" fill="none" stroke="#00eaff" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.6"/>
+          <circle cx="196" cy="90" r="18" fill="none" stroke="#00ffaa" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.6"/>
+          <circle cx="110" cy="120" r="18" fill="none" stroke="#00eaff" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.6"/>
+          <circle cx="24" cy="90" r="18" fill="none" stroke="#00ffaa" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.6"/>
+          <!-- Blades -->
+          <g class="blade-cw" style="transform-origin:24px 40px">
+            <line x1="6" y1="40" x2="42" y2="40" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24" y1="22" x2="24" y2="58" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="blade-ccw" style="transform-origin:110px 10px">
+            <line x1="92" y1="10" x2="128" y2="10" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="110" y1="-8" x2="110" y2="28" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="blade-cw" style="transform-origin:196px 40px">
+            <line x1="178" y1="40" x2="214" y2="40" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="196" y1="22" x2="196" y2="58" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="blade-ccw" style="transform-origin:196px 90px">
+            <line x1="178" y1="90" x2="214" y2="90" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="196" y1="72" x2="196" y2="108" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="blade-cw" style="transform-origin:110px 120px">
+            <line x1="92" y1="120" x2="128" y2="120" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="110" y1="102" x2="110" y2="138" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="blade-ccw" style="transform-origin:24px 90px">
+            <line x1="6" y1="90" x2="42" y2="90" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24" y1="72" x2="24" y2="108" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <text x="110" y="68" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#00eaff">6×</text>
+        </svg>
+      </div>
+      <div class="ac-info">
+        <div class="ac-type">MULTIROTOR · 6 ROTORS</div>
+        <div class="ac-name">HEXACOPTER</div>
+        <div class="ac-desc">Six-rotor platform offering redundancy and higher payload. Wider acoustic footprint but better fault tolerance. Common in commercial UAM.</div>
+        <div class="ac-specs">
+          <span class="ac-spec-tag">6 ROTORS</span>
+          <span class="ac-spec-tag">REDUNDANT</span>
+          <span class="ac-spec-tag">HIGH PAYLOAD</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 — COAXIAL -->
+    <div class="ac-card" onclick="selectAircraft(this,'coax')" data-ac="coax">
+      <div class="ac-illustration">
+        <svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+          <!-- Body -->
+          <ellipse cx="110" cy="75" rx="32" ry="12" fill="#091520" stroke="#1e4060" stroke-width="1.5"/>
+          <ellipse cx="110" cy="70" rx="24" ry="7" fill="#0a1a26"/>
+          <!-- Mast -->
+          <line x1="110" y1="62" x2="110" y2="30" stroke="#2d5a7a" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="110" cy="28" r="5" fill="#091520" stroke="#2d5a7a" stroke-width="2"/>
+          <!-- Upper rotor (larger) -->
+          <circle cx="110" cy="28" r="38" fill="none" stroke="#00eaff" stroke-width="0.8" stroke-dasharray="5,4" opacity="0.5"/>
+          <g class="blade-cw" style="transform-origin:110px 28px">
+            <line x1="72" y1="28" x2="148" y2="28" stroke="#00eaff" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="83" y1="0" x2="137" y2="56" stroke="#00eaff" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+          </g>
+          <!-- Lower rotor (smaller, contrarotating) -->
+          <circle cx="110" cy="34" r="28" fill="none" stroke="#00ffaa" stroke-width="0.8" stroke-dasharray="4,4" opacity="0.5"/>
+          <g class="blade-ccw" style="transform-origin:110px 34px">
+            <line x1="82" y1="34" x2="138" y2="34" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="90" y1="10" x2="130" y2="58" stroke="#00ffaa" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          </g>
+          <!-- Skids -->
+          <line x1="75" y1="90" x2="145" y2="90" stroke="#1e4060" stroke-width="3" stroke-linecap="round"/>
+          <line x1="84" y1="87" x2="84" y2="90" stroke="#1e4060" stroke-width="2"/>
+          <line x1="136" y1="87" x2="136" y2="90" stroke="#1e4060" stroke-width="2"/>
+          <!-- Labels -->
+          <text x="110" y="12" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">UPPER ↻</text>
+          <text x="110" y="106" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00ffaa">LOWER ↺ CONTRA</text>
+          <text x="168" y="34" font-family="JetBrains Mono" font-size="7" fill="#ffbe00">COAXIAL</text>
+        </svg>
+      </div>
+      <div class="ac-info">
+        <div class="ac-type">COAXIAL · CONTRA-ROTATING</div>
+        <div class="ac-name">COAXIAL ROTOR</div>
+        <div class="ac-desc">Two contra-rotating rotors on a single shaft. Compact footprint with torque cancellation. Unique BVI interaction between upper and lower rotors increases tonal noise complexity.</div>
+        <div class="ac-specs">
+          <span class="ac-spec-tag">2 ROTORS</span>
+          <span class="ac-spec-tag">CONTRA-ROT</span>
+          <span class="ac-spec-tag">BVI NOISE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 4 — TANDEM -->
+    <div class="ac-card" onclick="selectAircraft(this,'tandem')" data-ac="tandem">
+      <div class="ac-illustration">
+        <svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+          <!-- Fuselage -->
+          <ellipse cx="110" cy="88" rx="72" ry="14" fill="#091520" stroke="#1e4060" stroke-width="1.5"/>
+          <ellipse cx="110" cy="84" rx="60" ry="8" fill="#0a1a26"/>
+          <!-- Nose -->
+          <ellipse cx="184" cy="86" rx="20" ry="9" fill="#091520" stroke="#1e4060" stroke-width="1.2"/>
+          <!-- Pylons -->
+          <line x1="66" y1="78" x2="66" y2="48" stroke="#1e4060" stroke-width="3" stroke-linecap="round"/>
+          <line x1="154" y1="78" x2="154" y2="48" stroke="#1e4060" stroke-width="3" stroke-linecap="round"/>
+          <!-- Motor heads -->
+          <circle cx="66" cy="46" r="5" fill="#091520" stroke="#2d5a7a" stroke-width="1.5"/>
+          <circle cx="154" cy="46" r="5" fill="#091520" stroke="#2d5a7a" stroke-width="1.5"/>
+          <!-- Rotor discs -->
+          <circle cx="66" cy="46" r="36" fill="none" stroke="#00eaff" stroke-width="0.7" stroke-dasharray="5,4" opacity="0.5"/>
+          <circle cx="154" cy="46" r="36" fill="none" stroke="#00ffaa" stroke-width="0.7" stroke-dasharray="5,4" opacity="0.5"/>
+          <!-- Forward rotor blades -->
+          <g class="blade-cw" style="transform-origin:66px 46px">
+            <line x1="30" y1="46" x2="102" y2="46" stroke="#00eaff" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="47" y1="10" x2="85" y2="82" stroke="#00eaff" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          </g>
+          <!-- Aft rotor blades (contra) -->
+          <g class="blade-ccw" style="transform-origin:154px 46px">
+            <line x1="118" y1="46" x2="190" y2="46" stroke="#00ffaa" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="135" y1="10" x2="173" y2="82" stroke="#00ffaa" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          </g>
+          <!-- Skids -->
+          <line x1="42" y1="104" x2="170" y2="104" stroke="#1e4060" stroke-width="3" stroke-linecap="round"/>
+          <line x1="52" y1="102" x2="52" y2="104" stroke="#1e4060" stroke-width="2"/>
+          <line x1="160" y1="102" x2="160" y2="104" stroke="#1e4060" stroke-width="2"/>
+          <text x="66" y="9" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">FWD ↻</text>
+          <text x="154" y="9" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00ffaa">AFT ↺</text>
+        </svg>
+      </div>
+      <div class="ac-info">
+        <div class="ac-type">TANDEM · LONGITUDINAL</div>
+        <div class="ac-name">TANDEM ROTOR</div>
+        <div class="ac-desc">Front and rear rotors on a conventional fuselage — helicopter-style layout. Excellent range/payload ratio. Fore-aft acoustic interference creates characteristic noise pattern.</div>
+        <div class="ac-specs">
+          <span class="ac-spec-tag">2 ROTORS</span>
+          <span class="ac-spec-tag">LONG RANGE</span>
+          <span class="ac-spec-tag">INTERFERENCE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 5 — LIFT + CRUISE -->
+    <div class="ac-card" onclick="selectAircraft(this,'liftcruise')" data-ac="liftcruise">
+      <div class="ac-illustration">
+        <svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+          <!-- Fuselage -->
+          <ellipse cx="110" cy="80" rx="68" ry="11" fill="#091520" stroke="#1e4060" stroke-width="1.5"/>
+          <ellipse cx="110" cy="76" rx="56" ry="6" fill="#0a1a26"/>
+          <ellipse cx="178" cy="78" rx="18" ry="7" fill="#091520" stroke="#1e4060" stroke-width="1"/>
+          <!-- Wing -->
+          <line x1="68" y1="76" x2="20" y2="66" stroke="#1e4060" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="150" y1="76" x2="198" y2="66" stroke="#1e4060" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Lift rotor pylons -->
+          <line x1="34" y1="66" x2="34" y2="40" stroke="#1e4060" stroke-width="2"/>
+          <line x1="186" y1="66" x2="186" y2="40" stroke="#1e4060" stroke-width="2"/>
+          <!-- Lift rotors -->
+          <circle cx="34" cy="38" r="22" fill="none" stroke="#00eaff" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.5"/>
+          <circle cx="186" cy="38" r="22" fill="none" stroke="#00eaff" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.5"/>
+          <g class="blade-cw" style="transform-origin:34px 38px">
+            <line x1="12" y1="38" x2="56" y2="38" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="34" y1="16" x2="34" y2="60" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="blade-ccw" style="transform-origin:186px 38px">
+            <line x1="164" y1="38" x2="208" y2="38" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="186" y1="16" x2="186" y2="60" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <!-- Pusher prop -->
+          <circle cx="43" cy="79" r="14" fill="none" stroke="#ffbe00" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.5"/>
+          <g class="blade-ccw" style="transform-origin:43px 79px">
+            <line x1="29" y1="79" x2="57" y2="79" stroke="#ffbe00" stroke-width="2" stroke-linecap="round"/>
+            <line x1="43" y1="65" x2="43" y2="93" stroke="#ffbe00" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <text x="34" y="13" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#00eaff">LIFT</text>
+          <text x="186" y="13" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#00eaff">LIFT</text>
+          <text x="43" y="100" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#ffbe00">PUSH</text>
+          <!-- Skids -->
+          <line x1="50" y1="94" x2="165" y2="94" stroke="#1e4060" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="ac-info">
+        <div class="ac-type">HYBRID · LIFT + CRUISE</div>
+        <div class="ac-name">LIFT+CRUISE</div>
+        <div class="ac-desc">Dedicated lift rotors for hover/VTOL and a pusher/puller propeller for cruise. Most efficient for longer ranges. Rotors tilt or fold in cruise — complex acoustic transition modes.</div>
+        <div class="ac-specs">
+          <span class="ac-spec-tag">3+ ROTORS</span>
+          <span class="ac-spec-tag">RANGE OPT</span>
+          <span class="ac-spec-tag">PUSHER PROP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 6 — OCTOCOPTER -->
+    <div class="ac-card" onclick="selectAircraft(this,'octo')" data-ac="octo">
+      <div class="ac-illustration">
+        <svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+          <rect x="94" y="54" width="32" height="22" rx="4" fill="#091520" stroke="#1e4060" stroke-width="1.5"/>
+          <!-- 8 arms at 45° -->
+          <line x1="110" y1="65" x2="24" y2="30" stroke="#1e4060" stroke-width="1.8"/>
+          <line x1="110" y1="65" x2="55" y2="10" stroke="#1e4060" stroke-width="1.8"/>
+          <line x1="110" y1="65" x2="165" y2="10" stroke="#1e4060" stroke-width="1.8"/>
+          <line x1="110" y1="65" x2="196" y2="30" stroke="#1e4060" stroke-width="1.8"/>
+          <line x1="110" y1="65" x2="196" y2="100" stroke="#1e4060" stroke-width="1.8"/>
+          <line x1="110" y1="65" x2="165" y2="120" stroke="#1e4060" stroke-width="1.8"/>
+          <line x1="110" y1="65" x2="55" y2="120" stroke="#1e4060" stroke-width="1.8"/>
+          <line x1="110" y1="65" x2="24" y2="100" stroke="#1e4060" stroke-width="1.8"/>
+          <!-- Rotors (alternating) -->
+          <g class="blade-cw" style="transform-origin:24px 30px">
+            <line x1="10" y1="30" x2="38" y2="30" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24" y1="16" x2="24" y2="44" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="24" cy="30" r="14" fill="none" stroke="#00eaff" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.5"/>
+          <g class="blade-ccw" style="transform-origin:55px 10px">
+            <line x1="41" y1="10" x2="69" y2="10" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="55" y1="-4" x2="55" y2="24" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="55" cy="10" r="14" fill="none" stroke="#00ffaa" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.5"/>
+          <g class="blade-cw" style="transform-origin:165px 10px">
+            <line x1="151" y1="10" x2="179" y2="10" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="165" y1="-4" x2="165" y2="24" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="165" cy="10" r="14" fill="none" stroke="#00eaff" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.5"/>
+          <g class="blade-ccw" style="transform-origin:196px 30px">
+            <line x1="182" y1="30" x2="210" y2="30" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="196" y1="16" x2="196" y2="44" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="196" cy="30" r="14" fill="none" stroke="#00ffaa" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.5"/>
+          <g class="blade-cw" style="transform-origin:196px 100px">
+            <line x1="182" y1="100" x2="210" y2="100" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="196" y1="86" x2="196" y2="114" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="196" cy="100" r="14" fill="none" stroke="#00eaff" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.5"/>
+          <g class="blade-ccw" style="transform-origin:165px 120px">
+            <line x1="151" y1="120" x2="179" y2="120" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="165" y1="106" x2="165" y2="134" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="165" cy="120" r="14" fill="none" stroke="#00ffaa" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.5"/>
+          <g class="blade-cw" style="transform-origin:55px 120px">
+            <line x1="41" y1="120" x2="69" y2="120" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="55" y1="106" x2="55" y2="134" stroke="#00eaff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="55" cy="120" r="14" fill="none" stroke="#00eaff" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.5"/>
+          <g class="blade-ccw" style="transform-origin:24px 100px">
+            <line x1="10" y1="100" x2="38" y2="100" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24" y1="86" x2="24" y2="114" stroke="#00ffaa" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="24" cy="100" r="14" fill="none" stroke="#00ffaa" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.5"/>
+          <text x="110" y="68" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">8×</text>
+        </svg>
+      </div>
+      <div class="ac-info">
+        <div class="ac-type">MULTIROTOR · 8 ROTORS</div>
+        <div class="ac-name">OCTOCOPTER</div>
+        <div class="ac-desc">Eight rotors for maximum redundancy. Heavy-lift UAM platform. Combined noise from 8 sources creates complex spectral interactions. Higher overall SPL than smaller configurations.</div>
+        <div class="ac-specs">
+          <span class="ac-spec-tag">8 ROTORS</span>
+          <span class="ac-spec-tag">MAX REDUND.</span>
+          <span class="ac-spec-tag">HEAVY LIFT</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /aircraft-grid -->
+
+  <button class="proceed-btn" id="proceedBtn" onclick="proceedToTool()">
+    ◈ CONFIGURE &amp; ANALYSE
+  </button>
+</div><!-- /step-select -->
+
+
+<!-- ══════════════════════════════════════════════
+     STEP 2 — ANALYSIS TOOL
+══════════════════════════════════════════════ -->
+<div id="step-tool">
+
+  <!-- NAV -->
+  <div class="tool-nav">
+    <div class="tnav-crumb">
+      SONIQ <span>›</span> <span id="crumb-ac">QUADCOPTER</span> <span>›</span> ACOUSTIC ANALYSIS
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted)">AUTO-REFRESH</span>
+      <label class="tog" style="width:38px;height:19px">
+        <input type="checkbox" id="togAutoRefresh" checked onchange="toggleAutoRefresh()">
+        <div class="tog-track"></div>
+      </label>
+      <button class="tnav-btn" onclick="backToSelect()">← CHANGE AIRCRAFT</button>
+    </div>
+  </div>
+
+  <!-- TOOL BODY -->
+  <div class="tool-body">
+
+    <!-- ══ SIDEBAR ══ -->
+    <div class="sidebar" id="sidebarEl">
+
+      <!-- Selected aircraft mini -->
+      <div class="ac-mini" onclick="backToSelect()">
+        <div class="ac-mini-svg" id="miniSvgWrap"></div>
+        <div class="ac-mini-info">
+          <div class="ac-mini-name" id="miniName">QUADCOPTER</div>
+          <div class="ac-mini-sub" id="miniSub">4 ROTORS · OPEN ROTOR</div>
+        </div>
+        <div class="ac-mini-change">CHANGE ↩</div>
+      </div>
+
+      <!-- ROTOR PARAMETERS -->
+      <div class="sec-hdr">
+        <div class="sec-hdr-icon">⊙</div>
+        <div class="sec-hdr-label">Rotor Geometry</div>
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-lbl">ROTOR DIAMETER <span class="val" id="vD">1.4 m</span></div>
+        <input type="range" id="sD" min="0.3" max="5.0" step="0.05" value="1.4" oninput="slv('vD',this.value,' m');schedCalc()">
+        <div class="tick-row"><span>0.3</span><span>1.5</span><span>3.0</span><span>5.0m</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">ROTOR RPM <span class="val" id="vRPM">1800</span></div>
+        <input type="range" id="sRPM" min="200" max="8000" step="50" value="1800" oninput="slv('vRPM',this.value,'');schedCalc()">
+        <div class="tick-row"><span>200</span><span>2500</span><span>5000</span><span>8000</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">BLADES PER ROTOR <span class="val" id="vB">3</span></div>
+        <input type="range" id="sB" min="2" max="8" step="1" value="3" class="a" oninput="slv('vB',this.value,'');schedCalc()">
+        <div class="tick-row"><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">BLADE CHORD (75%R) <span class="val" id="vChord">0.09 m</span></div>
+        <input type="range" id="sChord" min="0.02" max="0.35" step="0.01" value="0.09" oninput="slv('vChord',this.value,' m');schedCalc()">
+        <div class="tick-row"><span>0.02</span><span>0.10</span><span>0.20</span><span>0.35m</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">PITCH ANGLE <span class="val" id="vPitch">8°</span></div>
+        <input type="range" id="sPitch" min="0" max="35" step="0.5" value="8" class="a" oninput="slv('vPitch',this.value,'°');schedCalc()">
+        <div class="tick-row"><span>0°</span><span>10°</span><span>20°</span><span>35°</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">DISC LOADING (N/m²) <span class="val" id="vDL">300</span></div>
+        <input type="range" id="sDL" min="50" max="1500" step="10" value="300" class="g" oninput="slv('vDL',this.value,' N/m²');schedCalc()">
+        <div class="tick-row"><span>50</span><span>400</span><span>900</span><span>1500</span></div>
+      </div>
+
+      <!-- VEHICLE PARAMETERS -->
+      <div class="sec-hdr">
+        <div class="sec-hdr-icon">✈</div>
+        <div class="sec-hdr-label">Vehicle Parameters</div>
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-lbl">NUMBER OF ROTORS</div>
+        <div class="n-inp">
+          <input type="number" id="nRotors" value="4" min="1" max="20" oninput="schedCalc()">
+          <span class="n-unit">UNITS</span>
+        </div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">MAX AUW / THRUST <span class="val" id="vAUW">800 kg</span></div>
+        <input type="range" id="sAUW" min="50" max="15000" step="50" value="800" class="g" oninput="slv('vAUW',this.value,' kg');schedCalc()">
+        <div class="tick-row"><span>50</span><span>3k</span><span>8k</span><span>15000kg</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">CRUISE AIRSPEED <span class="val" id="vVcr">60 kt</span></div>
+        <input type="range" id="sVcr" min="0" max="200" step="5" value="60" oninput="slv('vVcr',this.value,' kt');schedCalc()">
+        <div class="tick-row"><span>0</span><span>50</span><span>100</span><span>200 kt</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">FLIGHT ALTITUDE <span class="val" id="vAlt">300 m</span></div>
+        <input type="range" id="sAlt" min="0" max="3000" step="50" value="300" oninput="slv('vAlt',this.value,' m');schedCalc()">
+        <div class="tick-row"><span>0</span><span>750</span><span>1500</span><span>3000m</span></div>
+      </div>
+
+      <!-- ACOUSTIC PARAMETERS -->
+      <div class="sec-hdr">
+        <div class="sec-hdr-icon">◈</div>
+        <div class="sec-hdr-label">Acoustic Parameters</div>
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-lbl">OBSERVER DISTANCE <span class="val" id="vRobs">100 m</span></div>
+        <input type="range" id="sRobs" min="10" max="600" step="5" value="100" oninput="slv('vRobs',this.value,' m');schedCalc()">
+        <div class="tick-row"><span>10</span><span>150</span><span>350</span><span>600m</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">CABIN SURFACE AREA <span class="val" id="vScab">8 m²</span></div>
+        <input type="range" id="sScab" min="1" max="60" step="0.5" value="8" oninput="slv('vScab',this.value,' m²');schedCalc()">
+        <div class="tick-row"><span>1</span><span>15</span><span>35</span><span>60m²</span></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">WALL TRANSMISSION LOSS <span class="val" id="vTL">22 dB</span></div>
+        <input type="range" id="sTL" min="5" max="50" step="1" value="22" class="g" oninput="slv('vTL',this.value,' dB');schedCalc()">
+        <div class="tick-row"><span>5</span><span>15</span><span>30</span><span>50 dB</span></div>
+      </div>
+
+      <!-- GROUND TYPE -->
+      <div class="ctrl">
+        <div class="ctrl-lbl">GROUND SURFACE</div>
+        <div class="choice-row" id="gndRow">
+          <button class="choice-btn on" onclick="setGnd(this,0.0)">ASPHALT α=0</button>
+          <button class="choice-btn" onclick="setGnd(this,0.15)">GRASS α=0.15</button>
+          <button class="choice-btn" onclick="setGnd(this,0.35)">FOREST α=0.35</button>
+        </div>
+      </div>
+
+      <!-- FLIGHT PHASE -->
+      <div class="ctrl">
+        <div class="ctrl-lbl">FLIGHT PHASE</div>
+        <div class="choice-row" id="phaseRow">
+          <button class="choice-btn on" onclick="setPhase(this,'hover')">HOVER</button>
+          <button class="choice-btn" onclick="setPhase(this,'climbout')">CLIMBOUT</button>
+          <button class="choice-btn" onclick="setPhase(this,'cruise')">CRUISE</button>
+          <button class="choice-btn" onclick="setPhase(this,'approach')">APPROACH</button>
+        </div>
+      </div>
+
+      <!-- TOGGLES -->
+      <div class="ctrl">
+        <div class="ctrl-lbl" style="margin-bottom:10px">PROCESSING OPTIONS</div>
+        <div class="tog-row">
+          <span class="tog-lbl">A-Weighting dB(A)</span>
+          <label class="tog"><input type="checkbox" id="togAw" checked onchange="schedCalc()"><div class="tog-track"></div></label>
+        </div>
+        <div class="tog-row">
+          <span class="tog-lbl">Ground reflection (+3 dB)</span>
+          <label class="tog"><input type="checkbox" id="togGnd" checked onchange="schedCalc()"><div class="tog-track"></div></label>
+        </div>
+        <div class="tog-row">
+          <span class="tog-lbl">Doppler shift (flyover)</span>
+          <label class="tog"><input type="checkbox" id="togDop" onchange="schedCalc()"><div class="tog-track"></div></label>
+        </div>
+        <div class="tog-row">
+          <span class="tog-lbl">Show 1/3-octave bands</span>
+          <label class="tog"><input type="checkbox" id="togThird" onchange="schedCalc()"><div class="tog-track"></div></label>
+        </div>
+        <div class="tog-row">
+          <span class="tog-lbl">Noise limit overlay (65 dB)</span>
+          <label class="tog"><input type="checkbox" id="togLimit" checked onchange="schedCalc()"><div class="tog-track"></div></label>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="runCalc()">◈ CALCULATE NOW</button>
+
+    </div><!-- /sidebar -->
+
+    <!-- ══ CONTENT ══ -->
+    <div class="content" id="contentEl">
+
+      <!-- VIEWER STRIP -->
+      <div class="viewer-strip">
+        <div class="viewer-box" id="viewerBox">
+          <svg id="viewerSvg" viewBox="0 0 300 152" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="metrics-row">
+          <div class="met c">
+            <div class="met-lbl">BLADE PASS FREQ.</div>
+            <div class="met-val" id="mBPF">—</div>
+            <div class="met-unit">Hz &nbsp;(B × RPM/60)</div>
+          </div>
+          <div class="met g">
+            <div class="met-lbl">TIP SPEED</div>
+            <div class="met-val" id="mVtip">—</div>
+            <div class="met-unit">m/s &nbsp;Mach <span id="mMach">—</span></div>
+          </div>
+          <div class="met a">
+            <div class="met-lbl">FAR-FIELD SPL</div>
+            <div class="met-val" id="mSPLff">—</div>
+            <div class="met-unit">dB(A) @ <span id="mRstr">100</span>m</div>
+          </div>
+          <div class="met c">
+            <div class="met-lbl">CABIN INTERIOR</div>
+            <div class="met-val" id="mSPLcab">—</div>
+            <div class="met-unit">dB(A) interior</div>
+          </div>
+          <div class="met g">
+            <div class="met-lbl">EPNL (ESTIMATE)</div>
+            <div class="met-val" id="mEPNL">—</div>
+            <div class="met-unit">EPNdB flyover</div>
+          </div>
+          <div class="met a">
+            <div class="met-lbl">ICAO COMPLIANCE</div>
+            <div style="padding-top:4px" id="mComp"><span class="chip pass">CALCULATING…</span></div>
+            <div class="met-unit" style="margin-top:4px">Limit: 65 dB(A)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOURCE BAR -->
+      <div class="src-strip">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--dim);white-space:nowrap">NOISE<br>SOURCES</div>
+        <div class="src-bar-wrap">
+          <div class="src-bar" id="srcBar">
+            <div class="src-seg" id="srcThick" style="background:#00eaff;flex:35"></div>
+            <div class="src-seg" id="srcLoad"  style="background:#00ffaa;flex:28"></div>
+            <div class="src-seg" id="srcBVI"   style="background:#ffbe00;flex:22"></div>
+            <div class="src-seg" id="srcBB"    style="background:#ff3355;flex:15"></div>
+          </div>
+          <div class="src-legend">
+            <div class="src-dot"><div class="src-dot-sq" style="background:#00eaff"></div><span style="color:#00eaff" id="pThick">THICKNESS 35%</span></div>
+            <div class="src-dot"><div class="src-dot-sq" style="background:#00ffaa"></div><span style="color:#00ffaa" id="pLoad">LOADING 28%</span></div>
+            <div class="src-dot"><div class="src-dot-sq" style="background:#ffbe00"></div><span style="color:#ffbe00" id="pBVI">BVI 22%</span></div>
+            <div class="src-dot"><div class="src-dot-sq" style="background:#ff3355"></div><span style="color:#ff3355" id="pBB">BROADBAND 15%</span></div>
+            <div class="src-total" id="srcTotal">– dB(A)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOUR PLOTS -->
+      <div class="plots">
+
+        <!-- P1: Far-field spectrum -->
+        <div class="plot-panel">
+          <div class="plot-hdr">
+            <div class="plot-title">◈ FAR-FIELD SPL SPECTRUM</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="plot-sub" id="p1sub">@ 100m · hover</div>
+              <span class="chip pass" id="p1chip" style="font-size:8px;padding:2px 7px">ICAO OK</span>
+            </div>
+          </div>
+          <div class="plot-wrap"><canvas id="c1"></canvas></div>
+        </div>
+
+        <!-- P2: Cabin noise -->
+        <div class="plot-panel">
+          <div class="plot-hdr">
+            <div class="plot-title">◈ CABIN INTERIOR NOISE</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="plot-sub">TL applied per band</div>
+              <span class="chip pass" id="p2chip" style="font-size:8px;padding:2px 7px">COMFORT OK</span>
+            </div>
+          </div>
+          <div class="plot-wrap"><canvas id="c2"></canvas></div>
+        </div>
+
+        <!-- P3: BPF harmonics -->
+        <div class="plot-panel">
+          <div class="plot-hdr">
+            <div class="plot-title">◈ BPF HARMONIC TONES</div>
+            <div class="plot-sub" id="p3sub">BPF = – Hz</div>
+          </div>
+          <div class="plot-wrap"><canvas id="c3"></canvas></div>
+        </div>
+
+        <!-- P4: Polar directivity -->
+        <div class="plot-panel">
+          <div class="plot-hdr">
+            <div class="plot-title">◈ NOISE POLAR DIRECTIVITY</div>
+            <div class="plot-sub">0°=axis · 90°=in-plane</div>
+          </div>
+          <div class="plot-wrap"><canvas id="c4"></canvas></div>
+        </div>
+
+      </div><!-- /plots -->
+
+      <!-- STATUS -->
+      <div class="status">
+        <div class="st-item"><div class="st-dot"></div>SONIQ LIVE</div>
+        <div class="st-sep"></div>
+        <div class="st-item">MODEL: <span class="st-val">Lowson + Farassat 1A + BPM</span></div>
+        <div class="st-sep"></div>
+        <div class="st-item">BPF: <span class="st-val" id="stBPF">–</span></div>
+        <div class="st-item">Vtip: <span class="st-val" id="stVtip">–</span></div>
+        <div class="st-item">SPL(ff): <span class="st-val" id="stSPL">–</span></div>
+        <div class="st-item">Cabin: <span class="st-val" id="stCab">–</span></div>
+        <div class="st-right">Updated: <span id="stTime">–</span></div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /tool-body -->
+</div><!-- /step-tool -->
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<div id="footer">
+  <div>
+    <div class="footer-brand">SONIQ</div>
+    <div class="footer-info">
+      eVTOL Open Rotor Acoustics Suite<br>
+      Developed by <strong style="color:var(--cyan)">Zirconique</strong> &nbsp;·&nbsp;
+      <a href="mailto:info@zirconique.com">info@zirconique.com</a><br>
+      © 2025 Zirconique. All rights reserved.
+    </div>
+  </div>
+  <div class="footer-models">
+    ACOUSTIC MODELS<br>
+    Thickness: Lowson (1970) &amp; Farassat 1A<br>
+    Loading: Ffowcs Williams–Hawkings<br>
+    Broadband: Brooks-Pope-Marcolini (BPM)<br>
+    BVI: Rotorcraft Noise Model (RNM)<br>
+    Standard: ICAO Annex 16 Vol. I / SAE ARP1579
+  </div>
+</div>
+
+
+<script>
+/* ══════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════ */
+let currentAc = 'quad';
+let groundAlpha = 0.0;
+let flightPhase = 'hover';
+let charts = {};
+let calcTimer = null;
+let autoRefresh = true;
+let calcCount = 0;
+
+/* ══════════════════════════════════════════════
+   AIRCRAFT DEFAULTS
+══════════════════════════════════════════════ */
+const AC_DEFAULTS = {
+  quad:       {N:4,  D:1.4, RPM:1800, B:3, chord:0.09, pitch:8,  DL:300,  AUW:500,  Vcr:60,  alt:150},
+  hex:        {N:6,  D:1.1, RPM:2200, B:3, chord:0.07, pitch:7,  DL:280,  AUW:600,  Vcr:55,  alt:150},
+  coax:       {N:2,  D:2.2, RPM:1200, B:3, chord:0.14, pitch:9,  DL:450,  AUW:800,  Vcr:80,  alt:200},
+  tandem:     {N:2,  D:3.0, RPM:900,  B:2, chord:0.22, pitch:10, DL:350,  AUW:1500, Vcr:90,  alt:300},
+  liftcruise: {N:3,  D:1.6, RPM:1600, B:3, chord:0.11, pitch:8,  DL:320,  AUW:900,  Vcr:120, alt:500},
+  octo:       {N:8,  D:0.9, RPM:2600, B:2, chord:0.06, pitch:6,  DL:260,  AUW:700,  Vcr:50,  alt:120},
+};
+
+const AC_LABELS = {
+  quad:'QUADCOPTER', hex:'HEXACOPTER', coax:'COAXIAL ROTOR',
+  tandem:'TANDEM ROTOR', liftcruise:'LIFT + CRUISE', octo:'OCTOCOPTER'
+};
+
+const AC_SUBS = {
+  quad:'4 ROTORS · OPEN ROTOR', hex:'6 ROTORS · OPEN ROTOR',
+  coax:'2 ROTORS · CONTRA-ROTATING', tandem:'2 ROTORS · LONGITUDINAL',
+  liftcruise:'3 ROTORS · HYBRID', octo:'8 ROTORS · OPEN ROTOR'
+};
+
+/* A-weighting lookup */
+const AW_TABLE = {
+  16:-56.7,20:-50.5,25:-44.7,31.5:-39.4,40:-34.6,50:-30.2,63:-26.2,80:-22.5,
+  100:-19.1,125:-16.1,160:-13.4,200:-10.9,250:-8.6,315:-6.6,400:-4.8,500:-3.2,
+  630:-1.9,800:-0.8,1000:0,1250:0.6,1600:1.0,2000:1.2,2500:1.3,3150:1.2,
+  4000:1.0,5000:0.5,6300:-0.1,8000:-1.1,10000:-2.5,12500:-4.3,16000:-6.6,20000:-9.3
+};
+const THIRD_OCT = [16,20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,
+                   1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
+const OCT_BANDS = [63,125,250,500,1000,2000,4000,8000];
+
+/* ══════════════════════════════════════════════
+   SLIDER HELPER
+══════════════════════════════════════════════ */
+function slv(id, val, sfx){ document.getElementById(id).textContent = val + sfx; }
+
+/* ══════════════════════════════════════════════
+   AIRCRAFT SELECTION
+══════════════════════════════════════════════ */
+function selectAircraft(el, key){
+  document.querySelectorAll('.ac-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  currentAc = key;
+  document.getElementById('proceedBtn').disabled = false;
+}
+
+function proceedToTool(){
+  // Load defaults for this aircraft
+  const d = AC_DEFAULTS[currentAc];
+  document.getElementById('sD').value = d.D;   slv('vD',d.D,' m');
+  document.getElementById('sRPM').value = d.RPM; slv('vRPM',d.RPM,'');
+  document.getElementById('sB').value = d.B;   slv('vB',d.B,'');
+  document.getElementById('sChord').value = d.chord; slv('vChord',d.chord,' m');
+  document.getElementById('sPitch').value = d.pitch; slv('vPitch',d.pitch,'°');
+  document.getElementById('sDL').value = d.DL;  slv('vDL',d.DL,' N/m²');
+  document.getElementById('nRotors').value = d.N;
+  document.getElementById('sAUW').value = d.AUW; slv('vAUW',d.AUW,' kg');
+  document.getElementById('sVcr').value = d.Vcr; slv('vVcr',d.Vcr,' kt');
+  document.getElementById('sAlt').value = d.alt; slv('vAlt',d.alt,' m');
+
+  // Set crumb + mini
+  document.getElementById('crumb-ac').textContent = AC_LABELS[currentAc];
+  document.getElementById('miniName').textContent  = AC_LABELS[currentAc];
+  document.getElementById('miniSub').textContent   = AC_SUBS[currentAc];
+
+  // Mini SVG
+  const miniSrc = document.querySelector(`[data-ac="${currentAc}"] .ac-illustration svg`);
+  if(miniSrc){
+    document.getElementById('miniSvgWrap').innerHTML = miniSrc.outerHTML;
+  }
+
+  // Show tool
+  document.getElementById('step-select').style.display = 'none';
+  document.getElementById('step-tool').style.display   = 'block';
+
+  // Init charts then calculate
+  if(!charts.c1) initCharts();
+  runCalc();
+}
+
+function backToSelect(){
+  document.getElementById('step-tool').style.display   = 'none';
+  document.getElementById('step-select').style.display = 'flex';
+}
+
+/* ══════════════════════════════════════════════
+   OPTION SETTERS
+══════════════════════════════════════════════ */
+function setGnd(el, alpha){
+  document.querySelectorAll('#gndRow .choice-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on'); groundAlpha = alpha; schedCalc();
+}
+function setPhase(el, phase){
+  document.querySelectorAll('#phaseRow .choice-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on'); flightPhase = phase; schedCalc();
+}
+function toggleAutoRefresh(){
+  autoRefresh = document.getElementById('togAutoRefresh').checked;
+}
+
+/* ══════════════════════════════════════════════
+   DEBOUNCED SCHEDULER
+══════════════════════════════════════════════ */
+function schedCalc(){
+  if(!autoRefresh) return;
+  clearTimeout(calcTimer);
+  calcTimer = setTimeout(runCalc, 120);
+}
+
+/* ══════════════════════════════════════════════
+   CORE ACOUSTICS ENGINE
+══════════════════════════════════════════════ */
+function calcAcoustics(){
+  const D     = +document.getElementById('sD').value;
+  const RPM   = +document.getElementById('sRPM').value;
+  const B     = +document.getElementById('sB').value;
+  const chord = +document.getElementById('sChord').value;
+  const pitch = +document.getElementById('sPitch').value;
+  const DL    = +document.getElementById('sDL').value;
+  const N     = Math.max(1, +document.getElementById('nRotors').value);
+  const AUW   = +document.getElementById('sAUW').value;
+  const Vcr   = +document.getElementById('sVcr').value * 0.5144; // kt → m/s
+  const alt   = +document.getElementById('sAlt').value;
+  const Robs  = +document.getElementById('sRobs').value;
+  const Scab  = +document.getElementById('sScab').value;
+  const TL    = +document.getElementById('sTL').value;
+  const useAW  = document.getElementById('togAw').checked;
+  const useGnd = document.getElementById('togGnd').checked;
+  const useDop = document.getElementById('togDop').checked;
+  const useThd = document.getElementById('togThird').checked;
+  const useLim = document.getElementById('togLimit').checked;
+
+  /* Derived */
+  const R     = D / 2;
+  const Omega = RPM * 2 * Math.PI / 60;
+  const Vtip  = Omega * R;
+  const Mach  = Vtip / 340;
+  const BPF   = B * RPM / 60;
+  const Adisc = Math.PI * R * R;
+  const rho   = 1.225 * Math.exp(-alt / 8500);
+  const a0    = 340;
+  const T_each= (AUW * 9.81) / N;   // N per rotor
+  const v_i   = Math.sqrt(T_each / (2 * rho * Adisc + 1e-9)); // induced velocity
+
+  /* Phase factor adjusts loading noise */
+  const phFac = {hover:1.0, climbout:1.15, cruise:0.7, approach:1.05}[flightPhase] || 1;
+
+  /* ── Thickness noise (Lowson simplified) */
+  const t_c = 0.12;
+  const SPL_thick_base = 20 * Math.log10(
+    Math.max(1e-20, rho * a0 * B * Omega * Omega * R * R * chord * t_c / (4 * Math.PI * Robs))
+  ) + 20 * Math.log10(Math.max(1e-9, Mach));
+  const SPL_thick = SPL_thick_base + 10 * Math.log10(N);
+
+  /* ── Loading noise (FW-H simplified) */
+  const dTdt  = T_each * B * Omega * phFac;
+  const SPL_load_base = 20 * Math.log10(
+    Math.max(1e-20, B * dTdt / (4 * Math.PI * a0 * rho * Robs * Robs))
+  ) + 94;
+  const SPL_load = Math.min(115, SPL_load_base + 10 * Math.log10(N));
+
+  /* ── Broadband (BPM trailing-edge) */
+  const Re    = rho * Vtip * chord / 1.81e-5;
+  const dstar = 0.037 * chord * Math.pow(Math.max(1,Re), -0.2);
+  const SPL_bb_base = 10 * Math.log10(
+    Math.max(1e-40, rho*rho * a0*a0*a0 * chord * dstar * Math.pow(Mach,5) / (Robs*Robs))
+  ) + 128;
+  const SPL_bb = Math.min(110, SPL_bb_base + 10 * Math.log10(N * B));
+
+  /* ── BVI noise */
+  const mu    = Vcr / Vtip;  // advance ratio
+  const bvi   = mu > 0.05 ? 8 * mu : 0.4;
+  const SPL_bvi = SPL_load + 3 * bvi;
+
+  /* ── Ground reflection */
+  const gndBoost = useGnd ? 3 : 0;
+
+  /* ── Doppler */
+  const Mflight = Vcr / a0;
+  const dopFwdFac = useDop ? (1 / (1 - Mflight)) : 1;
+  const dopBoost  = useDop ? 20 * Math.log10(dopFwdFac) : 0;
+
+  /* ── Ground absorption (freq-independent approx) */
+  const absCorr = -3 * groundAlpha;
+
+  /* ── Log-energy sum */
+  function logSum(...vals){
+    const v = vals.filter(x=>isFinite(x)&&x>-200);
+    if(!v.length) return -200;
+    return 10*Math.log10(v.reduce((s,x)=>s+Math.pow(10,x/10),0));
+  }
+
+  const SPL_raw = logSum(SPL_thick, SPL_load, SPL_bb, SPL_bvi) + gndBoost + absCorr + dopBoost;
+
+  /* ── Build spectrum */
+  const bands = useThd ? THIRD_OCT : OCT_BANDS;
+
+  function getAW(f){
+    const nearest = Object.keys(AW_TABLE).map(Number).reduce((p,c)=>Math.abs(c-f)<Math.abs(p-f)?c:p);
+    return useAW ? (AW_TABLE[nearest]||0) : 0;
+  }
+
+  function bandSPL(f){
+    // BPF harmonics
+    let hSum = 0;
+    for(let h=1;h<=10;h++){
+      const fh = h*BPF;
+      const bw = fh*0.15;
+      const near = Math.exp(-0.5*Math.pow((f-fh)/bw,2));
+      const Lh   = (SPL_load+SPL_thick)/2 - 6*Math.log2(Math.max(1,h));
+      hSum += Math.pow(10, Lh/10) * near;
+    }
+    // Broadband (shaped)
+    const fpk = Math.max(1, 0.8*Vtip/chord);
+    const bbS = 1 / (1 + Math.pow(f/fpk - 1, 2));
+    const bbV = Math.pow(10, SPL_bb/10) * bbS;
+
+    const raw  = 10*Math.log10(Math.max(1e-20, hSum+bbV));
+    const aw   = getAW(f);
+    return raw + aw + gndBoost + absCorr + dopBoost;
+  }
+
+  const spectrum = bands.map(f=>({f, spl:bandSPL(f)}));
+
+  /* Overall dB(A) */
+  const splA = logSum(...spectrum.map(b=>b.spl));
+
+  /* Cabin noise */
+  const R_skin = 3; // m from rotor to fuselage skin
+  const skinCorr = 20*Math.log10(Robs/R_skin);
+  const cabSpec = spectrum.map(b=>{
+    const tlf = TL + 6*Math.log2(Math.max(1,b.f/500));
+    return {f:b.f, spl: b.spl + skinCorr - tlf};
+  });
+  const splCab = logSum(...cabSpec.map(b=>b.spl));
+
+  /* EPNL estimate (simplified: OASPL - 13 dB for typical duration) */
+  const EPNL = splA - 13 + 10*Math.log10(Math.max(1,N)*0.5);
+
+  /* Harmonics bar chart */
+  const hFreqs = Array.from({length:8},(_,i)=>(i+1)*BPF);
+  const hLevels = hFreqs.map((fh,i)=>{
+    const h=i+1;
+    const lh = (SPL_load+SPL_thick)/2 - 6*Math.log2(h) + gndBoost + getAW(fh) + absCorr + dopBoost;
+    return Math.max(15, lh);
+  });
+
+  /* Polar directivity — 37 angles 0..360 step 10 */
+  const polAngles = Array.from({length:37},(_,i)=>i*10);
+  const polData   = polAngles.map(deg=>{
+    const th = deg*Math.PI/180;
+    const Dt = Math.pow(Math.cos(th),2);
+    const Dl = (0.5+0.5*Math.cos(th))*(0.5+0.5*Math.sin(th));
+    const Db = 0.7+0.3*Math.sin(th);
+    const Dc = (Dt+Dl+Db)/3;
+    return Math.max(30, SPL_raw + 10*Math.log10(Dc+0.01));
+  });
+
+  /* Source percentages */
+  const p_th  = Math.pow(10,SPL_thick/10);
+  const p_ld  = Math.pow(10,SPL_load/10);
+  const p_bb  = Math.pow(10,SPL_bb/10);
+  const p_bvi = Math.pow(10,SPL_bvi/10);
+  const p_tot = p_th+p_ld+p_bb+p_bvi;
+  const pct   = x=>Math.round(100*x/p_tot);
+
+  return {
+    BPF, Vtip, Mach, splA, splCab, EPNL, Robs, N,
+    spectrum, cabSpec, hFreqs, hLevels, polAngles, polData, bands,
+    src:{ th:pct(p_th), ld:pct(p_ld), bvi:pct(p_bvi), bb:pct(p_bb) },
+    splRaw: SPL_raw
+  };
+}
+
+/* ══════════════════════════════════════════════
+   RUN & UPDATE UI
+══════════════════════════════════════════════ */
+function runCalc(){
+  calcCount++;
+  const res = calcAcoustics();
+
+  /* flash helper */
+  function flash(id,val){
+    const el=document.getElementById(id);
+    el.textContent=val; el.classList.remove('flash');
+    void el.offsetWidth; el.classList.add('flash');
+  }
+
+  flash('mBPF', Math.round(res.BPF));
+  flash('mVtip', Math.round(res.Vtip));
+  document.getElementById('mMach').textContent = res.Mach.toFixed(2);
+  flash('mSPLff', res.splA.toFixed(1));
+  flash('mSPLcab', res.splCab.toFixed(1));
+  flash('mEPNL', res.EPNL.toFixed(1));
+  document.getElementById('mRstr').textContent = Math.round(res.Robs);
+
+  /* Compliance */
+  const sff = res.splA;
+  let compClass, compText;
+  if(sff<=65){ compClass='pass'; compText='✓ COMPLIANT'; }
+  else if(sff<=75){ compClass='warn'; compText='⚠ MARGINAL'; }
+  else { compClass='fail'; compText='✗ EXCEEDS LIMIT'; }
+  document.getElementById('mComp').innerHTML=`<span class="chip ${compClass}">${compText}</span>`;
+  const p1c = document.getElementById('p1chip');
+  p1c.textContent=compText; p1c.className=`chip ${compClass}`;
+
+  const scab = res.splCab;
+  let cc, ct;
+  if(scab<=70){cc='pass';ct='COMFORTABLE';}
+  else if(scab<=80){cc='warn';ct='⚠ MODERATE';}
+  else{cc='fail';ct='✗ LOUD';}
+  const p2c = document.getElementById('p2chip');
+  p2c.textContent=ct; p2c.className=`chip ${cc}`;
+
+  /* Source bar */
+  document.getElementById('srcThick').style.flex = res.src.th;
+  document.getElementById('srcLoad').style.flex  = res.src.ld;
+  document.getElementById('srcBVI').style.flex   = res.src.bvi;
+  document.getElementById('srcBB').style.flex    = res.src.bb;
+  document.getElementById('pThick').textContent  = `THICKNESS ${res.src.th}%`;
+  document.getElementById('pLoad').textContent   = `LOADING ${res.src.ld}%`;
+  document.getElementById('pBVI').textContent    = `BVI ${res.src.bvi}%`;
+  document.getElementById('pBB').textContent     = `BROADBAND ${res.src.bb}%`;
+  document.getElementById('srcTotal').textContent= `${res.splA.toFixed(1)} dB(A)`;
+
+  /* Plot sub-labels */
+  document.getElementById('p1sub').textContent = `@ ${Math.round(res.Robs)}m · ${flightPhase}`;
+  document.getElementById('p3sub').textContent = `BPF = ${Math.round(res.BPF)} Hz`;
+
+  /* Status bar */
+  document.getElementById('stBPF').textContent  = Math.round(res.BPF)+' Hz';
+  document.getElementById('stVtip').textContent = Math.round(res.Vtip)+' m/s';
+  document.getElementById('stSPL').textContent  = res.splA.toFixed(1)+' dB(A)';
+  document.getElementById('stCab').textContent  = res.splCab.toFixed(1)+' dB(A)';
+  document.getElementById('stTime').textContent = new Date().toLocaleTimeString();
+
+  /* Aircraft viewer */
+  updateViewer(res);
+
+  /* Charts */
+  updateCharts(res);
+}
+
+/* ══════════════════════════════════════════════
+   AIRCRAFT VIEWER SVG
+══════════════════════════════════════════════ */
+function updateViewer(res){
+  const B   = +document.getElementById('sB').value;
+  const D   = +document.getElementById('sD').value;
+  const N   = res.N;
+  const svg = document.getElementById('viewerSvg');
+
+  let s = `
+    <defs>
+      <radialGradient id="vgrd" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#0f2236"/>
+        <stop offset="100%" stop-color="#061018"/>
+      </radialGradient>
+    </defs>
+    <!-- Ground line -->
+    <line x1="0" y1="128" x2="300" y2="128" stroke="#0f2236" stroke-width="1"/>
+    <text x="292" y="140" font-family="JetBrains Mono" font-size="7" fill="#152d44" text-anchor="end">GND</text>
+  `;
+
+  function bladeLines(cx,cy,nb,r,col,clsName){
+    let g=`<g class="${clsName}" style="transform-origin:${cx}px ${cy}px">`;
+    for(let b=0;b<nb;b++){
+      const a=(b/nb)*Math.PI;
+      const x1=(cx+r*Math.cos(a)).toFixed(1), y1=(cy+r*Math.sin(a)*0.6).toFixed(1);
+      const x2=(cx-r*Math.cos(a)).toFixed(1), y2=(cy-r*Math.sin(a)*0.6).toFixed(1);
+      g+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="2" stroke-linecap="round"/>`;
+    }
+    g+=`</g>`;
+    return g;
+  }
+
+  function discCircle(cx,cy,r,col,dash='4,3'){
+    return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="none" stroke="${col}" stroke-width="0.8" stroke-dasharray="${dash}" opacity="0.5"/>`;
+  }
+
+  const rDisc = Math.max(16, Math.min(50, (D/2)*14));
+  const spl   = res.splA;
+  const splCol= spl<=65?'#00ffaa':spl<=75?'#ffbe00':'#ff3355';
+
+  if(currentAc==='quad'||currentAc==='hex'||currentAc==='octo'){
+    const cx=150, cy=72;
+    const numR= currentAc==='quad'?4:currentAc==='hex'?6:8;
+    const armL= Math.min(68, rDisc*1.8+18);
+    // body
+    s+=`<rect x="${cx-18}" y="${cy-12}" width="36" height="24" rx="5" fill="url(#vgrd)" stroke="#1e4060" stroke-width="1.5"/>`;
+    s+=`<circle cx="${cx-5}" cy="${cy}" r="2" fill="#00ffaa"/><circle cx="${cx+5}" cy="${cy}" r="2" fill="#00eaff"/>`;
+    // skids
+    s+=`<line x1="${cx-28}" y1="${cy+20}" x2="${cx+28}" y2="${cy+20}" stroke="#0f2236" stroke-width="3" stroke-linecap="round"/>`;
+    s+=`<line x1="${cx-20}" y1="${cy+12}" x2="${cx-20}" y2="${cy+20}" stroke="#0f2236" stroke-width="2"/>`;
+    s+=`<line x1="${cx+20}" y1="${cy+12}" x2="${cx+20}" y2="${cy+20}" stroke="#0f2236" stroke-width="2"/>`;
+    for(let i=0;i<numR;i++){
+      const ang = (i/numR)*2*Math.PI - Math.PI/4;
+      const px  = cx + armL*Math.cos(ang);
+      const py  = cy + armL*Math.sin(ang)*0.55;
+      const cw  = i%2===0;
+      const col = cw?'#00eaff':'#00ffaa';
+      s+=`<line x1="${cx}" y1="${cy}" x2="${px.toFixed(1)}" y2="${py.toFixed(1)}" stroke="#0f2236" stroke-width="2"/>`;
+      s+=`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4" fill="#061018" stroke="#1e4060" stroke-width="1.5"/>`;
+      s+=discCircle(px,py,rDisc,col);
+      s+=bladeLines(px,py,B,rDisc,col,cw?'blade-cw':'blade-ccw');
+      s+=`<text x="${px.toFixed(1)}" y="${(py-rDisc-4).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="${col}">${cw?'↻':'↺'}</text>`;
+    }
+  }
+  else if(currentAc==='coax'){
+    const cx=150,cy=78;
+    const rUp=rDisc+12, rLo=rDisc;
+    s+=`<ellipse cx="${cx}" cy="${cy+10}" rx="36" ry="13" fill="url(#vgrd)" stroke="#1e4060" stroke-width="1.5"/>`;
+    s+=`<line x1="${cx}" y1="${cy+10}" x2="${cx}" y2="${cy-24}" stroke="#2d5a7a" stroke-width="4" stroke-linecap="round"/>`;
+    s+=`<circle cx="${cx}" cy="${cy-26}" r="5" fill="#061018" stroke="#2d5a7a" stroke-width="2"/>`;
+    s+=discCircle(cx,cy-26,rUp,'#00eaff');
+    s+=bladeLines(cx,cy-26,B,rUp,'#00eaff','blade-cw');
+    s+=discCircle(cx,cy-18,rLo,'#00ffaa');
+    s+=bladeLines(cx,cy-18,B,rLo,'#00ffaa','blade-ccw');
+    s+=`<line x1="${cx-40}" y1="${cy+24}" x2="${cx+40}" y2="${cy+24}" stroke="#0f2236" stroke-width="3" stroke-linecap="round"/>`;
+    s+=`<line x1="${cx-30}" y1="${cy+23}" x2="${cx-30}" y2="${cy+24}" stroke="#0f2236" stroke-width="2"/>`;
+    s+=`<line x1="${cx+30}" y1="${cy+23}" x2="${cx+30}" y2="${cy+24}" stroke="#0f2236" stroke-width="2"/>`;
+    s+=`<text x="${cx}" y="12" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">UPPER ↻</text>`;
+    s+=`<text x="${cx}" y="24" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00ffaa">LOWER ↺ CONTRA</text>`;
+  }
+  else if(currentAc==='tandem'){
+    const by=80;
+    s+=`<ellipse cx="150" cy="${by}" rx="80" ry="14" fill="url(#vgrd)" stroke="#1e4060" stroke-width="1.5"/>`;
+    s+=`<ellipse cx="220" cy="${by-2}" rx="22" ry="8" fill="url(#vgrd)" stroke="#1e4060" stroke-width="1"/>`;
+    s+=`<line x1="84" y1="${by-14}" x2="84" y2="${by-44}" stroke="#1e4060" stroke-width="3" stroke-linecap="round"/>`;
+    s+=`<line x1="214" y1="${by-14}" x2="214" y2="${by-44}" stroke="#1e4060" stroke-width="3" stroke-linecap="round"/>`;
+    s+=discCircle(84,by-46,rDisc,'#00eaff');
+    s+=bladeLines(84,by-46,B,rDisc,'#00eaff','blade-cw');
+    s+=discCircle(214,by-46,rDisc,'#00ffaa');
+    s+=bladeLines(214,by-46,B,rDisc,'#00ffaa','blade-ccw');
+    s+=`<line x1="66" y1="${by+18}" x2="232" y2="${by+18}" stroke="#0f2236" stroke-width="3" stroke-linecap="round"/>`;
+    s+=`<text x="84" y="8" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">FWD ↻</text>`;
+    s+=`<text x="214" y="8" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00ffaa">AFT ↺</text>`;
+  }
+  else if(currentAc==='liftcruise'){
+    const by=80;
+    s+=`<ellipse cx="150" cy="${by}" rx="72" ry="12" fill="url(#vgrd)" stroke="#1e4060" stroke-width="1.5"/>`;
+    s+=`<ellipse cx="220" cy="${by-2}" rx="18" ry="7" fill="url(#vgrd)" stroke="#1e4060" stroke-width="1"/>`;
+    s+=`<line x1="80" y1="${by}" x2="36" y2="${by-10}" stroke="#1e4060" stroke-width="3.5" stroke-linecap="round"/>`;
+    s+=`<line x1="218" y1="${by}" x2="262" y2="${by-10}" stroke="#1e4060" stroke-width="3.5" stroke-linecap="round"/>`;
+    s+=`<line x1="42" y1="${by-10}" x2="42" y2="${by-38}" stroke="#1e4060" stroke-width="2"/>`;
+    s+=`<line x1="256" y1="${by-10}" x2="256" y2="${by-38}" stroke="#1e4060" stroke-width="2"/>`;
+    s+=discCircle(42,by-40,rDisc-4,'#00eaff');
+    s+=bladeLines(42,by-40,B,rDisc-4,'#00eaff','blade-cw');
+    s+=discCircle(256,by-40,rDisc-4,'#00eaff');
+    s+=bladeLines(256,by-40,B,rDisc-4,'#00eaff','blade-ccw');
+    // pusher
+    s+=discCircle(78,by,Math.round(rDisc*0.7),'#ffbe00');
+    s+=bladeLines(78,by,B,Math.round(rDisc*0.7),'#ffbe00','blade-ccw');
+    s+=`<line x1="80" y1="${by+14}" x2="216" y2="${by+14}" stroke="#0f2236" stroke-width="3" stroke-linecap="round"/>`;
+    s+=`<text x="42" y="8" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">LIFT</text>`;
+    s+=`<text x="256" y="8" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#00eaff">LIFT</text>`;
+    s+=`<text x="78" y="${by+28}" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#ffbe00">PUSH</text>`;
+  }
+
+  /* SPL bar at bottom */
+  const pct = Math.min(100, Math.max(0, (spl-40)/60*100));
+  s+=`
+    <rect x="8" y="134" width="284" height="5" fill="#061018" rx="1"/>
+    <rect x="8" y="134" width="${(pct*2.84).toFixed(1)}" height="5" rx="1" fill="${splCol}"/>
+    <text x="8" y="148" font-family="JetBrains Mono" font-size="7" fill="#152d44">40</text>
+    <text x="150" y="148" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#152d44">70 dB(A)</text>
+    <text x="292" y="148" text-anchor="end" font-family="JetBrains Mono" font-size="7" fill="#152d44">100</text>
+    <text x="${(8+pct*2.84).toFixed(1)}" y="148" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="${splCol}" font-weight="bold">${spl.toFixed(0)}</text>
+  `;
+
+  svg.innerHTML = s;
+}
+
+/* ══════════════════════════════════════════════
+   CHART INIT
+══════════════════════════════════════════════ */
+const BASE_OPTS = {
+  responsive:true, maintainAspectRatio:false,
+  animation:{duration:300},
+  plugins:{
+    legend:{labels:{color:'#4d7a96',font:{family:'JetBrains Mono',size:9},boxWidth:10,padding:8}},
+    tooltip:{
+      backgroundColor:'#0a1a26',borderColor:'#1e4060',borderWidth:1,
+      titleColor:'#00eaff',bodyColor:'#b8cdd8',
+      titleFont:{family:'JetBrains Mono',size:9},bodyFont:{family:'JetBrains Mono',size:9}
+    }
+  },
+  scales:{
+    x:{ticks:{color:'#2a4a60',font:{family:'JetBrains Mono',size:8}},
+       grid:{color:'rgba(21,45,68,.5)',lineWidth:.5},border:{color:'#0f2236'}},
+    y:{ticks:{color:'#2a4a60',font:{family:'JetBrains Mono',size:8}},
+       grid:{color:'rgba(21,45,68,.5)',lineWidth:.5},border:{color:'#0f2236'}}
+  }
+};
+
+function initCharts(){
+  Chart.defaults.color = '#4d7a96';
+
+  charts.c1 = new Chart(document.getElementById('c1'),{
+    type:'bar',
+    data:{labels:[],datasets:[
+      {label:'SPL Spectrum',data:[],backgroundColor:'rgba(0,234,255,.25)',borderColor:'#00eaff',borderWidth:1.5},
+      {label:'BPF Tones',   data:[],backgroundColor:'rgba(255,190,0,.4)', borderColor:'#ffbe00',borderWidth:1.5,type:'bar'}
+    ]},
+    options:{...BASE_OPTS, scales:{...BASE_OPTS.scales,
+      y:{...BASE_OPTS.scales.y,min:20,max:100,title:{display:true,text:'SPL [dB(A)]',color:'#2a4a60',font:{family:'JetBrains Mono',size:8}}},
+      x:{...BASE_OPTS.scales.x,title:{display:true,text:'Frequency [Hz]',color:'#2a4a60',font:{family:'JetBrains Mono',size:8}}}
+    }}
+  });
+
+  charts.c2 = new Chart(document.getElementById('c2'),{
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'Exterior', data:[],borderColor:'#00eaff',backgroundColor:'rgba(0,234,255,.07)',fill:true,borderWidth:1.5,pointRadius:2,tension:.35},
+      {label:'Cabin',    data:[],borderColor:'#00ffaa',backgroundColor:'rgba(0,255,170,.07)',fill:true,borderWidth:2,  pointRadius:2,tension:.35},
+      {label:'Limit 72dB',data:[],borderColor:'rgba(255,51,85,.5)',fill:false,borderWidth:1,borderDash:[5,3],pointRadius:0}
+    ]},
+    options:{...BASE_OPTS, scales:{...BASE_OPTS.scales,
+      y:{...BASE_OPTS.scales.y,min:10,max:100,title:{display:true,text:'SPL [dB(A)]',color:'#2a4a60',font:{family:'JetBrains Mono',size:8}}},
+      x:{...BASE_OPTS.scales.x,title:{display:true,text:'Frequency [Hz]',color:'#2a4a60',font:{family:'JetBrains Mono',size:8}}}
+    }}
+  });
+
+  charts.c3 = new Chart(document.getElementById('c3'),{
+    type:'bar',
+    data:{labels:[],datasets:[
+      {label:'Harmonic Level',data:[],
+        backgroundColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex]||0;return v>75?'rgba(255,51,85,.5)':v>65?'rgba(255,190,0,.5)':'rgba(0,234,255,.35)'},
+        borderColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex]||0;return v>75?'#ff3355':v>65?'#ffbe00':'#00eaff'},
+        borderWidth:1.5
+      }
+    ]},
+    options:{...BASE_OPTS, scales:{...BASE_OPTS.scales,
+      y:{...BASE_OPTS.scales.y,min:20,max:100,title:{display:true,text:'SPL [dB(A)]',color:'#2a4a60',font:{family:'JetBrains Mono',size:8}}},
+      x:{...BASE_OPTS.scales.x,title:{display:true,text:'× BPF',color:'#2a4a60',font:{family:'JetBrains Mono',size:8}}}
+    }}
+  });
+
+  charts.c4 = new Chart(document.getElementById('c4'),{
+    type:'radar',
+    data:{labels:Array.from({length:37},(_,i)=>i%3===0?(i*10)+'°':''),
+      datasets:[
+        {label:'SPL Directivity',data:Array(37).fill(60),
+          borderColor:'#00eaff',backgroundColor:'rgba(0,234,255,.07)',
+          borderWidth:1.5,pointRadius:2,pointBackgroundColor:'#00eaff'},
+        {label:'65 dB Limit',data:Array(37).fill(65),
+          borderColor:'rgba(255,51,85,.45)',backgroundColor:'transparent',
+          borderWidth:1,borderDash:[4,3],pointRadius:0}
+      ]},
+    options:{...BASE_OPTS,
+      scales:{r:{
+        min:30,max:95,
+        ticks:{color:'#2a4a60',font:{family:'JetBrains Mono',size:7},stepSize:10,backdropColor:'transparent'},
+        grid:{color:'rgba(21,45,68,.6)'},
+        pointLabels:{color:'#2a4a60',font:{family:'JetBrains Mono',size:7}},
+        angleLines:{color:'rgba(21,45,68,.5)'}
+      }}
+    }
+  });
+}
+
+/* ══════════════════════════════════════════════
+   CHART UPDATE
+══════════════════════════════════════════════ */
+function updateCharts(res){
+  const showLim = document.getElementById('togLimit').checked;
+  const fmtF = f => f>=1000?(f/1000).toFixed(f>=10000?0:1)+'k':f;
+  const labels = res.spectrum.map(b=>fmtF(b.f));
+
+  /* C1 */
+  charts.c1.data.labels = labels;
+  charts.c1.data.datasets[0].data = res.spectrum.map(b=>+b.spl.toFixed(1));
+  // BPF overlay — highlight bands near harmonics
+  const BPF = res.BPF;
+  charts.c1.data.datasets[1].data = res.spectrum.map(b=>{
+    for(let h=1;h<=8;h++) if(Math.abs(b.f-h*BPF)/(h*BPF)<0.28) return +b.spl.toFixed(1);
+    return null;
+  });
+  charts.c1.update('none');
+
+  /* C2 */
+  charts.c2.data.labels = labels;
+  charts.c2.data.datasets[0].data = res.spectrum.map(b=>+b.spl.toFixed(1));
+  charts.c2.data.datasets[1].data = res.cabSpec.map(b=>+b.spl.toFixed(1));
+  charts.c2.data.datasets[2].data = showLim ? res.spectrum.map(()=>72) : [];
+  charts.c2.update('none');
+
+  /* C3 */
+  charts.c3.data.labels = res.hFreqs.map((f,i)=>`${i+1}× (${Math.round(f)}Hz)`);
+  charts.c3.data.datasets[0].data = res.hLevels.map(v=>+v.toFixed(1));
+  charts.c3.update('none');
+
+  /* C4 */
+  charts.c4.data.datasets[0].data = res.polData.map(v=>Math.max(30,+v.toFixed(1)));
+  charts.c4.data.datasets[1].data = showLim ? Array(37).fill(65) : [];
+  charts.c4.update('none');
+}
+
+/* ══════════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════════ */
+window.addEventListener('load',()=>{
+  // Pre-select quad
+  document.getElementById('proceedBtn').disabled = false;
+});
+</script>
+</body>
+</html>
