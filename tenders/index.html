@@ -178,11 +178,30 @@ textarea{resize:vertical;min-height:72px}
 
 /* RESPONSIVE */
 @media(max-width:768px){.grid4{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.psu-grid{grid-template-columns:repeat(2,1fr)}.work-grid{grid-template-columns:1fr}.dash-tabs{overflow-x:auto;white-space:nowrap}}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px}
+.login-box{width:100%;max-width:420px;background:var(--ink2);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:44px 40px;box-shadow:0 0 80px rgba(201,168,76,0.06)}
+.login-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--paper);letter-spacing:0.04em;margin-bottom:4px}
+.login-logo em{color:var(--gold);font-style:normal}
+.login-sub{font-size:9px;color:rgba(245,240,232,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:32px}
+.login-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.45);display:block;margin-bottom:7px}
+.login-input{width:100%;padding:11px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink3);border:1px solid rgba(245,240,232,0.12);color:var(--paper);border-radius:4px;outline:none;margin-bottom:16px;transition:border-color 0.2s}
+.login-input:focus{border-color:var(--gold)}
+.login-input.shake{animation:shake 0.4s ease;border-color:var(--red)}
+.login-btn{width:100%;padding:13px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:var(--gold);color:var(--ink);border:none;border-radius:4px;transition:all 0.2s;margin-top:4px}
+.login-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+.login-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.login-error{margin-top:14px;padding:10px 14px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);border-radius:4px;color:#fca5a5;font-size:10px;line-height:1.6;display:none}
+.login-error.show{display:block}
+.login-attempts{margin-top:10px;font-size:9px;color:rgba(245,240,232,0.3);text-align:center}
+.lockout-timer{color:var(--red);font-weight:700}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 </style>
 </head>
 <body>
 
-<header>
+<header id="main-header" style="display:none">
   <div class="hdr">
     <div class="logo">
       <div class="logo-hex">⚡</div>
@@ -196,13 +215,28 @@ textarea{resize:vertical;min-height:72px}
       <button id="refresh-btn" onclick="runLiveRefresh()" style="display:none;align-items:center;gap:5px;background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);color:#2ecc71;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer"><span class="live-dot"></span>Refresh Live Data</button>
       <span id="hdr-context" style="color:var(--gold)"></span>
       <a href="mailto:info@zirconique.com" style="color:rgba(245,240,232,0.4);text-decoration:none;font-size:10px">info@zirconique.com</a>
-      <a href="/" class="back-link">&larr; Home</a>
+      <span id="hdr-user" style="font-size:10px;color:rgba(245,240,232,0.45)"></span><button id="logout-btn" onclick="doLogout()" style="background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.3);color:#fca5a5;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer">Sign Out</button><a href="/" class="back-link">&larr; Home</a>
     </div>
   </div>
 </header>
 
 <!-- ═══ SELECTION SCREEN ═══ -->
-<div id="select-screen">
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Tender<em>IQ</em></div>
+    <div class="login-sub">India PSU Bid Intelligence · Authorised Access Only</div>
+    <label class="login-label">Username</label>
+    <input class="login-input" type="text" id="login-user" placeholder="Enter username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <label class="login-label">Password</label>
+    <input class="login-input" type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-attempts" id="login-attempts"></div>
+  </div>
+</div>
+
+<div id="select-screen" style="display:none">
 <div class="select-wrap">
 
   <!-- Step 1: PSU -->
@@ -305,6 +339,100 @@ textarea{resize:vertical;min-height:72px}
 </div>
 
 <script>
+
+// ═══════════════════════════════════════════════════════
+//  USER MANAGEMENT
+//
+//  To add a user:
+//  1. Go to https://emn178.github.io/online-tools/sha256.html
+//  2. Type the password → copy the hash
+//  3. Add: "newusername": "paste-hash-here"
+//
+//  Default credentials:
+//  admin    / TenderIQ@2026
+//  analyst1 / Bid@Analyst1
+//  analyst2 / Bid@Analyst2
+// ═══════════════════════════════════════════════════════
+const USERS = {
+  "admin":    "dbd93a844805af432680c531312accc9b16179ed9e8275a59dc09651418d33a6",
+  "analyst1": "5acb46febcb355b0fdbb8eeeae72a02bbabc26519f2df4d67fa2eae221e4f07f",
+  "analyst2": "a6ce10c595fbda0b20e0cac5e089369a531b1acf6e144d0799e24275a1e1756b"
+};
+const MAX_ATTEMPTS = 5, LOCKOUT_MINS = 15;
+let failedAttempts = parseInt(sessionStorage.getItem("tiq_fa") || "0");
+let lockoutUntil   = parseInt(sessionStorage.getItem("tiq_lu") || "0");
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
+function saveSession(u) { sessionStorage.setItem("tiq_user", u); sessionStorage.setItem("tiq_ts", Date.now().toString()); }
+function getSession() {
+  const u = sessionStorage.getItem("tiq_user"), ts = parseInt(sessionStorage.getItem("tiq_ts") || "0");
+  if (!u) return null;
+  if (Date.now() - ts > 8 * 60 * 60 * 1000) { sessionStorage.removeItem("tiq_user"); sessionStorage.removeItem("tiq_ts"); return null; }
+  return u;
+}
+async function doLogin() {
+  const btn = document.getElementById("login-btn");
+  const errEl = document.getElementById("login-error");
+  const attEl = document.getElementById("login-attempts");
+  if (Date.now() < lockoutUntil) { const m = Math.ceil((lockoutUntil - Date.now()) / 60000); showLoginError("Too many attempts. Try again in <span class=\"lockout-timer\">" + m + " min</span>."); return; }
+  const username = document.getElementById("login-user").value.trim().toLowerCase();
+  const password = document.getElementById("login-pass").value;
+  if (!username || !password) { showLoginError("Please enter both username and password."); shakeInputs(); return; }
+  btn.disabled = true; btn.textContent = "Signing in...";
+  try {
+    const hash = await sha256(password);
+    if (USERS[username] && USERS[username] === hash) {
+      failedAttempts = 0; sessionStorage.removeItem("tiq_fa"); sessionStorage.removeItem("tiq_lu");
+      saveSession(username); showApp(username);
+    } else {
+      failedAttempts++; sessionStorage.setItem("tiq_fa", failedAttempts.toString());
+      if (failedAttempts >= MAX_ATTEMPTS) {
+        lockoutUntil = Date.now() + LOCKOUT_MINS * 60 * 1000;
+        sessionStorage.setItem("tiq_lu", lockoutUntil.toString());
+        showLoginError("Account locked for <span class=\"lockout-timer\">" + LOCKOUT_MINS + " minutes</span>.");
+      } else {
+        const l = MAX_ATTEMPTS - failedAttempts;
+        showLoginError("Incorrect credentials. " + l + " attempt" + (l === 1 ? "" : "s") + " remaining.");
+        shakeInputs();
+        attEl.textContent = l + " of " + MAX_ATTEMPTS + " remaining";
+      }
+      btn.disabled = false; btn.textContent = "Sign In \u2192";
+    }
+  } catch(e) { showLoginError("Error. Please refresh and try again."); btn.disabled = false; btn.textContent = "Sign In \u2192"; }
+}
+function showLoginError(msg) { const el = document.getElementById("login-error"); el.innerHTML = msg; el.classList.add("show"); }
+function shakeInputs() { ["login-user","login-pass"].forEach(id => { const el = document.getElementById(id); el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); }); }
+function showApp(username) {
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("main-header").style.display = "block";
+  document.getElementById("select-screen").style.display = "block";
+  // show logout btn in header
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) { logoutBtn.style.display = "inline-block"; }
+  const userLbl = document.getElementById("hdr-user");
+  if (userLbl) userLbl.textContent = username;
+}
+function doLogout() {
+  sessionStorage.removeItem("tiq_user"); sessionStorage.removeItem("tiq_ts");
+  document.getElementById("login-screen").style.display = "flex";
+  document.getElementById("main-header").style.display = "none";
+  document.getElementById("select-screen").style.display = "none";
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("login-user").value = "";
+  document.getElementById("login-pass").value = "";
+  document.getElementById("login-error").classList.remove("show");
+}
+
+// Check existing session on load
+(function() {
+  const u = getSession();
+  if (u) { showApp(u); }
+})();
+
+
 // ══════════════════════════════════════════════════
 //  TENDERIQ v2 — ALL PSU · ALL WORK TYPES
 // ══════════════════════════════════════════════════
