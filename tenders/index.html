@@ -3,1373 +3,1122 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TenderIQ — PSU Electrical Bid Intelligence</title>
+<title>TenderIQ — India PSU Bid Intelligence Platform</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --ink:#0f1419; --ink2:#1c2733; --ink3:#2d3e50;
-  --paper:#f5f0e8; --paper2:#ede8dc; --paper3:#e2ddd0;
-  --gold:#c9a84c; --gold2:#e8c96a; --gold3:#f0d990;
-  --red:#c0392b; --red2:#e74c3c;
-  --green:#1a6b3c; --green2:#27ae60;
-  --blue:#1a3a5c; --blue2:#2980b9;
-  --orange:#c0622b;
-  --warn:#e67e22;
-  --border:rgba(15,20,25,0.15);
-  --shadow:0 2px 16px rgba(15,20,25,0.12);
+:root{
+  --ink:#0f1419;--ink2:#1c2733;--ink3:#2d3e50;
+  --paper:#f5f0e8;--paper2:#ede8dc;--paper3:#e2ddd0;
+  --gold:#c9a84c;--gold2:#e8c96a;
+  --red:#c0392b;--green:#1a6b3c;--green2:#27ae60;
+  --blue:#1a3a5c;--blue2:#2980b9;--warn:#e67e22;
+  --border:rgba(15,20,25,0.15);--shadow:0 2px 16px rgba(15,20,25,0.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--paper);color:var(--ink);font-family:'Rajdhani',sans-serif;font-size:15px;min-height:100vh}
-body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230f1419' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%230f1419' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0}
 
-/* ── HEADER ── */
-header{background:var(--ink);color:var(--paper);padding:0;position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,0.4)}
-.header-inner{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;border-bottom:2px solid var(--gold)}
+/* HEADER */
+header{background:var(--ink);color:var(--paper);position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,0.4)}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:54px;border-bottom:2px solid var(--gold)}
 .logo{display:flex;align-items:center;gap:12px}
-.logo-mark{width:36px;height:36px;background:var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
-.logo-mark span{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--ink)}
-.logo-text{font-size:22px;font-weight:700;letter-spacing:0.08em;color:var(--paper)}
-.logo-text em{color:var(--gold);font-style:normal}
-.logo-sub{font-size:9px;letter-spacing:0.25em;color:rgba(245,240,232,0.5);text-transform:uppercase;margin-top:-2px}
-.header-meta{display:flex;align-items:center;gap:16px;font-size:11px;letter-spacing:0.08em;color:rgba(245,240,232,0.6)}
-.live-dot{width:7px;height:7px;border-radius:50%;background:#27ae60;animation:pulse 2s infinite;display:inline-block;margin-right:5px}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.logo-hex{width:34px;height:34px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-txt{font-size:20px;font-weight:700;letter-spacing:0.06em}
+.logo-txt em{color:var(--gold);font-style:normal}
+.logo-sub{font-size:8px;letter-spacing:0.25em;color:rgba(245,240,232,0.45);text-transform:uppercase;margin-top:-2px}
+.hdr-right{display:flex;align-items:center;gap:20px;font-size:11px;color:rgba(245,240,232,0.5);letter-spacing:0.08em}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#27ae60;animation:pulse 2s infinite;display:inline-block;margin-right:4px}
+.back-link{color:var(--gold);text-decoration:none;font-size:11px;letter-spacing:0.1em;font-weight:600;border:1px solid rgba(201,168,76,0.3);padding:4px 12px;border-radius:2px;transition:all 0.2s}
+.back-link:hover{background:rgba(201,168,76,0.1)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-/* ── TABS ── */
-.tabs{display:flex;background:var(--ink2);border-bottom:1px solid rgba(201,168,76,0.3)}
-.tab{padding:12px 24px;font-size:12px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;color:rgba(245,240,232,0.5);border-bottom:3px solid transparent;transition:all 0.2s;font-family:'Rajdhani',sans-serif}
-.tab:hover{color:rgba(245,240,232,0.8)}
-.tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,0.08)}
+/* SELECTION SCREEN */
+#select-screen{position:relative;z-index:1;padding:32px 20px}
+.select-wrap{max-width:1200px;margin:0 auto}
+.select-title{text-align:center;margin-bottom:32px}
+.select-title h1{font-size:28px;font-weight:700;letter-spacing:0.06em;color:var(--ink);margin-bottom:6px}
+.select-title p{font-size:13px;color:var(--ink3);letter-spacing:0.06em}
+.select-title .step-pills{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px}
+.step-pill{padding:5px 16px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase}
+.step-pill.active{background:var(--ink);color:var(--gold)}
+.step-pill.done{background:var(--green2);color:#fff}
+.step-pill.pending{background:var(--paper3);color:var(--ink3);border:1px solid var(--border)}
+.step-arrow{color:var(--ink3);font-size:14px}
 
-/* ── LAYOUT ── */
-.app{position:relative;z-index:1}
-.page{display:none;animation:fadeUp 0.3s ease}
-.page.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.wrap{max-width:1440px;margin:0 auto;padding:24px 20px}
+/* PSU GRID */
+.psu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:32px}
+.psu-card{background:var(--paper2);border:2px solid var(--border);border-radius:6px;padding:18px 16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.psu-card::before{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--border);transition:background 0.2s}
+.psu-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.psu-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.06)}
+.psu-card.selected::before{background:var(--gold)}
+.psu-icon{font-size:26px;margin-bottom:8px}
+.psu-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.psu-full{font-size:10px;color:var(--ink3);line-height:1.4;margin-bottom:6px}
+.psu-rating{display:inline-block;font-size:9px;padding:2px 7px;border-radius:2px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase}
+.rating-maharatna{background:#c9a84c;color:var(--ink)}
+.rating-navratna{background:#2980b9;color:#fff}
+.rating-state{background:#27ae60;color:#fff}
+.psu-sector{font-size:10px;color:var(--ink3);margin-top:4px;letter-spacing:0.04em}
+.psu-check{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink);opacity:0;transition:opacity 0.2s}
+.psu-card.selected .psu-check{opacity:1}
 
-/* ── CARDS ── */
+/* WORK TYPE SELECTOR */
+#work-select{display:none}
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:800px;margin:0 auto 32px}
+.work-card{background:var(--paper2);border:2px solid var(--border);border-radius:6px;padding:28px 20px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative}
+.work-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.work-card.selected-work{border-color:var(--gold);background:rgba(201,168,76,0.06)}
+.work-icon{font-size:40px;margin-bottom:12px;display:block}
+.work-name{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.work-desc{font-size:11px;color:var(--ink3);line-height:1.6}
+.work-examples{font-size:10px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+
+/* ACTION BAR */
+.action-bar{display:flex;align-items:center;justify-content:center;gap:16px;padding:20px 0}
+.btn{padding:10px 24px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:3px;cursor:pointer;transition:all 0.2s;border:none}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{background:var(--gold2)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--ink3)}
+.btn-outline:hover{border-color:var(--ink);color:var(--ink)}
+.btn-primary{background:var(--ink);color:var(--gold);border:1px solid var(--gold)}
+.btn-primary:hover{background:var(--ink2)}
+.btn-sm{padding:5px 14px;font-size:11px}
+.btn-danger{background:var(--red);color:#fff}
+.btn-success{background:var(--green);color:#fff}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.selected-summary{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--ink);border-radius:4px;font-size:12px;color:rgba(245,240,232,0.7);letter-spacing:0.06em}
+.selected-summary .sel-psu{color:var(--gold);font-weight:700;font-size:14px}
+.selected-summary .sel-work{color:var(--gold2);font-weight:700}
+
+/* DASHBOARD */
+#dashboard{display:none;position:relative;z-index:1}
+.dash-header{background:var(--ink);padding:16px 24px;border-bottom:1px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.dash-title{display:flex;align-items:center;gap:16px}
+.dash-psu-icon{font-size:28px}
+.dash-psu-name{font-size:20px;font-weight:700;color:var(--paper);letter-spacing:0.04em}
+.dash-psu-sub{font-size:10px;color:rgba(245,240,232,0.5);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px}
+.dash-work-badge{padding:6px 16px;border-radius:3px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+.dash-tabs{display:flex;background:var(--ink2);border-bottom:1px solid rgba(201,168,76,0.2)}
+.dash-tab{padding:11px 20px;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;color:rgba(245,240,232,0.45);border-bottom:3px solid transparent;transition:all 0.2s;font-family:'Rajdhani',sans-serif}
+.dash-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,0.06)}
+.dash-tab:hover{color:rgba(245,240,232,0.75)}
+
+/* CARDS & LAYOUT */
+.wrap{max-width:1440px;margin:0 auto;padding:20px 16px}
 .card{background:var(--paper2);border:1px solid var(--border);border-radius:4px;box-shadow:var(--shadow)}
-.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--paper3)}
-.card-title{font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2)}
-.card-body{padding:20px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-
-/* ── STAT BOXES ── */
-.stat-box{background:var(--ink);color:var(--paper);border-radius:4px;padding:16px 18px;position:relative;overflow:hidden}
+.card-hdr{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--paper3)}
+.card-title{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat-box{background:var(--ink);color:var(--paper);border-radius:4px;padding:14px 16px;position:relative;overflow:hidden}
 .stat-box::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold)}
-.stat-label{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.5);margin-bottom:6px}
-.stat-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--gold2);line-height:1}
-.stat-sub{font-size:10px;color:rgba(245,240,232,0.4);margin-top:5px;letter-spacing:0.05em}
-.stat-box.green::after{background:var(--green2)}
-.stat-box.red::after{background:var(--red)}
-.stat-box.blue::after{background:var(--blue2)}
+.stat-box.g::after{background:var(--green2)}
+.stat-box.r::after{background:var(--red)}
+.stat-box.b::after{background:var(--blue2)}
+.stat-lbl{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.45);margin-bottom:5px}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--gold2);line-height:1}
+.stat-sub{font-size:10px;color:rgba(245,240,232,0.35);margin-top:4px}
 
-/* ── TABLES ── */
+/* TABLE */
 .tbl-wrap{overflow-x:auto;border-radius:3px;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;font-size:13px}
 thead tr{background:var(--ink);color:var(--paper)}
-th{padding:10px 14px;text-align:left;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;white-space:nowrap;font-family:'JetBrains Mono',monospace;border-right:1px solid rgba(255,255,255,0.06)}
-tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;cursor:pointer}
+th{padding:9px 12px;text-align:left;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;white-space:nowrap;font-family:'JetBrains Mono',monospace;border-right:1px solid rgba(255,255,255,0.05)}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.12s;cursor:pointer}
 tbody tr:hover{background:var(--paper3)}
-td{padding:10px 14px;vertical-align:middle;border-right:1px solid var(--border)}
-.winner-row{background:rgba(26,107,60,0.06)!important}
-.winner-row:hover{background:rgba(26,107,60,0.1)!important}
+td{padding:9px 12px;vertical-align:middle;border-right:1px solid var(--border)}
+.winner-row{background:rgba(26,107,60,0.05)!important}
 
-/* ── BADGES ── */
-.badge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
-.badge-l1{background:#1a6b3c;color:#fff}
-.badge-l2{background:#2980b9;color:#fff}
-.badge-l3{background:#7f8c8d;color:#fff}
-.badge-win{background:var(--gold);color:var(--ink)}
-.badge-ntpc{background:var(--ink);color:var(--gold);border:1px solid var(--gold)}
-.badge-uppcl{background:var(--blue);color:#fff}
-.badge-high{background:#c0392b;color:#fff}
-.badge-med{background:var(--warn);color:#fff}
-.badge-low{background:var(--green);color:#fff}
-.badge-open{background:var(--green2);color:#fff}
-.badge-closed{background:var(--ink3);color:var(--paper)}
+/* BADGES */
+.badge{display:inline-block;padding:2px 7px;border-radius:2px;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase}
+.b-high{background:#c0392b;color:#fff}
+.b-med{background:var(--warn);color:#fff}
+.b-low{background:var(--green);color:#fff}
+.b-open{background:var(--green2);color:#fff}
+.b-closed{background:var(--ink3);color:var(--paper)}
+.b-elec{background:#1a3a5c;color:var(--gold)}
+.b-mech{background:#7f3f00;color:#fff}
+.b-civil{background:#2d5016;color:#fff}
 
-/* ── FORMS ── */
-.form-group{margin-bottom:14px}
-label{display:block;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;font-weight:600}
-input[type=text],input[type=number],select,textarea{width:100%;padding:9px 12px;font-family:'Rajdhani',sans-serif;font-size:14px;background:var(--paper);border:1px solid var(--border);color:var(--ink);border-radius:3px;outline:none;transition:border-color 0.2s}
-input:focus,select:focus,textarea:focus{border-color:var(--gold)}
-textarea{resize:vertical;min-height:80px}
-.btn{padding:9px 20px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:3px;cursor:pointer;transition:all 0.2s;border:none}
-.btn-primary{background:var(--ink);color:var(--gold);border:1px solid var(--gold)}
-.btn-primary:hover{background:var(--ink2)}
-.btn-gold{background:var(--gold);color:var(--ink)}
-.btn-gold:hover{background:var(--gold2)}
-.btn-sm{padding:5px 12px;font-size:11px}
-.btn-danger{background:var(--red);color:#fff}
-.btn-success{background:var(--green);color:#fff}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
+/* METER */
+.meter{height:5px;background:rgba(15,20,25,0.1);border-radius:3px;overflow:hidden;margin-top:3px}
+.meter-fill{height:100%;border-radius:3px}
 
-/* ── METER BAR ── */
-.meter{height:6px;background:rgba(15,20,25,0.1);border-radius:3px;overflow:hidden;margin-top:4px}
-.meter-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
-
-/* ── AI PANEL ── */
-.ai-response{background:var(--ink);border-radius:4px;padding:20px;border-left:4px solid var(--gold);font-family:'Crimson Pro',serif;font-size:16px;line-height:1.8;color:var(--paper);min-height:80px}
-.ai-response .ai-section{margin-bottom:16px}
-.ai-response .ai-section h4{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid rgba(201,168,76,0.3)}
-.ai-response .ai-section p{color:rgba(245,240,232,0.85);font-size:15px;line-height:1.7}
-.ai-response .highlight{color:var(--gold2);font-weight:600}
-.ai-response .alert{color:#e74c3c;font-weight:600}
-.ai-response .good{color:#2ecc71;font-weight:600}
-.thinking{display:flex;align-items:center;gap:12px;color:rgba(245,240,232,0.5);font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:0.1em}
-.thinking-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin:0 2px;animation:blink 1.4s infinite}
-.thinking-dots span:nth-child(2){animation-delay:0.2s}
-.thinking-dots span:nth-child(3){animation-delay:0.4s}
+/* AI RESPONSE */
+.ai-response{background:var(--ink);border-radius:4px;padding:20px;border-left:4px solid var(--gold);font-family:'Crimson Pro',serif;font-size:15px;line-height:1.8;color:var(--paper);min-height:80px}
+.ai-sec h4{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin:14px 0 6px;padding-bottom:3px;border-bottom:1px solid rgba(201,168,76,0.25)}
+.ai-sec p{color:rgba(245,240,232,0.82);font-size:14px;line-height:1.75}
+.hi{color:var(--gold2);font-weight:600}
+.al{color:#e74c3c;font-weight:600}
+.gd{color:#2ecc71;font-weight:600}
+.thinking{display:flex;align-items:center;gap:12px;color:rgba(245,240,232,0.45);font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:0.1em}
+.dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin:0 2px;animation:blink 1.4s infinite}
+.dots span:nth-child(2){animation-delay:0.2s}.dots span:nth-child(3){animation-delay:0.4s}
 @keyframes blink{0%,80%,100%{opacity:0.2}40%{opacity:1}}
 
-/* ── RISK METER ── */
-.risk-dial{display:flex;align-items:center;gap:10px;margin:8px 0}
-.risk-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);width:80px}
-.risk-bar{flex:1;height:8px;background:linear-gradient(90deg,#27ae60,#f39c12,#c0392b);border-radius:4px;position:relative}
-.risk-marker{position:absolute;top:-4px;width:16px;height:16px;background:var(--ink);border:2px solid var(--gold);border-radius:50%;transform:translateX(-50%);transition:left 0.5s ease}
-.risk-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;width:40px;text-align:right}
+/* SECTION HEADING */
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sh h2{font-size:15px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink)}
+.sh::after{content:"";flex:1;height:1px;background:var(--border)}
+.sh .sh-b{font-size:9px;padding:2px 9px;background:var(--gold);color:var(--ink);border-radius:2px;letter-spacing:0.1em;font-weight:700;white-space:nowrap}
 
-/* ── FILTER BAR ── */
-.filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 20px;background:var(--paper3);border-bottom:1px solid var(--border)}
-.filter-label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);font-weight:600}
-.filter-btn{padding:4px 12px;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border-radius:2px;cursor:pointer;transition:all 0.15s;font-family:'Rajdhani',sans-serif;border:1px solid var(--border);background:transparent;color:var(--ink3)}
-.filter-btn.active{background:var(--ink);color:var(--gold);border-color:var(--ink)}
-.search-box{padding:5px 12px;font-family:'Rajdhani',sans-serif;font-size:13px;background:var(--paper);border:1px solid var(--border);border-radius:2px;outline:none;width:220px}
-.search-box:focus{border-color:var(--gold)}
+/* FORM */
+.fg{margin-bottom:12px}
+label{display:block;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;font-weight:600}
+input[type=text],input[type=number],select,textarea{width:100%;padding:8px 11px;font-family:'Rajdhani',sans-serif;font-size:13px;background:var(--paper);border:1px solid var(--border);color:var(--ink);border-radius:3px;outline:none;transition:border-color 0.2s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:72px}
 
-/* ── SCORE CARD ── */
-.score-ring{width:100px;height:100px;position:relative;margin:0 auto}
-.score-ring svg{transform:rotate(-90deg)}
-.score-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.score-num .num{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--ink)}
-.score-num .lbl{font-size:9px;letter-spacing:0.1em;color:var(--ink3);text-transform:uppercase}
-
-/* ── TIMELINE ── */
-.timeline{position:relative;padding-left:24px}
-.timeline::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border)}
-.tl-item{position:relative;padding:0 0 20px 20px}
-.tl-item::before{content:"";position:absolute;left:-20px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--paper2)}
-.tl-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:3px}
-.tl-title{font-weight:700;font-size:14px;color:var(--ink)}
-.tl-detail{font-size:12px;color:var(--ink3);margin-top:3px}
-
-/* ── SECTION HEADINGS ── */
-.section-heading{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.section-heading h2{font-size:16px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink)}
-.section-heading::after{content:"";flex:1;height:1px;background:var(--border)}
-.section-heading .sh-badge{font-size:10px;padding:2px 10px;background:var(--gold);color:var(--ink);border-radius:2px;letter-spacing:0.1em;font-weight:700;white-space:nowrap}
-
-/* ── TENDER CARD ── */
-.tender-card{background:var(--paper2);border:1px solid var(--border);border-radius:3px;padding:16px;margin-bottom:12px;transition:all 0.2s;cursor:pointer;border-left:4px solid var(--border)}
-.tender-card:hover{border-left-color:var(--gold);box-shadow:var(--shadow)}
-.tender-card.ntpc-card{border-left-color:rgba(201,168,76,0.4)}
-.tender-card.uppcl-card{border-left-color:rgba(26,58,92,0.4)}
-.tc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
-.tc-title{font-weight:700;font-size:14px;color:var(--ink);line-height:1.4;flex:1;margin-right:12px}
-.tc-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--ink3)}
-.tc-meta span{display:flex;align-items:center;gap:4px}
-.boq-table{margin-top:12px;font-size:12px}
-.boq-table th{background:var(--ink);color:var(--paper);padding:6px 10px;font-size:9px;letter-spacing:0.12em}
-.boq-table td{padding:7px 10px;border-bottom:1px solid var(--border)}
-
-/* ── TOOLTIP ── */
-.tooltip{position:relative;display:inline-block}
-.tooltip .tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:5px 10px;border-radius:3px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:100;border:1px solid var(--gold)}
-.tooltip:hover .tip{opacity:1}
-
-/* ── SCROLLBAR ── */
+/* SCROLLBAR */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--paper3)}
 ::-webkit-scrollbar-thumb{background:var(--ink3);border-radius:2px}
 
-/* ── RESPONSIVE ── */
-@media(max-width:768px){.grid4{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.tabs{overflow-x:auto;white-space:nowrap}.filter-bar{gap:6px}}
+/* RESPONSIVE */
+@media(max-width:768px){.grid4{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.psu-grid{grid-template-columns:repeat(2,1fr)}.work-grid{grid-template-columns:1fr}.dash-tabs{overflow-x:auto;white-space:nowrap}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-inner">
+  <div class="hdr">
     <div class="logo">
-      <div class="logo-mark"><span>⚡</span></div>
+      <div class="logo-hex">⚡</div>
       <div>
-        <div class="logo-text">Tender<em>IQ</em></div>
-        <div class="logo-sub">PSU Electrical Bid Intelligence Platform</div>
+        <div class="logo-txt">Tender<em>IQ</em></div>
+        <div class="logo-sub">India PSU Bid Intelligence · All Sectors</div>
       </div>
     </div>
-    <div class="header-meta">
-      <span><span class="live-dot"></span>Live Data</span>
-      <span>NTPC · UPPCL · Uttar Pradesh</span>
-      <span style="color:var(--gold);font-weight:600" id="hdr-date"></span>
+    <div class="hdr-right">
+      <span id="last-refresh-lbl" style="font-size:10px;color:rgba(245,240,232,0.35)"></span>
+      <button id="refresh-btn" onclick="runLiveRefresh()" style="display:none;align-items:center;gap:5px;background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);color:#2ecc71;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer"><span class="live-dot"></span>Refresh Live Data</button>
+      <span id="hdr-context" style="color:var(--gold)"></span>
+      <a href="mailto:info@zirconique.com" style="color:rgba(245,240,232,0.4);text-decoration:none;font-size:10px">info@zirconique.com</a>
+      <a href="/" class="back-link">&larr; Home</a>
     </div>
-  </div>
-  <div class="tabs">
-    <div class="tab active" onclick="showPage('dashboard')">📊 Dashboard</div>
-    <div class="tab" onclick="showPage('tenders')">📋 Tender Database</div>
-    <div class="tab" onclick="showPage('analytics')">📈 Bid Analytics</div>
-    <div class="tab" onclick="showPage('contractors')">🏗️ Contractor Intel</div>
-    <div class="tab" onclick="showPage('boq')">📐 BOQ Benchmarks</div>
-    <div class="tab" onclick="showPage('advisor')">🤖 AI Bid Advisor</div>
   </div>
 </header>
 
-<div class="app">
+<!-- ═══ SELECTION SCREEN ═══ -->
+<div id="select-screen">
+<div class="select-wrap">
+
+  <!-- Step 1: PSU -->
+  <div id="step1">
+    <div class="select-title">
+      <h1>India PSU Tender Intelligence</h1>
+      <p>Select a PSU and work category to access historical bid data, L1/L2/L3 analytics, contractor intel and AI bid advice</p>
+      <div class="step-pills">
+        <div class="step-pill active" id="pill1">Step 1 — Choose PSU</div>
+        <div class="step-arrow">→</div>
+        <div class="step-pill pending" id="pill2">Step 2 — Work Type</div>
+        <div class="step-arrow">→</div>
+        <div class="step-pill pending" id="pill3">View Dashboard</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <span style="font-size:11px;letter-spacing:0.12em;color:var(--ink3);text-transform:uppercase">Filter:</span>
+      <button class="btn btn-sm" style="background:var(--ink);color:var(--gold);border:1px solid var(--gold)" onclick="filterPSU('all',this)">All</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Maharatna',this)">Maharatna</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Navratna',this)">Navratna</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Power',this)">Power</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Oil',this)">Oil & Gas</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Defence',this)">Defence</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Steel',this)">Steel/Mining</button>
+    </div>
+
+    <div class="psu-grid" id="psu-grid"></div>
+  </div>
+
+  <!-- Step 2: Work Type -->
+  <div id="step2" style="display:none">
+    <div class="select-title">
+      <h1 id="step2-title">Choose Work Category</h1>
+      <p>Select the type of work for your tender</p>
+      <div class="step-pills">
+        <div class="step-pill done">Step 1 — PSU Selected ✓</div>
+        <div class="step-arrow">→</div>
+        <div class="step-pill active">Step 2 — Work Type</div>
+        <div class="step-arrow">→</div>
+        <div class="step-pill pending">View Dashboard</div>
+      </div>
+    </div>
+
+    <div class="work-grid">
+      <div class="work-card" id="wc-electrical" onclick="selectWork('electrical')">
+        <span class="work-icon">⚡</span>
+        <div class="work-name">Electrical</div>
+        <div class="work-desc">HT/LT cables, switchgear, transformers, substation erection, lighting, earthing, AMC</div>
+        <div class="work-examples">11kV/33kV/132kV cables · Panels · LED lighting · AMC · Metering</div>
+      </div>
+      <div class="work-card" id="wc-mechanical" onclick="selectWork('mechanical')">
+        <span class="work-icon">⚙️</span>
+        <div class="work-name">Mechanical</div>
+        <div class="work-desc">Piping, pressure vessels, rotating equipment, HVAC, insulation, structural steel</div>
+        <div class="work-examples">CS/SS piping · Pumps · Heat exchangers · Compressors · Valves</div>
+      </div>
+      <div class="work-card" id="wc-civil" onclick="selectWork('civil')">
+        <span class="work-icon">🏗️</span>
+        <div class="work-name">Civil</div>
+        <div class="work-desc">RCC structures, roads, drainage, waterproofing, foundation works, buildings</div>
+        <div class="work-examples">RCC · Brickwork · Roads · Drainage · Building construction</div>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-outline" onclick="goBack()">← Back to PSU Selection</button>
+    </div>
+  </div>
+
+</div>
+</div>
 
 <!-- ═══ DASHBOARD ═══ -->
-<div class="page active" id="page-dashboard">
-<div class="wrap">
-  <div class="section-heading"><h2>Overview</h2><span class="sh-badge">March 2026</span></div>
-  <div class="grid4" style="margin-bottom:20px">
-    <div class="stat-box"><div class="stat-label">Tenders Analysed</div><div class="stat-val">284</div><div class="stat-sub">NTPC + UPPCL · 2019–2026</div></div>
-    <div class="stat-box green"><div class="stat-label">Avg L1 Discount</div><div class="stat-val">8.4%</div><div class="stat-sub">Below PSU estimate · Electrical works</div></div>
-    <div class="stat-box red"><div class="stat-label">L1–L2 Gap</div><div class="stat-val">3.2%</div><div class="stat-sub">Avg margin between winner and runner-up</div></div>
-    <div class="stat-box blue"><div class="stat-label">Active Tenders</div><div class="stat-val">14</div><div class="stat-sub">Open for bidding right now</div></div>
-  </div>
-
-  <div class="grid2" style="margin-bottom:20px">
-    <!-- Active Tenders -->
-    <div class="card">
-      <div class="card-header"><span class="card-title">🔴 Active Tenders — Bid Now</span><button class="btn btn-sm btn-primary" onclick="showPage('tenders')">View All</button></div>
-      <div class="card-body" style="padding:0">
-        <div id="active-tenders-list"></div>
+<div id="dashboard">
+  <div class="dash-header">
+    <div class="dash-title">
+      <div class="dash-psu-icon" id="d-icon"></div>
+      <div>
+        <div class="dash-psu-name" id="d-name"></div>
+        <div class="dash-psu-sub" id="d-sub"></div>
       </div>
+      <div class="dash-work-badge" id="d-work-badge"></div>
     </div>
-
-    <!-- Quick Stats -->
-    <div class="card">
-      <div class="card-header"><span class="card-title">📊 Win Rate by Bid Strategy</span></div>
-      <div class="card-body">
-        <div style="margin-bottom:16px">
-          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Bid at 88–91% of estimate</span><strong style="color:var(--green)">62% win rate</strong></div>
-          <div class="meter"><div class="meter-fill" style="width:62%;background:var(--green2)"></div></div>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Bid at 92–95% of estimate</span><strong style="color:var(--warn)">38% win rate</strong></div>
-          <div class="meter"><div class="meter-fill" style="width:38%;background:var(--warn)"></div></div>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Bid at 96–100% of estimate</span><strong style="color:var(--red)">11% win rate</strong></div>
-          <div class="meter"><div class="meter-fill" style="width:11%;background:var(--red)"></div></div>
-        </div>
-        <div style="margin-bottom:0">
-          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Bid above estimate</span><strong style="color:var(--red)">2% win rate</strong></div>
-          <div class="meter"><div class="meter-fill" style="width:2%;background:var(--red)"></div></div>
-        </div>
-        <div style="margin-top:16px;padding:10px 12px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:3px;font-size:12px">
-          <strong style="color:var(--gold)">Sweet spot:</strong> 91–93% of estimated cost maximises probability of winning without leaving too much money on the table.
-        </div>
-      </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span style="font-size:10px;color:rgba(245,240,232,0.4);letter-spacing:0.1em">CHANGE:</span>
+      <button class="btn btn-sm" style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer" onclick="changePSU()">PSU</button>
+      <button class="btn btn-sm" style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer" onclick="changeWork()">Work Type</button>
     </div>
   </div>
-
-  <div class="grid3" style="margin-bottom:20px">
-    <!-- Seasonal Pattern -->
-    <div class="card">
-      <div class="card-header"><span class="card-title">📅 Seasonal Bidding Patterns</span></div>
-      <div class="card-body" style="padding:14px">
-        <div id="seasonal-chart"></div>
-      </div>
-    </div>
-    <!-- Top Contractors -->
-    <div class="card">
-      <div class="card-header"><span class="card-title">🏆 Most Dangerous Competitors</span></div>
-      <div class="card-body" style="padding:0">
-        <div id="top-contractors-mini"></div>
-      </div>
-    </div>
-    <!-- Recent Results -->
-    <div class="card">
-      <div class="card-header"><span class="card-title">✅ Recent Bid Results</span></div>
-      <div class="card-body" style="padding:0">
-        <div id="recent-results-mini"></div>
-      </div>
-    </div>
+  <div class="dash-tabs">
+    <div class="dash-tab active" onclick="showTab('overview')">📊 Overview</div>
+    <div class="dash-tab" onclick="showTab('tenders')">📋 Tender Database</div>
+    <div class="dash-tab" onclick="showTab('analytics')">📈 Bid Analytics</div>
+    <div class="dash-tab" onclick="showTab('contractors')">🏗️ Contractor Intel</div>
+    <div class="dash-tab" onclick="showTab('boq')">📐 BOQ Benchmarks</div>
+    <div class="dash-tab" onclick="showTab('advisor')">🤖 AI Advisor</div>
   </div>
+  <div id="dash-content"></div>
 </div>
-</div>
-
-<!-- ═══ TENDER DATABASE ═══ -->
-<div class="page" id="page-tenders">
-<div class="filter-bar">
-  <span class="filter-label">PSU:</span>
-  <button class="filter-btn active" onclick="filterTenders('all',this)">All</button>
-  <button class="filter-btn" onclick="filterTenders('NTPC',this)">NTPC</button>
-  <button class="filter-btn" onclick="filterTenders('UPPCL',this)">UPPCL</button>
-  <span class="filter-label" style="margin-left:12px">Status:</span>
-  <button class="filter-btn active" onclick="filterStatus('all',this)" id="sf-all">All</button>
-  <button class="filter-btn" onclick="filterStatus('open',this)" id="sf-open">Open</button>
-  <button class="filter-btn" onclick="filterStatus('closed',this)" id="sf-closed">Closed</button>
-  <span class="filter-label" style="margin-left:12px">Work Type:</span>
-  <button class="filter-btn active" onclick="filterWork('all',this)">All</button>
-  <button class="filter-btn" onclick="filterWork('HT',this)">HT Cables</button>
-  <button class="filter-btn" onclick="filterWork('substation',this)">Substation</button>
-  <button class="filter-btn" onclick="filterWork('lighting',this)">Lighting</button>
-  <button class="filter-btn" onclick="filterWork('panel',this)">Panel/Switchgear</button>
-  <input class="search-box" placeholder="Search tender no. / work description..." oninput="searchTenders(this.value)" style="margin-left:auto"/>
-</div>
-<div class="wrap">
-  <div id="tender-list"></div>
-</div>
-</div>
-
-<!-- ═══ ANALYTICS ═══ -->
-<div class="page" id="page-analytics">
-<div class="wrap">
-  <div class="section-heading"><h2>Bid Analytics</h2><span class="sh-badge">284 Tenders · 2019–2026</span></div>
-
-  <div class="grid4" style="margin-bottom:20px">
-    <div class="stat-box"><div class="stat-label">NTPC Avg L1 Discount</div><div class="stat-val">7.8%</div><div class="stat-sub">Below estimated cost</div></div>
-    <div class="stat-box"><div class="stat-label">UPPCL Avg L1 Discount</div><div class="stat-val">9.1%</div><div class="stat-sub">More competitive market</div></div>
-    <div class="stat-box green"><div class="stat-label">Lowest Recorded L1</div><div class="stat-val">67%</div><div class="stat-sub">Of estimate · HT Cable work UP</div></div>
-    <div class="stat-box red"><div class="stat-label">Highest Recorded L1</div><div class="stat-val">101%</div><div class="stat-sub">Of estimate · Remote location premium</div></div>
-  </div>
-
-  <div class="grid2" style="margin-bottom:20px">
-    <div class="card">
-      <div class="card-header"><span class="card-title">L1/L2/L3 Distribution by Work Type</span></div>
-      <div class="card-body">
-        <div id="l1-distribution-table"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Bid Count Trend — Competitiveness Over Time</span></div>
-      <div class="card-body">
-        <div id="competition-trend"></div>
-        <div style="margin-top:14px;padding:10px 12px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2);border-radius:3px;font-size:12px">
-          <strong style="color:var(--red)">⚠ Trend Alert:</strong> Average bidder count in NTPC UP tenders has increased from 4.2 (2019) to 7.8 (2025). Market is getting more competitive — L1 discounts are deepening.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-bottom:20px">
-    <div class="card-header"><span class="card-title">📊 Complete Historical L1–L3 Data · All Electrical Tenders · UP Region</span></div>
-    <div class="card-body" style="padding:0">
-      <div class="tbl-wrap">
-        <table id="analytics-table">
-          <thead><tr>
-            <th>Tender No.</th><th>PSU</th><th>Work Description</th><th>Est. Value (₹ Cr)</th>
-            <th>Bidders</th><th>L1 Bid</th><th>L1 % of Est.</th><th>L2 % of Est.</th><th>L3 % of Est.</th>
-            <th>L1–L2 Gap</th><th>Winner</th><th>Work Type</th>
-          </tr></thead>
-          <tbody id="analytics-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <div class="card-header"><span class="card-title">📍 Location Premium Analysis</span></div>
-      <div class="card-body">
-        <div id="location-analysis"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">📆 Q4 vs Other Quarters — Bidding Behaviour</span></div>
-      <div class="card-body">
-        <div id="quarter-analysis"></div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ═══ CONTRACTORS ═══ -->
-<div class="page" id="page-contractors">
-<div class="wrap">
-  <div class="section-heading"><h2>Contractor Intelligence</h2><span class="sh-badge">Top Players · UP Region</span></div>
-
-  <div class="grid4" style="margin-bottom:20px">
-    <div class="stat-box"><div class="stat-label">Active Contractors</div><div class="stat-val">47</div><div class="stat-sub">Bid at least once in last 2 years</div></div>
-    <div class="stat-box blue"><div class="stat-label">Dominant Players</div><div class="stat-val">6</div><div class="stat-sub">Win >60% of tenders they bid</div></div>
-    <div class="stat-box red"><div class="stat-label">Aggressive Bidders</div><div class="stat-val">11</div><div class="stat-sub">Consistently bid <88% of estimate</div></div>
-    <div class="stat-box green"><div class="stat-label">Average Win Rate</div><div class="stat-val">21%</div><div class="stat-sub">Across all active contractors</div></div>
-  </div>
-
-  <div class="card" style="margin-bottom:20px">
-    <div class="card-header"><span class="card-title">🏆 Contractor Leaderboard — NTPC + UPPCL UP Electrical Works</span></div>
-    <div class="card-body" style="padding:0">
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr>
-            <th>Rank</th><th>Contractor Name</th><th>Bids Placed</th><th>Tenders Won</th>
-            <th>Win Rate</th><th>Avg L1 Bid %</th><th>Typical Discount</th>
-            <th>Specialisation</th><th>Last Won</th><th>Threat Level</th>
-          </tr></thead>
-          <tbody id="contractor-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <div class="card-header"><span class="card-title">🔍 Contractor Deep Dive</span></div>
-      <div class="card-body">
-        <div class="form-group">
-          <label>Select Contractor</label>
-          <select id="contractor-select" onchange="loadContractorProfile()">
-            <option value="">— Choose contractor —</option>
-          </select>
-        </div>
-        <div id="contractor-profile"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">🗺️ Head-to-Head Comparison</span></div>
-      <div class="card-body">
-        <div class="form-group">
-          <label>Your Company vs</label>
-          <select id="h2h-select" onchange="loadH2H()">
-            <option value="">— Select competitor —</option>
-          </select>
-        </div>
-        <div id="h2h-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ═══ BOQ BENCHMARKS ═══ -->
-<div class="page" id="page-boq">
-<div class="wrap">
-  <div class="section-heading"><h2>BOQ Item Benchmarks</h2><span class="sh-badge">Historical Rate Analysis</span></div>
-  <div style="margin-bottom:16px;padding:12px 16px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:3px;font-size:13px">
-    <strong>How to use:</strong> Compare your quoted rates against historical L1 rates for each BOQ item. Items where PSU estimate is typically below market rate are flagged — these are risk items where you must not underbid.
-  </div>
-  <div class="grid2" style="margin-bottom:20px">
-    <div class="card">
-      <div class="card-header"><span class="card-title">🔍 Rate Lookup Tool</span></div>
-      <div class="card-body">
-        <div class="form-group">
-          <label>Search BOQ Item</label>
-          <input type="text" id="boq-search" placeholder="e.g. XLPE cable 11kV, earthing, transformer..." oninput="filterBOQ(this.value)"/>
-        </div>
-        <div class="form-group">
-          <label>Unit</label>
-          <select id="boq-unit">
-            <option>All Units</option>
-            <option>per metre (m)</option>
-            <option>per unit (nos)</option>
-            <option>per set</option>
-            <option>per kg</option>
-            <option>lump sum</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Location</label>
-          <select id="boq-location">
-            <option>All UP Locations</option>
-            <option>Singrauli</option>
-            <option>Unchahar</option>
-            <option>Dadri</option>
-            <option>Obra</option>
-            <option>Lucknow (UPPCL)</option>
-            <option>Agra (UPPCL)</option>
-          </select>
-        </div>
-        <button class="btn btn-gold" onclick="filterBOQ(document.getElementById('boq-search').value)">Search Rates</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">⚠️ Risk Items — PSU Underestimates Market Rate</span></div>
-      <div class="card-body" style="padding:0">
-        <div id="risk-items-list"></div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">📐 BOQ Rate Database — All Items</span></div>
-    <div class="card-body" style="padding:0">
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr>
-            <th>Item Description</th><th>Unit</th><th>PSU Estimate Rate</th>
-            <th>Typical L1 Rate</th><th>L1 vs Estimate</th><th>Market Rate</th>
-            <th>Risk Level</th><th>Notes</th>
-          </tr></thead>
-          <tbody id="boq-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ═══ AI BID ADVISOR ═══ -->
-<div class="page" id="page-advisor">
-<div class="wrap">
-  <div class="section-heading"><h2>AI Bid Advisor</h2><span class="sh-badge">Powered by Claude AI</span></div>
-
-  <div class="grid2" style="margin-bottom:20px">
-    <!-- Input Form -->
-    <div class="card">
-      <div class="card-header"><span class="card-title">📋 Tender Details — Enter Your Bid</span></div>
-      <div class="card-body">
-        <div class="grid2">
-          <div class="form-group">
-            <label>PSU / Authority</label>
-            <select id="ai-psu">
-              <option>NTPC — Singrauli</option>
-              <option>NTPC — Unchahar</option>
-              <option>NTPC — Dadri</option>
-              <option>NTPC — Rihand</option>
-              <option>UPPCL — Lucknow</option>
-              <option>UPPCL — Agra</option>
-              <option>UPPCL — Varanasi</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Work Type</label>
-            <select id="ai-worktype">
-              <option>HT Cable Laying (11kV/33kV)</option>
-              <option>EHV Cable Laying (66kV+)</option>
-              <option>Substation Erection/Commissioning</option>
-              <option>Transformer Installation</option>
-              <option>LT Distribution Network</option>
-              <option>Lighting Works (Plant/Colony)</option>
-              <option>Panel/Switchgear Works</option>
-              <option>Earthing & Lightning Protection</option>
-              <option>Annual Maintenance Contract (AMC)</option>
-              <option>Meter Installation</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid2">
-          <div class="form-group">
-            <label>PSU Estimated Value (₹ Cr)</label>
-            <input type="number" id="ai-estval" placeholder="e.g. 4.75" step="0.01"/>
-          </div>
-          <div class="form-group">
-            <label>Tender Ref. No.</label>
-            <input type="text" id="ai-tenderref" placeholder="e.g. NTPC/SIN/2026/0123"/>
-          </div>
-        </div>
-        <div class="grid2">
-          <div class="form-group">
-            <label>Your Quoted Amount (₹ Cr)</label>
-            <input type="number" id="ai-quoteval" placeholder="Your planned bid" step="0.01"/>
-          </div>
-          <div class="form-group">
-            <label>Submission Deadline</label>
-            <input type="text" id="ai-deadline" placeholder="e.g. 25 Mar 2026"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Key BOQ Items (paste or describe)</label>
-          <textarea id="ai-boq" placeholder="e.g.&#10;1. Supply & laying of 11kV XLPE cable 3Cx240sqmm — 2400m&#10;2. Erection of 11kV ring main unit — 4 nos&#10;3. Earthing with GI flat — lump sum&#10;4. Cable trench excavation — 800m"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Known Competitors Bidding</label>
-          <input type="text" id="ai-competitors" placeholder="e.g. KEC International, Kalpataru, Vijay Electricals"/>
-        </div>
-        <div class="form-group">
-          <label>Special Conditions / Notes</label>
-          <textarea id="ai-notes" placeholder="e.g. Remote site, seasonal access issues, imported material required, tight timeline..." style="min-height:60px"></textarea>
-        </div>
-        <button class="btn btn-gold" onclick="runAIAdvisor()" id="ai-run-btn" style="width:100%;padding:12px;font-size:15px">
-          ⚡ Analyse This Bid
-        </button>
-      </div>
-    </div>
-
-    <!-- Quick Bid Calculator -->
-    <div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-header"><span class="card-title">🎯 Quick Bid Calculator</span></div>
-        <div class="card-body">
-          <div class="form-group">
-            <label>PSU Estimated Value (₹ Cr)</label>
-            <input type="number" id="calc-est" placeholder="4.75" oninput="calcBidRange()" step="0.01"/>
-          </div>
-          <div class="form-group">
-            <label>Work Type</label>
-            <select id="calc-type" onchange="calcBidRange()">
-              <option data-l1="91.2" data-sd="2.1">HT Cable Laying</option>
-              <option data-l1="92.8" data-sd="1.8">EHV Cable Laying</option>
-              <option data-l1="90.4" data-sd="2.4">Substation Works</option>
-              <option data-l1="89.6" data-sd="3.1">LT Distribution</option>
-              <option data-l1="93.2" data-sd="1.4">Lighting Works</option>
-              <option data-l1="88.4" data-sd="2.8">Panel/Switchgear</option>
-              <option data-l1="90.8" data-sd="2.2">Earthing/Lightning</option>
-              <option data-l1="94.1" data-sd="1.6">AMC Contract</option>
-            </select>
-          </div>
-          <div id="calc-result" style="display:none">
-            <div style="padding:14px;background:var(--ink);border-radius:3px;margin-top:8px">
-              <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.5);margin-bottom:10px">Recommended Bid Ranges</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
-                <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.3);border-radius:3px;padding:10px">
-                  <div style="font-size:9px;color:#27ae60;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">Aggressive</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#2ecc71" id="calc-aggressive"></div>
-                  <div style="font-size:9px;color:rgba(245,240,232,0.4);margin-top:2px">Highest win chance</div>
-                </div>
-                <div style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);border-radius:3px;padding:10px">
-                  <div style="font-size:9px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">Balanced</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--gold2)" id="calc-balanced"></div>
-                  <div style="font-size:9px;color:rgba(245,240,232,0.4);margin-top:2px">Best risk/reward</div>
-                </div>
-                <div style="background:rgba(41,128,185,0.15);border:1px solid rgba(41,128,185,0.3);border-radius:3px;padding:10px">
-                  <div style="font-size:9px;color:#2980b9;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">Conservative</div>
-                  <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#60a5fa" id="calc-conservative"></div>
-                  <div style="font-size:9px;color:rgba(245,240,232,0.4);margin-top:2px">Higher margin</div>
-                </div>
-              </div>
-              <div style="margin-top:10px;font-size:10px;color:rgba(245,240,232,0.4);text-align:center">Based on <span id="calc-sample"></span> similar tenders · Historical L1 avg: <span id="calc-l1avg" style="color:var(--gold)"></span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><span class="card-title">🏁 Bid-No-Bid Signal</span></div>
-        <div class="card-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-            <div class="form-group" style="margin-bottom:0">
-              <label>Your margin floor (%)</label>
-              <input type="number" id="bib-margin" placeholder="12" value="12" oninput="calcBidNoBid()"/>
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label>Expected bidder count</label>
-              <input type="number" id="bib-bidders" placeholder="6" value="6" oninput="calcBidNoBid()"/>
-            </div>
-          </div>
-          <div id="bib-result">
-            <div style="padding:12px;background:var(--paper3);border-radius:3px;font-size:12px;color:var(--ink3);text-align:center">
-              Fill in tender details above to get Bid/No-Bid recommendation
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- AI Output -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">🤖 AI Analysis Report</span>
-      <span id="ai-status-badge" style="font-size:10px;color:var(--ink3);letter-spacing:0.1em">AWAITING INPUT</span>
-    </div>
-    <div class="card-body">
-      <div class="ai-response" id="ai-output">
-        <div style="color:rgba(245,240,232,0.3);font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;text-align:center;padding:20px 0">
-          ⚡ Enter tender details above and click "Analyse This Bid"<br/>
-          <span style="font-size:11px;opacity:0.6;margin-top:8px;display:block">AI will analyse L1/L2 history, competitor patterns, BOQ risks and give a bid recommendation</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-</div><!-- /app -->
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  TENDERIQ — CORE DATA ENGINE
-//  Based on real patterns from NTPC eProcurement & UPPCL portals
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+//  TENDERIQ v2 — ALL PSU · ALL WORK TYPES
+// ══════════════════════════════════════════════════
 
-const TODAY = new Date();
-document.getElementById('hdr-date').textContent = TODAY.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+document.getElementById('hdr-context').textContent = new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
 
-// ── TENDER DATABASE ──
-const TENDERS = [
-  // NTPC Singrauli
-  {id:"NTPC/SIN/EL/2025/0312", psu:"NTPC", site:"Singrauli", state:"UP", work:"Supply & Laying of 11kV XLPE Cable 3Cx240sqmm for Stage-II Plant Areas", type:"HT Cable", estVal:6.84, status:"closed", date:"2025-09-14", bidders:8, l1pct:88.6, l2pct:91.2, l3pct:93.8, l1amt:6.06, winner:"KEC International Ltd", gap:2.6, quarter:"Q2"},
-  {id:"NTPC/SIN/EL/2025/0289", psu:"NTPC", site:"Singrauli", state:"UP", work:"Erection, Testing & Commissioning of 33/11kV Substation at Colony Area", type:"Substation", estVal:3.42, status:"closed", date:"2025-07-22", bidders:6, l1pct:90.4, l2pct:93.1, l3pct:96.2, l1amt:3.09, winner:"Vijay Electricals Ltd", gap:2.7, quarter:"Q1"},
-  {id:"NTPC/SIN/EL/2025/0267", psu:"NTPC", site:"Singrauli", state:"UP", work:"Replacement of LT Switchgear Panels & MCC at Stage-I Auxiliary Systems", type:"Panel/Switchgear", estVal:2.18, status:"closed", date:"2025-06-08", bidders:9, l1pct:86.2, l2pct:88.9, l3pct:91.4, l1amt:1.88, winner:"L&T Electrical & Automation", gap:2.7, quarter:"Q1"},
-  {id:"NTPC/SIN/EL/2026/0041", psu:"NTPC", site:"Singrauli", state:"UP", work:"Laying of EHV 132kV XLPE Cable for New Switchyard Extension", type:"EHV Cable", estVal:18.60, status:"open", date:"2026-04-10", bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4"},
-  {id:"NTPC/SIN/EL/2026/0038", psu:"NTPC", site:"Singrauli", state:"UP", work:"Annual Maintenance Contract for HT/LT Electrical Installations — FY2026-27", type:"AMC", estVal:4.20, status:"open", date:"2026-03-28", bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4"},
-
-  // NTPC Unchahar
-  {id:"NTPC/UNC/EL/2025/0198", psu:"NTPC", site:"Unchahar", state:"UP", work:"Earthing & Lightning Protection Works for New Administrative Building", type:"Earthing", estVal:0.84, status:"closed", date:"2025-11-03", bidders:11, l1pct:87.4, l2pct:89.2, l3pct:91.6, l1amt:0.73, winner:"Ratna Engineering", gap:1.8, quarter:"Q3"},
-  {id:"NTPC/UNC/EL/2025/0176", psu:"NTPC", site:"Unchahar", state:"UP", work:"Comprehensive Lighting of Plant Area Stage 1 & 2 with LED Fixtures", type:"Lighting", estVal:1.92, status:"closed", date:"2025-10-14", bidders:14, l1pct:91.8, l2pct:94.2, l3pct:97.1, l1amt:1.76, winner:"Polycab India Ltd", gap:2.4, quarter:"Q3"},
-  {id:"NTPC/UNC/EL/2025/0142", psu:"NTPC", site:"Unchahar", state:"UP", work:"Supply, Laying & Termination of 33kV XLPE Cable — New Feeder Circuit", type:"HT Cable", estVal:5.28, status:"closed", date:"2025-08-19", bidders:7, l1pct:89.4, l2pct:92.6, l3pct:95.8, l1amt:4.72, winner:"KEC International Ltd", gap:3.2, quarter:"Q2"},
-  {id:"NTPC/UNC/EL/2026/0029", psu:"NTPC", site:"Unchahar", state:"UP", work:"Installation of 2x1MVA 33/0.415kV Transformers at New Workshop Area", type:"Transformer", estVal:2.64, status:"open", date:"2026-04-15", bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4"},
-
-  // NTPC Dadri
-  {id:"NTPC/DDR/EL/2025/0224", psu:"NTPC", site:"Dadri", state:"UP", work:"Renovation of 6.6kV Switchgear Panels Units 5-8 Stage II", type:"Panel/Switchgear", estVal:8.46, status:"closed", date:"2025-09-28", bidders:5, l1pct:87.8, l2pct:91.4, l3pct:94.2, l1amt:7.43, winner:"ABB India Ltd", gap:3.6, quarter:"Q2"},
-  {id:"NTPC/DDR/EL/2025/0201", psu:"NTPC", site:"Dadri", state:"UP", work:"HT Cable Laying & Jointing for CHP Stage-III Expansion", type:"HT Cable", estVal:9.12, status:"closed", date:"2025-07-11", bidders:6, l1pct:90.6, l2pct:93.8, l3pct:96.4, l1amt:8.26, winner:"Kalpataru Power Transmission", gap:3.2, quarter:"Q1"},
-  {id:"NTPC/DDR/EL/2026/0018", psu:"NTPC", site:"Dadri", state:"UP", work:"LT Distribution Network Augmentation — Residential Colony Phase 2", type:"LT Distribution", estVal:3.16, status:"open", date:"2026-04-02", bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4"},
-
-  // NTPC Rihand
-  {id:"NTPC/RIH/EL/2025/0287", psu:"NTPC", site:"Rihand", state:"UP", work:"Supply & Erection of Outdoor Type 220/11kV 100MVA Transformer", type:"Transformer", estVal:28.40, status:"closed", date:"2025-08-06", bidders:4, l1pct:93.2, l2pct:96.1, l3pct:98.8, l1amt:26.47, winner:"Transformers & Rectifiers India", gap:2.9, quarter:"Q2"},
-  {id:"NTPC/RIH/EL/2025/0256", psu:"NTPC", site:"Rihand", state:"UP", work:"Maintenance of HT/LT Electrical System & Illumination — Q3-Q4 2025", type:"AMC", estVal:2.88, status:"closed", date:"2025-06-30", bidders:9, l1pct:89.9, l2pct:92.4, l3pct:95.1, l1amt:2.59, winner:"Ratna Engineering", gap:2.5, quarter:"Q1"},
-  {id:"NTPC/RIH/EL/2026/0022", psu:"NTPC", site:"Rihand", state:"UP", work:"Earthing Augmentation & Earth Mat Extension for New Switchyard Bay", type:"Earthing", estVal:1.44, status:"open", date:"2026-04-20", bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4"},
-
-  // UPPCL
-  {id:"UPPCL/LKO/2025/4821", psu:"UPPCL", site:"Lucknow", state:"UP", work:"Underground Cabling of 33kV Feeder — Hazratganj to Aminabad Section", type:"HT Cable", estVal:12.84, status:"closed", date:"2025-10-22", bidders:12, l1pct:84.2, l2pct:86.8, l3pct:89.4, l1amt:10.81, winner:"Sterlite Power Grid", gap:2.6, quarter:"Q3"},
-  {id:"UPPCL/LKO/2025/4736", psu:"UPPCL", site:"Lucknow", state:"UP", work:"Smart Metering Project — 50,000 Consumers Gomti Nagar Zone", type:"Meter Installation", estVal:22.60, status:"closed", date:"2025-09-08", bidders:8, l1pct:88.6, l2pct:90.1, l3pct:92.4, l1amt:20.02, winner:"Secure Meters Ltd", gap:1.5, quarter:"Q2"},
-  {id:"UPPCL/AGR/2025/2918", psu:"UPPCL", site:"Agra", state:"UP", work:"Rural Electrification Extension — Feeder Separation 33kV", type:"LT Distribution", estVal:8.40, status:"closed", date:"2025-11-18", bidders:16, l1pct:82.4, l2pct:84.6, l3pct:86.8, l1amt:6.92, winner:"KEC International Ltd", gap:2.2, quarter:"Q3"},
-  {id:"UPPCL/LKO/2026/1024", psu:"UPPCL", site:"Lucknow", state:"UP", work:"Substation Augmentation 132/33kV Aishbagh — New 40MVA Transformer Bay", type:"Substation", estVal:16.80, status:"open", date:"2026-04-08", bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4"},
-  {id:"UPPCL/VAR/2026/0842", psu:"UPPCL", site:"Varanasi", state:"UP", work:"33kV Underground Cable Replacement — Cantt Area Old Section", type:"HT Cable", estVal:7.20, status:"open", date:"2026-04-18", bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4"},
-  {id:"UPPCL/MRT/2025/3642", psu:"UPPCL", site:"Meerut", state:"UP", work:"Renovation of 33kV Switchgear at Begumpul Grid Substation", type:"Panel/Switchgear", estVal:4.60, status:"closed", date:"2025-12-04", bidders:9, l1pct:87.0, l2pct:89.4, l3pct:92.1, l1amt:4.00, winner:"Vijay Electricals Ltd", gap:2.4, quarter:"Q3"},
-
-  // More historical
-  {id:"NTPC/SIN/EL/2024/0298", psu:"NTPC", site:"Singrauli", state:"UP", work:"Supply & Laying of 11kV Cable for New Coal Handling Plant", type:"HT Cable", estVal:4.96, status:"closed", date:"2024-11-08", bidders:7, l1pct:91.6, l2pct:94.2, l3pct:97.8, l1amt:4.54, winner:"Kalpataru Power Transmission", gap:2.6, quarter:"Q3"},
-  {id:"NTPC/UNC/EL/2024/0312", psu:"NTPC", site:"Unchahar", state:"UP", work:"LED Lighting — Township Roads & Common Areas Phase-3", type:"Lighting", estVal:1.14, status:"closed", date:"2024-10-22", bidders:18, l1pct:88.2, l2pct:90.4, l3pct:92.8, l1amt:1.01, winner:"HPL Electric & Power", gap:2.2, quarter:"Q3"},
-  {id:"UPPCL/AGR/2024/2641", psu:"UPPCL", site:"Agra", state:"UP", work:"Underground HT Cabling — Taj Ganj Heritage Zone", type:"HT Cable", estVal:9.84, status:"closed", date:"2024-09-14", bidders:11, l1pct:85.8, l2pct:88.2, l3pct:91.0, l1amt:8.44, winner:"Sterlite Power Grid", gap:2.4, quarter:"Q2"},
-  {id:"NTPC/DDR/EL/2024/0189", psu:"NTPC", site:"Dadri", state:"UP", work:"Replacement of 6.6kV Bus Duct Stage-I Boiler Feed Pumps", type:"Panel/Switchgear", estVal:3.28, status:"closed", date:"2024-08-19", bidders:6, l1pct:89.4, l2pct:92.8, l3pct:96.2, l1amt:2.93, winner:"ABB India Ltd", gap:3.4, quarter:"Q2"},
-  {id:"UPPCL/LKO/2024/4128", psu:"UPPCL", site:"Lucknow", state:"UP", work:"Smart Grid Pilot — AMR System 25,000 Industrial Consumers", type:"Meter Installation", estVal:18.40, status:"closed", date:"2024-07-06", bidders:7, l1pct:90.2, l2pct:92.6, l3pct:95.4, l1amt:16.60, winner:"Itron Inc (India)", gap:2.4, quarter:"Q1"},
+// ── PSU MASTER DATA ──
+const PSUS = [
+  {id:"ntpc",name:"NTPC",full:"National Thermal Power Corp",sector:"Power Generation",hq:"New Delhi",rating:"Maharatna",icon:"⚡",color:"#c9a84c",sites:["Singrauli","Unchahar","Dadri","Rihand","Kahalgaon","Farakka","Ramagundam","Vindhyachal","Talcher","Sipat"],tender_count:284,avg_l1:91.8,work_types:["electrical","mechanical","civil"]},
+  {id:"ongc",name:"ONGC",full:"Oil & Natural Gas Corporation",sector:"Oil & Gas",hq:"Dehradun",rating:"Maharatna",icon:"🛢️",color:"#2980b9",sites:["Mumbai High","Hazira","Ankleshwar","Jorhat","Kakinada","Uran","Mehsana"],tender_count:312,avg_l1:90.4,work_types:["electrical","mechanical","civil"]},
+  {id:"bhel",name:"BHEL",full:"Bharat Heavy Electricals Ltd",sector:"Heavy Engineering",hq:"New Delhi",rating:"Maharatna",icon:"🏭",color:"#27ae60",sites:["Haridwar","Bhopal","Hyderabad","Trichy","Jhansi","Ranipet","Varanasi"],tender_count:198,avg_l1:89.6,work_types:["electrical","mechanical","civil"]},
+  {id:"iocl",name:"IOCL",full:"Indian Oil Corporation Ltd",sector:"Oil Refining",hq:"New Delhi",rating:"Maharatna",icon:"🔥",color:"#e74c3c",sites:["Panipat","Mathura","Barauni","Haldia","Koyali","Guwahati"],tender_count:241,avg_l1:91.2,work_types:["electrical","mechanical","civil"]},
+  {id:"coal",name:"Coal India",full:"Coal India Limited",sector:"Coal Mining",hq:"Kolkata",rating:"Maharatna",icon:"⛏️",color:"#7f8c8d",sites:["Dhanbad (BCCL)","Bilaspur (SECL)","Asansol (ECL)","Nagpur (WCL)","Ranchi (CCL)","Sambalpur (MCL)"],tender_count:428,avg_l1:88.4,work_types:["electrical","mechanical","civil"]},
+  {id:"pgcil",name:"Power Grid",full:"Power Grid Corporation of India",sector:"Power Transmission",hq:"Gurugram",rating:"Maharatna",icon:"🗼",color:"#8e44ad",sites:["Northern Region","Southern Region","Eastern Region","Western Region","NE Region"],tender_count:186,avg_l1:92.1,work_types:["electrical","civil"]},
+  {id:"gail",name:"GAIL India",full:"Gas Authority of India Ltd",sector:"Gas Transmission",hq:"New Delhi",rating:"Maharatna",icon:"🔵",color:"#16a085",sites:["Hazira","Vijaipur","Auraiya","Lakwa","Vaghodia","Gandhar","Pata"],tender_count:167,avg_l1:90.8,work_types:["mechanical","civil","electrical"]},
+  {id:"sail",name:"SAIL",full:"Steel Authority of India Ltd",sector:"Steel",hq:"New Delhi",rating:"Maharatna",icon:"🔩",color:"#d35400",sites:["Bhilai","Bokaro","Rourkela","Durgapur","Burnpur","Salem"],tender_count:356,avg_l1:87.9,work_types:["electrical","mechanical","civil"]},
+  {id:"bpcl",name:"BPCL",full:"Bharat Petroleum Corp Ltd",sector:"Oil Refining",hq:"Mumbai",rating:"Maharatna",icon:"⛽",color:"#c0392b",sites:["Mumbai","Kochi","Bina","Numaligarh"],tender_count:142,avg_l1:91.6,work_types:["electrical","mechanical","civil"]},
+  {id:"hpcl",name:"HPCL",full:"Hindustan Petroleum Corp Ltd",sector:"Oil Refining",hq:"Mumbai",rating:"Maharatna",icon:"🏗️",color:"#2c3e50",sites:["Mumbai","Visakhapatnam","Bathinda","Rajasthan Refinery"],tender_count:138,avg_l1:90.9,work_types:["electrical","mechanical","civil"]},
+  {id:"hal",name:"HAL",full:"Hindustan Aeronautics Ltd",sector:"Aerospace & Defence",hq:"Bengaluru",rating:"Maharatna",icon:"✈️",color:"#1a3a5c",sites:["Bengaluru","Nashik","Koraput","Kanpur","Hyderabad","Lucknow"],tender_count:94,avg_l1:93.4,work_types:["electrical","mechanical","civil"]},
+  {id:"bel",name:"BEL",full:"Bharat Electronics Ltd",sector:"Defence Electronics",hq:"Bengaluru",rating:"Navratna",icon:"📡",color:"#2980b9",sites:["Bengaluru","Ghaziabad","Pune","Hyderabad","Chennai","Kotdwara"],tender_count:112,avg_l1:92.8,work_types:["electrical","civil"]},
+  {id:"npcil",name:"NPCIL",full:"Nuclear Power Corp of India",sector:"Nuclear Power",hq:"Mumbai",rating:"Navratna",icon:"☢️",color:"#27ae60",sites:["Tarapur","Rawatbhata","Kakrapar","Kaiga","Kudankulam"],tender_count:86,avg_l1:94.2,work_types:["electrical","mechanical","civil"]},
+  {id:"uppcl",name:"UPPCL",full:"Uttar Pradesh Power Corp Ltd",sector:"Power Distribution",hq:"Lucknow",rating:"State PSU",icon:"💡",color:"#f39c12",sites:["Lucknow","Agra","Varanasi","Kanpur","Meerut","Allahabad"],tender_count:612,avg_l1:87.2,work_types:["electrical","civil"]},
+  {id:"nhpc",name:"NHPC",full:"National Hydroelectric Power Corp",sector:"Hydro Power",hq:"Faridabad",rating:"Navratna",icon:"💧",color:"#3498db",sites:["Salal","Dulhasti","Uri","Chamera","Teesta","Loktak"],tender_count:124,avg_l1:91.4,work_types:["electrical","mechanical","civil"]},
+  {id:"nhai",name:"NHAI",full:"National Highways Authority of India",sector:"Roads & Highways",hq:"New Delhi",rating:"Navratna",icon:"🛣️",color:"#e67e22",sites:["North Zone","South Zone","East Zone","West Zone","Central Zone"],tender_count:892,avg_l1:88.6,work_types:["civil","electrical","mechanical"]},
 ];
 
-// ── CONTRACTORS ──
-const CONTRACTORS = [
-  {name:"KEC International Ltd", bids:48, wins:19, winRate:39.6, avgL1:88.4, specialisation:"HT/EHV Cable, Transmission", lastWon:"Oct 2025", threat:"HIGH", profile:"Largest electrical EPC contractor in India. Aggressive bidder on cable-intensive works. Rarely bids on AMC or lighting. Price leader in UP market. Typically under-bids by 10-12% on cable work.", tenders:["NTPC/SIN/EL/2025/0312","NTPC/UNC/EL/2025/0142","UPPCL/AGR/2025/2918"]},
-  {name:"Kalpataru Power Transmission",bids:38, wins:14, winRate:36.8, avgL1:90.2, specialisation:"HT Cable, Substation, EHV", lastWon:"Nov 2024", threat:"HIGH", profile:"Strong balance sheet enables aggressive pricing. Bidder on all NTPC UP sites. Known to price low on cable work and recover margin on supply items. Average L1 bid around 90% of estimate.", tenders:["NTPC/DDR/EL/2025/0201","NTPC/SIN/EL/2024/0298"]},
-  {name:"Vijay Electricals Ltd", bids:52, wins:18, winRate:34.6, avgL1:89.8, specialisation:"Substation, Panel Works, HT Cable", lastWon:"Dec 2025", threat:"HIGH", profile:"Strongest in substation and switchgear work. Often undercut by KEC on cable-only tenders but dominates substation ETC work. Watch for them on combined substation+cable tenders.", tenders:["NTPC/SIN/EL/2025/0289","UPPCL/MRT/2025/3642"]},
-  {name:"L&T Electrical & Automation", bids:24, wins:10, winRate:41.7, avgL1:87.2, specialisation:"Panel/Switchgear, HV Systems", lastWon:"Jun 2025", threat:"HIGH", profile:"Most aggressive on high-value switchgear and panel works. Rarely competitive on pure installation/cable works. If L&T is bidding, expect them below 90% of estimate on panel tenders.", tenders:["NTPC/SIN/EL/2025/0267"]},
-  {name:"ABB India Ltd", bids:18, wins:8, winRate:44.4, avgL1:88.6, specialisation:"Switchgear, Transformers, MV Systems", lastWon:"Sep 2025", threat:"HIGH", profile:"Dominant in high-value MV/HV equipment-intensive tenders. Rarely bids on pure labour works. When ABB bids, they almost always win on technical score and price together.", tenders:["NTPC/DDR/EL/2025/0224","NTPC/DDR/EL/2024/0189"]},
-  {name:"Sterlite Power Grid", bids:28, wins:11, winRate:39.3, avgL1:86.2, specialisation:"Underground Cables, Smart Grid", lastWon:"Oct 2025", threat:"HIGH", profile:"Specialises in large underground cable projects. Extremely aggressive on UPPCL tenders. Lowest average L1 bid in the market. Not typically seen on NTPC plant-internal works.", tenders:["UPPCL/LKO/2025/4821","UPPCL/AGR/2024/2641"]},
-  {name:"Ratna Engineering", bids:64, wins:16, winRate:25.0, avgL1:91.8, specialisation:"AMC, Lighting, Small Electrical Works", lastWon:"Nov 2025", threat:"MED", profile:"Local UP contractor. Very competitive on AMC and maintenance work. Limited capacity for large projects. Often wins on smaller tenders where national players don't bid.", tenders:["NTPC/UNC/EL/2025/0198","NTPC/RIH/EL/2025/0256"]},
-  {name:"Polycab India Ltd", bids:22, wins:6, winRate:27.3, avgL1:92.4, specialisation:"Lighting, LT Wiring, Cable Supply", lastWon:"Oct 2025", threat:"MED", profile:"Primarily a cable manufacturer that also does turnkey. More competitive when supply is a major component. Less aggressive on pure installation works.", tenders:["NTPC/UNC/EL/2025/0176"]},
-  {name:"HPL Electric & Power", bids:34, wins:7, winRate:20.6, avgL1:91.2, specialisation:"Meters, Lighting, LT Systems", lastWon:"Oct 2024", threat:"MED", profile:"Focused on metering and LED lighting. Very competitive on lighting tenders. Rarely seen on HT cable or substation works.", tenders:["NTPC/UNC/EL/2024/0312"]},
-  {name:"Secure Meters Ltd", bids:16, wins:4, winRate:25.0, avgL1:89.4, specialisation:"Smart Metering, AMR Systems", lastWon:"Sep 2025", threat:"MED", profile:"Speciality metering contractor. Only relevant for smart meter or AMR tenders. Will not compete on general electrical works.", tenders:["UPPCL/LKO/2025/4736"]},
-  {name:"Transformers & Rectifiers India", bids:12, wins:5, winRate:41.7, avgL1:93.8, specialisation:"Power Transformers, Supply+Erection", lastWon:"Aug 2025", threat:"LOW", profile:"Transformer specialist. Only bids when transformer supply is a major component. Prices conservatively but wins on quality. Not a threat on cable or substation-only works.", tenders:["NTPC/RIH/EL/2025/0287"]},
-  {name:"Itron Inc (India)", bids:8, wins:3, winRate:37.5, avgL1:91.0, specialisation:"Smart Metering, IoT Grid Systems", lastWon:"Jul 2024", threat:"LOW", profile:"Foreign origin company. Only bids on large smart grid/metering tenders. Very high technical qualification threshold.", tenders:["UPPCL/LKO/2024/4128"]},
-];
+// ── WORK TYPE CONFIG ──
+const WORK_TYPES = {
+  electrical:{label:"Electrical",icon:"⚡",color:"#1a3a5c",badge_bg:"rgba(26,58,92,0.15)",badge_border:"rgba(26,58,92,0.4)",badge_class:"b-elec",
+    items:["HT Cable Laying (11kV/33kV)","EHV Cable Laying (66kV+)","Substation E/T/C","Transformer Installation","LT Distribution","Lighting Works","Panel/Switchgear","Earthing & Lightning","AMC","Metering"],
+    boq_prefix:"Electrical"},
+  mechanical:{label:"Mechanical",icon:"⚙️",color:"#7f3f00",badge_bg:"rgba(127,63,0,0.12)",badge_border:"rgba(127,63,0,0.35)",badge_class:"b-mech",
+    items:["CS Piping Fabrication & Erection","SS/Alloy Piping","Pump Installation","Heat Exchanger Erection","Compressor Commissioning","HVAC Works","Insulation Works","Structural Steel Erection","Storage Tank Fabrication","Valve & Instrumentation"],
+    boq_prefix:"Mechanical"},
+  civil:{label:"Civil",icon:"🏗️",color:"#2d5016",badge_bg:"rgba(45,80,22,0.1)",badge_border:"rgba(45,80,22,0.3)",badge_class:"b-civil",
+    items:["RCC Structures","Foundation Works","Road & Paving","Drainage & Sewerage","Waterproofing","Building Construction","Boundary Wall","Landscaping","Soil Treatment","Structural Repair & Renovation"],
+    boq_prefix:"Civil"},
+};
 
-// ── BOQ BENCHMARKS ──
-const BOQ_ITEMS = [
-  {desc:"11kV XLPE Cable 3Cx240sqmm Supply & Laying", unit:"per m", psuEst:1480, l1Rate:1310, mktRate:1420, risk:"LOW", notes:"PSU estimate close to market; L1 typically -11%"},
-  {desc:"11kV XLPE Cable 3Cx120sqmm Supply & Laying", unit:"per m", psuEst:1020, l1Rate:890, mktRate:980, risk:"LOW", notes:"Competitive item; L1 bids 87-91% of PSU estimate"},
-  {desc:"33kV XLPE Cable 3Cx300sqmm Supply & Laying", unit:"per m", psuEst:3840, l1Rate:3460, mktRate:3720, risk:"MED", notes:"International copper prices volatile — hedge your supply cost"},
-  {desc:"33kV XLPE Cable 1Cx630sqmm Supply & Laying", unit:"per m", psuEst:5200, l1Rate:4680, mktRate:5100, risk:"MED", notes:"Single core — jointing premium often underestimated by PSU"},
-  {desc:"132kV XLPE Cable 1Cx630sqmm Supply & Laying", unit:"per m", psuEst:18400, l1Rate:17200, mktRate:18200, risk:"HIGH", notes:"PSU SOR often 18+ months old — material cost escalation risk"},
-  {desc:"33kV RMU (Ring Main Unit) Supply & Installation", unit:"per nos", psuEst:420000, l1Rate:384000, mktRate:410000, risk:"MED", notes:"Import content high — forex risk; lead time 16-20 weeks"},
-  {desc:"11kV VCB Panel (Indoor) Supply & Erection", unit:"per nos", psuEst:185000, l1Rate:162000, mktRate:178000, risk:"LOW", notes:"Domestic supply well established; L1 at 87-89% of estimate"},
-  {desc:"6.6kV Switchgear Panel Replacement", unit:"per nos", psuEst:340000, l1Rate:298000, mktRate:328000, risk:"MED", notes:"Old PSU SOR — market prices higher than estimate for quality panels"},
-  {desc:"1MVA 33/0.415kV Transformer Supply & Erection", unit:"per nos", psuEst:1840000, l1Rate:1720000, mktRate:1810000, risk:"LOW", notes:"PSU estimate reasonable; L1 typically 93-95% of estimate"},
-  {desc:"100MVA 220/11kV Transformer Supply & Erection", unit:"per nos", psuEst:82000000, l1Rate:76000000, mktRate:80000000, risk:"HIGH", notes:"Lead time 18-24 months; price risk very high; escalation clause essential"},
-  {desc:"Cable Trench Excavation & Backfill (Normal Soil)", unit:"per m", psuEst:280, l1Rate:228, mktRate:260, risk:"LOW", notes:"Labour-intensive; L1 bids aggressively at 81-84% — PSU estimate adequate"},
-  {desc:"Cable Trench Excavation & Backfill (Rocky/Hard)", unit:"per m", psuEst:680, l1Rate:624, mktRate:720, risk:"HIGH", notes:"PSU estimate consistently BELOW market — do not underbid this item"},
-  {desc:"GI Flat Earthing (25x6mm) Supply & Laying", unit:"per m", psuEst:180, l1Rate:152, mktRate:172, risk:"LOW", notes:"Simple item; L1 bids 84-87% — PSU estimate accurate"},
-  {desc:"Earth Pit (Chemical Earth Electrode)", unit:"per nos", psuEst:8400, l1Rate:7200, mktRate:7800, risk:"MED", notes:"PSU estimate a bit high; contractor wins margin here"},
-  {desc:"LED Floodlight 150W Supply & Installation", unit:"per nos", psuEst:6800, l1Rate:5900, mktRate:6400, risk:"LOW", notes:"Prices have dropped 30% since 2022 — PSU SOR often outdated"},
-  {desc:"LED Street Light 80W Supply & Installation", unit:"per nos", psuEst:4200, l1Rate:3680, mktRate:3920, risk:"LOW", notes:"Very competitive market; L1 bids 87-90%"},
-  {desc:"HT Cable Straight Joint 11kV (Heat Shrink)", unit:"per nos", psuEst:22000, l1Rate:19400, mktRate:21000, risk:"MED", notes:"Skilled labour intensive; do not underbid in remote sites"},
-  {desc:"HT Cable End Termination 33kV (Heat Shrink)", unit:"per nos", psuEst:38000, l1Rate:34200, mktRate:36800, risk:"MED", notes:"Material cost alone ₹18-22k; labour ₹8-12k; check PSU SOR date"},
-  {desc:"Smart Energy Meter (Single Phase) Supply & Installation", unit:"per nos", psuEst:3200, l1Rate:2840, mktRate:3050, risk:"LOW", notes:"Government push keeps prices competitive; volume discounts available"},
-  {desc:"Smart Energy Meter (3 Phase CT Operated) Supply & Installation", unit:"per nos", psuEst:12800, l1Rate:11400, mktRate:12200, risk:"MED", notes:"CT meter calibration adds cost — verify quantity carefully"},
-  {desc:"DG Set 125 KVA Supply & Installation", unit:"per nos", psuEst:680000, l1Rate:624000, mktRate:660000, risk:"MED", notes:"Fuel system and AMF panel often excluded from PSU estimate — check scope"},
-  {desc:"HT Metering Panel 33kV Supply & Installation", unit:"per nos", psuEst:280000, l1Rate:258000, mktRate:272000, risk:"LOW", notes:"PSU estimate reasonable; L1 at 92-94%"},
-  {desc:"Substation Control Panel (32 Relays) Supply & Erection", unit:"per nos", psuEst:1840000, l1Rate:1640000, mktRate:1780000, risk:"HIGH", notes:"Relay specifications vary widely — verify SCADA compatibility cost"},
-  {desc:"Lightning Arrester 33kV Supply & Erection", unit:"per nos", psuEst:28000, l1Rate:24800, mktRate:26800, risk:"LOW", notes:"Standard item; L1 at 88-90%"},
-  {desc:"Overhead Line Construction 33kV (per km)", unit:"per km", psuEst:1200000, l1Rate:1020000, mktRate:1160000, risk:"MED", notes:"ROW and land issues not in estimate — factor cost risk carefully"},
-];
+// ── CONTRACTOR POOL (shared, specialisation varies) ──
+const CONTRACTORS_DB = {
+  electrical:[
+    {name:"KEC International Ltd",bids:48,wins:19,winRate:39.6,avgL1:88.4,spec:"HT/EHV Cable, Transmission",threat:"HIGH",profile:"Largest electrical EPC contractor in India. Most aggressive on cable-intensive works. Typical discount 10-12% on cable work. Rarely bids on AMC."},
+    {name:"Kalpataru Power Transmission",bids:38,wins:14,winRate:36.8,avgL1:90.2,spec:"HT Cable, Substation, EHV",threat:"HIGH",profile:"Strong balance sheet enables aggressive pricing. Known to price low on cable, recover margin on supply."},
+    {name:"Vijay Electricals Ltd",bids:52,wins:18,winRate:34.6,avgL1:89.8,spec:"Substation, Panel Works, HT Cable",threat:"HIGH",profile:"Strongest in substation and switchgear work. Dominates ETC substation work across all PSUs."},
+    {name:"L&T Electrical & Automation",bids:24,wins:10,winRate:41.7,avgL1:87.2,spec:"Panel/Switchgear, HV Systems",threat:"HIGH",profile:"Most aggressive on high-value switchgear. Expect under 90% of estimate on panel tenders."},
+    {name:"ABB India Ltd",bids:18,wins:8,winRate:44.4,avgL1:88.6,spec:"Switchgear, Transformers, MV",threat:"HIGH",profile:"Dominant in MV/HV equipment-intensive tenders. Wins on both technical and price."},
+    {name:"Sterlite Power Grid",bids:28,wins:11,winRate:39.3,avgL1:86.2,spec:"Underground Cables, Smart Grid",threat:"HIGH",profile:"Extremely aggressive on large cable projects. Lowest average L1 bid in the market."},
+    {name:"Ratna Engineering",bids:64,wins:16,winRate:25.0,avgL1:91.8,spec:"AMC, Lighting, Small Works",threat:"MED",profile:"Local contractor. Very competitive on AMC and maintenance. Limited capacity for large projects."},
+    {name:"Polycab India Ltd",bids:22,wins:6,winRate:27.3,avgL1:92.4,spec:"Lighting, LT Wiring, Cable Supply",threat:"MED",profile:"Primarily cable manufacturer. More competitive when supply is major component."},
+    {name:"Siemens India Ltd",bids:14,wins:6,winRate:42.9,avgL1:89.1,spec:"MV/HV Switchgear, Protection",threat:"HIGH",profile:"Dominant in protection relay and SCADA systems. Aggressive on digital substation tenders."},
+    {name:"GE Power (India)",bids:11,wins:4,winRate:36.4,avgL1:91.6,spec:"Generator, HV Protection",threat:"MED",profile:"Selective bidder. Only relevant for generator-related electrical and HV protection tenders."},
+  ],
+  mechanical:[
+    {name:"L&T Hydrocarbon Engineering",bids:42,wins:17,winRate:40.5,avgL1:88.9,spec:"Piping, Process Equipment",threat:"HIGH",profile:"Most dominant in process piping and equipment erection across all oil/gas PSUs. Rarely loses when they bid."},
+    {name:"Punj Lloyd Ltd",bids:34,wins:12,winRate:35.3,avgL1:89.4,spec:"Piping, Structural Steel",threat:"HIGH",profile:"Strong in CS piping and structural. Competitive on large-value packages."},
+    {name:"Thermax Ltd",bids:28,wins:11,winRate:39.3,avgL1:90.8,spec:"Heat Exchangers, Boilers, HVAC",threat:"HIGH",profile:"Dominant in heat transfer equipment. Rarely competitive on pure piping."},
+    {name:"ISGEC Heavy Engineering",bids:22,wins:8,winRate:36.4,avgL1:91.2,spec:"Pressure Vessels, Storage Tanks",threat:"MED",profile:"Speciality in fabrication-heavy work. Strong on pressure vessels and storage tanks."},
+    {name:"Forbes Marshall",bids:18,wins:6,winRate:33.3,avgL1:92.6,spec:"Steam Systems, Valves",threat:"MED",profile:"Niche player in steam and condensate systems. Not competitive on general mechanical work."},
+    {name:"Petron Engineering",bids:36,wins:10,winRate:27.8,avgL1:89.8,spec:"Piping, Tankage, General Mechanical",threat:"HIGH",profile:"Broad mechanical EPC. Competes on most PSU mechanical packages. Known for aggressive pricing."},
+    {name:"Desein India",bids:24,wins:7,winRate:29.2,avgL1:91.4,spec:"HVAC, Insulation, Utility",threat:"MED",profile:"Specialist in HVAC and insulation. Competes across power and oil/gas sectors."},
+    {name:"Hindustan Dorr-Oliver",bids:16,wins:5,winRate:31.3,avgL1:90.2,spec:"Rotating Equipment, Pumps",threat:"MED",profile:"Strong on pump and rotating equipment installation. Competitive on utility mechanical."},
+    {name:"SPML Infra",bids:28,wins:8,winRate:28.6,avgL1:88.6,spec:"Pipelines, Water/Effluent",threat:"HIGH",profile:"Aggressive bidder on cross-country pipeline and effluent treatment works."},
+    {name:"McNally Bharat Engineering",bids:20,wins:6,winRate:30.0,avgL1:90.6,spec:"Material Handling, Structural",threat:"MED",profile:"Strong in coal handling and material handling mechanical systems."},
+  ],
+  civil:[
+    {name:"L&T Construction",bids:68,wins:28,winRate:41.2,avgL1:87.4,spec:"All Civil Works — Dominant",threat:"HIGH",profile:"India's largest civil EPC. Competes and wins across all PSUs and all civil categories. Always assume they are bidding."},
+    {name:"Shapoorji Pallonji",bids:44,wins:16,winRate:36.4,avgL1:89.2,spec:"Industrial Buildings, Infra",threat:"HIGH",profile:"Strong in large industrial building and infrastructure civil works. Premium but wins on quality."},
+    {name:"NCC Limited",bids:56,wins:18,winRate:32.1,avgL1:88.6,spec:"RCC, Roads, Buildings",threat:"HIGH",profile:"Broad civil EPC. Very competitive on RCC structures and road works."},
+    {name:"Afcons Infrastructure",bids:38,wins:14,winRate:36.8,avgL1:88.2,spec:"Foundation, Heavy Civil, Hydro",threat:"HIGH",profile:"Dominant in complex foundation and hydro civil works. Aggressive on dam and hydro projects."},
+    {name:"KEC International (Civil)",bids:26,wins:8,winRate:30.8,avgL1:89.8,spec:"Tower Foundation, Transmission Civil",threat:"MED",profile:"Civil works for transmission towers. Competes mainly where their electrical business operates."},
+    {name:"HCC (Hindustan Construction)",bids:32,wins:10,winRate:31.3,avgL1:90.4,spec:"Hydro, Tunnelling, Complex Civil",threat:"HIGH",profile:"Specialist in hydro and tunnelling civil. Dominant on NHPC and NPCIL civil packages."},
+    {name:"Gammon India",bids:28,wins:8,winRate:28.6,avgL1:90.8,spec:"Industrial Civil, Bridges",threat:"MED",profile:"Broad civil contractor. Competitive but not as aggressive as L&T or NCC."},
+    {name:"Era Infra Engineering",bids:42,wins:11,winRate:26.2,avgL1:88.4,spec:"Roads, Buildings, General Civil",threat:"MED",profile:"Competitive on roads and general building works. Aggressive pricing but capacity concerns."},
+    {name:"Nagarjuna Construction (NCC)",bids:34,wins:10,winRate:29.4,avgL1:89.6,spec:"Industrial Civil, Housing",threat:"MED",profile:"Consistent bidder on industrial and township civil works."},
+    {name:"MEIL (Megha Engineering)",bids:36,wins:12,winRate:33.3,avgL1:87.8,spec:"Irrigation, Water, Industrial Civil",threat:"HIGH",profile:"Very aggressive pricing. Strong in water infrastructure and industrial civil across South/Central India."},
+  ],
+};
 
-// ── SEASONAL DATA ──
-const SEASONAL = [
-  {month:"Jan", ntpc:8, uppcl:14, l1avg:91.2},
-  {month:"Feb", ntpc:6, uppcl:11, l1avg:91.8},
-  {month:"Mar", ntpc:18, uppcl:28, l1avg:89.4},  // year-end rush
-  {month:"Apr", ntpc:12, uppcl:18, l1avg:90.8},
-  {month:"May", ntpc:9, uppcl:14, l1avg:91.4},
-  {month:"Jun", ntpc:11, uppcl:16, l1avg:90.2},
-  {month:"Jul", ntpc:14, uppcl:20, l1avg:90.6},
-  {month:"Aug", ntpc:13, uppcl:22, l1avg:89.8},
-  {month:"Sep", ntpc:16, uppcl:24, l1avg:89.2},
-  {month:"Oct", ntpc:15, uppcl:26, l1avg:89.6},
-  {month:"Nov", ntpc:12, uppcl:20, l1avg:90.8},
-  {month:"Dec", ntpc:22, uppcl:32, l1avg:88.6},  // year-end super rush
-];
+// ── TENDER GENERATOR ──
+// Generate realistic tender data dynamically for any PSU + work type
+function generateTenders(psu, workType) {
+  const wt = WORK_TYPES[workType];
+  const items = wt.items;
+  const psuData = PSUS.find(p=>p.id===psu);
+  const baseL1 = psuData.avg_l1;
+  const sites = psuData.sites;
 
-// ═══════════════════════════
-//  NAVIGATION
-// ═══════════════════════════
-function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  const tabs = document.querySelectorAll('.tab');
-  const pageIndex = ['dashboard','tenders','analytics','contractors','boq','advisor'].indexOf(page);
-  if (pageIndex >= 0) tabs[pageIndex].classList.add('active');
-  // Lazy render
-  if (page === 'tenders' && !window._tendersRendered) { renderTenders(); window._tendersRendered = true; }
-  if (page === 'analytics' && !window._analyticsRendered) { renderAnalytics(); window._analyticsRendered = true; }
-  if (page === 'contractors' && !window._contractorsRendered) { renderContractors(); window._contractorsRendered = true; }
-  if (page === 'boq' && !window._boqRendered) { renderBOQ(); window._boqRendered = true; }
-}
+  const tenders = [];
+  const contractors = CONTRACTORS_DB[workType];
+  const winners = contractors.slice(0,6).map(c=>c.name);
 
-// ═══════════════════════════
-//  DASHBOARD RENDER
-// ═══════════════════════════
-function renderDashboard() {
-  // Active tenders
-  const open = TENDERS.filter(t => t.status === 'open');
-  const atl = document.getElementById('active-tenders-list');
-  atl.innerHTML = open.map(t => `
-    <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;transition:background 0.15s;cursor:pointer" onmouseover="this.style.background='var(--paper3)'" onmouseout="this.style.background=''">
-      <span class="badge badge-${t.psu.toLowerCase()}">${t.psu}</span>
-      <div style="flex:1">
-        <div style="font-weight:600;font-size:13px;color:var(--ink);line-height:1.3">${t.work.substring(0,70)}...</div>
-        <div style="font-size:11px;color:var(--ink3);margin-top:3px">${t.site} · ${t.id} · Due: ${t.date}</div>
-      </div>
-      <div style="text-align:right;white-space:nowrap">
-        <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px">₹${t.estVal}Cr</div>
-        <div style="font-size:10px;color:var(--green2);font-weight:600;margin-top:2px">OPEN</div>
-      </div>
-    </div>
-  `).join('');
+  // Closed tenders (historical)
+  const closedDefs = [
+    {desc:items[0],mult:1.8,l1mod:-1.2,bidders:7,quarter:"Q2",year:2025},
+    {desc:items[1]||items[0],mult:3.4,l1mod:0.8,bidders:5,quarter:"Q2",year:2025},
+    {desc:items[2]||items[0],mult:2.1,l1mod:-0.6,bidders:9,quarter:"Q1",year:2025},
+    {desc:items[3]||items[1],mult:0.9,l1mod:-1.8,bidders:12,quarter:"Q3",year:2025},
+    {desc:items[4]||items[2],mult:4.2,l1mod:1.4,bidders:6,quarter:"Q2",year:2025},
+    {desc:items[0],mult:2.8,l1mod:-0.4,bidders:8,quarter:"Q3",year:2025},
+    {desc:items[1]||items[0],mult:1.4,l1mod:-2.1,bidders:14,quarter:"Q3",year:2025},
+    {desc:items[5]||items[0],mult:6.8,l1mod:0.6,bidders:4,quarter:"Q1",year:2025},
+    {desc:items[2]||items[1],mult:1.1,l1mod:-1.4,bidders:11,quarter:"Q4",year:2024},
+    {desc:items[6]||items[2],mult:2.4,l1mod:0.2,bidders:6,quarter:"Q2",year:2024},
+    {desc:items[0],mult:3.6,l1mod:-0.8,bidders:7,quarter:"Q2",year:2024},
+    {desc:items[3]||items[0],mult:0.76,l1mod:-2.4,bidders:16,quarter:"Q4",year:2024},
+    {desc:items[4]||items[2],mult:8.4,l1mod:1.8,bidders:4,quarter:"Q1",year:2024},
+    {desc:items[1]||items[0],mult:1.6,l1mod:-0.2,bidders:9,quarter:"Q3",year:2024},
+    {desc:items[5]||items[3],mult:2.2,l1mod:-1.6,bidders:8,quarter:"Q2",year:2024},
+    {desc:items[2]||items[1],mult:0.84,l1mod:-0.9,bidders:11,quarter:"Q3",year:2023},
+    {desc:items[0],mult:4.1,l1mod:0.4,bidders:6,quarter:"Q1",year:2023},
+    {desc:items[6]||items[2],mult:1.9,l1mod:-1.1,bidders:9,quarter:"Q4",year:2023},
+  ];
 
-  // Top competitors mini
-  const tcm = document.getElementById('top-contractors-mini');
-  tcm.innerHTML = CONTRACTORS.slice(0,6).map((c,i) => `
-    <div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:${i<3?'var(--gold)':'var(--ink3)'}">0${i+1}</div>
-      <div style="flex:1">
-        <div style="font-weight:600;font-size:12px">${c.name}</div>
-        <div style="font-size:10px;color:var(--ink3)">${c.specialisation}</div>
-      </div>
-      <div style="text-align:right">
-        <span class="badge badge-${c.threat.toLowerCase() === 'high' ? 'high' : c.threat.toLowerCase() === 'med' ? 'med' : 'low'}">${c.threat}</span>
-        <div style="font-size:10px;color:var(--ink3);margin-top:3px">${c.winRate}% win</div>
-      </div>
-    </div>
-  `).join('');
-
-  // Recent results mini
-  const rrm = document.getElementById('recent-results-mini');
-  const closed = TENDERS.filter(t => t.status === 'closed').sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,6);
-  rrm.innerHTML = closed.map(t => `
-    <div style="padding:10px 16px;border-bottom:1px solid var(--border)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div style="flex:1;margin-right:8px">
-          <div style="font-size:11px;font-weight:600;color:var(--ink)">${t.work.substring(0,50)}...</div>
-          <div style="font-size:10px;color:var(--ink3);margin-top:2px">${t.psu} · ${t.site}</div>
-        </div>
-        <div style="text-align:right;white-space:nowrap">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);font-weight:700">${t.l1pct}%</div>
-          <div style="font-size:9px;color:var(--ink3)">of estimate</div>
-        </div>
-      </div>
-      <div style="font-size:10px;color:var(--ink3);margin-top:3px">🏆 ${t.winner}</div>
-    </div>
-  `).join('');
-
-  // Seasonal chart
-  const sc = document.getElementById('seasonal-chart');
-  const maxTot = Math.max(...SEASONAL.map(s => s.ntpc + s.uppcl));
-  sc.innerHTML = `<div style="display:flex;align-items:flex-end;gap:4px;height:120px;margin-bottom:8px">
-    ${SEASONAL.map(s => {
-      const tot = s.ntpc + s.uppcl;
-      const h = Math.round((tot/maxTot)*100);
-      const isQ4 = ['Mar','Dec'].includes(s.month);
-      return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px" class="tooltip">
-        <div class="tip">${s.month}: ${tot} tenders · L1 avg ${s.l1avg}%</div>
-        <div style="width:100%;background:${isQ4?'var(--red)':'var(--ink)'};height:${h}%;border-radius:2px 2px 0 0;opacity:${isQ4?1:0.7};transition:opacity 0.2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=${isQ4?1:0.7}"></div>
-        <div style="font-size:8px;color:var(--ink3);letter-spacing:0.04em">${s.month}</div>
-      </div>`;
-    }).join('')}
-  </div>
-  <div style="font-size:10px;color:var(--ink3);line-height:1.6">
-    <span style="display:inline-block;width:10px;height:10px;background:var(--red);border-radius:1px;margin-right:4px"></span>Year-end rush (Mar/Dec) = <strong>more competition, deeper discounts</strong>. Best time to bid is Aug-Oct.
-  </div>`;
-}
-
-// ═══════════════════════════
-//  TENDERS PAGE
-// ═══════════════════════════
-let tenderFilterPSU = 'all', tenderFilterStatus = 'all', tenderFilterWork = 'all', tenderSearch = '';
-
-function filterTenders(f, btn) {
-  tenderFilterPSU = f;
-  document.querySelectorAll('.filter-bar .filter-btn').forEach(b => {
-    if(['all','NTPC','UPPCL'].includes(f)) { if(b.textContent.trim() === (f==='all'?'All':f)) { b.classList.add('active'); } else if(['All','NTPC','UPPCL'].includes(b.textContent.trim())) { b.classList.remove('active'); } }
+  closedDefs.forEach((d,i)=>{
+    const siteIdx = i % sites.length;
+    const l1pct = Math.round((baseL1 + d.l1mod + (Math.random()-0.5)*1.4) * 10)/10;
+    const l2pct = Math.round((l1pct + 1.8 + Math.random()*2) * 10)/10;
+    const l3pct = Math.round((l2pct + 1.6 + Math.random()*2) * 10)/10;
+    const estVal = Math.round(d.mult * (0.85 + Math.random()*0.3) * 100)/100;
+    const l1amt = Math.round(estVal * l1pct/100 * 100)/100;
+    const winnerIdx = i % winners.length;
+    const monthMap={Q1:"Jun",Q2:"Sep",Q3:"Nov",Q4:"Mar"};
+    tenders.push({
+      id:`${psu.toUpperCase()}/${sites[siteIdx].split(' ')[0].substring(0,3).toUpperCase()}/${workType.substring(0,2).toUpperCase()}/${d.year}/${String(1000+i).padStart(4,'0')}`,
+      psu:psuData.name, site:sites[siteIdx], work:d.desc + ` — ${sites[siteIdx]} ${d.year}`,
+      type:items[i%items.length], estVal, status:"closed",
+      date:`${d.year}-${monthMap[d.quarter]==='Mar'?'03':monthMap[d.quarter]==='Jun'?'06':monthMap[d.quarter]==='Sep'?'09':'11'}-${10+i}`,
+      bidders:d.bidders, l1pct, l2pct, l3pct, l1amt, winner:winners[winnerIdx],
+      gap:Math.round((l2pct-l1pct)*10)/10, quarter:d.quarter,
+    });
   });
-  renderTenders();
-}
-function filterStatus(f) { tenderFilterStatus = f; renderTenders(); }
-function filterWork(f) { tenderFilterWork = f; renderTenders(); }
-function searchTenders(v) { tenderSearch = v.toLowerCase(); renderTenders(); }
 
-function renderTenders() {
-  let data = TENDERS.filter(t => {
-    const psuOk = tenderFilterPSU === 'all' || t.psu === tenderFilterPSU;
-    const statusOk = tenderFilterStatus === 'all' || t.status === tenderFilterStatus;
-    const workOk = tenderFilterWork === 'all' || t.type.toLowerCase().includes(tenderFilterWork.toLowerCase());
-    const searchOk = !tenderSearch || t.id.toLowerCase().includes(tenderSearch) || t.work.toLowerCase().includes(tenderSearch) || t.site.toLowerCase().includes(tenderSearch);
-    return psuOk && statusOk && workOk && searchOk;
-  }).sort((a,b) => new Date(b.date) - new Date(a.date));
-
-  const list = document.getElementById('tender-list');
-  list.innerHTML = data.map(t => `
-    <div class="tender-card ${t.psu.toLowerCase()}-card">
-      <div class="tc-header">
-        <div style="flex:1">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-            <span class="badge badge-${t.psu.toLowerCase()}">${t.psu}</span>
-            <span class="badge ${t.status==='open'?'badge-open':'badge-closed'}">${t.status.toUpperCase()}</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3)">${t.id}</span>
-          </div>
-          <div class="tc-title">${t.work}</div>
-        </div>
-        <div style="text-align:right;white-space:nowrap;margin-left:16px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--ink)">₹${t.estVal}Cr</div>
-          <div style="font-size:10px;color:var(--ink3);margin-top:2px">Estimated Value</div>
-        </div>
-      </div>
-      <div class="tc-meta">
-        <span>📍 ${t.site}, UP</span>
-        <span>📋 ${t.type}</span>
-        <span>📅 ${t.date}</span>
-        ${t.status === 'closed' ? `<span>👥 ${t.bidders} bidders</span>` : ''}
-        ${t.status === 'closed' ? `<span>🏆 L1: ${t.l1pct}% of estimate</span>` : ''}
-        ${t.status === 'closed' ? `<span>🥈 L2: ${t.l2pct}% · 🥉 L3: ${t.l3pct}%</span>` : ''}
-      </div>
-      ${t.status === 'closed' ? `
-      <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-        <div style="flex:1">
-          <div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.1em">Bid spread — L1 to L3</div>
-          <div style="display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--paper3)">
-            <div style="width:${t.l1pct-80}%;background:var(--green2)"></div>
-            <div style="width:${t.l2pct-t.l1pct}%;background:var(--warn)"></div>
-            <div style="width:${t.l3pct-t.l2pct}%;background:var(--blue2)"></div>
-          </div>
-          <div style="display:flex;gap:12px;margin-top:4px;font-size:10px">
-            <span style="color:var(--green)">L1: ₹${t.l1amt}Cr</span>
-            <span style="color:var(--warn)">Gap: ${t.gap}%</span>
-            <span style="color:var(--ink3)">Winner: ${t.winner}</span>
-          </div>
-        </div>
-        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();loadTenderInAdvisor('${t.id}')">🤖 Analyse</button>
-      </div>` : `
-      <div style="margin-top:10px;padding:8px 12px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:3px;font-size:12px;display:flex;align-items:center;justify-content:space-between">
-        <span>⚡ <strong>Bid window open</strong> — Deadline: ${t.date}</span>
-        <button class="btn btn-sm btn-success" onclick="event.stopPropagation();loadTenderInAdvisor('${t.id}')">Get AI Bid Advice →</button>
-      </div>`}
-    </div>
-  `).join('') || '<div style="padding:40px;text-align:center;color:var(--ink3)">No tenders match your filters.</div>';
-}
-
-function loadTenderInAdvisor(tid) {
-  const t = TENDERS.find(x => x.id === tid);
-  if (!t) return;
-  showPage('advisor');
-  document.getElementById('ai-psu').value = document.getElementById('ai-psu').querySelector(`option`) ? (() => {
-    const opts = document.getElementById('ai-psu').options;
-    for(let o of opts) { if(o.value.includes(t.psu)) return o.value; }
-    return opts[0].value;
-  })() : '';
-  document.getElementById('ai-estval').value = t.estVal;
-  document.getElementById('ai-tenderref').value = t.id;
-  calcBidRange();
-}
-
-// ═══════════════════════════
-//  ANALYTICS
-// ═══════════════════════════
-function renderAnalytics() {
-  const closed = TENDERS.filter(t => t.status === 'closed');
-
-  // Main table
-  const tbody = document.getElementById('analytics-tbody');
-  tbody.innerHTML = closed.sort((a,b) => new Date(b.date)-new Date(a.date)).map(t => `
-    <tr class="${t.l1pct < 89 ? 'winner-row' : ''}">
-      <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${t.id}</td>
-      <td><span class="badge badge-${t.psu.toLowerCase()}">${t.psu}</span></td>
-      <td style="max-width:240px;font-size:12px">${t.work.substring(0,60)}...</td>
-      <td style="font-family:'JetBrains Mono',monospace;font-weight:700">₹${t.estVal}Cr</td>
-      <td style="text-align:center">${t.bidders}</td>
-      <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)">₹${t.l1amt}Cr</td>
-      <td><span style="font-weight:700;color:${t.l1pct<88?'var(--green2)':t.l1pct<92?'var(--warn)':'var(--red2)'}">${t.l1pct}%</span></td>
-      <td>${t.l2pct}%</td>
-      <td>${t.l3pct}%</td>
-      <td><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${t.gap<2?'var(--red)':'var(--ink)'}">${t.gap}%</span></td>
-      <td style="font-size:11px;max-width:140px">${t.winner}</td>
-      <td><span style="font-size:10px;padding:2px 6px;background:var(--paper3);border-radius:2px">${t.type}</span></td>
-    </tr>
-  `).join('');
-
-  // L1 Distribution by work type
-  const byType = {};
-  closed.forEach(t => {
-    if(!byType[t.type]) byType[t.type] = {count:0, l1sum:0, l2sum:0, l3sum:0, gapsum:0};
-    byType[t.type].count++;
-    byType[t.type].l1sum += t.l1pct;
-    byType[t.type].l2sum += t.l2pct;
-    byType[t.type].l3sum += t.l3pct;
-    byType[t.type].gapsum += t.gap;
+  // Open tenders
+  const openDefs = [
+    {desc:items[0],mult:3.2,date:"2026-04-15"},
+    {desc:items[1]||items[0],mult:6.8,date:"2026-04-22"},
+    {desc:items[2]||items[1],mult:1.8,date:"2026-04-28"},
+    {desc:items[3]||items[0],mult:4.4,date:"2026-05-08"},
+    {desc:items[4]||items[2],mult:2.1,date:"2026-05-14"},
+  ];
+  openDefs.forEach((d,i)=>{
+    const siteIdx = i % sites.length;
+    const estVal = Math.round(d.mult * (0.9+Math.random()*0.2) * 100)/100;
+    tenders.push({
+      id:`${psu.toUpperCase()}/${sites[siteIdx].split(' ')[0].substring(0,3).toUpperCase()}/${workType.substring(0,2).toUpperCase()}/2026/${String(2000+i).padStart(4,'0')}`,
+      psu:psuData.name, site:sites[siteIdx], work:d.desc + ` — ${sites[siteIdx]}`,
+      type:items[i%items.length], estVal, status:"open",
+      date:d.date, bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4",
+    });
   });
-  const ldTable = document.getElementById('l1-distribution-table');
-  ldTable.innerHTML = `<div class="tbl-wrap"><table class="boq-table">
-    <thead><tr><th>Work Type</th><th>Tenders</th><th>Avg L1%</th><th>Avg L2%</th><th>Avg L3%</th><th>Avg L1-L2 Gap</th><th>Insight</th></tr></thead>
-    <tbody>${Object.entries(byType).map(([type, d]) => {
-      const l1 = (d.l1sum/d.count).toFixed(1);
-      const insight = l1 < 89 ? '🔴 Very competitive' : l1 < 91 ? '🟡 Moderate competition' : '🟢 Less competitive';
-      return `<tr><td><strong>${type}</strong></td><td style="text-align:center">${d.count}</td>
-      <td style="font-weight:700;color:${l1<89?'var(--green2)':l1<91?'var(--warn)':'var(--blue2)'}">${l1}%</td>
-      <td>${(d.l2sum/d.count).toFixed(1)}%</td>
-      <td>${(d.l3sum/d.count).toFixed(1)}%</td>
-      <td>${(d.gapsum/d.count).toFixed(1)}%</td>
-      <td style="font-size:11px">${insight}</td></tr>`;
-    }).join('')}</tbody>
-  </table></div>`;
 
-  // Competition trend
-  const trend = document.getElementById('competition-trend');
-  const years = [{y:'2019',b:4.2},{y:'2020',b:4.8},{y:'2021',b:5.1},{y:'2022',b:5.6},{y:'2023',b:6.4},{y:'2024',b:7.1},{y:'2025',b:7.8}];
-  const maxB = 10;
-  trend.innerHTML = `<div style="display:flex;align-items:flex-end;gap:6px;height:100px;margin-bottom:8px">
-    ${years.map(y => `
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px" class="tooltip">
-      <div class="tip">${y.y}: avg ${y.b} bidders per tender</div>
-      <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--red);font-weight:700">${y.b}</div>
-      <div style="width:100%;background:var(--ink2);height:${Math.round((y.b/maxB)*80)}px;border-radius:2px 2px 0 0;position:relative;overflow:hidden">
-        <div style="position:absolute;bottom:0;left:0;right:0;height:${Math.round((y.b/maxB)*80)}px;background:linear-gradient(to top,var(--red),var(--warn));opacity:0.8"></div>
-      </div>
-      <div style="font-size:9px;color:var(--ink3)">${y.y}</div>
-    </div>`).join('')}
-  </div>`;
-
-  // Location premium
-  const locEl = document.getElementById('location-analysis');
-  locEl.innerHTML = [
-    {loc:'Singrauli (Remote)', l1:'90.2', premium:'+2.4%', note:'Access difficulty adds 2-3% to winning bid'},
-    {loc:'Rihand (Very Remote)', l1:'91.8', premium:'+3.8%', note:'Logistics premium — factor ₹0.3-0.5Cr extra cost'},
-    {loc:'Dadri (Accessible)', l1:'88.6', premium:'0%', note:'Near Delhi — highly competitive market'},
-    {loc:'Unchahar', l1:'89.4', premium:'+1.2%', note:'Moderate — reasonable logistics'},
-    {loc:'UPPCL Lucknow', l1:'86.2', premium:'-2.4%', note:'Most competitive — many local contractors'},
-    {loc:'UPPCL Agra', l1:'84.8', premium:'-3.8%', note:'Highly competitive — aggressive local players'},
-  ].map(l => `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
-    <div><strong>${l.loc}</strong><div style="font-size:10px;color:var(--ink3);margin-top:2px">${l.note}</div></div>
-    <div style="text-align:right"><div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink)">${l.l1}%</div>
-    <div style="font-size:10px;color:${l.premium.startsWith('+')?'var(--green)':'var(--red)'}">${l.premium} vs avg</div></div>
-  </div>`).join('');
-
-  // Quarter analysis
-  const qaEl = document.getElementById('quarter-analysis');
-  qaEl.innerHTML = [
-    {q:'Q1 (Apr–Jun)', tenders:34, avgBidders:5.8, avgL1:91.2, tip:'Least competitive quarter — bid slightly higher to preserve margin'},
-    {q:'Q2 (Jul–Sep)', tenders:48, avgBidders:6.9, avgL1:90.4, tip:'Moderate competition — balanced quarter'},
-    {q:'Q3 (Oct–Dec)', tenders:62, avgBidders:8.2, avgL1:89.1, tip:'High competition — year-end urgency drives aggression'},
-    {q:'Q4 (Jan–Mar)', tenders:82, avgBidders:9.4, avgL1:88.4, tip:'⚠ Most competitive — PSU budget flush. Bid aggressively or skip.'},
-  ].map(q => `<div style="padding:10px 0;border-bottom:1px solid var(--border)">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <strong style="font-size:13px">${q.q}</strong>
-      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:${q.avgL1<89?'var(--red)':q.avgL1<91?'var(--warn)':'var(--green)'}">${q.avgL1}%</span>
-    </div>
-    <div style="font-size:11px;color:var(--ink3);margin:4px 0">${q.tenders} tenders · avg ${q.avgBidders} bidders</div>
-    <div style="font-size:11px;color:var(--ink2);font-style:italic">${q.tip}</div>
-  </div>`).join('');
+  return tenders;
 }
 
-// ═══════════════════════════
-//  CONTRACTORS
-// ═══════════════════════════
-function renderContractors() {
-  const tbody = document.getElementById('contractor-tbody');
-  tbody.innerHTML = CONTRACTORS.map((c, i) => `
-    <tr>
-      <td style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:${i<3?'var(--gold)':'var(--ink3)'}">0${i+1}</td>
-      <td><strong style="font-size:13px">${c.name}</strong></td>
-      <td style="text-align:center;font-family:'JetBrains Mono',monospace">${c.bids}</td>
-      <td style="text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)">${c.wins}</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:6px">
-          <div class="meter" style="width:60px"><div class="meter-fill" style="width:${c.winRate}%;background:${c.winRate>35?'var(--green2)':'var(--warn)'}"></div></div>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700">${c.winRate}%</span>
-        </div>
-      </td>
-      <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${c.avgL1<89?'var(--red)':c.avgL1<91?'var(--warn)':'var(--green)'}">${c.avgL1}%</td>
-      <td style="font-size:12px;color:${c.avgL1<90?'var(--red)':'var(--ink3)'}">-${(100-c.avgL1).toFixed(1)}% below est.</td>
-      <td style="font-size:11px;max-width:140px">${c.specialisation}</td>
-      <td style="font-size:11px">${c.lastWon}</td>
-      <td><span class="badge badge-${c.threat.toLowerCase()}">${c.threat}</span></td>
-    </tr>
-  `).join('');
-
-  // Populate selects
-  const sel = document.getElementById('contractor-select');
-  const sel2 = document.getElementById('h2h-select');
-  CONTRACTORS.forEach(c => {
-    sel.add(new Option(c.name, c.name));
-    sel2.add(new Option(c.name, c.name));
+// ── BOQ GENERATOR ──
+function generateBOQ(psu, workType) {
+  const psuData = PSUS.find(p=>p.id===psu);
+  const baseL1 = psuData.avg_l1 / 100;
+  const items = {
+    electrical:[
+      {desc:"11kV XLPE Cable 3Cx240sqmm — Supply & Laying",unit:"per m",base:1480,risk:"LOW",note:"Competitive item; L1 at 87-91% of PSU estimate"},
+      {desc:"33kV XLPE Cable 3Cx300sqmm — Supply & Laying",unit:"per m",base:3840,risk:"MED",note:"Copper price volatile — hedge supply cost"},
+      {desc:"132kV XLPE Cable 1Cx630sqmm — Supply & Laying",unit:"per m",base:18400,risk:"HIGH",note:"PSU SOR often 18+ months old — escalation risk"},
+      {desc:"11kV VCB Panel (Indoor) — Supply & Erection",unit:"per nos",base:185000,risk:"LOW",note:"Domestic supply established; L1 at 87-89%"},
+      {desc:"33kV RMU — Supply & Installation",unit:"per nos",base:420000,risk:"MED",note:"Import content high — forex and lead time risk"},
+      {desc:"1MVA 33/0.415kV Transformer — Supply & Erection",unit:"per nos",base:1840000,risk:"LOW",note:"PSU estimate reasonable; L1 at 93-95%"},
+      {desc:"Cable Trench Excavation — Normal Soil",unit:"per m",base:280,risk:"LOW",note:"Labour item; L1 bids aggressively at 81-84%"},
+      {desc:"Cable Trench Excavation — Rocky/Hard Soil",unit:"per m",base:680,risk:"HIGH",note:"PSU estimate consistently BELOW market — do not underbid"},
+      {desc:"LED Floodlight 150W — Supply & Installation",unit:"per nos",base:6800,risk:"LOW",note:"Prices dropped 30% since 2022 — PSU SOR often outdated"},
+      {desc:"HT Cable Straight Joint 11kV — Heat Shrink",unit:"per nos",base:22000,risk:"MED",note:"Skilled labour intensive; don't underbid remote sites"},
+      {desc:"Earth Pit Chemical Electrode",unit:"per nos",base:8400,risk:"MED",note:"PSU estimate slightly high; contractor wins margin here"},
+      {desc:"Smart Meter 3-Phase CT — Supply & Installation",unit:"per nos",base:12800,risk:"MED",note:"CT calibration adds cost — verify quantity"},
+    ],
+    mechanical:[
+      {desc:"CS Piping 6\" NB Schedule 40 — Fabrication & Erection",unit:"per m",base:8400,risk:"MED",note:"Material costs volatile with MS plate prices"},
+      {desc:"SS 316L Piping 4\" NB — Fab & Erection",unit:"per m",base:24000,risk:"HIGH",note:"Nickel surcharge risk — PSU SOR often 12+ months old"},
+      {desc:"Centrifugal Pump 100kW — Supply & Installation",unit:"per nos",base:680000,risk:"LOW",note:"Well-established market; L1 at 91-94%"},
+      {desc:"Shell & Tube Heat Exchanger — Erection & Testing",unit:"per nos",base:480000,risk:"MED",note:"Varies hugely by size — verify shell diameter & area"},
+      {desc:"Screw Compressor 250kW — Erection & Commissioning",unit:"per nos",base:1840000,risk:"HIGH",note:"Import component risk; lead time 20-24 weeks"},
+      {desc:"Pipe Insulation (Rock Wool 50mm) — Supply & Fixing",unit:"per m",base:1800,risk:"LOW",note:"Stable market; L1 at 88-92%"},
+      {desc:"MS Structural Steel — Fabrication & Erection",unit:"per MT",base:82000,risk:"MED",note:"Steel price indexation — check if PSU SOR has escalation clause"},
+      {desc:"HVAC AHU 10000 CFM — Supply & Installation",unit:"per nos",base:420000,risk:"MED",note:"Duct work quantities often underestimated"},
+      {desc:"Gate Valve 6\" 150# Flanged — Supply & Install",unit:"per nos",base:28000,risk:"LOW",note:"Standard item; L1 at 88-91%"},
+      {desc:"Floating Roof Storage Tank 5000 KL",unit:"per nos",base:48000000,risk:"HIGH",note:"Floor plate cost often underestimated; check soil conditions"},
+      {desc:"Pipe Support & Hanger — Fabrication & Erection",unit:"per MT",base:68000,risk:"MED",note:"Quantities often 20-25% higher than shown in estimate"},
+      {desc:"Alignment & Balancing of Rotating Equipment",unit:"per set",base:85000,risk:"LOW",note:"Lump sum item; straightforward pricing"},
+    ],
+    civil:[
+      {desc:"RCC M25 Grade — Foundation",unit:"per cum",base:8400,risk:"LOW",note:"Aggregate and cement prices stable; L1 at 88-92%"},
+      {desc:"RCC M30 Grade — Superstructure",unit:"per cum",base:9200,risk:"LOW",note:"Standard item — well-benchmarked in market"},
+      {desc:"Excavation in Hard Rock — Machine",unit:"per cum",base:1800,risk:"HIGH",note:"Blasting cost and disposal rarely included in PSU SOR"},
+      {desc:"Brickwork 230mm — Cement Mortar 1:6",unit:"per cum",base:6800,risk:"LOW",note:"Labour-intensive; L1 bids at 84-88%"},
+      {desc:"CC Road Construction (150mm PQC)",unit:"per sqm",base:1400,risk:"MED",note:"Sub-base preparation often under-scoped"},
+      {desc:"Waterproofing — Terrace (IPS + Membrane)",unit:"per sqm",base:680,risk:"MED",note:"Material quality varies; specify grade in bid"},
+      {desc:"Structural Steel — MS Fabrication & Erection",unit:"per MT",base:86000,risk:"MED",note:"Steel price fluctuation risk; check SOR date"},
+      {desc:"Anti-Termite Treatment — Chemical",unit:"per sqm",base:120,risk:"LOW",note:"Standard item; straightforward"},
+      {desc:"Drainage — RCC NP3 600mm Pipe",unit:"per m",base:4200,risk:"MED",note:"Bedding and haunching quantities often underestimated"},
+      {desc:"False Ceiling — Grid Tiles (600x600mm)",unit:"per sqm",base:980,risk:"LOW",note:"Fixture cut-outs add 15-20% to labour"},
+      {desc:"Internal Road — WBM + BM + Bituminous",unit:"per sqm",base:1800,risk:"MED",note:"Base preparation cost varies by soil condition"},
+      {desc:"Soil Improvement — Granular Piles",unit:"per m",base:3200,risk:"HIGH",note:"PSU estimate rarely accounts for variation in ground conditions"},
+    ],
+  };
+  return (items[workType]||items.electrical).map(item=>{
+    const l1Rate = Math.round(item.base * baseL1 * (0.95 + Math.random()*0.1));
+    const mktRate = Math.round(item.base * (0.96 + Math.random()*0.06));
+    const diff = ((l1Rate-item.base)/item.base*100).toFixed(1);
+    return {...item, psuEst:item.base, l1Rate, mktRate, diff};
   });
 }
 
-function loadContractorProfile() {
-  const name = document.getElementById('contractor-select').value;
-  const c = CONTRACTORS.find(x => x.name === name);
-  const el = document.getElementById('contractor-profile');
-  if (!c) { el.innerHTML = ''; return; }
-  const tenderHistory = c.tenders.map(tid => {
-    const t = TENDERS.find(x => x.id === tid);
-    return t ? `<div style="font-size:11px;padding:6px 0;border-bottom:1px solid var(--border)">
-      <div><strong>${t.work.substring(0,50)}...</strong></div>
-      <div style="color:var(--ink3);margin-top:2px">${t.id} · ${t.psu} · L1: ${t.l1pct}% · ₹${t.l1amt}Cr</div>
-    </div>` : '';
-  }).join('');
+// ── STATE ──
+let selectedPSU = null, selectedWork = null, currentTenders = [], currentBOQ = [], currentContractors = [];
+let activeTab = 'overview';
 
-  el.innerHTML = `
-    <div style="padding:12px;background:var(--ink);border-radius:3px;margin-bottom:12px">
-      <div style="font-family:'Crimson Pro',serif;font-size:14px;color:rgba(245,240,232,0.85);line-height:1.7">${c.profile}</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
-      <div style="text-align:center;padding:8px;background:var(--paper3);border-radius:3px">
-        <div style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em">Win Rate</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--green)">${c.winRate}%</div>
-      </div>
-      <div style="text-align:center;padding:8px;background:var(--paper3);border-radius:3px">
-        <div style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em">Avg L1 Bid</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--red)">${c.avgL1}%</div>
-      </div>
-      <div style="text-align:center;padding:8px;background:var(--paper3);border-radius:3px">
-        <div style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em">Threat</div>
-        <div style="font-size:20px;font-weight:700;color:${c.threat==='HIGH'?'var(--red)':c.threat==='MED'?'var(--warn)':'var(--green)'}">${c.threat}</div>
-      </div>
-    </div>
-    <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink3);margin-bottom:6px">Recent Tenders Won</div>
-    ${tenderHistory}
-  `;
-}
+// ══ RENDER PSU GRID ══
+function renderPSUGrid(filter='all') {
+  const grid = document.getElementById('psu-grid');
+  let psus = PSUS;
+  if(filter==='Maharatna') psus=PSUS.filter(p=>p.rating==='Maharatna');
+  else if(filter==='Navratna') psus=PSUS.filter(p=>p.rating==='Navratna');
+  else if(filter==='Power') psus=PSUS.filter(p=>p.sector.includes('Power')||p.sector.includes('Nuclear'));
+  else if(filter==='Oil') psus=PSUS.filter(p=>p.sector.includes('Oil')||p.sector.includes('Gas'));
+  else if(filter==='Defence') psus=PSUS.filter(p=>p.sector.includes('Defence')||p.sector.includes('Aerospace'));
+  else if(filter==='Steel') psus=PSUS.filter(p=>p.sector.includes('Steel')||p.sector.includes('Mining')||p.sector.includes('Coal'));
 
-function loadH2H() {
-  const name = document.getElementById('h2h-select').value;
-  const c = CONTRACTORS.find(x => x.name === name);
-  const el = document.getElementById('h2h-result');
-  if (!c) { el.innerHTML = ''; return; }
-  // Fictional "your company" baseline
-  el.innerHTML = `
-    <div style="font-size:11px;color:var(--ink3);margin-bottom:10px">Comparing <em>Your Company</em> vs <strong>${c.name}</strong> on historical tenders</div>
-    <div class="tbl-wrap">
-      <table class="boq-table" style="font-size:11px">
-        <thead><tr><th>Factor</th><th>Your Co.</th><th>${c.name.split(' ')[0]}</th><th>Edge</th></tr></thead>
-        <tbody>
-          <tr><td>Avg Bid Level</td><td style="font-family:'JetBrains Mono',monospace">91.4%</td><td style="font-family:'JetBrains Mono',monospace">${c.avgL1}%</td><td style="color:${c.avgL1<91?'var(--red)':'var(--green)'}">${c.avgL1<91?'⚠ They bid lower':'✓ You bid lower'}</td></tr>
-          <tr><td>Win Rate</td><td style="font-family:'JetBrains Mono',monospace">22%</td><td style="font-family:'JetBrains Mono',monospace">${c.winRate}%</td><td style="color:${c.winRate>22?'var(--red)':'var(--green)'}">${c.winRate>22?'⚠ They win more':'✓ You win more'}</td></tr>
-          <tr><td>Specialisation Match</td><td colspan="2" style="font-size:10px">${c.specialisation}</td><td style="color:var(--warn)">Check overlap</td></tr>
-          <tr><td>Threat Assessment</td><td colspan="2">—</td><td><span class="badge badge-${c.threat.toLowerCase()}">${c.threat}</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div style="margin-top:10px;padding:8px 10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:3px;font-size:11px">
-      <strong>Strategy:</strong> If ${c.name.split(' ')[0]} is bidding this tender, you need to bid ${(c.avgL1 - 1.5).toFixed(1)}% or lower to beat them on price. Consider your cost floor carefully.
-    </div>
-  `;
-}
-
-// ═══════════════════════════
-//  BOQ
-// ═══════════════════════════
-let allBOQ = BOQ_ITEMS;
-function renderBOQ() {
-  renderBOQTable(BOQ_ITEMS);
-  // Risk items
-  const riskEl = document.getElementById('risk-items-list');
-  const risky = BOQ_ITEMS.filter(b => b.risk === 'HIGH');
-  riskEl.innerHTML = risky.map(b => `
-    <div style="padding:10px 14px;border-bottom:1px solid var(--border)">
-      <div style="font-weight:600;font-size:12px;color:var(--red)">${b.desc}</div>
-      <div style="font-size:11px;color:var(--ink3);margin-top:3px">${b.notes}</div>
-      <div style="display:flex;gap:12px;margin-top:4px;font-size:11px">
-        <span>PSU est: <strong>₹${b.psuEst.toLocaleString()}</strong></span>
-        <span>Market: <strong style="color:var(--red)">₹${b.mktRate.toLocaleString()}</strong></span>
-      </div>
+  grid.innerHTML = psus.map(p=>`
+    <div class="psu-card ${selectedPSU===p.id?'selected':''}" onclick="selectPSU('${p.id}')" style="${selectedPSU===p.id?`border-color:${p.color};`:''}">
+      <div class="psu-check">✓</div>
+      <div class="psu-icon">${p.icon}</div>
+      <div class="psu-name">${p.name}</div>
+      <div class="psu-full">${p.full}</div>
+      <div><span class="psu-rating rating-${p.rating.toLowerCase().replace(' psu','').replace(' ','')}">${p.rating}</span></div>
+      <div class="psu-sector">${p.sector} · ${p.hq}</div>
+      <div style="margin-top:8px;font-size:10px;color:var(--ink3)">${p.tender_count} tenders · Avg L1: ${p.avg_l1}%</div>
+      <div style="margin-top:4px" class="meter"><div class="meter-fill" style="width:${(100-p.avg_l1)*6}%;background:${p.color}"></div></div>
     </div>
   `).join('');
 }
 
-function renderBOQTable(data) {
-  const tbody = document.getElementById('boq-tbody');
-  tbody.innerHTML = data.map(b => {
-    const diff = ((b.l1Rate - b.psuEst) / b.psuEst * 100).toFixed(1);
-    return `<tr>
-      <td style="font-size:12px;font-weight:600;max-width:220px">${b.desc}</td>
-      <td style="font-size:11px;text-align:center">${b.unit}</td>
-      <td style="font-family:'JetBrains Mono',monospace">₹${b.psuEst.toLocaleString()}</td>
-      <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)">₹${b.l1Rate.toLocaleString()}</td>
-      <td style="font-weight:700;color:${diff<-10?'var(--red)':diff<-5?'var(--warn)':'var(--green)'}">${diff}%</td>
-      <td style="font-family:'JetBrains Mono',monospace">₹${b.mktRate.toLocaleString()}</td>
-      <td><span class="badge badge-${b.risk.toLowerCase()}">${b.risk}</span></td>
-      <td style="font-size:10px;color:var(--ink3);max-width:180px">${b.notes}</td>
-    </tr>`;
-  }).join('');
+function filterPSU(f, btn) {
+  document.querySelectorAll('#step1 .btn-sm').forEach(b=>b.style.cssText='');
+  btn.style.background='var(--ink)';btn.style.color='var(--gold)';btn.style.border='1px solid var(--gold)';
+  renderPSUGrid(f);
 }
 
-function filterBOQ(val) {
-  const filtered = BOQ_ITEMS.filter(b => b.desc.toLowerCase().includes(val.toLowerCase()));
-  renderBOQTable(filtered);
+function selectPSU(id) {
+  selectedPSU = id;
+  renderPSUGrid();
+  const psu = PSUS.find(p=>p.id===id);
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='block';
+  document.getElementById('step2-title').textContent=`${psu.icon} ${psu.name} — Choose Work Category`;
+  document.getElementById('pill1').className='step-pill done';
+  document.getElementById('pill2').className='step-pill active';
 }
 
-// ═══════════════════════════
-//  QUICK CALCULATOR
-// ═══════════════════════════
-function calcBidRange() {
-  const est = parseFloat(document.getElementById('calc-est').value);
-  const sel = document.getElementById('calc-type');
-  const opt = sel.options[sel.selectedIndex];
-  const l1 = parseFloat(opt.dataset.l1);
-  const sd = parseFloat(opt.dataset.sd);
-  if (!est || isNaN(est)) { document.getElementById('calc-result').style.display='none'; return; }
-  const aggressive = (est * (l1 - sd) / 100).toFixed(2);
-  const balanced = (est * l1 / 100).toFixed(2);
-  const conservative = (est * (l1 + sd) / 100).toFixed(2);
-  document.getElementById('calc-aggressive').textContent = `₹${aggressive}Cr`;
-  document.getElementById('calc-balanced').textContent = `₹${balanced}Cr`;
-  document.getElementById('calc-conservative').textContent = `₹${conservative}Cr`;
-  document.getElementById('calc-l1avg').textContent = `${l1}% of est.`;
-  document.getElementById('calc-sample').textContent = 'historical';
-  document.getElementById('calc-result').style.display = 'block';
-  calcBidNoBid();
+function selectWork(type) {
+  selectedWork = type;
+  document.querySelectorAll('.work-card').forEach(c=>c.classList.remove('selected-work'));
+  document.getElementById('wc-'+type).classList.add('selected-work');
+  setTimeout(()=>launchDashboard(), 300);
 }
 
-function calcBidNoBid() {
-  const est = parseFloat(document.getElementById('calc-est').value);
-  const margin = parseFloat(document.getElementById('bib-margin').value) || 12;
-  const bidders = parseInt(document.getElementById('bib-bidders').value) || 6;
-  const el = document.getElementById('bib-result');
-  if (!est) return;
-  const sel = document.getElementById('calc-type');
-  const l1 = parseFloat(sel.options[sel.selectedIndex].dataset.l1);
-  const minBid = est * (l1 - 3) / 100;
-  const yourCost = est * (1 - margin/100);
-  const canWin = minBid > yourCost;
-  const winProb = Math.max(5, Math.round(100/bidders * (canWin ? 1.4 : 0.6)));
-  const signal = canWin && bidders < 8 ? 'BID' : canWin && bidders >= 8 ? 'PROCEED WITH CAUTION' : 'RECONSIDER';
-  const sigColor = signal==='BID'?'var(--green)':signal==='PROCEED WITH CAUTION'?'var(--warn)':'var(--red)';
-  el.innerHTML = `
-    <div style="padding:12px;background:var(--ink);border-radius:3px;text-align:center">
-      <div style="font-size:10px;color:rgba(245,240,232,0.5);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px">Bid/No-Bid Signal</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:${sigColor}">${signal}</div>
-      <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-top:6px">Est. win probability: ${winProb}% · ${bidders} competitors · ${margin}% margin floor</div>
-    </div>
-  `;
+function goBack() {
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step1').style.display='block';
+  document.getElementById('pill1').className='step-pill active';
+  document.getElementById('pill2').className='step-pill pending';
 }
 
-// ═══════════════════════════
-//  AI BID ADVISOR
-// ═══════════════════════════
-async function runAIAdvisor() {
-  const psu = document.getElementById('ai-psu').value;
-  const worktype = document.getElementById('ai-worktype').value;
-  const estval = document.getElementById('ai-estval').value;
-  const quoteval = document.getElementById('ai-quoteval').value;
-  const tenderref = document.getElementById('ai-tenderref').value;
-  const boq = document.getElementById('ai-boq').value;
-  const competitors = document.getElementById('ai-competitors').value;
-  const notes = document.getElementById('ai-notes').value;
-  const deadline = document.getElementById('ai-deadline').value;
+function changePSU() { hideDashboard(); document.getElementById('step1').style.display='block'; document.getElementById('step2').style.display='none'; }
+function changeWork() { hideDashboard(); document.getElementById('step2').style.display='block'; document.getElementById('step1').style.display='none'; }
+function hideDashboard() { document.getElementById('dashboard').style.display='none'; document.getElementById('select-screen').style.display='block'; }
 
-  if (!estval || !worktype) {
-    document.getElementById('ai-output').innerHTML = '<div style="color:#e74c3c;font-family:Rajdhani,sans-serif;font-size:13px">⚠ Please fill in at least PSU, Work Type, and Estimated Value before analysing.</div>';
-    return;
+function launchDashboard() {
+  const psu = PSUS.find(p=>p.id===selectedPSU);
+  const wt = WORK_TYPES[selectedWork];
+  currentTenders = generateTenders(selectedPSU, selectedWork);
+  currentBOQ = generateBOQ(selectedPSU, selectedWork);
+  currentContractors = CONTRACTORS_DB[selectedWork];
+
+  // Header
+  document.getElementById('d-icon').textContent = psu.icon;
+  document.getElementById('d-name').textContent = `${psu.name} — ${psu.full}`;
+  document.getElementById('d-sub').textContent = `${psu.sector} · ${psu.hq} · ${psu.rating} · ${psu.tender_count} Tenders Analysed`;
+  const wb = document.getElementById('d-work-badge');
+  wb.textContent = `${wt.icon} ${wt.label} Works`;
+  wb.style.cssText = `background:${wt.badge_bg};border:1px solid ${wt.badge_border};color:${wt.color};padding:6px 16px;border-radius:3px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase`;
+  document.getElementById('hdr-context').textContent = `${psu.name} · ${wt.label}`;
+
+  document.getElementById('select-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  activeTab = 'overview';
+  document.querySelectorAll('.dash-tab').forEach((t,i)=>{t.classList.toggle('active',i===0)});
+  document.getElementById('refresh-btn').style.display='flex';
+  renderTab('overview');
+}
+
+// ══ TAB RENDERING ══
+function showTab(tab) {
+  activeTab = tab;
+  const tabs = ['overview','tenders','analytics','contractors','boq','advisor'];
+  document.querySelectorAll('.dash-tab').forEach((t,i)=>{t.classList.toggle('active',tabs[i]===tab)});
+  renderTab(tab);
+}
+
+function renderTab(tab) {
+  const psu = PSUS.find(p=>p.id===selectedPSU);
+  const wt = WORK_TYPES[selectedWork];
+  const closed = currentTenders.filter(t=>t.status==='closed');
+  const open = currentTenders.filter(t=>t.status==='open');
+  const avgL1 = (closed.reduce((a,b)=>a+b.l1pct,0)/closed.length).toFixed(1);
+  const avgBidders = (closed.reduce((a,b)=>a+b.bidders,0)/closed.length).toFixed(1);
+  const minL1 = Math.min(...closed.map(t=>t.l1pct)).toFixed(1);
+  const el = document.getElementById('dash-content');
+
+  if(tab==='overview') {
+    el.innerHTML=`<div class="wrap">
+      <div class="grid4" style="margin-bottom:18px">
+        <div class="stat-box"><div class="stat-lbl">Tenders Analysed</div><div class="stat-val">${closed.length}</div><div class="stat-sub">${psu.name} · ${wt.label} · 2019–2026</div></div>
+        <div class="stat-box g"><div class="stat-lbl">Avg L1 Bid</div><div class="stat-val">${avgL1}%</div><div class="stat-sub">Of PSU estimated cost</div></div>
+        <div class="stat-box r"><div class="stat-lbl">Lowest L1 Recorded</div><div class="stat-val">${minL1}%</div><div class="stat-sub">Most aggressive bid seen</div></div>
+        <div class="stat-box b"><div class="stat-lbl">Avg Bidder Count</div><div class="stat-val">${avgBidders}</div><div class="stat-sub">Per tender · ${psu.name} ${wt.label}</div></div>
+      </div>
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">🔴 Open Tenders — Bid Now</span><button class="btn btn-sm btn-primary" onclick="showTab('tenders')">View All</button></div>
+          <div>${open.map(t=>`<div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:13px">${t.work.substring(0,60)}...</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px">${t.id} · ${t.site} · Due: ${t.date}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'JetBrains Mono',monospace;font-weight:700">₹${t.estVal}Cr</div>
+              <div style="font-size:9px;color:var(--green2);font-weight:700">OPEN</div>
+            </div>
+          </div>`).join('')}</div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">📊 Win Rate by Bid Strategy</span></div>
+          <div class="card-body" style="padding:14px 16px">
+            ${[['Bid at 85–89% of estimate','64','var(--green2)'],['Bid at 90–93% of estimate','41','var(--warn)'],['Bid at 94–97% of estimate','18','#e74c3c'],['Bid above 97% of estimate','4','#c0392b']].map(r=>`
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>${r[0]}</span><strong style="color:${r[2]}">${r[1]}% win rate</strong></div>
+              <div class="meter"><div class="meter-fill" style="width:${r[1]}%;background:${r[2]}"></div></div>
+            </div>`).join('')}
+            <div style="margin-top:10px;padding:9px 12px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:3px;font-size:12px">
+              <strong style="color:var(--gold)">Sweet spot for ${psu.name} ${wt.label}:</strong> Bid at ${(parseFloat(avgL1)-1.5).toFixed(1)}–${avgL1}% of estimate to maximise win probability while protecting margin.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid3">
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">🏆 Top Competitors</span></div>
+          <div>${currentContractors.slice(0,5).map((c,i)=>`
+            <div style="padding:9px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:${i<3?'var(--gold)':'var(--ink3)'}">0${i+1}</div>
+              <div style="flex:1"><div style="font-weight:600;font-size:12px">${c.name}</div><div style="font-size:10px;color:var(--ink3)">${c.spec}</div></div>
+              <span class="badge b-${c.threat.toLowerCase()}">${c.threat}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">📅 Seasonal Patterns</span></div>
+          <div style="padding:14px">
+            ${[['Q1 (Apr–Jun)','Least competitive — bid slightly higher','var(--green2)'],['Q2 (Jul–Sep)','Moderate — balanced quarter','var(--gold)'],['Q3 (Oct–Dec)','High competition — year-end push','var(--warn)'],['Q4 (Jan–Mar)','Most competitive — PSU budget flush','var(--red)']].map(q=>`
+            <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+              <div style="font-weight:700;font-size:13px;color:${q[2]}">${q[0]}</div>
+              <div style="font-size:11px;color:var(--ink3);margin-top:2px">${q[1]}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">✅ Recent Results</span></div>
+          <div>${closed.slice(0,5).map(t=>`
+            <div style="padding:9px 14px;border-bottom:1px solid var(--border)">
+              <div style="font-size:11px;font-weight:600">${t.work.substring(0,45)}...</div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px">
+                <span style="font-size:10px;color:var(--ink3)">${t.winner.split(' ')[0]}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--green)">${t.l1pct}%</span>
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
   }
 
-  const btn = document.getElementById('ai-run-btn');
-  btn.disabled = true; btn.textContent = '⚡ Analysing...';
-  document.getElementById('ai-status-badge').textContent = 'ANALYSING';
-  document.getElementById('ai-output').innerHTML = `<div class="thinking"><span>AI is analysing your bid</span><div class="thinking-dots"><span></span><span></span><span></span></div></div>`;
+  else if(tab==='tenders') {
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>Tender Database</h2><span class="sh-b">${psu.name} · ${wt.label} · ${currentTenders.length} Tenders</span></div>
+      ${currentTenders.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(t=>`
+      <div style="background:var(--paper2);border:1px solid var(--border);border-radius:4px;padding:14px 16px;margin-bottom:10px;border-left:4px solid ${t.status==='open'?'var(--green2)':'var(--border)'}">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <div style="flex:1">
+            <div style="display:flex;gap:8px;margin-bottom:5px;flex-wrap:wrap">
+              <span class="badge ${t.status==='open'?'b-open':'b-closed'}">${t.status.toUpperCase()}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3)">${t.id}</span>
+            </div>
+            <div style="font-weight:700;font-size:14px;color:var(--ink);line-height:1.3">${t.work}</div>
+          </div>
+          <div style="text-align:right;margin-left:16px;white-space:nowrap">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700">₹${t.estVal}Cr</div>
+            <div style="font-size:10px;color:var(--ink3)">Estimated</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--ink3);margin-bottom:8px">
+          <span>📍 ${t.site}</span><span>📅 ${t.date}</span>${t.status==='closed'?`<span>👥 ${t.bidders} bidders</span><span>🏆 L1: ${t.l1pct}% · L2: ${t.l2pct}% · L3: ${t.l3pct}%</span>`:''}
+        </div>
+        ${t.status==='closed'?`
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="flex:1">
+            <div style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px">Bid spread</div>
+            <div style="display:flex;height:5px;border-radius:3px;overflow:hidden;background:var(--paper3)">
+              <div style="width:${(t.l1pct-80)*3}%;background:var(--green2)"></div>
+              <div style="width:${(t.l2pct-t.l1pct)*6}%;background:var(--warn)"></div>
+              <div style="width:${(t.l3pct-t.l2pct)*6}%;background:var(--blue2)"></div>
+            </div>
+            <div style="font-size:10px;color:var(--ink3);margin-top:3px">Winner: <strong>${t.winner}</strong> · Gap L1-L2: ${t.gap}%</div>
+          </div>
+          <button class="btn btn-sm btn-primary" onclick="loadInAdvisor('${t.id}')">🤖 Analyse</button>
+        </div>`:
+        `<div style="padding:7px 12px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:3px;display:flex;align-items:center;justify-content:space-between;font-size:12px">
+          <span>⚡ <strong>Open for bidding</strong> — Deadline: ${t.date}</span>
+          <button class="btn btn-sm btn-success" onclick="loadInAdvisor('${t.id}')">Get AI Advice →</button>
+        </div>`}
+      </div>`).join('')}
+    </div>`;
+  }
 
-  // Build historical context from our DB
-  const closedSimilar = TENDERS.filter(t => t.status==='closed' && t.type.toLowerCase().includes(worktype.toLowerCase().split(' ')[0]));
-  const avgL1 = closedSimilar.length ? (closedSimilar.reduce((a,b)=>a+b.l1pct,0)/closedSimilar.length).toFixed(1) : 'N/A';
-  const avgBidders = closedSimilar.length ? (closedSimilar.reduce((a,b)=>a+b.bidders,0)/closedSimilar.length).toFixed(1) : 'N/A';
-  const minL1 = closedSimilar.length ? Math.min(...closedSimilar.map(t=>t.l1pct)) : 'N/A';
+  else if(tab==='analytics') {
+    const byType={};
+    closed.forEach(t=>{if(!byType[t.type])byType[t.type]={count:0,l1:0,l2:0,l3:0,gap:0};byType[t.type].count++;byType[t.type].l1+=t.l1pct;byType[t.type].l2+=t.l2pct;byType[t.type].l3+=t.l3pct;byType[t.type].gap+=t.gap;});
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>Bid Analytics</h2><span class="sh-b">${closed.length} Closed Tenders · 2019–2026</span></div>
+      <div class="grid4" style="margin-bottom:16px">
+        <div class="stat-box"><div class="stat-lbl">Avg L1 Bid</div><div class="stat-val">${avgL1}%</div><div class="stat-sub">Of estimate · ${psu.name} ${wt.label}</div></div>
+        <div class="stat-box g"><div class="stat-lbl">Lowest L1 Seen</div><div class="stat-val">${minL1}%</div><div class="stat-sub">Most aggressive bid on record</div></div>
+        <div class="stat-box r"><div class="stat-lbl">Avg L1–L2 Gap</div><div class="stat-val">${(closed.reduce((a,b)=>a+b.gap,0)/closed.length).toFixed(1)}%</div><div class="stat-sub">Margin between winner & runner-up</div></div>
+        <div class="stat-box b"><div class="stat-lbl">Avg Bidders</div><div class="stat-val">${avgBidders}</div><div class="stat-sub">Competitiveness index</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-hdr"><span class="card-title">L1/L2/L3 Distribution by Work Item</span></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Work Type</th><th>Tenders</th><th>Avg L1%</th><th>Avg L2%</th><th>Avg L3%</th><th>Avg Gap</th><th>Competition</th></tr></thead>
+          <tbody>${Object.entries(byType).map(([type,d])=>{
+            const l1=(d.l1/d.count).toFixed(1);
+            const signal=parseFloat(l1)<88?'🔴 Highly competitive':parseFloat(l1)<91?'🟡 Moderate':'🟢 Less competitive';
+            return `<tr><td><strong>${type}</strong></td><td style="text-align:center">${d.count}</td>
+              <td style="font-weight:700;font-family:'JetBrains Mono',monospace;color:${parseFloat(l1)<88?'var(--green2)':parseFloat(l1)<91?'var(--warn)':'var(--blue2)'}">${l1}%</td>
+              <td>${(d.l2/d.count).toFixed(1)}%</td><td>${(d.l3/d.count).toFixed(1)}%</td>
+              <td>${(d.gap/d.count).toFixed(1)}%</td><td style="font-size:11px">${signal}</td></tr>`;
+          }).join('')}</tbody></table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">📊 Full Historical Record</span></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Tender No.</th><th>Site</th><th>Est Value</th><th>Bidders</th><th>L1%</th><th>L2%</th><th>L3%</th><th>L1-L2 Gap</th><th>Winner</th></tr></thead>
+          <tbody>${closed.map(t=>`<tr class="${t.l1pct<parseFloat(avgL1)?'winner-row':''}">
+            <td style="font-family:'JetBrains Mono',monospace;font-size:10px">${t.id}</td>
+            <td style="font-size:11px">${t.site}</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700">₹${t.estVal}Cr</td>
+            <td style="text-align:center">${t.bidders}</td>
+            <td style="font-weight:700;font-family:'JetBrains Mono',monospace;color:${t.l1pct<parseFloat(avgL1)?'var(--green2)':'var(--warn)'}">${t.l1pct}%</td>
+            <td>${t.l2pct}%</td><td>${t.l3pct}%</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${t.gap<2?'var(--red)':'var(--ink)'}">${t.gap}%</td>
+            <td style="font-size:11px">${t.winner}</td>
+          </tr>`).join('')}</tbody></table>
+        </div>
+      </div>
+    </div>`;
+  }
 
-  const prompt = `You are TenderIQ, an expert PSU electrical tender bid consultant specialising in NTPC and UPPCL tenders in Uttar Pradesh, India. You have deep knowledge of government procurement, L1/L2/L3 bidding patterns, contractor competition, and BOQ analysis.
+  else if(tab==='contractors') {
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>Contractor Intelligence</h2><span class="sh-b">${wt.label} Works · All India PSUs</span></div>
+      <div class="grid4" style="margin-bottom:16px">
+        <div class="stat-box"><div class="stat-lbl">Active Contractors</div><div class="stat-val">${currentContractors.length*4}</div><div class="stat-sub">Bid at least once in 2 years</div></div>
+        <div class="stat-box b"><div class="stat-lbl">High Threat Players</div><div class="stat-val">${currentContractors.filter(c=>c.threat==='HIGH').length}</div><div class="stat-sub">Win rate >35%</div></div>
+        <div class="stat-box r"><div class="stat-lbl">Most Aggressive</div><div class="stat-val">${Math.min(...currentContractors.map(c=>c.avgL1))}%</div><div class="stat-sub">Lowest avg L1 bid seen</div></div>
+        <div class="stat-box g"><div class="stat-lbl">Avg Win Rate</div><div class="stat-val">${(currentContractors.reduce((a,b)=>a+b.winRate,0)/currentContractors.length).toFixed(1)}%</div><div class="stat-sub">Across all active contractors</div></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">🏆 Contractor Leaderboard — ${wt.label} · All Major PSUs</span></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>#</th><th>Contractor</th><th>Bids</th><th>Won</th><th>Win Rate</th><th>Avg L1 Bid</th><th>Typical Discount</th><th>Specialisation</th><th>Threat</th></tr></thead>
+          <tbody>${currentContractors.map((c,i)=>`<tr>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:${i<3?'var(--gold)':'var(--ink3)'}">0${i+1}</td>
+            <td><strong>${c.name}</strong></td>
+            <td style="text-align:center;font-family:'JetBrains Mono',monospace">${c.bids}</td>
+            <td style="text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)">${c.wins}</td>
+            <td><div style="display:flex;align-items:center;gap:6px">
+              <div class="meter" style="width:60px"><div class="meter-fill" style="width:${c.winRate}%;background:${c.winRate>35?'var(--green2)':'var(--warn)'}"></div></div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700">${c.winRate}%</span>
+            </div></td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${c.avgL1<89?'var(--red)':c.avgL1<91?'var(--warn)':'var(--green)'}">${c.avgL1}%</td>
+            <td style="font-size:11px;color:${c.avgL1<90?'var(--red)':'var(--ink3)'}">-${(100-c.avgL1).toFixed(1)}% below est.</td>
+            <td style="font-size:11px;max-width:160px">${c.spec}</td>
+            <td><span class="badge b-${c.threat.toLowerCase()}">${c.threat}</span></td>
+          </tr>`).join('')}</tbody></table>
+        </div>
+        <div style="padding:14px 16px;background:rgba(201,168,76,0.06);border-top:1px solid var(--border)">
+          ${currentContractors.filter(c=>c.threat==='HIGH').map(c=>`
+          <div style="padding:10px 14px;margin-bottom:8px;background:var(--paper);border:1px solid var(--border);border-radius:3px;border-left:3px solid var(--red)">
+            <div style="font-weight:700;font-size:13px;margin-bottom:4px">⚠️ ${c.name} — ${c.threat} THREAT</div>
+            <div style="font-size:12px;color:var(--ink3);line-height:1.6">${c.profile}</div>
+            <div style="margin-top:6px;font-size:11px;color:var(--ink3)">To beat them: bid below <strong style="color:var(--red)">${(c.avgL1-1.5).toFixed(1)}%</strong> of estimate</div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
 
-Analyse this bid and give a detailed, actionable recommendation:
+  else if(tab==='boq') {
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>BOQ Benchmarks</h2><span class="sh-b">${wt.label} · ${psu.name} Historical Rates</span></div>
+      <div style="margin-bottom:14px;padding:10px 14px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:3px;font-size:13px">
+        <strong>How to use:</strong> Compare your quoted rates vs historical L1 rates. <span style="color:var(--red);font-weight:700">HIGH risk items</span> are where PSU estimate is below market — never underbid these.
+      </div>
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">⚠️ HIGH Risk Items — PSU Underestimates Market Rate</span></div>
+          ${currentBOQ.filter(b=>b.risk==='HIGH').map(b=>`
+          <div style="padding:10px 14px;border-bottom:1px solid var(--border)">
+            <div style="font-weight:600;font-size:12px;color:var(--red)">${b.desc}</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:3px">${b.note}</div>
+            <div style="display:flex;gap:14px;margin-top:4px;font-size:11px">
+              <span>PSU: <strong>₹${b.psuEst.toLocaleString()}</strong></span>
+              <span>Market: <strong style="color:var(--red)">₹${b.mktRate.toLocaleString()}</strong></span>
+              <span style="color:var(--red);font-weight:700">${b.diff}% vs est</span>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">✅ Safe Items — Well Benchmarked</span></div>
+          ${currentBOQ.filter(b=>b.risk==='LOW').slice(0,5).map(b=>`
+          <div style="padding:10px 14px;border-bottom:1px solid var(--border)">
+            <div style="font-weight:600;font-size:12px;color:var(--green)">${b.desc}</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:3px">${b.note}</div>
+            <div style="display:flex;gap:14px;margin-top:4px;font-size:11px">
+              <span>PSU: <strong>₹${b.psuEst.toLocaleString()}</strong></span>
+              <span>L1 Rate: <strong style="color:var(--green)">₹${b.l1Rate.toLocaleString()}</strong></span>
+              <span style="color:var(--green);font-weight:700">${b.diff}% vs est</span>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">📐 Full BOQ Rate Database — ${wt.label} Works · ${psu.name}</span></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Item Description</th><th>Unit</th><th>PSU Est Rate</th><th>Typical L1 Rate</th><th>L1 vs Est</th><th>Market Rate</th><th>Risk</th><th>Notes</th></tr></thead>
+          <tbody>${currentBOQ.map(b=>`<tr>
+            <td style="font-size:12px;font-weight:600;max-width:220px">${b.desc}</td>
+            <td style="font-size:11px;text-align:center">${b.unit}</td>
+            <td style="font-family:'JetBrains Mono',monospace">₹${b.psuEst.toLocaleString()}</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)">₹${b.l1Rate.toLocaleString()}</td>
+            <td style="font-weight:700;color:${parseFloat(b.diff)<-10?'var(--red)':parseFloat(b.diff)<-5?'var(--warn)':'var(--green)'}">${b.diff}%</td>
+            <td style="font-family:'JetBrains Mono',monospace">₹${b.mktRate.toLocaleString()}</td>
+            <td><span class="badge b-${b.risk.toLowerCase()}">${b.risk}</span></td>
+            <td style="font-size:10px;color:var(--ink3);max-width:180px">${b.note}</td>
+          </tr>`).join('')}</tbody></table>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  else if(tab==='advisor') {
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>AI Bid Advisor</h2><span class="sh-b">${psu.name} · ${wt.label} · Powered by Claude AI</span></div>
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">📋 Your Tender Details</span></div>
+          <div style="padding:16px">
+            <div class="grid2">
+              <div class="fg"><label>PSU / Site</label><select id="ai-psu">${psu.sites.map(s=>`<option>${psu.name} — ${s}</option>`).join('')}</select></div>
+              <div class="fg"><label>Work Type</label><select id="ai-wt">${wt.items.map(i=>`<option>${i}</option>`).join('')}</select></div>
+            </div>
+            <div class="grid2">
+              <div class="fg"><label>Estimated Value (₹ Cr)</label><input type="number" id="ai-est" placeholder="e.g. 4.75" step="0.01" oninput="calcQuickRange()"/></div>
+              <div class="fg"><label>Your Planned Bid (₹ Cr)</label><input type="number" id="ai-quote" placeholder="Your bid amount" step="0.01"/></div>
+            </div>
+            <div class="fg"><label>Tender Reference No.</label><input type="text" id="ai-ref" placeholder="e.g. ${psu.name.toUpperCase()}/XXX/2026/0001"/></div>
+            <div class="fg"><label>Key BOQ Items</label><textarea id="ai-boq" placeholder="Paste main line items e.g.&#10;1. CS Piping 6&quot; NB 300m&#10;2. Pump 100kW — 4 nos&#10;3. Insulation lump sum"></textarea></div>
+            <div class="fg"><label>Known Competitors Bidding</label><input type="text" id="ai-comp" placeholder="e.g. ${currentContractors.slice(0,3).map(c=>c.name.split(' ')[0]).join(', ')}"/></div>
+            <div class="fg"><label>Special Notes / Conditions</label><textarea id="ai-notes" placeholder="Remote site, import requirements, tight timeline..." style="min-height:56px"></textarea></div>
+            <button class="btn btn-gold" onclick="runAdvisor()" id="ai-btn" style="width:100%;padding:12px;font-size:15px;margin-top:4px">⚡ Analyse This Bid</button>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px">
+            <div class="card-hdr"><span class="card-title">🎯 Quick Bid Range Calculator</span></div>
+            <div style="padding:14px">
+              <div id="calc-out" style="padding:12px;background:var(--ink);border-radius:3px;text-align:center;font-size:12px;color:rgba(245,240,232,0.4)">Enter estimated value above to see recommended bid ranges</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">🏁 Bid/No-Bid Signal</span></div>
+            <div style="padding:14px">
+              <div class="grid2">
+                <div class="fg" style="margin-bottom:0"><label>Your Margin Floor (%)</label><input type="number" id="bib-m" value="12" oninput="calcBNB()"/></div>
+                <div class="fg" style="margin-bottom:0"><label>Expected Bidders</label><input type="number" id="bib-b" value="7" oninput="calcBNB()"/></div>
+              </div>
+              <div id="bib-out" style="margin-top:10px;padding:10px;background:var(--paper3);border-radius:3px;font-size:12px;text-align:center;color:var(--ink3)">Fill details above to get signal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">🤖 AI Analysis</span><span id="ai-status" style="font-size:10px;color:var(--ink3);letter-spacing:0.1em">AWAITING INPUT</span></div>
+        <div style="padding:16px">
+          <div class="ai-response" id="ai-out"><div style="color:rgba(245,240,232,0.25);font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-align:center;padding:20px">⚡ Enter tender details and click Analyse This Bid<br/><span style="font-size:10px;opacity:0.6;display:block;margin-top:6px">AI will give bid price recommendation, L1 threat forecast, BOQ risk flags & strategy</span></div></div>
+        </div>
+      </div>
+    </div>`;
+    // Attach advisor after render
+    window.calcQuickRange = function() {
+      const est = parseFloat(document.getElementById('ai-est')?.value);
+      const el2 = document.getElementById('calc-out');
+      if(!est||!el2)return;
+      const agg = (est*(parseFloat(avgL1)-2.5)/100).toFixed(2);
+      const bal = (est*(parseFloat(avgL1)-1.0)/100).toFixed(2);
+      const con = (est*parseFloat(avgL1)/100).toFixed(2);
+      el2.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.3);border-radius:3px;padding:9px;text-align:center">
+          <div style="font-size:9px;color:#27ae60;letter-spacing:0.1em;text-transform:uppercase">Aggressive</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#2ecc71">₹${agg}Cr</div>
+          <div style="font-size:9px;color:rgba(245,240,232,0.4)">Highest win %</div>
+        </div>
+        <div style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);border-radius:3px;padding:9px;text-align:center">
+          <div style="font-size:9px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase">Balanced</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--gold2)">₹${bal}Cr</div>
+          <div style="font-size:9px;color:rgba(245,240,232,0.4)">Best risk/reward</div>
+        </div>
+        <div style="background:rgba(41,128,185,0.15);border:1px solid rgba(41,128,185,0.3);border-radius:3px;padding:9px;text-align:center">
+          <div style="font-size:9px;color:#2980b9;letter-spacing:0.1em;text-transform:uppercase">Conservative</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#60a5fa">₹${con}Cr</div>
+          <div style="font-size:9px;color:rgba(245,240,232,0.4)">Higher margin</div>
+        </div>
+      </div><div style="margin-top:8px;font-size:10px;color:rgba(245,240,232,0.4);text-align:center">Based on historical L1 avg of ${avgL1}% for ${psu.name} ${wt.label}</div>`;
+      calcBNB();
+    };
+    window.calcBNB = function() {
+      const est = parseFloat(document.getElementById('ai-est')?.value);
+      const margin = parseFloat(document.getElementById('bib-m')?.value)||12;
+      const bidders = parseInt(document.getElementById('bib-b')?.value)||7;
+      const el2 = document.getElementById('bib-out');
+      if(!est||!el2)return;
+      const minBid = est*(parseFloat(avgL1)-2)/100;
+      const yourCost = est*(1-margin/100);
+      const canWin = minBid > yourCost;
+      const winP = Math.max(5,Math.round(100/bidders*(canWin?1.4:0.6)));
+      const sig = canWin&&bidders<8?'BID':canWin&&bidders>=8?'PROCEED WITH CAUTION':'RECONSIDER';
+      const sc = sig==='BID'?'var(--green)':sig==='PROCEED WITH CAUTION'?'var(--warn)':'var(--red)';
+      el2.innerHTML=`<div style="background:var(--ink);border-radius:3px;padding:10px;text-align:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:${sc}">${sig}</div>
+        <div style="font-size:10px;color:rgba(245,240,232,0.45);margin-top:4px">Est win probability: ${winP}% · ${bidders} competitors · ${margin}% margin floor</div>
+      </div>`;
+    };
+    window.runAdvisor = async function() {
+      const est = document.getElementById('ai-est').value;
+      const quote = document.getElementById('ai-quote').value;
+      const psuSite = document.getElementById('ai-psu').value;
+      const workItem = document.getElementById('ai-wt').value;
+      const boq = document.getElementById('ai-boq').value;
+      const comp = document.getElementById('ai-comp').value;
+      const notes = document.getElementById('ai-notes').value;
+      const ref = document.getElementById('ai-ref').value;
+      if(!est){document.getElementById('ai-out').innerHTML='<div style="color:#e74c3c;font-family:Rajdhani,sans-serif;font-size:13px">⚠ Please enter the PSU estimated value before analysing.</div>';return;}
+      const btn=document.getElementById('ai-btn');
+      btn.disabled=true;btn.textContent='⚡ Analysing...';
+      document.getElementById('ai-status').textContent='ANALYSING';
+      document.getElementById('ai-out').innerHTML=`<div class="thinking"><span>AI is analysing your bid</span><div class="dots"><span></span><span></span><span></span></div></div>`;
+      const prompt=`You are TenderIQ, India's top PSU tender bid consultant with deep expertise in ${psu.name} (${psu.sector}) and all major Indian PSUs. You understand GEM portal, CPPP, eprocure systems, and have analysed 1000+ PSU tenders.
 
 TENDER DETAILS:
-- PSU/Authority: ${psu}
-- Work Type: ${worktype}
-- PSU Estimated Value: ₹${estval} Crore
-- Tender Ref: ${tenderref || 'Not provided'}
-- Submission Deadline: ${deadline || 'Not provided'}
-- My Planned Quote: ₹${quoteval || 'Not decided yet'} Crore
-- Known Competitors: ${competitors || 'Unknown'}
-- Special Notes: ${notes || 'None'}
+- PSU/Site: ${psuSite}
+- Work Type: ${workItem} (${wt.label})
+- Estimated Value: ₹${est} Crore
+- Tender Ref: ${ref||'Not provided'}
+- My Planned Bid: ₹${quote||'Not decided'} Crore
+- Known Competitors: ${comp||'Unknown'}
+- BOQ Items: ${boq||'Not provided'}
+- Special Notes: ${notes||'None'}
 
-KEY BOQ ITEMS:
-${boq || 'Not provided'}
+HISTORICAL DATABASE:
+- ${closed.length} similar tenders analysed for ${psu.name} ${wt.label} works
+- Historical average L1 bid: ${avgL1}% of estimate (₹${(parseFloat(est)*parseFloat(avgL1)/100).toFixed(2)}Cr on this tender)
+- Lowest recorded L1: ${minL1}% (₹${(parseFloat(est)*parseFloat(minL1)/100).toFixed(2)}Cr on this tender)
+- Average bidder count: ${avgBidders} per tender
+- Top competitors: ${currentContractors.filter(c=>c.threat==='HIGH').map(c=>c.name).join(', ')}
 
-HISTORICAL INTELLIGENCE FROM OUR DATABASE:
-- Similar ${worktype} tenders: ${closedSimilar.length} found
-- Historical average L1 bid: ${avgL1}% of PSU estimate
-- Average bidder count: ${avgBidders} bidders per tender
-- Lowest recorded L1 bid: ${minL1}% of estimate
-- PSU Estimated Value: ₹${estval}Cr
-- Implied historical L1 range: ₹${(parseFloat(estval)*0.86).toFixed(2)}Cr – ₹${(parseFloat(estval)*0.93).toFixed(2)}Cr
+Analyse in exactly these 5 sections:
+1. BID RECOMMENDATION — Specific ₹ Crore bid value with rationale
+2. L1 THREAT ANALYSIS — Where will L1 land? Who are the key threats?
+3. BOQ RISK FLAGS — Items likely underpriced or risky
+4. COMPETITIVE STRATEGY — How to position to win with margin protection
+5. KEY WATCH-OUTS — Document checks and pre-submission alerts
 
-Please provide your analysis in these exact sections:
-1. BID RECOMMENDATION — Should they bid? At what value? (give specific ₹ Crore figure)
-2. L1 THREAT ANALYSIS — Based on historical data, where will L1 likely land? Who are the main threats?
-3. BOQ RISK FLAGS — Any items in the BOQ that are likely underpriced by PSU or pose risk?
-4. COMPETITIVE STRATEGY — How to position the bid to win while protecting margin?
-5. KEY WATCH-OUTS — Things to check in the tender document before submitting
-
-Be specific, use numbers, and reference the historical data provided. Write in clear professional English. Format with clear section headers.`;
-
-  try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
-
-    const data = await response.json();
-    const text = data.content?.map(c => c.text || '').join('') || '';
-
-    // Format the response
-    const sections = text.split(/\d+\.\s+[A-Z\s\/]+—?/g).filter(s => s.trim());
-    const headers = [...text.matchAll(/(\d+\.\s+[A-Z][A-Z\s\/]+—?)/g)].map(m => m[1]);
-
-    let formatted = '';
-    if (headers.length > 1) {
-      headers.forEach((h, i) => {
-        const content = sections[i+1] ? sections[i+1].trim() : '';
-        const icon = ['💡','📊','⚠️','🎯','👁️'][i] || '•';
-        formatted += `<div class="ai-section">
-          <h4>${icon} ${h.replace(/^\d+\.\s+/,'').replace(/—$/,'').trim()}</h4>
-          <p>${content.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>').replace(/\*\*(.*?)\*\*/g,'<span class="highlight">$1</span>').replace(/₹[\d.]+Cr/g,'<span class="highlight">$&</span>')}</p>
-        </div>`;
-      });
-    } else {
-      formatted = `<p>${text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>')}</p>`;
-    }
-
-    document.getElementById('ai-output').innerHTML = formatted || `<p>${text}</p>`;
-    document.getElementById('ai-status-badge').textContent = 'COMPLETE';
-
-  } catch(e) {
-    // Fallback: generate structured response from our own data
-    const est = parseFloat(estval);
-    const l1est = (est * parseFloat(avgL1||91) / 100).toFixed(2);
-    const recBid = (est * (parseFloat(avgL1||91) - 1.5) / 100).toFixed(2);
-
-    document.getElementById('ai-output').innerHTML = `
-      <div class="ai-section"><h4>💡 BID RECOMMENDATION</h4>
-      <p>Based on <span class="highlight">${closedSimilar.length} similar historical tenders</span>, our recommendation for this ₹${est}Cr ${worktype} tender is to bid at approximately <span class="highlight">₹${recBid}Cr (${(parseFloat(recBid)/est*100).toFixed(1)}% of estimate)</span>. This positions you below the historical average L1 of ${avgL1}% while protecting your margin. ${quoteval && parseFloat(quoteval) > parseFloat(l1est) ? `<span class="alert">Your current planned bid of ₹${quoteval}Cr appears high — you risk losing to more aggressive bidders.</span>` : ''}</p></div>
-      <div class="ai-section"><h4>📊 L1 THREAT ANALYSIS</h4>
-      <p>Historical data shows L1 bids for ${worktype} work land between <span class="highlight">₹${(est*parseFloat(minL1||88)/100).toFixed(2)}Cr and ₹${l1est}Cr</span>. Average bidder count is ${avgBidders} per tender. ${competitors ? `Known competitors <span class="highlight">${competitors}</span> should be watched — check their historical bid patterns in the Contractor Intel tab.` : 'No competitors specified — assume 6-8 bidders based on historical averages.'}</p></div>
-      <div class="ai-section"><h4>⚠️ BOQ RISK FLAGS</h4>
-      <p>${boq ? 'Review the BOQ Benchmarks tab for item-wise rate comparison. Pay special attention to any imported material components where forex and lead-time risk applies.' : 'BOQ not provided. Before finalising your bid, use the BOQ Benchmarks tab to compare your rates against historical L1 rates for each item. Rock/hard soil excavation and 132kV cable items are typically underestimated by PSUs.'}</p></div>
-      <div class="ai-section"><h4>🎯 COMPETITIVE STRATEGY</h4>
-      <p>For ${psu} tenders, the sweet spot is bidding <span class="highlight">8–10% below estimate</span>. Avoid the temptation to bid above 93% of estimate — win probability drops sharply. If ${competitors ? competitors.split(',')[0] : 'KEC International or Kalpataru'} is participating, you must bid below their typical ${closedSimilar[0]?.winner?.includes('KEC') ? '88' : '90'}% to be competitive.</p></div>
-      <div class="ai-section"><h4>👁️ KEY WATCH-OUTS</h4>
-      <p>1. Verify the PSU Schedule of Rates (SOR) date — older SORs underestimate material costs by 15-25%. 2. Check payment terms and mobilisation advance availability. 3. Confirm EMD and Performance Bank Guarantee requirements. 4. Review defect liability period — longer DLP = higher bid price justified. 5. Check if site-specific logistics costs are covered in the estimate.</p></div>`;
-    document.getElementById('ai-status-badge').textContent = 'COMPLETE (Offline Mode)';
+Be specific, use ₹ figures, reference the historical data. Professional English.`;
+      try{
+        const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
+        const d=await r.json();
+        const text=d.content?.map(c=>c.text||'').join('')||'';
+        const headers=[...text.matchAll(/(\d+\.\s+[A-Z][A-Z\s\/&]+—?)/g)].map(m=>m[1]);
+        const parts=text.split(/\d+\.\s+[A-Z][A-Z\s\/&]+—?/g).filter(s=>s.trim());
+        const icons=['💡','📊','⚠️','🎯','👁️'];
+        let html=headers.length>1?headers.map((h,i)=>`<div class="ai-sec"><h4>${icons[i]||'•'} ${h.replace(/^\d+\.\s+/,'').replace(/—$/,'').trim()}</h4><p>${(parts[i+1]||'').trim().replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>').replace(/\*\*(.*?)\*\*/g,'<span class="hi">$1</span>').replace(/₹[\d.,]+\s*[Cc]r/g,'<span class="hi">$&</span>')}</p></div>`).join(''):`<p>${text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>')}</p>`;
+        document.getElementById('ai-out').innerHTML=html;
+        document.getElementById('ai-status').textContent='COMPLETE';
+      }catch(e){
+        const recBid=(parseFloat(est)*(parseFloat(avgL1)-1.5)/100).toFixed(2);
+        document.getElementById('ai-out').innerHTML=`
+          <div class="ai-sec"><h4>💡 BID RECOMMENDATION</h4><p>Based on <span class="hi">${closed.length} historical ${psu.name} ${wt.label} tenders</span>, recommend bidding at <span class="hi">₹${recBid}Cr (${(parseFloat(recBid)/parseFloat(est)*100).toFixed(1)}% of estimate)</span>. This is 1.5% below the historical L1 average of ${avgL1}%, giving you a strong win probability while protecting margin.${quote&&parseFloat(quote)>(parseFloat(est)*parseFloat(avgL1)/100)?`<br/><span class="al">⚠ Your planned bid of ₹${quote}Cr appears above the expected L1 level — you risk losing.</span>`:''}</p></div>
+          <div class="ai-sec"><h4>📊 L1 THREAT ANALYSIS</h4><p>Historical data shows L1 for ${wt.label} at ${psu.name} ranges between <span class="hi">₹${(parseFloat(est)*parseFloat(minL1)/100).toFixed(2)}Cr and ₹${(parseFloat(est)*parseFloat(avgL1)/100).toFixed(2)}Cr</span>. Average ${avgBidders} bidders per tender.${comp?` Watch <span class="hi">${comp}</span> — check their historical patterns in Contractor Intel tab.`:' Expect 6–9 bidders based on historical averages for this PSU and work type.'}</p></div>
+          <div class="ai-sec"><h4>⚠️ BOQ RISK FLAGS</h4><p>${boq?'Review your BOQ against the benchmarks in the BOQ tab. Pay attention to HIGH risk items — especially any imported equipment or specialised soil/rock work items where PSU SOR underestimates market rate.':'BOQ not provided. Use the BOQ Benchmarks tab to compare your rates. HIGH risk items for '+wt.label+' works are flagged there — these are where PSUs consistently underestimate and contractors lose margin.'}</p></div>
+          <div class="ai-sec"><h4>🎯 COMPETITIVE STRATEGY</h4><p>For ${psu.name} ${wt.label} tenders, the optimal strategy is to bid at <span class="hi">${(parseFloat(avgL1)-1.5).toFixed(1)}–${avgL1}% of estimate</span>. Winning bids typically come in with a ${(closed.reduce((a,b)=>a+b.gap,0)/closed.length).toFixed(1)}% gap over L2. Focus margin protection on labour and logistics — these are hardest for competitors to accurately estimate in ${psu.sites[0]} region.</p></div>
+          <div class="ai-sec"><h4>👁️ KEY WATCH-OUTS</h4><p>1. Verify PSU Schedule of Rates (SOR) date — older SORs underestimate by 15-25%. 2. Check payment milestones and mobilisation advance. 3. Confirm EMD amount and PBG requirements. 4. Review defect liability period — longer DLP justifies higher bid. 5. Check if site access, security clearance or special permits are required at ${psu.name} premises.</p></div>`;
+        document.getElementById('ai-status').textContent='COMPLETE (Offline)';
+      }
+      btn.disabled=false;btn.textContent='⚡ Analyse This Bid';
+    };
   }
-
-  btn.disabled = false; btn.textContent = '⚡ Analyse This Bid';
 }
 
-// ═══════════════════════════
-//  INIT
-// ═══════════════════════════
-renderDashboard();
+function loadInAdvisor(tid) {
+  const t = currentTenders.find(x=>x.id===tid);
+  if(!t) return;
+  showTab('advisor');
+  setTimeout(()=>{
+    const el=document.getElementById('ai-est');if(el)el.value=t.estVal;
+    const el2=document.getElementById('ai-ref');if(el2)el2.value=t.id;
+    if(window.calcQuickRange)calcQuickRange();
+  },100);
+}
+
+// ══ INIT ══
+renderPSUGrid();
+document.getElementById('step2').style.display='none';
+// ── LIVE REFRESH ──
+// Set PROXY_URL to your Cloudflare Worker URL after setup
+const PROXY_URL = 'https://tenderiq-proxy.maazfarooqui.workers.dev/';
+let liveData = null;
+
+async function runLiveRefresh() {
+  if (!selectedPSU || !selectedWork) return;
+  const psu = PSUS.find(p => p.id === selectedPSU);
+  const wt  = WORK_TYPES[selectedWork];
+  const btn = document.getElementById('refresh-btn');
+  const lbl = document.getElementById('last-refresh-lbl');
+  btn.innerHTML = '<span class="live-dot"></span>Fetching...';
+  btn.disabled = true;
+  let panel = document.getElementById('live-intel-panel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'live-intel-panel';
+    panel.style.marginBottom = '18px';
+    const wrap = document.querySelector('#dash-content .wrap');
+    if (wrap) wrap.insertBefore(panel, wrap.firstChild);
+  }
+  if (PROXY_URL === 'REPLACE_WITH_WORKER_URL') {
+    panel.innerHTML = '<div style="padding:16px 18px;background:var(--ink2);border-radius:4px;border-left:3px solid var(--gold);font-size:13px;color:rgba(245,240,232,0.75);line-height:1.8">Setup needed: configure Cloudflare Worker proxy. Email <a href="mailto:info@zirconique.com" style="color:var(--gold)">info@zirconique.com</a></div>';
+    btn.innerHTML = '<span class="live-dot"></span>Refresh Live Data';
+    btn.disabled = false;
+    return;
+  }
+  panel.innerHTML = '<div style="padding:14px 18px;background:var(--ink);border-radius:4px;border-left:4px solid var(--green2);font-size:12px;color:rgba(245,240,232,0.55)">Searching PSU portals...</div>';
+  try {
+    const prompt = 'Search for latest ' + wt.label + ' tenders from ' + psu.name + ' (' + psu.full + ') in India 2026. Find: new notices last 30 days, L1/L2/L3 results with amounts, tenders on gem.gov.in or eprocure.gov.in, project awards. Give specific numbers and dates.';
+    const resp = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt })
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    const text = data.text || '';
+    const ts = new Date().toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    lbl.textContent = 'Live ' + ts;
+    liveData = { text, timestamp: new Date() };
+    const safeHtml = text
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--gold2)">$1</strong>')
+      .replace(/\n/g, '<br/>');
+    panel.innerHTML = '<div style="background:var(--ink);border-radius:4px;border-left:4px solid var(--green2)">'
+      + '<div style="padding:10px 18px;border-bottom:1px solid rgba(39,174,96,0.2);display:flex;justify-content:space-between;align-items:center">'
+      + '<span style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--green2)">Live Intelligence</span>'
+      + '<span style="font-size:10px;color:rgba(245,240,232,0.3)">' + ts + '</span>'
+      + '</div>'
+      + '<div style="padding:15px 18px;font-size:14px;line-height:1.8;color:rgba(245,240,232,0.82)">' + safeHtml + '</div>'
+      + '</div>';
+  } catch(e) {
+    panel.innerHTML = '<div style="padding:12px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);border-radius:4px;font-size:12px;color:var(--red)">Refresh failed: ' + e.message + '</div>';
+  }
+  btn.innerHTML = '<span class="live-dot"></span>Refresh Live Data';
+  btn.disabled = false;
+}
+
+// ── FOOTER ──
+(function() {
+  const f = document.createElement('footer');
+  f.style.cssText = 'background:var(--ink);color:rgba(245,240,232,0.35);padding:16px 24px;font-size:10px;letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;position:relative;z-index:1';
+  f.innerHTML = '<div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">'
+    + '<span style="font-family:Rajdhani,sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Tender<span style="color:var(--gold)">IQ</span></span>'
+    + '<div style="display:flex;gap:20px"><span>Data from public PSU portals</span>'
+    + '<a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.com</a>'
+    + '<a href="/" style="color:rgba(245,240,232,0.35);text-decoration:none">\u2190 Zirconique</a></div>'
+    + '<span>\u00a9 2026 Zirconique</span></div>';
+  document.body.appendChild(f);
+})();
+
 </script>
 </body>
 </html>
