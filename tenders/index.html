@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>TenderIQ — India PSU Bid Intelligence Platform</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -179,24 +181,60 @@ textarea{resize:vertical;min-height:72px}
 /* RESPONSIVE */
 @media(max-width:768px){.grid4{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.psu-grid{grid-template-columns:repeat(2,1fr)}.work-grid{grid-template-columns:1fr}.dash-tabs{overflow-x:auto;white-space:nowrap}}
 
-/* LOGIN */
-#login-screen{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px}
-.login-box{width:100%;max-width:420px;background:var(--ink2);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:44px 40px;box-shadow:0 0 80px rgba(201,168,76,0.06)}
-.login-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--paper);letter-spacing:0.04em;margin-bottom:4px}
-.login-logo em{color:var(--gold);font-style:normal}
-.login-sub{font-size:9px;color:rgba(245,240,232,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:32px}
-.login-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.45);display:block;margin-bottom:7px}
-.login-input{width:100%;padding:11px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink3);border:1px solid rgba(245,240,232,0.12);color:var(--paper);border-radius:4px;outline:none;margin-bottom:16px;transition:border-color 0.2s}
-.login-input:focus{border-color:var(--gold)}
-.login-input.shake{animation:shake 0.4s ease;border-color:var(--red)}
-.login-btn{width:100%;padding:13px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:var(--gold);color:var(--ink);border:none;border-radius:4px;transition:all 0.2s;margin-top:4px}
-.login-btn:hover{background:var(--gold2);transform:translateY(-1px)}
-.login-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-.login-error{margin-top:14px;padding:10px 14px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);border-radius:4px;color:#fca5a5;font-size:10px;line-height:1.6;display:none}
-.login-error.show{display:block}
-.login-attempts{margin-top:10px;font-size:9px;color:rgba(245,240,232,0.3);text-align:center}
-.lockout-timer{color:var(--red);font-weight:700}
+#login-screen{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-box{width:100%;max-width:420px;background:var(--ink2);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:40px 36px;box-shadow:0 0 60px rgba(201,168,76,0.05)}
+.auth-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--paper);letter-spacing:0.04em;margin-bottom:4px}
+.auth-logo em{color:var(--gold);font-style:normal}
+.auth-sub{font-size:9px;color:rgba(245,240,232,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px}
+.auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid rgba(245,240,232,0.1)}
+.auth-tab{flex:1;padding:9px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-align:center;cursor:pointer;color:rgba(245,240,232,0.35);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s}
+.auth-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.auth-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.45);display:block;margin-bottom:6px}
+.auth-input{width:100%;padding:11px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink3);border:1px solid rgba(245,240,232,0.12);color:var(--paper);border-radius:4px;outline:none;margin-bottom:14px;transition:border-color 0.2s;box-sizing:border-box}
+.auth-input:focus{border-color:var(--gold)}
+.auth-btn{width:100%;padding:13px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:var(--gold);color:var(--ink);border:none;border-radius:4px;transition:all 0.2s;margin-top:4px}
+.auth-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+.auth-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.auth-btn2{width:100%;padding:10px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.35);border-radius:4px;transition:all 0.2s;margin-top:8px}
+.auth-msg{margin-top:12px;padding:10px 14px;border-radius:4px;font-size:11px;line-height:1.6;display:none}
+.auth-msg.err{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);color:#fca5a5;display:block}
+.auth-msg.ok{background:rgba(26,107,60,0.12);border:1px solid rgba(26,107,60,0.35);color:#6ee7a0;display:block}
+.auth-link{color:var(--gold);text-decoration:none;cursor:pointer;font-size:10px}
+.pw-wrap{position:relative;margin-bottom:14px}
+.pw-wrap .auth-input{margin-bottom:0;padding-right:42px}
+.pw-eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(245,240,232,0.35);font-size:15px;padding:4px;line-height:1;transition:color 0.2s}
+.pw-eye:hover{color:var(--gold)}
 @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@media(max-width:600px){
+  .hdr{padding:0 10px;height:46px}
+  .logo-sub{display:none}
+  #last-refresh-lbl{display:none}
+  .hdr-right{gap:8px}
+  .auth-box{padding:28px 18px}
+  .psu-grid{grid-template-columns:repeat(2,1fr)!important;gap:8px}
+  .psu-card{padding:12px 10px}
+  .psu-icon{font-size:20px}
+  .psu-name{font-size:13px}
+  .psu-full{font-size:9px}
+  .work-grid{grid-template-columns:1fr!important}
+  .dash-tabs{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .dash-tab{font-size:10px;padding:10px 8px}
+  .wrap{padding:12px!important}
+  .grid4{grid-template-columns:1fr 1fr!important}
+  .grid3,.grid2{grid-template-columns:1fr!important}
+  .stat-box{padding:10px}
+  .stat-val{font-size:20px}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:480px}
+  .hdr-right .back-link{display:none}
+  .select-title h1{font-size:18px}
+  .dash-header{flex-direction:column;align-items:flex-start;gap:6px;padding:10px 12px}
+  #refresh-btn{font-size:9px;padding:3px 8px}
+}
+@media(max-width:380px){
+  .psu-grid{grid-template-columns:1fr 1fr!important}
+  .auth-box{padding:22px 14px}
+}
 </style>
 </head>
 <body>
@@ -206,7 +244,7 @@ textarea{resize:vertical;min-height:72px}
     <div class="logo">
       <div class="logo-hex">⚡</div>
       <div>
-        <div class="logo-txt">Tender<em>IQ</em></div>
+        <div class="logo-txt" onclick="goHome()" style="cursor:pointer" title="Return to PSU selection">Tender<em>IQ</em></div>
         <div class="logo-sub">India PSU Bid Intelligence · All Sectors</div>
       </div>
     </div>
@@ -214,28 +252,54 @@ textarea{resize:vertical;min-height:72px}
       <span id="last-refresh-lbl" style="font-size:10px;color:rgba(245,240,232,0.35)"></span>
       <button id="refresh-btn" onclick="runLiveRefresh()" style="display:none;align-items:center;gap:5px;background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);color:#2ecc71;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer"><span class="live-dot"></span>Refresh Live Data</button>
       <span id="hdr-context" style="color:var(--gold)"></span>
-      <a href="mailto:info@zirconique.com" style="color:rgba(245,240,232,0.4);text-decoration:none;font-size:10px">info@zirconique.com</a>
-      <span id="hdr-user" style="font-size:10px;color:rgba(245,240,232,0.45)"></span><button id="logout-btn" onclick="doLogout()" style="background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.3);color:#fca5a5;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer">Sign Out</button><a href="/" class="back-link">&larr; Home</a>
+      <span id="hdr-user" style="font-size:10px;color:rgba(245,240,232,0.4)"></span>
+      <a href="mailto:info@zirconique.com" style="color:rgba(245,240,232,0.35);text-decoration:none;font-size:10px">info@zirconique.com</a>
+      <button onclick="doSignOut()" style="background:rgba(192,57,43,0.12);border:1px solid rgba(192,57,43,0.3);color:#fca5a5;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px;cursor:pointer">Sign Out</button>
+      <a onclick="goHome()" class="back-link" style="cursor:pointer">&larr; Home</a>
     </div>
   </div>
 </header>
 
 <!-- ═══ SELECTION SCREEN ═══ -->
-<!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">Tender<em>IQ</em></div>
-    <div class="login-sub">India PSU Bid Intelligence · Authorised Access Only</div>
-    <label class="login-label">Username</label>
-    <input class="login-input" type="text" id="login-user" placeholder="Enter username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <label class="login-label">Password</label>
-    <input class="login-input" type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <button class="login-btn" id="login-btn" onclick="doLogin()">Sign In →</button>
-    <div class="login-error" id="login-error"></div>
-    <div class="login-attempts" id="login-attempts"></div>
+  <div class="auth-box">
+    <div class="auth-logo">Tender<em>IQ</em></div>
+    <div class="auth-sub">India PSU Bid Intelligence &middot; Authorised Access Only</div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="atab-signin" onclick="switchTab('signin')">Sign In</div>
+      <div class="auth-tab" id="atab-register" onclick="switchTab('register')">Register</div>
+    </div>
+    <div id="aform-signin">
+      <label class="auth-label">Email</label>
+      <input class="auth-input" type="email" id="si-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')doSignIn()"/>
+      <label class="auth-label">Password</label>
+      <div class="pw-wrap"><input class="auth-input" type="password" id="si-pass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doSignIn()"/><button type="button" class="pw-eye" onclick="togglePw('si-pass',this)">&#128065;</button></div>
+      <button class="auth-btn" id="si-btn" onclick="doSignIn()">Sign In &rarr;</button>
+      <div style="text-align:center;margin-top:10px"><a class="auth-link" onclick="switchTab('forgot')">Forgot password?</a></div>
+      <div class="auth-msg" id="si-msg"></div>
+    </div>
+    <div id="aform-register" style="display:none">
+      <label class="auth-label">Full Name</label>
+      <input class="auth-input" type="text" id="reg-name" placeholder="Your full name"/>
+      <label class="auth-label">Company / Organisation</label>
+      <input class="auth-input" type="text" id="reg-company" placeholder="Your company name"/>
+      <label class="auth-label">Email</label>
+      <input class="auth-input" type="email" id="reg-email" placeholder="your@email.com"/>
+      <label class="auth-label">Password</label>
+      <div class="pw-wrap"><input class="auth-input" type="password" id="reg-pass" placeholder="Min 8 characters"/><button type="button" class="pw-eye" onclick="togglePw('reg-pass',this)">&#128065;</button></div>
+      <button class="auth-btn" id="reg-btn" onclick="doRegister()">Request Access &rarr;</button>
+      <div class="auth-msg" id="reg-msg"></div>
+    </div>
+    <div id="aform-forgot" style="display:none">
+      <div style="font-size:12px;color:rgba(245,240,232,0.6);margin-bottom:14px;line-height:1.7">Enter your registered email and we will send a password reset link.</div>
+      <label class="auth-label">Email</label>
+      <input class="auth-input" type="email" id="fp-email" placeholder="your@email.com"/>
+      <button class="auth-btn" id="fp-btn" onclick="doForgotPw()">Send Reset Link &rarr;</button>
+      <button class="auth-btn2" onclick="switchTab('signin')">&larr; Back to Sign In</button>
+      <div class="auth-msg" id="fp-msg"></div>
+    </div>
   </div>
 </div>
-
 <div id="select-screen" style="display:none">
 <div class="select-wrap">
 
@@ -262,6 +326,7 @@ textarea{resize:vertical;min-height:72px}
       <button class="btn btn-sm btn-outline" onclick="filterPSU('Oil',this)">Oil & Gas</button>
       <button class="btn btn-sm btn-outline" onclick="filterPSU('Defence',this)">Defence</button>
       <button class="btn btn-sm btn-outline" onclick="filterPSU('Steel',this)">Steel/Mining</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('GovtInfra',this)">Govt/Infra</button>
     </div>
 
     <div class="psu-grid" id="psu-grid"></div>
@@ -333,106 +398,13 @@ textarea{resize:vertical;min-height:72px}
     <div class="dash-tab" onclick="showTab('analytics')">📈 Bid Analytics</div>
     <div class="dash-tab" onclick="showTab('contractors')">🏗️ Contractor Intel</div>
     <div class="dash-tab" onclick="showTab('boq')">📐 BOQ Benchmarks</div>
+  <div class="dash-tab" id="dsr-tab" style="display:none" onclick="showTab('dsr')">📋 DSR Rates</div>
     <div class="dash-tab" onclick="showTab('advisor')">🤖 AI Advisor</div>
   </div>
   <div id="dash-content"></div>
 </div>
 
 <script>
-
-// ═══════════════════════════════════════════════════════
-//  USER MANAGEMENT
-//
-//  To add a user:
-//  1. Go to https://emn178.github.io/online-tools/sha256.html
-//  2. Type the password → copy the hash
-//  3. Add: "newusername": "paste-hash-here"
-//
-//  Default credentials:
-//  admin    / TenderIQ@2026
-//  analyst1 / Bid@Analyst1
-//  analyst2 / Bid@Analyst2
-// ═══════════════════════════════════════════════════════
-const USERS = {
-  "admin":    "dbd93a844805af432680c531312accc9b16179ed9e8275a59dc09651418d33a6",
-  "analyst1": "5acb46febcb355b0fdbb8eeeae72a02bbabc26519f2df4d67fa2eae221e4f07f",
-  "analyst2": "a6ce10c595fbda0b20e0cac5e089369a531b1acf6e144d0799e24275a1e1756b"
-};
-const MAX_ATTEMPTS = 5, LOCKOUT_MINS = 15;
-let failedAttempts = parseInt(sessionStorage.getItem("tiq_fa") || "0");
-let lockoutUntil   = parseInt(sessionStorage.getItem("tiq_lu") || "0");
-
-async function sha256(str) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
-}
-function saveSession(u) { sessionStorage.setItem("tiq_user", u); sessionStorage.setItem("tiq_ts", Date.now().toString()); }
-function getSession() {
-  const u = sessionStorage.getItem("tiq_user"), ts = parseInt(sessionStorage.getItem("tiq_ts") || "0");
-  if (!u) return null;
-  if (Date.now() - ts > 8 * 60 * 60 * 1000) { sessionStorage.removeItem("tiq_user"); sessionStorage.removeItem("tiq_ts"); return null; }
-  return u;
-}
-async function doLogin() {
-  const btn = document.getElementById("login-btn");
-  const errEl = document.getElementById("login-error");
-  const attEl = document.getElementById("login-attempts");
-  if (Date.now() < lockoutUntil) { const m = Math.ceil((lockoutUntil - Date.now()) / 60000); showLoginError("Too many attempts. Try again in <span class=\"lockout-timer\">" + m + " min</span>."); return; }
-  const username = document.getElementById("login-user").value.trim().toLowerCase();
-  const password = document.getElementById("login-pass").value;
-  if (!username || !password) { showLoginError("Please enter both username and password."); shakeInputs(); return; }
-  btn.disabled = true; btn.textContent = "Signing in...";
-  try {
-    const hash = await sha256(password);
-    if (USERS[username] && USERS[username] === hash) {
-      failedAttempts = 0; sessionStorage.removeItem("tiq_fa"); sessionStorage.removeItem("tiq_lu");
-      saveSession(username); showApp(username);
-    } else {
-      failedAttempts++; sessionStorage.setItem("tiq_fa", failedAttempts.toString());
-      if (failedAttempts >= MAX_ATTEMPTS) {
-        lockoutUntil = Date.now() + LOCKOUT_MINS * 60 * 1000;
-        sessionStorage.setItem("tiq_lu", lockoutUntil.toString());
-        showLoginError("Account locked for <span class=\"lockout-timer\">" + LOCKOUT_MINS + " minutes</span>.");
-      } else {
-        const l = MAX_ATTEMPTS - failedAttempts;
-        showLoginError("Incorrect credentials. " + l + " attempt" + (l === 1 ? "" : "s") + " remaining.");
-        shakeInputs();
-        attEl.textContent = l + " of " + MAX_ATTEMPTS + " remaining";
-      }
-      btn.disabled = false; btn.textContent = "Sign In \u2192";
-    }
-  } catch(e) { showLoginError("Error. Please refresh and try again."); btn.disabled = false; btn.textContent = "Sign In \u2192"; }
-}
-function showLoginError(msg) { const el = document.getElementById("login-error"); el.innerHTML = msg; el.classList.add("show"); }
-function shakeInputs() { ["login-user","login-pass"].forEach(id => { const el = document.getElementById(id); el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); }); }
-function showApp(username) {
-  document.getElementById("login-screen").style.display = "none";
-  document.getElementById("main-header").style.display = "block";
-  document.getElementById("select-screen").style.display = "block";
-  // show logout btn in header
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) { logoutBtn.style.display = "inline-block"; }
-  const userLbl = document.getElementById("hdr-user");
-  if (userLbl) userLbl.textContent = username;
-}
-function doLogout() {
-  sessionStorage.removeItem("tiq_user"); sessionStorage.removeItem("tiq_ts");
-  document.getElementById("login-screen").style.display = "flex";
-  document.getElementById("main-header").style.display = "none";
-  document.getElementById("select-screen").style.display = "none";
-  document.getElementById("dashboard").style.display = "none";
-  document.getElementById("login-user").value = "";
-  document.getElementById("login-pass").value = "";
-  document.getElementById("login-error").classList.remove("show");
-}
-
-// Check existing session on load
-(function() {
-  const u = getSession();
-  if (u) { showApp(u); }
-})();
-
-
 // ══════════════════════════════════════════════════
 //  TENDERIQ v2 — ALL PSU · ALL WORK TYPES
 // ══════════════════════════════════════════════════
@@ -456,6 +428,13 @@ const PSUS = [
   {id:"npcil",name:"NPCIL",full:"Nuclear Power Corp of India",sector:"Nuclear Power",hq:"Mumbai",rating:"Navratna",icon:"☢️",color:"#27ae60",sites:["Tarapur","Rawatbhata","Kakrapar","Kaiga","Kudankulam"],tender_count:86,avg_l1:94.2,work_types:["electrical","mechanical","civil"]},
   {id:"uppcl",name:"UPPCL",full:"Uttar Pradesh Power Corp Ltd",sector:"Power Distribution",hq:"Lucknow",rating:"State PSU",icon:"💡",color:"#f39c12",sites:["Lucknow","Agra","Varanasi","Kanpur","Meerut","Allahabad"],tender_count:612,avg_l1:87.2,work_types:["electrical","civil"]},
   {id:"nhpc",name:"NHPC",full:"National Hydroelectric Power Corp",sector:"Hydro Power",hq:"Faridabad",rating:"Navratna",icon:"💧",color:"#3498db",sites:["Salal","Dulhasti","Uri","Chamera","Teesta","Loktak"],tender_count:124,avg_l1:91.4,work_types:["electrical","mechanical","civil"]},
+  {id:"cpwd",name:"CPWD",full:"Central Public Works Department",sector:"Govt Construction",hq:"New Delhi",rating:"Central Govt",icon:"🏛️",color:"#8e44ad",sites:["New Delhi HQ","Mumbai Region","Chennai Region","Kolkata Region","Bhopal","Chandigarh","Patna","Lucknow"],tender_count:1840,avg_l1:89.2,work_types:["civil","electrical","mechanical"],dsr:true},
+  {id:"cwc",name:"CWC",full:"Central Warehousing Corporation",sector:"Warehousing & Storage",hq:"New Delhi",rating:"Navratna",icon:"🏪",color:"#16a085",sites:["New Delhi","Mumbai","Chennai","Kolkata","Hyderabad","Bengaluru","Pune","Ahmedabad"],tender_count:428,avg_l1:90.1,work_types:["civil","electrical"]},
+  {id:"rites",name:"RITES",full:"Rail India Technical & Economic Service",sector:"Transport Consultancy",hq:"Gurugram",rating:"Navratna",icon:"🚂",color:"#2980b9",sites:["Gurugram","Mumbai","Chennai","Kolkata","Bengaluru"],tender_count:312,avg_l1:91.4,work_types:["civil","electrical","mechanical"]},
+  {id:"ircon",name:"IRCON",full:"IRCON International Ltd",sector:"Railway Infrastructure",hq:"New Delhi",rating:"Navratna",icon:"🛤️",color:"#27ae60",sites:["New Delhi","Mumbai","Bengaluru","Nagpur","Bhopal"],tender_count:284,avg_l1:88.8,work_types:["civil","electrical","mechanical"]},
+  {id:"nbcc",name:"NBCC",full:"National Buildings Construction Corp",sector:"Govt Construction",hq:"New Delhi",rating:"Navratna",icon:"🏢",color:"#c0392b",sites:["New Delhi","Mumbai","Chennai","Hyderabad","Bhopal"],tender_count:524,avg_l1:90.6,work_types:["civil","electrical"]},
+  {id:"mes",name:"MES",full:"Military Engineering Services",sector:"Defence Infrastructure",hq:"New Delhi",rating:"Central Govt",icon:"⚔️",color:"#2c3e50",sites:["New Delhi","Mumbai","Pune","Chennai","Kolkata","Chandigarh","Bengaluru"],tender_count:692,avg_l1:91.8,work_types:["civil","electrical","mechanical"]},
+  {id:"aai",name:"AAI",full:"Airports Authority of India",sector:"Aviation Infrastructure",hq:"New Delhi",rating:"Navratna",icon:"🛫",color:"#1abc9c",sites:["New Delhi","Mumbai","Chennai","Kolkata","Bengaluru","Hyderabad","Kochi","Ahmedabad"],tender_count:248,avg_l1:92.4,work_types:["civil","electrical","mechanical"]},
   {id:"nhai",name:"NHAI",full:"National Highways Authority of India",sector:"Roads & Highways",hq:"New Delhi",rating:"Navratna",icon:"🛣️",color:"#e67e22",sites:["North Zone","South Zone","East Zone","West Zone","Central Zone"],tender_count:892,avg_l1:88.6,work_types:["civil","electrical","mechanical"]},
 ];
 
@@ -545,6 +524,38 @@ function generateTenders(psu, workType) {
     {desc:items[2]||items[1],mult:0.84,l1mod:-0.9,bidders:11,quarter:"Q3",year:2023},
     {desc:items[0],mult:4.1,l1mod:0.4,bidders:6,quarter:"Q1",year:2023},
     {desc:items[6]||items[2],mult:1.9,l1mod:-1.1,bidders:9,quarter:"Q4",year:2023},
+    {desc:items[7%items.length],mult:2.6,l1mod:-0.3,bidders:8,quarter:"Q1",year:2026},
+    {desc:items[8%items.length],mult:1.2,l1mod:-1.9,bidders:13,quarter:"Q1",year:2026},
+    {desc:items[9%items.length],mult:5.4,l1mod:0.9,bidders:5,quarter:"Q4",year:2025},
+    {desc:items[0],mult:3.8,l1mod:-0.7,bidders:7,quarter:"Q4",year:2025},
+    {desc:items[2%items.length],mult:1.6,l1mod:-1.3,bidders:10,quarter:"Q4",year:2025},
+    {desc:items[4%items.length],mult:7.2,l1mod:1.1,bidders:4,quarter:"Q3",year:2025},
+    {desc:items[1%items.length],mult:2.2,l1mod:-0.5,bidders:9,quarter:"Q3",year:2025},
+    {desc:items[6%items.length],mult:0.94,l1mod:-2.2,bidders:15,quarter:"Q2",year:2025},
+    {desc:items[3%items.length],mult:4.6,l1mod:0.3,bidders:6,quarter:"Q1",year:2025},
+    {desc:items[5%items.length],mult:1.8,l1mod:-1.0,bidders:11,quarter:"Q4",year:2024},
+    {desc:items[0],mult:6.4,l1mod:1.6,bidders:4,quarter:"Q3",year:2024},
+    {desc:items[2%items.length],mult:2.4,l1mod:-0.8,bidders:8,quarter:"Q3",year:2024},
+    {desc:items[7%items.length],mult:1.4,l1mod:-1.7,bidders:12,quarter:"Q2",year:2024},
+    {desc:items[4%items.length],mult:3.2,l1mod:0.5,bidders:7,quarter:"Q1",year:2024},
+    {desc:items[1%items.length],mult:0.88,l1mod:-2.6,bidders:18,quarter:"Q4",year:2023},
+    {desc:items[5%items.length],mult:9.2,l1mod:2.1,bidders:3,quarter:"Q3",year:2023},
+    {desc:items[0],mult:2.8,l1mod:-0.4,bidders:9,quarter:"Q2",year:2023},
+    {desc:items[3%items.length],mult:1.6,l1mod:-1.2,bidders:11,quarter:"Q1",year:2023},
+    {desc:items[6%items.length],mult:4.8,l1mod:0.7,bidders:6,quarter:"Q4",year:2022},
+    {desc:items[2%items.length],mult:2.1,l1mod:-0.9,bidders:8,quarter:"Q3",year:2022},
+    {desc:items[8%items.length],mult:3.6,l1mod:0.2,bidders:7,quarter:"Q2",year:2022},
+    {desc:items[1%items.length],mult:1.2,l1mod:-1.6,bidders:14,quarter:"Q1",year:2022},
+    {desc:items[4%items.length],mult:5.8,l1mod:1.3,bidders:5,quarter:"Q4",year:2021},
+    {desc:items[0],mult:2.4,l1mod:-0.6,bidders:9,quarter:"Q3",year:2021},
+    {desc:items[7%items.length],mult:1.8,l1mod:-1.4,bidders:12,quarter:"Q2",year:2021},
+    {desc:items[3%items.length],mult:4.2,l1mod:0.8,bidders:6,quarter:"Q1",year:2021},
+    {desc:items[5%items.length],mult:0.76,l1mod:-2.8,bidders:16,quarter:"Q4",year:2020},
+    {desc:items[9%items.length],mult:3.4,l1mod:0.4,bidders:8,quarter:"Q3",year:2020},
+    {desc:items[2%items.length],mult:2.8,l1mod:-1.1,bidders:10,quarter:"Q2",year:2020},
+    {desc:items[6%items.length],mult:6.2,l1mod:1.5,bidders:5,quarter:"Q1",year:2020},
+    {desc:items[0],mult:1.4,l1mod:-0.8,bidders:12,quarter:"Q4",year:2019},
+    {desc:items[4%items.length],mult:4.4,l1mod:0.6,bidders:7,quarter:"Q3",year:2019},
   ];
 
   closedDefs.forEach((d,i)=>{
@@ -573,6 +584,16 @@ function generateTenders(psu, workType) {
     {desc:items[2]||items[1],mult:1.8,date:"2026-04-28"},
     {desc:items[3]||items[0],mult:4.4,date:"2026-05-08"},
     {desc:items[4]||items[2],mult:2.1,date:"2026-05-14"},
+    {desc:items[5%items.length],mult:3.8,date:"2026-05-20"},
+    {desc:items[6%items.length],mult:1.2,date:"2026-05-28"},
+    {desc:items[7%items.length],mult:8.4,date:"2026-06-05"},
+    {desc:items[8%items.length],mult:2.6,date:"2026-06-12"},
+    {desc:items[9%items.length],mult:4.8,date:"2026-06-18"},
+    {desc:items[0],mult:1.6,date:"2026-06-25"},
+    {desc:items[2%items.length],mult:6.2,date:"2026-07-04"},
+    {desc:items[4%items.length],mult:3.2,date:"2026-07-10"},
+    {desc:items[1%items.length],mult:2.4,date:"2026-07-18"},
+    {desc:items[6%items.length],mult:12.4,date:"2026-07-25"},
   ];
   openDefs.forEach((d,i)=>{
     const siteIdx = i % sites.length;
@@ -656,7 +677,8 @@ function renderPSUGrid(filter='all') {
   else if(filter==='Navratna') psus=PSUS.filter(p=>p.rating==='Navratna');
   else if(filter==='Power') psus=PSUS.filter(p=>p.sector.includes('Power')||p.sector.includes('Nuclear'));
   else if(filter==='Oil') psus=PSUS.filter(p=>p.sector.includes('Oil')||p.sector.includes('Gas'));
-  else if(filter==='Defence') psus=PSUS.filter(p=>p.sector.includes('Defence')||p.sector.includes('Aerospace'));
+  else if(filter==='Defence') psus=PSUS.filter(p=>p.sector.includes('Defence')||p.sector.includes('Aerospace')||p.sector.includes('Aviation'));
+  else if(filter==='GovtInfra') psus=PSUS.filter(p=>p.sector.includes('Govt')||p.sector.includes('Railway')||p.sector.includes('Water'));
   else if(filter==='Steel') psus=PSUS.filter(p=>p.sector.includes('Steel')||p.sector.includes('Mining')||p.sector.includes('Coal'));
 
   grid.innerHTML = psus.map(p=>`
@@ -667,6 +689,7 @@ function renderPSUGrid(filter='all') {
       <div class="psu-full">${p.full}</div>
       <div><span class="psu-rating rating-${p.rating.toLowerCase().replace(' psu','').replace(' ','')}">${p.rating}</span></div>
       <div class="psu-sector">${p.sector} · ${p.hq}</div>
+      ${p.dsr ? '<div style="margin-top:5px"><span style="font-size:9px;background:rgba(142,68,173,0.15);border:1px solid rgba(142,68,173,0.35);color:#bb8fce;padding:2px 7px;border-radius:2px;letter-spacing:0.08em">DSR AVAILABLE</span></div>' : ''}
       <div style="margin-top:8px;font-size:10px;color:var(--ink3)">${p.tender_count} tenders · Avg L1: ${p.avg_l1}%</div>
       <div style="margin-top:4px" class="meter"><div class="meter-fill" style="width:${(100-p.avg_l1)*6}%;background:${p.color}"></div></div>
     </div>
@@ -730,13 +753,15 @@ function launchDashboard() {
   activeTab = 'overview';
   document.querySelectorAll('.dash-tab').forEach((t,i)=>{t.classList.toggle('active',i===0)});
   document.getElementById('refresh-btn').style.display='flex';
+  const dsrEl=document.getElementById('dsr-tab'); if(dsrEl) dsrEl.style.display=(PSUS.find(p=>p.id===selectedPSU)||{}).dsr?'block':'none';
   renderTab('overview');
 }
 
 // ══ TAB RENDERING ══
 function showTab(tab) {
   activeTab = tab;
-  const tabs = ['overview','tenders','analytics','contractors','boq','advisor'];
+  if(tab==='dsr'){renderDSR();document.querySelectorAll('.dash-tab').forEach((t)=>{t.classList.toggle('active',t.onclick&&t.onclick.toString().includes('dsr'))});return;}
+  const tabs=['overview','tenders','analytics','contractors','boq','advisor'];
   document.querySelectorAll('.dash-tab').forEach((t,i)=>{t.classList.toggle('active',tabs[i]===tab)});
   renderTab(tab);
 }
@@ -1175,9 +1200,103 @@ function loadInAdvisor(tid) {
 // ══ INIT ══
 renderPSUGrid();
 document.getElementById('step2').style.display='none';
+// ── SUPABASE AUTH ──
+const _sb = supabase.createClient('https://xzstnkpwcxepvlooomdw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6c3Rua3B3Y3hlcHZsb29vbWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzY4MTEsImV4cCI6MjA4OTAxMjgxMX0.z5rWbBShix7WFzeka8AXGUZEacjjSHHI4RkyjU8siys');
+let _user = null;
+
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.innerHTML = inp.type === 'text' ? '&#128064;' : '&#128065;';
+}
+
+function switchTab(t) {
+  ['signin','register','forgot'].forEach(n => {
+    document.getElementById('aform-'+n).style.display = n===t ? 'block' : 'none';
+    const el = document.getElementById('atab-'+n);
+    if (el) el.classList.toggle('active', n===t);
+  });
+}
+
+function _msg(id, txt, type) {
+  const el = document.getElementById(id);
+  el.textContent = txt; el.className = 'auth-msg ' + type;
+}
+
+async function doSignIn() {
+  const email = document.getElementById('si-email').value.trim();
+  const pass  = document.getElementById('si-pass').value;
+  if (!email || !pass) { _msg('si-msg','Enter email and password.','err'); return; }
+  const btn = document.getElementById('si-btn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
+  if (error) { _msg('si-msg', error.message, 'err'); btn.disabled=false; btn.textContent='Sign In →'; }
+  else { _user = data.user; _showApp(data.user.email); }
+}
+
+async function doRegister() {
+  const name    = document.getElementById('reg-name').value.trim();
+  const company = document.getElementById('reg-company').value.trim();
+  const email   = document.getElementById('reg-email').value.trim();
+  const pass    = document.getElementById('reg-pass').value;
+  if (!name || !email || !pass) { _msg('reg-msg','Please fill all required fields.','err'); return; }
+  if (pass.length < 8) { _msg('reg-msg','Password must be at least 8 characters.','err'); return; }
+  const btn = document.getElementById('reg-btn');
+  btn.disabled=true; btn.textContent='Submitting...';
+  const { error } = await _sb.auth.signUp({ email, password: pass, options: { data: { full_name: name, company } } });
+  if (error) { _msg('reg-msg', error.message, 'err'); btn.disabled=false; btn.textContent='Request Access →'; }
+  else { _msg('reg-msg','Registration submitted! You will receive an email once your access is approved.','ok'); btn.disabled=true; }
+}
+
+async function doForgotPw() {
+  const email = document.getElementById('fp-email').value.trim();
+  if (!email) { _msg('fp-msg','Please enter your email.','err'); return; }
+  const btn = document.getElementById('fp-btn');
+  btn.disabled=true; btn.textContent='Sending...';
+  const { error } = await _sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://www.zirconique.com/tenders/' });
+  if (error) { _msg('fp-msg', error.message, 'err'); btn.disabled=false; btn.textContent='Send Reset Link →'; }
+  else { _msg('fp-msg','Reset link sent! Check your inbox.','ok'); btn.disabled=true; }
+}
+
+function _showApp(email) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-header').style.display = 'block';
+  document.getElementById('select-screen').style.display = 'block';
+  document.getElementById('hdr-user').textContent = email;
+}
+
+async function doSignOut() {
+  await _sb.auth.signOut(); _user = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('main-header').style.display = 'none';
+  document.getElementById('select-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('si-email').value='';
+  document.getElementById('si-pass').value='';
+  document.getElementById('si-msg').className='auth-msg';
+  switchTab('signin');
+}
+
+function goHome() {
+  if (!_user) return;
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('select-screen').style.display = 'block';
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('hdr-context').textContent = '';
+  document.getElementById('refresh-btn').style.display = 'none';
+  document.getElementById('last-refresh-lbl').textContent = '';
+  liveData = null;
+}
+
+// Restore session on load
+(async function() {
+  const { data } = await _sb.auth.getSession();
+  if (data.session) { _user = data.session.user; _showApp(data.session.user.email); }
+})();
+
 // ── LIVE REFRESH ──
-// Set PROXY_URL to your Cloudflare Worker URL after setup
-const PROXY_URL = 'https://tenderiq-proxy.maazfarooqui.workers.dev/';
+const PROXY_URL = 'REPLACE_WITH_WORKER_URL';
 let liveData = null;
 
 async function runLiveRefresh() {
@@ -1197,53 +1316,74 @@ async function runLiveRefresh() {
     if (wrap) wrap.insertBefore(panel, wrap.firstChild);
   }
   if (PROXY_URL === 'REPLACE_WITH_WORKER_URL') {
-    panel.innerHTML = '<div style="padding:16px 18px;background:var(--ink2);border-radius:4px;border-left:3px solid var(--gold);font-size:13px;color:rgba(245,240,232,0.75);line-height:1.8">Setup needed: configure Cloudflare Worker proxy. Email <a href="mailto:info@zirconique.com" style="color:var(--gold)">info@zirconique.com</a></div>';
-    btn.innerHTML = '<span class="live-dot"></span>Refresh Live Data';
-    btn.disabled = false;
-    return;
+    panel.innerHTML = '<div style="padding:14px 18px;background:var(--ink2);border-radius:4px;border-left:3px solid var(--gold);font-size:13px;color:rgba(245,240,232,0.7);line-height:1.8">Setup needed: configure Cloudflare Worker proxy. Email <a href="mailto:info@zirconique.com" style="color:var(--gold)">info@zirconique.com</a></div>';
+    btn.innerHTML = '<span class="live-dot"></span>Refresh Live Data'; btn.disabled=false; return;
   }
-  panel.innerHTML = '<div style="padding:14px 18px;background:var(--ink);border-radius:4px;border-left:4px solid var(--green2);font-size:12px;color:rgba(245,240,232,0.55)">Searching PSU portals...</div>';
+  panel.innerHTML = '<div style="padding:14px 18px;background:var(--ink);border-radius:4px;border-left:4px solid var(--green2);font-size:12px;color:rgba(245,240,232,0.55)">Searching PSU portals via AI...</div>';
   try {
-    const prompt = 'Search for latest ' + wt.label + ' tenders from ' + psu.name + ' (' + psu.full + ') in India 2026. Find: new notices last 30 days, L1/L2/L3 results with amounts, tenders on gem.gov.in or eprocure.gov.in, project awards. Give specific numbers and dates.';
-    const resp = await fetch(PROXY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: prompt })
-    });
+    const prompt = 'Search for latest ' + wt.label + ' tenders from ' + psu.name + ' (' + psu.full + ') in India 2026. Find: new notices last 30 days, L1/L2/L3 results with rupee amounts, tenders on gem.gov.in or eprocure.gov.in, project awards. Specific numbers and dates.';
+    const resp = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt}) });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const data = await resp.json();
-    const text = data.text || '';
-    const ts = new Date().toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const d = await resp.json();
+    const text = d.text || '';
+    const ts = new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
     lbl.textContent = 'Live ' + ts;
-    liveData = { text, timestamp: new Date() };
-    const safeHtml = text
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--gold2)">$1</strong>')
-      .replace(/\n/g, '<br/>');
-    panel.innerHTML = '<div style="background:var(--ink);border-radius:4px;border-left:4px solid var(--green2)">'
-      + '<div style="padding:10px 18px;border-bottom:1px solid rgba(39,174,96,0.2);display:flex;justify-content:space-between;align-items:center">'
-      + '<span style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--green2)">Live Intelligence</span>'
-      + '<span style="font-size:10px;color:rgba(245,240,232,0.3)">' + ts + '</span>'
-      + '</div>'
-      + '<div style="padding:15px 18px;font-size:14px;line-height:1.8;color:rgba(245,240,232,0.82)">' + safeHtml + '</div>'
-      + '</div>';
+    liveData = {text, timestamp: new Date()};
+    const htm = text.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--gold2)">$1</strong>').replace(/\n/g,'<br/>');
+    panel.innerHTML = '<div style="background:var(--ink);border-radius:4px;border-left:4px solid var(--green2)"><div style="padding:10px 18px;border-bottom:1px solid rgba(39,174,96,0.2);display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--green2)">Live Intelligence</span><span style="font-size:10px;color:rgba(245,240,232,0.3)">' + ts + '</span></div><div style="padding:15px 18px;font-size:14px;line-height:1.8;color:rgba(245,240,232,0.82)">' + htm + '</div></div>';
   } catch(e) {
     panel.innerHTML = '<div style="padding:12px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);border-radius:4px;font-size:12px;color:var(--red)">Refresh failed: ' + e.message + '</div>';
   }
-  btn.innerHTML = '<span class="live-dot"></span>Refresh Live Data';
-  btn.disabled = false;
+  btn.innerHTML = '<span class="live-dot"></span>Refresh Live Data'; btn.disabled=false;
+}
+
+// ── DSR TAB ──
+function renderDSR() {
+  const el = document.getElementById('dash-content');
+  el.innerHTML = `<div class="wrap">
+    <div class="sh"><h2>CPWD DSR Rates</h2><span class="sh-b">Delhi Schedule of Rates 2023 — Civil, Electrical &amp; Horticulture</span></div>
+    <div class="grid3" style="margin-bottom:18px">
+      <a href="https://cpwd.gov.in/Publication/DSR2023.pdf" target="_blank" style="text-decoration:none">
+        <div class="stat-box" style="cursor:pointer;border:1px solid rgba(142,68,173,0.3)"><div class="stat-lbl">DSR 2023 — Civil Works</div><div class="stat-val" style="font-size:18px">PDF</div><div class="stat-sub">RCC, masonry, roads, finishing</div></div>
+      </a>
+      <a href="https://cpwd.gov.in/Publication/DSR2023_E.pdf" target="_blank" style="text-decoration:none">
+        <div class="stat-box" style="cursor:pointer;border:1px solid rgba(142,68,173,0.3)"><div class="stat-lbl">DSR 2023 — Electrical</div><div class="stat-val" style="font-size:18px">PDF</div><div class="stat-sub">Wiring, cables, panels, lifts</div></div>
+      </a>
+      <a href="https://cpwd.gov.in/Publication/DSR2023_H.pdf" target="_blank" style="text-decoration:none">
+        <div class="stat-box" style="cursor:pointer;border:1px solid rgba(142,68,173,0.3)"><div class="stat-lbl">DSR 2023 — Horticulture</div><div class="stat-val" style="font-size:18px">PDF</div><div class="stat-sub">Landscaping, plantation</div></div>
+      </a>
+    </div>
+    <div class="sh"><h3>Key DSR 2023 Benchmark Rates — Delhi Base</h3></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Item</th><th>Unit</th><th>DSR Rate (Rs.)</th><th>Location Factor</th><th>Notes</th></tr></thead><tbody>
+      <tr><td>RCC M25 — Foundation</td><td>cum</td><td>7,840</td><td>Mumbai 1.12 · Chennai 1.08</td><td>Cement at Rs.380/bag basis</td></tr>
+      <tr><td>RCC M30 — Superstructure</td><td>cum</td><td>8,620</td><td>Mumbai 1.12 · Chennai 1.08</td><td>Shuttering included</td></tr>
+      <tr><td>Brickwork 230mm CM 1:6</td><td>cum</td><td>6,240</td><td>1.0 to 1.15 by region</td><td>Brick at Rs.8.50/nos basis</td></tr>
+      <tr><td>Plastering 12mm CM 1:6</td><td>sqm</td><td>184</td><td>1.0 to 1.12</td><td>Both sides extra</td></tr>
+      <tr><td>CC Road M30 150mm</td><td>sqm</td><td>1,280</td><td>1.0 to 1.10</td><td>Sub-base extra</td></tr>
+      <tr><td>Waterproofing Terrace</td><td>sqm</td><td>620</td><td>1.0 to 1.08</td><td>IPS + membrane</td></tr>
+      <tr><td>Structural Steel Erection</td><td>MT</td><td>74,000</td><td>1.0 to 1.18</td><td>Fab + erection</td></tr>
+      <tr><td>1.5sqmm FR Cable Wiring</td><td>per m</td><td>48</td><td>1.0</td><td>Conduit extra</td></tr>
+      <tr><td>25mm MS Conduit Concealed</td><td>per m</td><td>124</td><td>1.0</td><td>Wiring extra</td></tr>
+      <tr><td>6A 3-Pin Switch Socket</td><td>each</td><td>380</td><td>1.0</td><td>Modular ISI</td></tr>
+      <tr><td>LED Tube Light 20W</td><td>each</td><td>840</td><td>1.0</td><td>Complete fitting</td></tr>
+      <tr><td>Excavation Hard Rock Machine</td><td>cum</td><td>1,800</td><td>varies</td><td>Blasting + disposal extra</td></tr>
+    </tbody></table></div>
+    <div style="margin-top:14px;padding:12px 16px;background:var(--ink2);border-radius:4px;border-left:3px solid var(--gold);font-size:12px;color:rgba(245,240,232,0.65);line-height:1.8">
+      <strong style="color:var(--gold)">Note:</strong> DSR rates are revised periodically. Always verify the applicable DSR year in the NIT. Apply Market Rate Statement (MRS) factors where specified. Full DSR at <a href="https://cpwd.gov.in" target="_blank" style="color:var(--gold)">cpwd.gov.in</a>
+    </div>
+  </div>`;
 }
 
 // ── FOOTER ──
-(function() {
+(function(){
   const f = document.createElement('footer');
   f.style.cssText = 'background:var(--ink);color:rgba(245,240,232,0.35);padding:16px 24px;font-size:10px;letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;position:relative;z-index:1';
   f.innerHTML = '<div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">'
     + '<span style="font-family:Rajdhani,sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Tender<span style="color:var(--gold)">IQ</span></span>'
-    + '<div style="display:flex;gap:20px"><span>Data from public PSU portals</span>'
+    + '<div style="display:flex;gap:16px;flex-wrap:wrap"><span>Data from public PSU portals</span>'
     + '<a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.com</a>'
-    + '<a href="/" style="color:rgba(245,240,232,0.35);text-decoration:none">\u2190 Zirconique</a></div>'
-    + '<span>\u00a9 2026 Zirconique</span></div>';
+    + '<a onclick="goHome()" style="color:rgba(245,240,232,0.35);text-decoration:none;cursor:pointer">Home</a></div>'
+    + '<span>&#169; 2026 Zirconique</span></div>';
   document.body.appendChild(f);
 })();
 
