@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TenderIQ — India PSU Bid Intelligence Platform</title>
+<title>ZirconIQ — ZirconIQ — Global Procurement Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
@@ -258,7 +258,7 @@ textarea{resize:vertical;min-height:72px}
     <div class="logo">
       <div class="logo-hex">⚡</div>
       <div>
-        <div class="logo-txt" onclick="goHome()" style="cursor:pointer" title="Return to PSU selection">Tender<em>IQ</em></div>
+        <div class="logo-txt" onclick="goHome()" style="cursor:pointer" title="Return to PSU selection">Zircon<em>IQ</em></div>
         <div class="logo-sub">India PSU Bid Intelligence · All Sectors</div>
       </div>
     </div>
@@ -267,7 +267,7 @@ textarea{resize:vertical;min-height:72px}
       <button id="refresh-btn" onclick="runLiveRefresh()" style="display:none;align-items:center;gap:5px;background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);color:#2ecc71;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer"><span class="live-dot"></span>Refresh Live Data</button>
       <span id="hdr-context" style="color:var(--gold)"></span>
       <span id="hdr-user" style="font-size:10px;color:rgba(245,240,232,0.4)"></span>
-      <a href="mailto:info@zirconique.com" style="color:rgba(245,240,232,0.35);text-decoration:none;font-size:10px">info@zirconique.com</a>
+      <a href="/cdn-cgi/l/email-protection#ff96919990bf85968d9c9091968e8a9ad19c9092" style="color:rgba(245,240,232,0.35);text-decoration:none;font-size:10px"><span class="__cf_email__" data-cfemail="d5bcbbb3ba95afbca7b6babbbca4a0b0fbb6bab8">[email&#160;protected]</span></a>
       <button onclick="doSignOut()" style="background:rgba(192,57,43,0.12);border:1px solid rgba(192,57,43,0.3);color:#fca5a5;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px;cursor:pointer">Sign Out</button>
       <a onclick="goHome()" class="back-link" style="cursor:pointer">&larr; Home</a>
     </div>
@@ -277,7 +277,7 @@ textarea{resize:vertical;min-height:72px}
 <!-- ═══ SELECTION SCREEN ═══ -->
 <div id="login-screen">
   <div class="auth-box">
-    <div class="auth-logo">Tender<em>IQ</em></div>
+    <div class="auth-logo">Zircon<em>IQ</em></div>
     <div class="auth-sub">India PSU Bid Intelligence &middot; Authorised Access Only</div>
     <div class="auth-tabs">
       <div class="auth-tab active" id="atab-signin" onclick="switchTab('signin')">Sign In</div>
@@ -460,9 +460,9 @@ textarea{resize:vertical;min-height:72px}
   <div id="dash-content"></div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ══════════════════════════════════════════════════
-//  TENDERIQ v2 — ALL PSU · ALL WORK TYPES
+//  ZIRCONIQ v2 — ALL PSU · ALL WORK TYPES
 // ══════════════════════════════════════════════════
 
 
@@ -1346,7 +1346,7 @@ function renderTab(tab) {
       btn.disabled=true;btn.textContent='⚡ Analysing...';
       document.getElementById('ai-status').textContent='ANALYSING';
       document.getElementById('ai-out').innerHTML=`<div class="thinking"><span>AI is analysing your bid</span><div class="dots"><span></span><span></span><span></span></div></div>`;
-      const prompt=`You are TenderIQ, India's top PSU tender bid consultant with deep expertise in ${psu.name} (${psu.sector}) and all major Indian PSUs. You understand GEM portal, CPPP, eprocure systems, and have analysed 1000+ PSU tenders.
+      const prompt=`You are ZirconIQ, India's top PSU tender bid consultant with deep expertise in ${psu.name} (${psu.sector}) and all major Indian PSUs. You understand GEM portal, CPPP, eprocure systems, and have analysed 1000+ PSU tenders.
 
 TENDER DETAILS:
 - PSU/Site: ${psuSite}
@@ -1722,14 +1722,6 @@ function renderDSR() {
   const f = document.createElement('footer');
   f.style.cssText = 'background:var(--ink);color:rgba(245,240,232,0.35);padding:16px 24px;font-size:10px;letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;position:relative;z-index:1';
   f.innerHTML = '<div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">'
-    + '<span style="font-family:Rajdhani,sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Tender<span style="color:var(--gold)">IQ</span></span>'
+    + '<span style="font-family:Rajdhani,sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Zircon<span style="color:var(--gold)">IQ</span></span>'
     + '<div style="display:flex;gap:16px;flex-wrap:wrap"><span>Data from public PSU portals</span>'
-    + '<a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.com</a>'
-    + '<a onclick="goHome()" style="color:rgba(245,240,232,0.35);text-decoration:none;cursor:pointer">Home</a></div>'
-    + '<span>&#169; 2026 Zirconique</span></div>';
-  document.body.appendChild(f);
-})();
-
-</script>
-</body>
-</html>
+    + '<a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.
