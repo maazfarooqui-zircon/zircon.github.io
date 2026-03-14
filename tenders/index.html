@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ZirconIQ — ZirconIQ — Global Procurement Intelligence</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -259,7 +259,7 @@ textarea{resize:vertical;min-height:72px}
       <div class="logo-hex">⚡</div>
       <div>
         <div class="logo-txt" onclick="goHome()" style="cursor:pointer" title="Return to PSU selection">Zircon<em>IQ</em></div>
-        <div class="logo-sub">India PSU Bid Intelligence · All Sectors</div>
+        <div class="logo-sub">ZirconIQ · All Sectors</div>
       </div>
     </div>
     <div class="hdr-right">
@@ -267,7 +267,7 @@ textarea{resize:vertical;min-height:72px}
       <button id="refresh-btn" onclick="runLiveRefresh()" style="display:none;align-items:center;gap:5px;background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);color:#2ecc71;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer"><span class="live-dot"></span>Refresh Live Data</button>
       <span id="hdr-context" style="color:var(--gold)"></span>
       <span id="hdr-user" style="font-size:10px;color:rgba(245,240,232,0.4)"></span>
-      <a href="/cdn-cgi/l/email-protection#ff96919990bf85968d9c9091968e8a9ad19c9092" style="color:rgba(245,240,232,0.35);text-decoration:none;font-size:10px"><span class="__cf_email__" data-cfemail="d5bcbbb3ba95afbca7b6babbbca4a0b0fbb6bab8">[email&#160;protected]</span></a>
+      <a href="mailto:info@zirconique.com" style="color:rgba(245,240,232,0.35);text-decoration:none;font-size:10px">info@zirconique.com</a>
       <button onclick="doSignOut()" style="background:rgba(192,57,43,0.12);border:1px solid rgba(192,57,43,0.3);color:#fca5a5;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px;cursor:pointer">Sign Out</button>
       <a onclick="goHome()" class="back-link" style="cursor:pointer">&larr; Home</a>
     </div>
@@ -278,7 +278,7 @@ textarea{resize:vertical;min-height:72px}
 <div id="login-screen">
   <div class="auth-box">
     <div class="auth-logo">Zircon<em>IQ</em></div>
-    <div class="auth-sub">India PSU Bid Intelligence &middot; Authorised Access Only</div>
+    <div class="auth-sub">ZirconIQ &middot; Authorised Access Only</div>
     <div class="auth-tabs">
       <div class="auth-tab active" id="atab-signin" onclick="switchTab('signin')">Sign In</div>
       <div class="auth-tab" id="atab-register" onclick="switchTab('register')">Register</div>
@@ -460,7 +460,7 @@ textarea{resize:vertical;min-height:72px}
   <div id="dash-content"></div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ══════════════════════════════════════════════════
 //  ZIRCONIQ v2 — ALL PSU · ALL WORK TYPES
 // ══════════════════════════════════════════════════
@@ -1523,7 +1523,7 @@ function renderOrgGrid(filter) {
 renderOrgGrid('all');
 document.getElementById('step2').style.display='none';
 // ── SUPABASE AUTH ──
-const _sb = supabase.createClient('https://xzstnkpwcxepvlooomdw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6c3Rua3B3Y3hlcHZsb29vbWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzY4MTEsImV4cCI6MjA4OTAxMjgxMX0.z5rWbBShix7WFzeka8AXGUZEacjjSHHI4RkyjU8siys');
+const _sb = (window.supabase||supabase).createClient('https://xzstnkpwcxepvlooomdw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6c3Rua3B3Y3hlcHZsb29vbWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzY4MTEsImV4cCI6MjA4OTAxMjgxMX0.z5rWbBShix7WFzeka8AXGUZEacjjSHHI4RkyjU8siys');
 let _user = null;
 
 function togglePw(id, btn) {
@@ -1552,7 +1552,13 @@ async function doSignIn() {
   const btn = document.getElementById('si-btn');
   btn.disabled = true; btn.textContent = 'Signing in...';
   const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
-  if (error) { _msg('si-msg', error.message, 'err'); btn.disabled=false; btn.textContent='Sign In →'; }
+  if (error) {
+    let msg = error.message;
+    if (msg.includes('Email not confirmed')) msg = 'Please confirm your email first — check your inbox for a verification link.';
+    else if (msg.includes('Invalid login') || msg.includes('Invalid email') || msg.includes('invalid_credentials')) msg = 'Incorrect email or password.';
+    else if (msg.includes('Too many')) msg = 'Too many attempts — wait a few minutes and try again.';
+    _msg('si-msg', msg, 'err'); btn.disabled=false; btn.textContent='Sign In →';
+  }
   else { _user = data.user; _showApp(data.user.email); }
 }
 
@@ -1567,7 +1573,7 @@ async function doRegister() {
   btn.disabled=true; btn.textContent='Submitting...';
   const { error } = await _sb.auth.signUp({ email, password: pass, options: { data: { full_name: name, company } } });
   if (error) { _msg('reg-msg', error.message, 'err'); btn.disabled=false; btn.textContent='Request Access →'; }
-  else { _msg('reg-msg','Registration submitted! You will receive an email once your access is approved.','ok'); btn.disabled=true; }
+  else { _msg('reg-msg','Account created! Check your email for a confirmation link, then sign in here.','ok'); btn.disabled=true; }
 }
 
 async function doForgotPw() {
@@ -1724,4 +1730,12 @@ function renderDSR() {
   f.innerHTML = '<div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">'
     + '<span style="font-family:Rajdhani,sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Zircon<span style="color:var(--gold)">IQ</span></span>'
     + '<div style="display:flex;gap:16px;flex-wrap:wrap"><span>Data from public PSU portals</span>'
-    + '<a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.
+    + '<a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.com</a>'
+    + '<a onclick="goHome()" style="color:rgba(245,240,232,0.35);text-decoration:none;cursor:pointer">Home</a></div>'
+    + '<span>&#169; 2026 Zirconique</span></div>';
+  document.body.appendChild(f);
+})();
+
+</script>
+</body>
+</html>
