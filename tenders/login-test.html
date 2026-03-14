@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login Test</title>
+<style>
+body{font-family:sans-serif;max-width:400px;margin:60px auto;padding:20px}
+input{width:100%;padding:10px;margin:8px 0;font-size:14px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
+button{width:100%;padding:12px;background:#c9a84c;color:#000;font-size:15px;font-weight:700;border:none;border-radius:4px;cursor:pointer;margin-top:8px}
+#msg{margin-top:12px;padding:10px;border-radius:4px;display:none;font-size:13px}
+#msg.err{background:#fde;border:1px solid #c00;color:#c00;display:block}
+#msg.ok{background:#dfd;border:1px solid #060;color:#060;display:block}
+#log{margin-top:20px;background:#f5f5f5;padding:12px;border-radius:4px;font-size:12px;font-family:monospace;white-space:pre-wrap;min-height:60px}
+</style>
+</head>
+<body>
+<h2>ZirconIQ Login Test</h2>
+<input type="email" id="email" placeholder="Email"/>
+<input type="password" id="pass" placeholder="Password"/>
+<button onclick="testLogin()">Test Sign In</button>
+<div id="msg"></div>
+<div id="log">Waiting for test...</div>
+<script>
+var URL = 'https://xzstnkpwcxepvlooomdw.supabase.co';
+var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6c3Rua3B3Y3hlcHZsb29vbWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzY4MTEsImV4cCI6MjA4OTAxMjgxMX0.z5rWbBShix7WFzeka8AXGUZEacjjSHHI4RkyjU8siys';
+function log(txt) { document.getElementById('log').textContent += '\n' + txt; }
+function testLogin() {
+  var email = document.getElementById('email').value.trim();
+  var pass  = document.getElementById('pass').value;
+  var msg   = document.getElementById('msg');
+  msg.className = ''; msg.textContent = '';
+  document.getElementById('log').textContent = 'Testing...';
+  log('Email: ' + email);
+  log('URL: ' + URL + '/auth/v1/token?grant_type=password');
+  fetch(URL + '/auth/v1/token?grant_type=password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': KEY },
+    body: JSON.stringify({ email: email, password: pass })
+  })
+  .then(function(r) { log('HTTP status: ' + r.status); return r.json(); })
+  .then(function(d) {
+    log('Response: ' + JSON.stringify(d, null, 2));
+    if (d.access_token) {
+      msg.className = 'ok'; msg.textContent = 'SUCCESS! Logged in as: ' + (d.user && d.user.email);
+    } else {
+      msg.className = 'err'; msg.textContent = 'FAILED: ' + (d.error_description || d.msg || d.error || JSON.stringify(d));
+    }
+  })
+  .catch(function(e) { log('ERROR: ' + e.message); msg.className = 'err'; msg.textContent = 'Network error: ' + e.message; });
+}
+</script>
+</body>
+</html>
