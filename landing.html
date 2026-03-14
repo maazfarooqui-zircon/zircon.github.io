@@ -177,7 +177,6 @@ footer{background:var(--ink);border-top:1px solid rgba(201,168,76,0.15);padding:
       <a href="#regions">Regions</a>
       <a href="#features">Features</a>
       <a href="#how">How It Works</a>
-      <a href="#pricing">Pricing</a>
       <a href="#contact">Contact</a>
     </div>
     <a href="tenders/index.html" class="nav-cta">Access Portal →</a>
@@ -334,59 +333,6 @@ footer{background:var(--ink);border-top:1px solid rgba(201,168,76,0.15);padding:
   </div>
 </section>
 
-<!-- PRICING -->
-<section class="section" id="pricing" style="background:var(--paper2)">
-  <div class="section-inner">
-    <div class="section-label">Plans</div>
-    <div class="section-title">Simple Pricing</div>
-    <p class="section-sub">All plans include full access to all 3 regions and 64 organisations.</p>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-name">Starter</div>
-        <div class="price-amount">₹4,999<span>/mo</span></div>
-        <div class="price-label">per user · billed monthly</div>
-        <ul class="price-feats">
-          <li class="price-feat">India region — all 24 organisations</li>
-          <li class="price-feat">All 5 work categories</li>
-          <li class="price-feat">Tender database & BOQ benchmarks</li>
-          <li class="price-feat">Contractor intel profiles</li>
-          <li class="price-feat">5 AI Advisor queries/month</li>
-        </ul>
-        <a href="tenders/index.html" class="price-btn">Get Started →</a>
-      </div>
-      <div class="price-card featured">
-        <div class="price-badge">Most Popular</div>
-        <div class="price-name">Professional</div>
-        <div class="price-amount">₹12,999<span>/mo</span></div>
-        <div class="price-label">per user · billed monthly</div>
-        <ul class="price-feats">
-          <li class="price-feat">All 3 regions — India, EU, US</li>
-          <li class="price-feat">All 64 organisations</li>
-          <li class="price-feat">Live intelligence refresh</li>
-          <li class="price-feat">Unlimited AI Advisor queries</li>
-          <li class="price-feat">Priority support</li>
-          <li class="price-feat">DSR rates (CPWD)</li>
-        </ul>
-        <a href="tenders/index.html" class="price-btn">Get Started →</a>
-      </div>
-      <div class="price-card">
-        <div class="price-name">Enterprise</div>
-        <div class="price-amount" style="font-size:28px">Custom</div>
-        <div class="price-label">team pricing · volume discounts</div>
-        <ul class="price-feats">
-          <li class="price-feat">Everything in Professional</li>
-          <li class="price-feat">Multi-user team access</li>
-          <li class="price-feat">Custom organisation coverage</li>
-          <li class="price-feat">API access for integration</li>
-          <li class="price-feat">Dedicated account manager</li>
-          <li class="price-feat">Custom analytics reports</li>
-        </ul>
-        <a href="#contact" class="price-btn">Contact Us →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CONTACT -->
 <section class="section contact-section" id="contact">
   <div class="section-inner">
@@ -399,7 +345,7 @@ footer{background:var(--ink);border-top:1px solid rgba(201,168,76,0.15);padding:
           <div class="contact-icon">✉️</div>
           <div>
             <div class="contact-item-title">Email</div>
-            <div class="contact-item-val"><a href="mailto:info@zirconique.com">info@zirconique.com</a></div>
+            <div class="contact-item-val"><a href="/cdn-cgi/l/email-protection#543d3a323b142e3d26373b3a3d2521317a373b39"><span class="__cf_email__" data-cfemail="4d24232b220d37243f2e2223243c3828632e2220">[email&#160;protected]</span></a></div>
           </div>
         </div>
         <div class="contact-item">
@@ -467,7 +413,7 @@ footer{background:var(--ink);border-top:1px solid rgba(201,168,76,0.15);padding:
       <div>
         <div class="footer-brand-name">Tender<em>IQ</em></div>
         <p class="footer-brand-desc">Global government procurement intelligence for contractors, consultants and advisors. Covering India PSUs, EU institutions and US Federal agencies.</p>
-        <a href="mailto:info@zirconique.com" style="color:var(--gold);font-size:12px;text-decoration:none">info@zirconique.com</a>
+        <a href="/cdn-cgi/l/email-protection#f0999e969fb08a9982939f9e99818595de939f9d" style="color:var(--gold);font-size:12px;text-decoration:none"><span class="__cf_email__" data-cfemail="adc4c3cbc2edd7c4dfcec2c3c4dcd8c883cec2c0">[email&#160;protected]</span></a>
       </div>
       <div>
         <div class="footer-col-title">Platform</div>
@@ -475,7 +421,6 @@ footer{background:var(--ink);border-top:1px solid rgba(201,168,76,0.15);padding:
           <li><a href="tenders/index.html">Access Portal</a></li>
           <li><a href="#features">Features</a></li>
           <li><a href="#regions">Regions</a></li>
-          <li><a href="#pricing">Pricing</a></li>
         </ul>
       </div>
       <div>
@@ -502,7 +447,7 @@ footer{background:var(--ink);border-top:1px solid rgba(201,168,76,0.15);padding:
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function submitForm() {
   const name = document.getElementById('cf-name').value.trim();
   const email = document.getElementById('cf-email').value.trim();
@@ -511,14 +456,4 @@ function submitForm() {
     alert('Please fill in your name, email and message.');
     return;
   }
-  // In production: connect to Supabase or email service
-  // For now show success message
-  document.getElementById('form-success').style.display = 'block';
-  ['cf-name','cf-company','cf-email','cf-region','cf-msg'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
-}
-</script>
-</body>
-</html>
+  // In production: con
