@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ZirconIQ — ZirconIQ — Global Procurement Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#0f1419;--ink2:#1c2733;--ink3:#2d3e50;
+  --paper:#f5f0e8;--paper2:#ede8dc;--paper3:#e2ddd0;
+  --gold:#c9a84c;--gold2:#e8c96a;
+  --red:#c0392b;--green:#1a6b3c;--green2:#27ae60;
+  --blue:#1a3a5c;--blue2:#2980b9;--warn:#e67e22;
+  --border:rgba(15,20,25,0.15);--shadow:0 2px 16px rgba(15,20,25,0.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Rajdhani',sans-serif;font-size:15px;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%230f1419' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0}
+
+/* HEADER */
+header{background:var(--ink);color:var(--paper);position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,0.4)}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:54px;border-bottom:2px solid var(--gold)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-hex{width:34px;height:34px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-txt{font-size:20px;font-weight:700;letter-spacing:0.06em}
+.logo-txt em{color:var(--gold);font-style:normal}
+.logo-sub{font-size:8px;letter-spacing:0.25em;color:rgba(245,240,232,0.45);text-transform:uppercase;margin-top:-2px}
+.hdr-right{display:flex;align-items:center;gap:20px;font-size:11px;color:rgba(245,240,232,0.5);letter-spacing:0.08em}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#27ae60;animation:pulse 2s infinite;display:inline-block;margin-right:4px}
+.back-link{color:var(--gold);text-decoration:none;font-size:11px;letter-spacing:0.1em;font-weight:600;border:1px solid rgba(201,168,76,0.3);padding:4px 12px;border-radius:2px;transition:all 0.2s}
+.back-link:hover{background:rgba(201,168,76,0.1)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* SELECTION SCREEN */
+#select-screen{position:relative;z-index:1;padding:32px 20px}
+.select-wrap{max-width:1200px;margin:0 auto}
+.select-title{text-align:center;margin-bottom:32px}
+.select-title h1{font-size:28px;font-weight:700;letter-spacing:0.06em;color:var(--ink);margin-bottom:6px}
+.select-title p{font-size:13px;color:var(--ink3);letter-spacing:0.06em}
+.select-title .step-pills{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px}
+.step-pill{padding:5px 16px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase}
+.step-pill.active{background:var(--ink);color:var(--gold)}
+.step-pill.done{background:var(--green2);color:#fff}
+.step-pill.pending{background:var(--paper3);color:var(--ink3);border:1px solid var(--border)}
+.step-arrow{color:var(--ink3);font-size:14px}
+
+/* PSU GRID */
+.psu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:32px}
+.psu-card{background:var(--paper2);border:2px solid var(--border);border-radius:6px;padding:18px 16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.psu-card::before{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--border);transition:background 0.2s}
+.psu-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.psu-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.06)}
+.psu-card.selected::before{background:var(--gold)}
+.psu-icon{font-size:26px;margin-bottom:8px}
+.psu-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.psu-full{font-size:10px;color:var(--ink3);line-height:1.4;margin-bottom:6px}
+.psu-rating{display:inline-block;font-size:9px;padding:2px 7px;border-radius:2px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase}
+.rating-maharatna{background:#c9a84c;color:var(--ink)}
+.rating-navratna{background:#2980b9;color:#fff}
+.rating-state{background:#27ae60;color:#fff}
+.psu-sector{font-size:10px;color:var(--ink3);margin-top:4px;letter-spacing:0.04em}
+.psu-check{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink);opacity:0;transition:opacity 0.2s}
+.psu-card.selected .psu-check{opacity:1}
+
+/* WORK TYPE SELECTOR */
+#work-select{display:none}
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:800px;margin:0 auto 32px}
+.work-card{background:var(--paper2);border:2px solid var(--border);border-radius:6px;padding:28px 20px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative}
+.work-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.work-card.selected-work{border-color:var(--gold);background:rgba(201,168,76,0.06)}
+.work-icon{font-size:40px;margin-bottom:12px;display:block}
+.work-name{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.work-desc{font-size:11px;color:var(--ink3);line-height:1.6}
+.work-examples{font-size:10px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+
+/* ACTION BAR */
+.action-bar{display:flex;align-items:center;justify-content:center;gap:16px;padding:20px 0}
+.btn{padding:10px 24px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:3px;cursor:pointer;transition:all 0.2s;border:none}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{background:var(--gold2)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--ink3)}
+.btn-outline:hover{border-color:var(--ink);color:var(--ink)}
+.btn-primary{background:var(--ink);color:var(--gold);border:1px solid var(--gold)}
+.btn-primary:hover{background:var(--ink2)}
+.btn-sm{padding:5px 14px;font-size:11px}
+.btn-danger{background:var(--red);color:#fff}
+.btn-success{background:var(--green);color:#fff}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.selected-summary{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--ink);border-radius:4px;font-size:12px;color:rgba(245,240,232,0.7);letter-spacing:0.06em}
+.selected-summary .sel-psu{color:var(--gold);font-weight:700;font-size:14px}
+.selected-summary .sel-work{color:var(--gold2);font-weight:700}
+
+/* DASHBOARD */
+#dashboard{display:none;position:relative;z-index:1}
+.dash-header{background:var(--ink);padding:16px 24px;border-bottom:1px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.dash-title{display:flex;align-items:center;gap:16px}
+.dash-psu-icon{font-size:28px}
+.dash-psu-name{font-size:20px;font-weight:700;color:var(--paper);letter-spacing:0.04em}
+.dash-psu-sub{font-size:10px;color:rgba(245,240,232,0.5);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px}
+.dash-work-badge{padding:6px 16px;border-radius:3px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+.dash-tabs{display:flex;background:var(--ink2);border-bottom:1px solid rgba(201,168,76,0.2)}
+.dash-tab{padding:11px 20px;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;color:rgba(245,240,232,0.45);border-bottom:3px solid transparent;transition:all 0.2s;font-family:'Rajdhani',sans-serif}
+.dash-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,0.06)}
+.dash-tab:hover{color:rgba(245,240,232,0.75)}
+
+/* CARDS & LAYOUT */
+.wrap{max-width:1440px;margin:0 auto;padding:20px 16px}
+.card{background:var(--paper2);border:1px solid var(--border);border-radius:4px;box-shadow:var(--shadow)}
+.card-hdr{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--paper3)}
+.card-title{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat-box{background:var(--ink);color:var(--paper);border-radius:4px;padding:14px 16px;position:relative;overflow:hidden}
+.stat-box::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold)}
+.stat-box.g::after{background:var(--green2)}
+.stat-box.r::after{background:var(--red)}
+.stat-box.b::after{background:var(--blue2)}
+.stat-lbl{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.45);margin-bottom:5px}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--gold2);line-height:1}
+.stat-sub{font-size:10px;color:rgba(245,240,232,0.35);margin-top:4px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:3px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:var(--ink);color:var(--paper)}
+th{padding:9px 12px;text-align:left;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;white-space:nowrap;font-family:'JetBrains Mono',monospace;border-right:1px solid rgba(255,255,255,0.05)}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.12s;cursor:pointer}
+tbody tr:hover{background:var(--paper3)}
+td{padding:9px 12px;vertical-align:middle;border-right:1px solid var(--border)}
+.winner-row{background:rgba(26,107,60,0.05)!important}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 7px;border-radius:2px;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase}
+.b-high{background:#c0392b;color:#fff}
+.b-med{background:var(--warn);color:#fff}
+.b-low{background:var(--green);color:#fff}
+.b-open{background:var(--green2);color:#fff}
+.b-closed{background:var(--ink3);color:var(--paper)}
+.b-elec{background:#1a3a5c;color:var(--gold)}
+.b-mech{background:#7f3f00;color:#fff}
+.b-civil{background:#2d5016;color:#fff}
+
+/* METER */
+.meter{height:5px;background:rgba(15,20,25,0.1);border-radius:3px;overflow:hidden;margin-top:3px}
+.meter-fill{height:100%;border-radius:3px}
+
+/* AI RESPONSE */
+.ai-response{background:var(--ink);border-radius:4px;padding:20px;border-left:4px solid var(--gold);font-family:'Crimson Pro',serif;font-size:15px;line-height:1.8;color:var(--paper);min-height:80px}
+.ai-sec h4{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin:14px 0 6px;padding-bottom:3px;border-bottom:1px solid rgba(201,168,76,0.25)}
+.ai-sec p{color:rgba(245,240,232,0.82);font-size:14px;line-height:1.75}
+.hi{color:var(--gold2);font-weight:600}
+.al{color:#e74c3c;font-weight:600}
+.gd{color:#2ecc71;font-weight:600}
+.thinking{display:flex;align-items:center;gap:12px;color:rgba(245,240,232,0.45);font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:0.1em}
+.dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin:0 2px;animation:blink 1.4s infinite}
+.dots span:nth-child(2){animation-delay:0.2s}.dots span:nth-child(3){animation-delay:0.4s}
+@keyframes blink{0%,80%,100%{opacity:0.2}40%{opacity:1}}
+
+/* SECTION HEADING */
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sh h2{font-size:15px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink)}
+.sh::after{content:"";flex:1;height:1px;background:var(--border)}
+.sh .sh-b{font-size:9px;padding:2px 9px;background:var(--gold);color:var(--ink);border-radius:2px;letter-spacing:0.1em;font-weight:700;white-space:nowrap}
+
+/* FORM */
+.fg{margin-bottom:12px}
+label{display:block;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;font-weight:600}
+input[type=text],input[type=number],select,textarea{width:100%;padding:8px 11px;font-family:'Rajdhani',sans-serif;font-size:13px;background:var(--paper);border:1px solid var(--border);color:var(--ink);border-radius:3px;outline:none;transition:border-color 0.2s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:72px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--paper3)}
+::-webkit-scrollbar-thumb{background:var(--ink3);border-radius:2px}
+
+/* RESPONSIVE */
+@media(max-width:768px){.grid4{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.psu-grid{grid-template-columns:repeat(2,1fr)}.work-grid{grid-template-columns:1fr}.dash-tabs{overflow-x:auto;white-space:nowrap}}
+
+#login-screen{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-box{width:100%;max-width:420px;background:var(--ink2);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:40px 36px;box-shadow:0 0 60px rgba(201,168,76,0.05)}
+.auth-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--paper);letter-spacing:0.04em;margin-bottom:4px}
+.auth-logo em{color:var(--gold);font-style:normal}
+.auth-sub{font-size:9px;color:rgba(245,240,232,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px}
+.auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid rgba(245,240,232,0.1)}
+.auth-tab{flex:1;padding:9px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-align:center;cursor:pointer;color:rgba(245,240,232,0.35);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s}
+.auth-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.auth-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.45);display:block;margin-bottom:6px}
+.auth-input{width:100%;padding:11px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink3);border:1px solid rgba(245,240,232,0.12);color:var(--paper);border-radius:4px;outline:none;margin-bottom:14px;transition:border-color 0.2s;box-sizing:border-box}
+.auth-input:focus{border-color:var(--gold)}
+.auth-btn{width:100%;padding:13px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:var(--gold);color:var(--ink);border:none;border-radius:4px;transition:all 0.2s;margin-top:4px}
+.auth-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+.auth-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.auth-btn2{width:100%;padding:10px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.35);border-radius:4px;transition:all 0.2s;margin-top:8px}
+.auth-msg{margin-top:12px;padding:10px 14px;border-radius:4px;font-size:11px;line-height:1.6;display:none}
+.auth-msg.err{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);color:#fca5a5;display:block}
+.auth-msg.ok{background:rgba(26,107,60,0.12);border:1px solid rgba(26,107,60,0.35);color:#6ee7a0;display:block}
+.auth-link{color:var(--gold);text-decoration:none;cursor:pointer;font-size:10px}
+.pw-wrap{position:relative;margin-bottom:14px}
+.pw-wrap .auth-input{margin-bottom:0;padding-right:42px}
+.pw-eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(245,240,232,0.35);font-size:15px;padding:4px;line-height:1;transition:color 0.2s}
+.pw-eye:hover{color:var(--gold)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@media(max-width:600px){
+  .hdr{padding:0 10px;height:46px}
+  .logo-sub{display:none}
+  #last-refresh-lbl{display:none}
+  .hdr-right{gap:8px}
+  .auth-box{padding:28px 18px}
+  .psu-grid{grid-template-columns:repeat(2,1fr)!important;gap:8px}
+  .psu-card{padding:12px 10px}
+  .psu-icon{font-size:20px}
+  .psu-name{font-size:13px}
+  .psu-full{font-size:9px}
+  .work-grid{grid-template-columns:1fr!important}
+  .dash-tabs{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .dash-tab{font-size:10px;padding:10px 8px}
+  .wrap{padding:12px!important}
+  .grid4{grid-template-columns:1fr 1fr!important}
+  .grid3,.grid2{grid-template-columns:1fr!important}
+  .stat-box{padding:10px}
+  .stat-val{font-size:20px}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:480px}
+  .hdr-right .back-link{display:none}
+  .select-title h1{font-size:18px}
+  .dash-header{flex-direction:column;align-items:flex-start;gap:6px;padding:10px 12px}
+  #refresh-btn{font-size:9px;padding:3px 8px}
+}
+@media(max-width:380px){
+  .psu-grid{grid-template-columns:1fr 1fr!important}
+  .auth-box{padding:22px 14px}
+}
+
+/* REGION SELECTOR */
+#region-screen{position:relative;z-index:1;padding:40px 20px}
+.region-wrap{max-width:900px;margin:0 auto;text-align:center}
+.region-title{font-size:24px;font-weight:700;letter-spacing:0.06em;color:var(--ink);margin-bottom:8px}
+.region-sub{font-size:13px;color:var(--ink3);margin-bottom:36px}
+.region-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:800px;margin:0 auto}
+.region-card{background:var(--paper2);border:2px solid var(--border);border-radius:8px;padding:32px 20px;cursor:pointer;transition:all 0.2s;text-align:center}
+.region-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--gold)}
+.region-flag{font-size:48px;margin-bottom:12px}
+.region-name{font-size:20px;font-weight:700;letter-spacing:0.06em;margin-bottom:6px}
+.region-desc{font-size:11px;color:var(--ink3);line-height:1.5}
+.region-count{display:inline-block;margin-top:10px;font-size:10px;font-weight:700;letter-spacing:0.1em;padding:3px 10px;border-radius:2px;background:var(--ink);color:var(--gold)}
+@media(max-width:600px){.region-grid{grid-template-columns:1fr;gap:12px}.region-card{padding:20px}}
+</style>
+</head>
+<body>
+
+<header id="main-header" style="display:none">
+  <div class="hdr">
+    <div class="logo">
+      <div class="logo-hex">⚡</div>
+      <div>
+        <div class="logo-txt" onclick="goHome()" style="cursor:pointer" title="Return to PSU selection">Zircon<em>IQ</em></div>
+        <div class="logo-sub">India PSU Bid Intelligence · All Sectors</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <span id="last-refresh-lbl" style="font-size:10px;color:rgba(245,240,232,0.35)"></span>
+      <button id="refresh-btn" onclick="runLiveRefresh()" style="display:none;align-items:center;gap:5px;background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);color:#2ecc71;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer"><span class="live-dot"></span>Refresh Live Data</button>
+      <span id="hdr-context" style="color:var(--gold)"></span>
+      <span id="hdr-user" style="font-size:10px;color:rgba(245,240,232,0.4)"></span>
+      <a href="/cdn-cgi/l/email-protection#ff96919990bf85968d9c9091968e8a9ad19c9092" style="color:rgba(245,240,232,0.35);text-decoration:none;font-size:10px"><span class="__cf_email__" data-cfemail="d5bcbbb3ba95afbca7b6babbbca4a0b0fbb6bab8">[email&#160;protected]</span></a>
+      <button onclick="doSignOut()" style="background:rgba(192,57,43,0.12);border:1px solid rgba(192,57,43,0.3);color:#fca5a5;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px;cursor:pointer">Sign Out</button>
+      <a onclick="goHome()" class="back-link" style="cursor:pointer">&larr; Home</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ SELECTION SCREEN ═══ -->
+<div id="login-screen">
+  <div class="auth-box">
+    <div class="auth-logo">Zircon<em>IQ</em></div>
+    <div class="auth-sub">India PSU Bid Intelligence &middot; Authorised Access Only</div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="atab-signin" onclick="switchTab('signin')">Sign In</div>
+      <div class="auth-tab" id="atab-register" onclick="switchTab('register')">Register</div>
+    </div>
+    <div id="aform-signin">
+      <label class="auth-label">Email</label>
+      <input class="auth-input" type="email" id="si-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')doSignIn()"/>
+      <label class="auth-label">Password</label>
+      <div class="pw-wrap"><input class="auth-input" type="password" id="si-pass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doSignIn()"/><button type="button" class="pw-eye" onclick="togglePw('si-pass',this)">&#128065;</button></div>
+      <button class="auth-btn" id="si-btn" onclick="doSignIn()">Sign In &rarr;</button>
+      <div style="text-align:center;margin-top:10px"><a class="auth-link" onclick="switchTab('forgot')">Forgot password?</a></div>
+      <div class="auth-msg" id="si-msg"></div>
+    </div>
+    <div id="aform-register" style="display:none">
+      <label class="auth-label">Full Name</label>
+      <input class="auth-input" type="text" id="reg-name" placeholder="Your full name"/>
+      <label class="auth-label">Company / Organisation</label>
+      <input class="auth-input" type="text" id="reg-company" placeholder="Your company name"/>
+      <label class="auth-label">Email</label>
+      <input class="auth-input" type="email" id="reg-email" placeholder="your@email.com"/>
+      <label class="auth-label">Password</label>
+      <div class="pw-wrap"><input class="auth-input" type="password" id="reg-pass" placeholder="Min 8 characters"/><button type="button" class="pw-eye" onclick="togglePw('reg-pass',this)">&#128065;</button></div>
+      <button class="auth-btn" id="reg-btn" onclick="doRegister()">Request Access &rarr;</button>
+      <div class="auth-msg" id="reg-msg"></div>
+    </div>
+    <div id="aform-forgot" style="display:none">
+      <div style="font-size:12px;color:rgba(245,240,232,0.6);margin-bottom:14px;line-height:1.7">Enter your registered email and we will send a password reset link.</div>
+      <label class="auth-label">Email</label>
+      <input class="auth-input" type="email" id="fp-email" placeholder="your@email.com"/>
+      <button class="auth-btn" id="fp-btn" onclick="doForgotPw()">Send Reset Link &rarr;</button>
+      <button class="auth-btn2" onclick="switchTab('signin')">&larr; Back to Sign In</button>
+      <div class="auth-msg" id="fp-msg"></div>
+    </div>
+  </div>
+</div>
+<div id="region-screen" style="display:none">
+  <div class="region-wrap">
+    <div class="region-title">Select Your Region</div>
+    <div class="region-sub">Choose the procurement region to access tender intelligence, contractor data and bid analytics</div>
+    <div class="region-grid">
+      <div class="region-card" onclick="selectRegion('india')">
+        <div class="region-flag">🇮🇳</div>
+        <div class="region-name">India</div>
+        <div class="region-desc">Central PSUs, State Utilities, CPWD, MES and all Government procurement</div>
+        <div class="region-count">24 ORGANISATIONS</div>
+      </div>
+      <div class="region-card" onclick="selectRegion('eu')">
+        <div class="region-flag">🇪🇺</div>
+        <div class="region-name">European Union</div>
+        <div class="region-desc">Pan-EU institutions, Germany, France, Netherlands, Poland and major member states</div>
+        <div class="region-count">20 ORGANISATIONS</div>
+      </div>
+      <div class="region-card" onclick="selectRegion('us')">
+        <div class="region-flag">🇺🇸</div>
+        <div class="region-name">United States</div>
+        <div class="region-desc">Federal agencies, DoD, DoE, Army Corps, and major state procurement authorities</div>
+        <div class="region-count">20 ORGANISATIONS</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="select-screen" style="display:none">
+<div class="select-wrap">
+
+  <!-- Step 1: PSU -->
+  <div id="step1">
+    <div class="select-title">
+      <h1 id="step1-title">India PSU Tender Intelligence</h1>
+      <p id="step1-sub">Select an organisation and work category to access bid data, analytics and AI advice</p>
+      <div class="step-pills">
+        <div class="step-pill active" id="pill1">Step 1 — Choose PSU</div>
+        <div class="step-arrow">→</div>
+        <div class="step-pill pending" id="pill2">Step 2 — Work Type</div>
+        <div class="step-arrow">→</div>
+        <div class="step-pill pending" id="pill3">View Dashboard</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px"><span id="region-badge" style="font-size:10px;font-weight:700;letter-spacing:0.12em;padding:4px 12px;border-radius:2px;background:var(--ink);color:var(--gold)">🇮🇳 INDIA</span></div>
+      <button onclick="goToRegion()" style="background:transparent;border:1px solid var(--border);color:var(--ink3);font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer">← Change Region</button>
+    </div>
+    <div id="filter-row" style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <span style="font-size:11px;letter-spacing:0.12em;color:var(--ink3);text-transform:uppercase">Filter:</span>
+      <button class="btn btn-sm" style="background:var(--ink);color:var(--gold);border:1px solid var(--gold)" onclick="filterPSU('all',this)">All</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Maharatna',this)">Maharatna</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Navratna',this)">Navratna</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Power',this)">Power</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Oil',this)">Oil & Gas</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Defence',this)">Defence</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('Steel',this)">Steel/Mining</button>
+      <button class="btn btn-sm btn-outline" onclick="filterPSU('GovtInfra',this)">Govt/Infra</button>
+    </div>
+
+    <div class="psu-grid" id="psu-grid"></div>
+  </div>
+
+  <!-- Step 2: Work Type -->
+  <div id="step2" style="display:none">
+    <div class="select-title">
+      <h1 id="step2-title">Choose Work Category</h1>
+      <p>Select the type of work for your tender</p>
+      <div class="step-pills">
+        <div class="step-pill done">Step 1 — PSU Selected ✓</div>
+        <div class="step-arrow">→</div>
+        <div class="step-pill active">Step 2 — Work Type</div>
+        <div class="step-arrow">→</div>
+        <div class="step-pill pending">View Dashboard</div>
+      </div>
+    </div>
+
+    <div class="work-grid">
+      <div class="work-card" id="wc-electrical" onclick="selectWork('electrical')">
+        <span class="work-icon">⚡</span>
+        <div class="work-name">Electrical</div>
+        <div class="work-desc">HT/LT cables, switchgear, transformers, substation erection, lighting, earthing, AMC</div>
+        <div class="work-examples">11kV/33kV/132kV cables · Panels · LED lighting · AMC · Metering</div>
+      </div>
+      <div class="work-card" id="wc-mechanical" onclick="selectWork('mechanical')">
+        <span class="work-icon">⚙️</span>
+        <div class="work-name">Mechanical</div>
+        <div class="work-desc">Piping, pressure vessels, rotating equipment, HVAC, insulation, structural steel</div>
+        <div class="work-examples">CS/SS piping · Pumps · Heat exchangers · Compressors · Valves</div>
+      </div>
+      <div class="work-card" id="wc-civil" onclick="selectWork('civil')">
+        <span class="work-icon">🏗️</span>
+        <div class="work-name">Civil</div>
+        <div class="work-desc">RCC structures, roads, drainage, waterproofing, foundation works, buildings</div>
+        <div class="work-examples">RCC · Brickwork · Roads · Drainage · Building construction</div>
+      </div>
+      <div class="work-card" id="wc-it" onclick="selectWork('it')">
+        <span class="work-icon">💻</span>
+        <div class="work-name">IT &amp; Technology</div>
+        <div class="work-desc">Software development, system integration, cloud, cybersecurity, ERP, data centres</div>
+        <div class="work-examples">ERP · Cloud · Cybersecurity · Data Centre · Software Dev</div>
+      </div>
+      <div class="work-card" id="wc-consulting" onclick="selectWork('consulting')">
+        <span class="work-icon">📋</span>
+        <div class="work-name">Consulting &amp; PMC</div>
+        <div class="work-desc">Project management, DPR preparation, design consultancy, transaction advisory</div>
+        <div class="work-examples">PMC · DPR · Design · Transaction Advisory · Audit</div>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-outline" onclick="goBack()">← Back to PSU Selection</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="dashboard">
+  <div class="dash-header">
+    <div class="dash-title">
+      <div class="dash-psu-icon" id="d-icon"></div>
+      <div>
+        <div class="dash-psu-name" id="d-name"></div>
+        <div class="dash-psu-sub" id="d-sub"></div>
+      </div>
+      <div class="dash-work-badge" id="d-work-badge"></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span style="font-size:10px;color:rgba(245,240,232,0.4);letter-spacing:0.1em">CHANGE:</span>
+      <button class="btn btn-sm" style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer" onclick="changePSU()">PSU</button>
+      <button class="btn btn-sm" style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:2px;cursor:pointer" onclick="changeWork()">Work Type</button>
+    </div>
+  </div>
+  <div class="dash-tabs">
+    <div class="dash-tab active" onclick="showTab('overview')">📊 Overview</div>
+    <div class="dash-tab" onclick="showTab('tenders')">📋 Tender Database</div>
+    <div class="dash-tab" onclick="showTab('analytics')">📈 Bid Analytics</div>
+    <div class="dash-tab" onclick="showTab('contractors')">🏗️ Contractor Intel</div>
+    <div class="dash-tab" onclick="showTab('boq')">📐 BOQ Benchmarks</div>
+  <div class="dash-tab" id="dsr-tab" style="display:none" onclick="showTab('dsr')">📋 DSR Rates</div>
+    <div class="dash-tab" onclick="showTab('advisor')">🤖 AI Advisor</div>
+  </div>
+  <div id="dash-content"></div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ══════════════════════════════════════════════════
+//  ZIRCONIQ v2 — ALL PSU · ALL WORK TYPES
+// ══════════════════════════════════════════════════
+
+
+// ── CURRENCY HELPERS ──
+function getCurrSym() {
+  const org = currentOrgList.find(p=>p.id===selectedPSU);
+  if (!org) return getCurrSym();
+  if (org.currency === 'USD') return '$';
+  if (org.currency === 'EUR') return '€';
+  return getCurrSym();
+}
+function getCurrUnit() {
+  const org = currentOrgList.find(p=>p.id===selectedPSU);
+  if (!org) return 'Cr';
+  if (org.currency === 'USD') return 'M';  // millions
+  if (org.currency === 'EUR') return 'M';
+  return 'Cr';
+}
+function fmtVal(v) {
+  return getCurrSym() + v + getCurrUnit();
+}
+
+document.getElementById('hdr-context').textContent = new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+
+// ── PSU MASTER DATA ──
+const PSUS = [
+  {id:"ntpc",name:"NTPC",full:"National Thermal Power Corp",sector:"Power Generation",hq:"New Delhi",rating:"Maharatna",icon:"⚡",color:"#c9a84c",sites:["Singrauli","Unchahar","Dadri","Rihand","Kahalgaon","Farakka","Ramagundam","Vindhyachal","Talcher","Sipat"],tender_count:284,avg_l1:91.8,work_types:["electrical","mechanical","civil"]},
+  {id:"ongc",name:"ONGC",full:"Oil & Natural Gas Corporation",sector:"Oil & Gas",hq:"Dehradun",rating:"Maharatna",icon:"🛢️",color:"#2980b9",sites:["Mumbai High","Hazira","Ankleshwar","Jorhat","Kakinada","Uran","Mehsana"],tender_count:312,avg_l1:90.4,work_types:["electrical","mechanical","civil"]},
+  {id:"bhel",name:"BHEL",full:"Bharat Heavy Electricals Ltd",sector:"Heavy Engineering",hq:"New Delhi",rating:"Maharatna",icon:"🏭",color:"#27ae60",sites:["Haridwar","Bhopal","Hyderabad","Trichy","Jhansi","Ranipet","Varanasi"],tender_count:198,avg_l1:89.6,work_types:["electrical","mechanical","civil"]},
+  {id:"iocl",name:"IOCL",full:"Indian Oil Corporation Ltd",sector:"Oil Refining",hq:"New Delhi",rating:"Maharatna",icon:"🔥",color:"#e74c3c",sites:["Panipat","Mathura","Barauni","Haldia","Koyali","Guwahati"],tender_count:241,avg_l1:91.2,work_types:["electrical","mechanical","civil"]},
+  {id:"coal",name:"Coal India",full:"Coal India Limited",sector:"Coal Mining",hq:"Kolkata",rating:"Maharatna",icon:"⛏️",color:"#7f8c8d",sites:["Dhanbad (BCCL)","Bilaspur (SECL)","Asansol (ECL)","Nagpur (WCL)","Ranchi (CCL)","Sambalpur (MCL)"],tender_count:428,avg_l1:88.4,work_types:["electrical","mechanical","civil"]},
+  {id:"pgcil",name:"Power Grid",full:"Power Grid Corporation of India",sector:"Power Transmission",hq:"Gurugram",rating:"Maharatna",icon:"🗼",color:"#8e44ad",sites:["Northern Region","Southern Region","Eastern Region","Western Region","NE Region"],tender_count:186,avg_l1:92.1,work_types:["electrical","civil"]},
+  {id:"gail",name:"GAIL India",full:"Gas Authority of India Ltd",sector:"Gas Transmission",hq:"New Delhi",rating:"Maharatna",icon:"🔵",color:"#16a085",sites:["Hazira","Vijaipur","Auraiya","Lakwa","Vaghodia","Gandhar","Pata"],tender_count:167,avg_l1:90.8,work_types:["mechanical","civil","electrical"]},
+  {id:"sail",name:"SAIL",full:"Steel Authority of India Ltd",sector:"Steel",hq:"New Delhi",rating:"Maharatna",icon:"🔩",color:"#d35400",sites:["Bhilai","Bokaro","Rourkela","Durgapur","Burnpur","Salem"],tender_count:356,avg_l1:87.9,work_types:["electrical","mechanical","civil"]},
+  {id:"bpcl",name:"BPCL",full:"Bharat Petroleum Corp Ltd",sector:"Oil Refining",hq:"Mumbai",rating:"Maharatna",icon:"⛽",color:"#c0392b",sites:["Mumbai","Kochi","Bina","Numaligarh"],tender_count:142,avg_l1:91.6,work_types:["electrical","mechanical","civil"]},
+  {id:"hpcl",name:"HPCL",full:"Hindustan Petroleum Corp Ltd",sector:"Oil Refining",hq:"Mumbai",rating:"Maharatna",icon:"🏗️",color:"#2c3e50",sites:["Mumbai","Visakhapatnam","Bathinda","Rajasthan Refinery"],tender_count:138,avg_l1:90.9,work_types:["electrical","mechanical","civil"]},
+  {id:"hal",name:"HAL",full:"Hindustan Aeronautics Ltd",sector:"Aerospace & Defence",hq:"Bengaluru",rating:"Maharatna",icon:"✈️",color:"#1a3a5c",sites:["Bengaluru","Nashik","Koraput","Kanpur","Hyderabad","Lucknow"],tender_count:94,avg_l1:93.4,work_types:["electrical","mechanical","civil"]},
+  {id:"bel",name:"BEL",full:"Bharat Electronics Ltd",sector:"Defence Electronics",hq:"Bengaluru",rating:"Navratna",icon:"📡",color:"#2980b9",sites:["Bengaluru","Ghaziabad","Pune","Hyderabad","Chennai","Kotdwara"],tender_count:112,avg_l1:92.8,work_types:["electrical","civil"]},
+  {id:"npcil",name:"NPCIL",full:"Nuclear Power Corp of India",sector:"Nuclear Power",hq:"Mumbai",rating:"Navratna",icon:"☢️",color:"#27ae60",sites:["Tarapur","Rawatbhata","Kakrapar","Kaiga","Kudankulam"],tender_count:86,avg_l1:94.2,work_types:["electrical","mechanical","civil"]},
+  {id:"uppcl",name:"UPPCL",full:"Uttar Pradesh Power Corp Ltd",sector:"Power Distribution",hq:"Lucknow",rating:"State PSU",icon:"💡",color:"#f39c12",sites:["Lucknow","Agra","Varanasi","Kanpur","Meerut","Allahabad"],tender_count:612,avg_l1:87.2,work_types:["electrical","civil"]},
+  {id:"nhpc",name:"NHPC",full:"National Hydroelectric Power Corp",sector:"Hydro Power",hq:"Faridabad",rating:"Navratna",icon:"💧",color:"#3498db",sites:["Salal","Dulhasti","Uri","Chamera","Teesta","Loktak"],tender_count:124,avg_l1:91.4,work_types:["electrical","mechanical","civil"]},
+  {id:"aiims",name:"AIIMS",full:"All India Institute of Medical Sciences",sector:"Healthcare & Medical",hq:"New Delhi",rating:"Central Govt",icon:"🏥",color:"#27ae60",sites:["New Delhi","Bhopal","Bhubaneswar","Jodhpur","Patna","Raipur","Rishikesh","Nagpur","Mangalagiri"],tender_count:684,avg_l1:91.2,work_types:["civil","electrical","mechanical","it"]},
+  {id:"esic",name:"ESIC",full:"Employees State Insurance Corporation",sector:"Healthcare & Medical",hq:"New Delhi",rating:"Central Govt",icon:"💊",color:"#16a085",sites:["New Delhi","Mumbai","Chennai","Kolkata","Bengaluru","Hyderabad","Pune","Ahmedabad"],tender_count:842,avg_l1:90.8,work_types:["civil","electrical","mechanical","it"]},
+  {id:"cghs",name:"CGHS / MoH",full:"Central Govt Health Scheme / Ministry of Health",sector:"Healthcare & Medical",hq:"New Delhi",rating:"Central Govt",icon:"🩺",color:"#2980b9",sites:["New Delhi","Mumbai","Chennai","Kolkata","Bengaluru","Hyderabad"],tender_count:1240,avg_l1:91.4,work_types:["civil","electrical","it","consulting"]},
+  {id:"nhm",name:"NHM",full:"National Health Mission",sector:"Healthcare & Medical",hq:"New Delhi",rating:"Central Govt",icon:"🏨",color:"#8e44ad",sites:["All States","District Hospitals","PHC Network"],tender_count:2840,avg_l1:89.6,work_types:["civil","electrical","it","consulting"]},
+  {id:"cpwd",name:"CPWD",full:"Central Public Works Department",sector:"Govt Construction",hq:"New Delhi",rating:"Central Govt",icon:"🏛️",color:"#8e44ad",sites:["New Delhi HQ","Mumbai Region","Chennai Region","Kolkata Region","Bhopal","Chandigarh","Patna","Lucknow"],tender_count:1840,avg_l1:89.2,work_types:["civil","electrical","mechanical"],dsr:true},
+  {id:"cwc",name:"CWC",full:"Central Warehousing Corporation",sector:"Warehousing & Storage",hq:"New Delhi",rating:"Navratna",icon:"🏪",color:"#16a085",sites:["New Delhi","Mumbai","Chennai","Kolkata","Hyderabad","Bengaluru","Pune","Ahmedabad"],tender_count:428,avg_l1:90.1,work_types:["civil","electrical"]},
+  {id:"rites",name:"RITES",full:"Rail India Technical & Economic Service",sector:"Transport Consultancy",hq:"Gurugram",rating:"Navratna",icon:"🚂",color:"#2980b9",sites:["Gurugram","Mumbai","Chennai","Kolkata","Bengaluru"],tender_count:312,avg_l1:91.4,work_types:["civil","electrical","mechanical"]},
+  {id:"ircon",name:"IRCON",full:"IRCON International Ltd",sector:"Railway Infrastructure",hq:"New Delhi",rating:"Navratna",icon:"🛤️",color:"#27ae60",sites:["New Delhi","Mumbai","Bengaluru","Nagpur","Bhopal"],tender_count:284,avg_l1:88.8,work_types:["civil","electrical","mechanical"]},
+  {id:"nbcc",name:"NBCC",full:"National Buildings Construction Corp",sector:"Govt Construction",hq:"New Delhi",rating:"Navratna",icon:"🏢",color:"#c0392b",sites:["New Delhi","Mumbai","Chennai","Hyderabad","Bhopal"],tender_count:524,avg_l1:90.6,work_types:["civil","electrical"]},
+  {id:"mes",name:"MES",full:"Military Engineering Services",sector:"Defence Infrastructure",hq:"New Delhi",rating:"Central Govt",icon:"⚔️",color:"#2c3e50",sites:["New Delhi","Mumbai","Pune","Chennai","Kolkata","Chandigarh","Bengaluru"],tender_count:692,avg_l1:91.8,work_types:["civil","electrical","mechanical"]},
+  {id:"aai",name:"AAI",full:"Airports Authority of India",sector:"Aviation Infrastructure",hq:"New Delhi",rating:"Navratna",icon:"🛫",color:"#1abc9c",sites:["New Delhi","Mumbai","Chennai","Kolkata","Bengaluru","Hyderabad","Kochi","Ahmedabad"],tender_count:248,avg_l1:92.4,work_types:["civil","electrical","mechanical"]},
+  {id:"nhai",name:"NHAI",full:"National Highways Authority of India",sector:"Roads & Highways",hq:"New Delhi",rating:"Navratna",icon:"🛣️",color:"#e67e22",sites:["North Zone","South Zone","East Zone","West Zone","Central Zone"],tender_count:892,avg_l1:88.6,work_types:["civil","electrical","mechanical"]},
+];
+
+
+// ── EU ORGANISATIONS ──
+const EU_ORGS = [
+  // Healthcare
+  {id:"echa_eu",name:"EMA / ECHA",full:"European Medicines Agency & Chemicals Agency",sector:"Healthcare & Regulatory",hq:"Amsterdam, Netherlands",rating:"Pan-EU",icon:"💉",color:"#27ae60",currency:"EUR",portal:"https://www.ema.europa.eu/en/about-us/procurement",sites:["Amsterdam","Helsinki","Brussels"],tender_count:284,avg_l1:93.6,work_types:["it","consulting"]},
+  {id:"nhs_uk",name:"NHS England",full:"National Health Service — England",sector:"Healthcare & Medical",hq:"London, UK",rating:"National Healthcare",icon:"🏥",color:"#003087",currency:"GBP",portal:"https://www.england.nhs.uk/ourwork/tsd/commercial-solutions",sites:["London","Manchester","Birmingham","Leeds","Bristol","Newcastle"],tender_count:4840,avg_l1:91.8,work_types:["civil","electrical","mechanical","it","consulting"]},
+  {id:"kfw_health",name:"KfW / BZgA",full:"KfW Development Bank & German Federal Health Agency",sector:"Healthcare & Medical",hq:"Frankfurt, Germany",rating:"Federal Germany",icon:"🇩🇪",color:"#c0392b",currency:"EUR",portal:"https://www.kfw.de/KfW-Group/Newsroom/Aktuelles/Ausschreibungen",sites:["Frankfurt","Berlin","Bonn","Cologne"],tender_count:684,avg_l1:92.4,work_types:["civil","it","consulting"]},
+  {id:"ap_hp",name:"AP-HP",full:"Assistance Publique — Hôpitaux de Paris",sector:"Healthcare & Medical",hq:"Paris, France",rating:"State Enterprise",icon:"🇫🇷",color:"#003399",currency:"EUR",portal:"https://www.aphp.fr/contenu/marches-publics",sites:["Paris","Île-de-France","Versailles"],tender_count:1240,avg_l1:91.2,work_types:["civil","electrical","mechanical","it"]},
+  // Pan-EU Institutions
+  {id:"ec_infra",name:"European Commission",full:"EC Infrastructure & Cohesion Funds",sector:"EU Institution",hq:"Brussels, Belgium",rating:"Pan-EU",icon:"🇪🇺",color:"#003399",currency:"EUR",portal:"https://ted.europa.eu",sites:["Brussels","Luxembourg","Strasbourg"],tender_count:1840,avg_l1:92.4,work_types:["civil","electrical","it","consulting"]},
+  {id:"eib",name:"EIB",full:"European Investment Bank",sector:"Development Finance",hq:"Luxembourg",rating:"Pan-EU",icon:"🏦",color:"#003399",currency:"EUR",portal:"https://eib.org/en/about/procurement",sites:["Luxembourg","Brussels","Warsaw"],tender_count:284,avg_l1:93.8,work_types:["civil","mechanical","consulting"]},
+  {id:"esa",name:"ESA",full:"European Space Agency",sector:"Space & Technology",hq:"Paris, France",rating:"Pan-EU",icon:"🚀",color:"#2c3e50",currency:"EUR",portal:"https://esastar.sso.esa.int",sites:["Noordwijk","Darmstadt","Madrid","Frascati"],tender_count:142,avg_l1:94.2,work_types:["electrical","mechanical","it","consulting"]},
+  {id:"eurocontrol",name:"Eurocontrol",full:"European Organisation for Safety of Air Navigation",sector:"Aviation",hq:"Brussels, Belgium",rating:"Pan-EU",icon:"✈️",color:"#1abc9c",currency:"EUR",portal:"https://www.eurocontrol.int/procurement",sites:["Brussels","Maastricht","Frankfurt"],tender_count:98,avg_l1:93.1,work_types:["electrical","it","consulting"]},
+  // Germany
+  {id:"bmvi_de",name:"BMVI Germany",full:"Federal Ministry for Digital & Transport (Germany)",sector:"Transport Infrastructure",hq:"Berlin, Germany",rating:"Federal Germany",icon:"🇩🇪",color:"#000000",currency:"EUR",portal:"https://www.evergabe-online.de",sites:["Berlin","Munich","Hamburg","Frankfurt","Cologne"],tender_count:2840,avg_l1:91.2,work_types:["civil","electrical","it","consulting"]},
+  {id:"db_netz",name:"DB Netz",full:"Deutsche Bahn — Rail Network",sector:"Railway Infrastructure",hq:"Frankfurt, Germany",rating:"Federal Germany",icon:"🚂",color:"#c0392b",currency:"EUR",portal:"https://www.deutschebahn.com/en/procurement",sites:["Frankfurt","Berlin","Munich","Hamburg","Stuttgart"],tender_count:3240,avg_l1:89.8,work_types:["civil","electrical","mechanical","it"]},
+  {id:"autobahn_de",name:"Autobahn GmbH",full:"Die Autobahn GmbH des Bundes",sector:"Road Infrastructure",hq:"Berlin, Germany",rating:"Federal Germany",icon:"🛣️",color:"#e67e22",currency:"EUR",portal:"https://www.autobahn.de/die-autobahn/vergabe",sites:["Berlin","Munich","Hannover","Cologne","Stuttgart"],tender_count:1680,avg_l1:90.4,work_types:["civil","electrical","consulting"]},
+  // France
+  {id:"sncf",name:"SNCF",full:"Société Nationale des Chemins de Fer Français",sector:"Railway",hq:"Paris, France",rating:"State Enterprise",icon:"🇫🇷",color:"#c0392b",currency:"EUR",portal:"https://www.sncf.com/en/group/suppliers/calls-for-tender",sites:["Paris","Lyon","Marseille","Bordeaux","Lille"],tender_count:2640,avg_l1:90.6,work_types:["civil","electrical","mechanical","it"]},
+  {id:"edf",name:"EDF",full:"Électricité de France",sector:"Energy",hq:"Paris, France",rating:"State Enterprise",icon:"⚡",color:"#e74c3c",currency:"EUR",portal:"https://www.edf.fr/en/the-edf-group/suppliers",sites:["Paris","Lyon","Strasbourg","Marseille","Bordeaux"],tender_count:1840,avg_l1:91.4,work_types:["electrical","mechanical","civil","it"]},
+  {id:"enedis",name:"Enedis",full:"Enedis — French Electricity Distribution",sector:"Power Distribution",hq:"Paris, France",rating:"State Enterprise",icon:"💡",color:"#2980b9",currency:"EUR",portal:"https://www.enedis.fr/appels-offres",sites:["Paris","Lyon","Nantes","Bordeaux","Toulouse"],tender_count:1240,avg_l1:90.8,work_types:["electrical","civil","it"]},
+  // Netherlands
+  {id:"rijkswaterstaat",name:"Rijkswaterstaat",full:"Rijkswaterstaat — Dutch Public Works",sector:"Water & Roads",hq:"Utrecht, Netherlands",rating:"Federal Netherlands",icon:"🇳🇱",color:"#003399",currency:"EUR",portal:"https://www.rijkswaterstaat.nl/zakelijk/zakendoen-met-rijkswaterstaat/tenders",sites:["Utrecht","Rotterdam","Amsterdam","Groningen","Arnhem"],tender_count:1420,avg_l1:92.1,work_types:["civil","electrical","consulting"]},
+  {id:"ns_nl",name:"NS — Dutch Rail",full:"Nederlandse Spoorwegen",sector:"Railway",hq:"Utrecht, Netherlands",rating:"State Enterprise",icon:"🚆",color:"#f39c12",currency:"EUR",portal:"https://www.ns.nl/en/about-ns/suppliers",sites:["Utrecht","Amsterdam","Rotterdam","The Hague","Eindhoven"],tender_count:684,avg_l1:92.6,work_types:["electrical","mechanical","it","consulting"]},
+  // Poland
+  {id:"pkp_pl",name:"PKP PLK",full:"PKP Polskie Linie Kolejowe — Polish Rail",sector:"Railway Infrastructure",hq:"Warsaw, Poland",rating:"State Enterprise",icon:"🇵🇱",color:"#c0392b",currency:"EUR",portal:"https://www.plk-sa.pl/en/business/tenders",sites:["Warsaw","Krakow","Gdansk","Wroclaw","Poznan"],tender_count:2840,avg_l1:88.4,work_types:["civil","electrical","mechanical"]},
+  {id:"gddkia_pl",name:"GDDKiA",full:"General Directorate for National Roads & Motorways (Poland)",sector:"Road Infrastructure",hq:"Warsaw, Poland",rating:"Federal Poland",icon:"🛤️",color:"#27ae60",currency:"EUR",portal:"https://www.gddkia.gov.pl/en/3/GDDKiA",sites:["Warsaw","Krakow","Gdansk","Wroclaw","Lodz"],tender_count:1640,avg_l1:87.8,work_types:["civil","consulting"]},
+  // Spain
+  {id:"adif_es",name:"ADIF",full:"Administrador de Infraestructuras Ferroviarias (Spain)",sector:"Railway Infrastructure",hq:"Madrid, Spain",rating:"State Enterprise",icon:"🇪🇸",color:"#c0392b",currency:"EUR",portal:"https://www.adif.es/en_US/conocer_adif/licitaciones",sites:["Madrid","Barcelona","Valencia","Seville","Bilbao"],tender_count:1840,avg_l1:89.6,work_types:["civil","electrical","mechanical"]},
+  {id:"redeia_es",name:"Red Eléctrica",full:"Red Eléctrica de España (Redeia)",sector:"Power Transmission",hq:"Madrid, Spain",rating:"State Enterprise",icon:"⚡",color:"#2c3e50",currency:"EUR",portal:"https://www.redeia.com/en/suppliers",sites:["Madrid","Barcelona","Seville","Zaragoza"],tender_count:684,avg_l1:91.8,work_types:["electrical","civil","consulting"]},
+  // Italy
+  {id:"anas_it",name:"ANAS",full:"Azienda Nazionale Autonoma delle Strade (Italy)",sector:"Road Infrastructure",hq:"Rome, Italy",rating:"State Enterprise",icon:"🇮🇹",color:"#27ae60",currency:"EUR",portal:"https://www.stradeanas.it/it/bandi-di-gara",sites:["Rome","Milan","Naples","Turin","Bologna"],tender_count:2140,avg_l1:88.2,work_types:["civil","electrical","consulting"]},
+  {id:"rfi_it",name:"RFI",full:"Rete Ferroviaria Italiana",sector:"Railway Infrastructure",hq:"Rome, Italy",rating:"State Enterprise",icon:"🚄",color:"#c0392b",currency:"EUR",portal:"https://gare.rfi.it",sites:["Rome","Milan","Turin","Venice","Naples"],tender_count:2640,avg_l1:89.4,work_types:["civil","electrical","mechanical"]},
+  // Sweden
+  {id:"trafikverket_se",name:"Trafikverket",full:"Swedish Transport Administration",sector:"Transport Infrastructure",hq:"Borlänge, Sweden",rating:"Federal Sweden",icon:"🇸🇪",color:"#006AA7",currency:"EUR",portal:"https://www.trafikverket.se/en/contactus/procurement",sites:["Stockholm","Gothenburg","Malmö","Uppsala","Borlänge"],tender_count:1240,avg_l1:92.8,work_types:["civil","electrical","it","consulting"]},
+  // Belgium
+  {id:"infrabel_be",name:"Infrabel",full:"Infrabel — Belgian Rail Infrastructure",sector:"Railway Infrastructure",hq:"Brussels, Belgium",rating:"State Enterprise",icon:"🇧🇪",color:"#fdda24",currency:"EUR",portal:"https://www.infrabel.be/en/public-contracts",sites:["Brussels","Antwerp","Ghent","Liège","Bruges"],tender_count:840,avg_l1:91.6,work_types:["civil","electrical","mechanical","it"]},
+];
+
+// ── US ORGANISATIONS ──
+const US_ORGS = [
+  // Healthcare
+  {id:"hhs_us",name:"HHS / NIH",full:"Dept of Health & Human Services / National Institutes of Health",sector:"Healthcare & Medical",hq:"Bethesda MD",rating:"Federal Agency",icon:"🏥",color:"#27ae60",currency:"USD",portal:"https://grants.nih.gov/contracts",sites:["Bethesda MD","Rockville MD","Research Triangle NC","Seattle WA","Houston TX"],tender_count:2840,avg_l1:92.6,work_types:["civil","electrical","it","consulting"]},
+  {id:"cdc_us",name:"CDC",full:"Centers for Disease Control & Prevention",sector:"Healthcare & Medical",hq:"Atlanta GA",rating:"Federal Agency",icon:"🔬",color:"#16a085",currency:"USD",portal:"https://www.cdc.gov/contracts",sites:["Atlanta GA","Fort Collins CO","San Juan PR","Anchorage AK"],tender_count:1240,avg_l1:93.2,work_types:["it","consulting","civil"]},
+  {id:"nyc_health",name:"NYC Health+Hospitals",full:"New York City Health and Hospitals Corporation",sector:"Healthcare & Medical",hq:"New York NY",rating:"State Agency",icon:"🗽",color:"#003DA5",currency:"USD",portal:"https://www.nychealthandhospitals.org/procurement",sites:["Manhattan","Brooklyn","Queens","Bronx","Staten Island"],tender_count:1840,avg_l1:91.4,work_types:["civil","electrical","mechanical","it"]},
+  {id:"ca_dhcs",name:"CA DHCS",full:"California Dept of Health Care Services",sector:"Healthcare & Medical",hq:"Sacramento CA",rating:"State Agency",icon:"🌴",color:"#e74c3c",currency:"USD",portal:"https://www.dhcs.ca.gov/provgovpart/Pages/SolicitationsandContracts.aspx",sites:["Sacramento","Los Angeles","San Francisco","San Diego","Fresno"],tender_count:984,avg_l1:92.1,work_types:["it","consulting","civil"]},
+  // Federal
+  {id:"usace",name:"Army Corps",full:"US Army Corps of Engineers",sector:"Federal — Defence/Infrastructure",hq:"Washington DC",rating:"Federal Agency",icon:"🎖️",color:"#2c3e50",currency:"USD",portal:"https://www.usace.army.mil/Business-With-Us",sites:["Washington DC","Omaha NE","Fort Worth TX","Sacramento CA","Nashville TN"],tender_count:3840,avg_l1:91.2,work_types:["civil","electrical","mechanical","consulting"]},
+  {id:"doe_us",name:"DOE",full:"US Department of Energy",sector:"Federal — Energy",hq:"Washington DC",rating:"Federal Agency",icon:"⚡",color:"#c0392b",currency:"USD",portal:"https://www.energy.gov/management/office-acquisition-project-management",sites:["Washington DC","Oak Ridge TN","Richland WA","Savannah GA","Los Alamos NM"],tender_count:2140,avg_l1:92.8,work_types:["electrical","mechanical","civil","it","consulting"]},
+  {id:"dot_fhwa",name:"FHWA",full:"Federal Highway Administration",sector:"Federal — Roads",hq:"Washington DC",rating:"Federal Agency",icon:"🛣️",color:"#e67e22",currency:"USD",portal:"https://www.fhwa.dot.gov/procurement",sites:["Washington DC","Atlanta GA","Denver CO","Chicago IL","Oakland CA"],tender_count:2840,avg_l1:90.4,work_types:["civil","electrical","consulting"]},
+  {id:"dod_us",name:"DoD / DLA",full:"Department of Defense — Defense Logistics Agency",sector:"Federal — Defence",hq:"Fort Belvoir VA",rating:"Federal Agency",icon:"⚔️",color:"#1a3a5c",currency:"USD",portal:"https://www.dla.mil/AboutDLA/ProvidingForWarfighters/Contracting",sites:["Fort Belvoir VA","Battle Creek MI","Philadelphia PA","Richmond VA","Columbus OH"],tender_count:6840,avg_l1:93.4,work_types:["electrical","mechanical","it","consulting"]},
+  {id:"gsa_us",name:"GSA",full:"General Services Administration",sector:"Federal — Government Properties",hq:"Washington DC",rating:"Federal Agency",icon:"🏛️",color:"#8e44ad",currency:"USD",portal:"https://www.gsa.gov/real-estate/facilities-maintenance/facilities-maintenance-and-operations",sites:["Washington DC","New York NY","Chicago IL","Atlanta GA","San Francisco CA"],tender_count:4840,avg_l1:91.8,work_types:["civil","electrical","mechanical","it","consulting"]},
+  {id:"va_us",name:"VA / VAMC",full:"Veterans Affairs — Medical Centre Construction",sector:"Federal — Healthcare",hq:"Washington DC",rating:"Federal Agency",icon:"🏥",color:"#27ae60",currency:"USD",portal:"https://www.cfm.va.gov/contract",sites:["Washington DC","Nashville TN","Denver CO","Chicago IL","Los Angeles CA"],tender_count:1840,avg_l1:92.2,work_types:["civil","electrical","mechanical","it"]},
+  {id:"dot_fra",name:"FRA / Amtrak",full:"Federal Railroad Administration & Amtrak",sector:"Federal — Railway",hq:"Washington DC",rating:"Federal Agency",icon:"🚆",color:"#2980b9",currency:"USD",portal:"https://www.fra.dot.gov/Page/P0003",sites:["Washington DC","New York NY","Chicago IL","Philadelphia PA","Boston MA"],tender_count:1240,avg_l1:91.6,work_types:["civil","electrical","mechanical","it"]},
+  {id:"epa_us",name:"EPA",full:"US Environmental Protection Agency",sector:"Federal — Environment",hq:"Washington DC",rating:"Federal Agency",icon:"🌿",color:"#16a085",currency:"USD",portal:"https://www.epa.gov/contracts",sites:["Washington DC","Chicago IL","Atlanta GA","Denver CO","Seattle WA"],tender_count:984,avg_l1:93.1,work_types:["civil","mechanical","it","consulting"]},
+  // State Agencies
+  {id:"caltrans",name:"Caltrans",full:"California Department of Transportation",sector:"State — California Roads",hq:"Sacramento CA",rating:"State Agency",icon:"🏔️",color:"#e74c3c",currency:"USD",portal:"https://dot.ca.gov/programs/construction",sites:["Sacramento","Los Angeles","San Francisco","San Diego","Fresno"],tender_count:3240,avg_l1:89.8,work_types:["civil","electrical","consulting"]},
+  {id:"nysdot",name:"NYSDOT",full:"New York State Dept of Transportation",sector:"State — New York Roads",hq:"Albany NY",rating:"State Agency",icon:"🗽",color:"#1a3a5c",currency:"USD",portal:"https://www.dot.ny.gov/doing-business",sites:["Albany","New York City","Buffalo","Rochester","Syracuse"],tender_count:2140,avg_l1:90.4,work_types:["civil","electrical","consulting"]},
+  {id:"txdot",name:"TxDOT",full:"Texas Department of Transportation",sector:"State — Texas Roads",hq:"Austin TX",rating:"State Agency",icon:"🤠",color:"#8B4513",currency:"USD",portal:"https://www.txdot.gov/business/contractors-suppliers.html",sites:["Austin","Houston","Dallas","San Antonio","Fort Worth"],tender_count:2840,avg_l1:89.2,work_types:["civil","electrical","consulting"]},
+  {id:"nypa",name:"NYPA",full:"New York Power Authority",sector:"State — Power",hq:"White Plains NY",rating:"State Agency",icon:"⚡",color:"#f39c12",currency:"USD",portal:"https://www.nypa.gov/about/doing-business-with-nypa",sites:["White Plains","Niagara Falls","Massena","Poletti","Blenheim"],tender_count:684,avg_l1:91.4,work_types:["electrical","civil","mechanical","it"]},
+  {id:"mta_ny",name:"MTA",full:"Metropolitan Transportation Authority — New York",sector:"State — Transit",hq:"New York NY",rating:"State Agency",icon:"🚇",color:"#003DA5",currency:"USD",portal:"https://new.mta.info/doing-business-with-us",sites:["New York City","Yonkers","Ronkonkoma","New Haven CT"],tender_count:2640,avg_l1:88.4,work_types:["civil","electrical","mechanical","it"]},
+  {id:"metra_il",name:"Metra / CDOT",full:"Metra + Chicago DOT",sector:"State — Illinois Transit",hq:"Chicago IL",rating:"State Agency",icon:"🏙️",color:"#2c3e50",currency:"USD",portal:"https://www.chicagometrarail.com/vendor",sites:["Chicago","Joliet","Aurora","Elgin","Waukegan"],tender_count:1240,avg_l1:90.2,work_types:["civil","electrical","mechanical","it"]},
+  {id:"fdot",name:"FDOT",full:"Florida Dept of Transportation",sector:"State — Florida Roads",hq:"Tallahassee FL",rating:"State Agency",icon:"🌴",color:"#e67e22",currency:"USD",portal:"https://www.fdot.gov/programmanagement/implemented/uam",sites:["Tallahassee","Miami","Orlando","Tampa","Jacksonville"],tender_count:2140,avg_l1:90.8,work_types:["civil","electrical","consulting"]},
+  {id:"wsdot",name:"WSDOT",full:"Washington State Dept of Transportation",sector:"State — Washington Roads",hq:"Olympia WA",rating:"State Agency",icon:"🌲",color:"#16a085",currency:"USD",portal:"https://wsdot.wa.gov/doing-business/contracts-procurement",sites:["Olympia","Seattle","Spokane","Vancouver WA","Tacoma"],tender_count:984,avg_l1:91.6,work_types:["civil","electrical","consulting"]},
+  {id:"pge_us",name:"PG&E",full:"Pacific Gas & Electric (California)",sector:"State — Utility",hq:"Oakland CA",rating:"State Utility",icon:"💡",color:"#c9a84c",currency:"USD",portal:"https://www.pge.com/en_US/business/save-energy-money/energy-procurement/procurement.page",sites:["Oakland","San Francisco","Sacramento","Fresno","Bakersfield"],tender_count:1840,avg_l1:91.2,work_types:["electrical","civil","it"]},
+  {id:"con_edison",name:"Con Edison",full:"Consolidated Edison — New York",sector:"State — Utility",hq:"New York NY",rating:"State Utility",icon:"🔌",color:"#e74c3c",currency:"USD",portal:"https://www.coned.com/en/business-partners/supplier-diversity",sites:["New York City","Yonkers","White Plains","Staten Island"],tender_count:1240,avg_l1:92.4,work_types:["electrical","civil","mechanical","it"]},
+  {id:"ladwp",name:"LADWP",full:"Los Angeles Dept of Water & Power",sector:"State — Utility",hq:"Los Angeles CA",rating:"State Utility",icon:"🌊",color:"#2980b9",currency:"USD",portal:"https://www.ladwp.com/ladwp/faces/ladwp/partners/p-vendors",sites:["Los Angeles","San Fernando Valley","Owens Valley"],tender_count:984,avg_l1:91.8,work_types:["electrical","civil","mechanical","it"]},
+];
+
+// ── EXTENDED WORK TYPES (IT + Consulting added) ──
+const WORK_TYPES_EXT = {
+  electrical:{label:"Electrical",icon:"⚡",color:"#1a3a5c",badge_bg:"rgba(26,58,92,0.15)",badge_border:"rgba(26,58,92,0.4)",badge_class:"b-elec",
+    items:["HT Cable Laying (11kV/33kV)","EHV Cable Laying (66kV+)","Substation E/T/C","Transformer Installation","LT Distribution","Lighting Works","Panel/Switchgear","Earthing & Lightning Protection","AMC & O&M","Metering & Instrumentation"],
+    boq_prefix:"Electrical"},
+  mechanical:{label:"Mechanical",icon:"⚙️",color:"#7f3f00",badge_bg:"rgba(127,63,0,0.12)",badge_border:"rgba(127,63,0,0.35)",badge_class:"b-mech",
+    items:["CS Piping Fabrication & Erection","SS/Alloy Piping Works","Pump Installation & Commissioning","Heat Exchanger Erection","Compressor Installation","HVAC Works","Insulation Works","Structural Steel Erection","Storage Tank Fabrication","Valve & Instrumentation"],
+    boq_prefix:"Mechanical"},
+  civil:{label:"Civil",icon:"🏗️",color:"#2d5016",badge_bg:"rgba(45,80,22,0.1)",badge_border:"rgba(45,80,22,0.3)",badge_class:"b-civil",
+    items:["RCC Structures","Foundation Works","Road & Paving","Drainage & Sewerage","Waterproofing","Building Construction","Boundary Wall & Fencing","Landscaping","Soil Treatment & Improvement","Structural Repair & Renovation"],
+    boq_prefix:"Civil"},
+  it:{label:"IT & Technology",icon:"💻",color:"#6c3483",badge_bg:"rgba(108,52,131,0.12)",badge_border:"rgba(108,52,131,0.35)",badge_class:"b-it",
+    items:["ERP Implementation","Cloud Migration","Cybersecurity Solutions","Data Centre Setup","Software Development","Network Infrastructure","IT AMC & Support","Digital Transformation","GIS & Mapping Solutions","Smart City / IoT Solutions"],
+    boq_prefix:"IT"},
+  consulting:{label:"Consulting & PMC",icon:"📋",color:"#117a65",badge_bg:"rgba(17,122,101,0.12)",badge_border:"rgba(17,122,101,0.3)",badge_class:"b-consult",
+    items:["Project Management Consultancy","DPR Preparation","Feasibility Studies","Design & Engineering","Transaction Advisory","Audit & Inspection","Training & Capacity Building","Legal & Regulatory Advisory","Environmental Impact Assessment","Quality Assurance & Control"],
+    boq_prefix:"Consulting"},
+};
+
+// ── REGION STATE ──
+let currentRegion = 'india';
+let currentOrgList = [];
+
+// ── WORK TYPE CONFIG ──
+const WORK_TYPES = {
+  electrical:{label:"Electrical",icon:"⚡",color:"#1a3a5c",badge_bg:"rgba(26,58,92,0.15)",badge_border:"rgba(26,58,92,0.4)",badge_class:"b-elec",
+    items:["HT Cable Laying (11kV/33kV)","EHV Cable Laying (66kV+)","Substation E/T/C","Transformer Installation","LT Distribution","Lighting Works","Panel/Switchgear","Earthing & Lightning","AMC","Metering"],
+    boq_prefix:"Electrical"},
+  mechanical:{label:"Mechanical",icon:"⚙️",color:"#7f3f00",badge_bg:"rgba(127,63,0,0.12)",badge_border:"rgba(127,63,0,0.35)",badge_class:"b-mech",
+    items:["CS Piping Fabrication & Erection","SS/Alloy Piping","Pump Installation","Heat Exchanger Erection","Compressor Commissioning","HVAC Works","Insulation Works","Structural Steel Erection","Storage Tank Fabrication","Valve & Instrumentation"],
+    boq_prefix:"Mechanical"},
+  civil:{label:"Civil",icon:"🏗️",color:"#2d5016",badge_bg:"rgba(45,80,22,0.1)",badge_border:"rgba(45,80,22,0.3)",badge_class:"b-civil",
+    items:["RCC Structures","Foundation Works","Road & Paving","Drainage & Sewerage","Waterproofing","Building Construction","Boundary Wall","Landscaping","Soil Treatment","Structural Repair & Renovation"],
+    boq_prefix:"Civil"},
+};
+
+// ── CONTRACTOR POOL (shared, specialisation varies) ──
+const CONTRACTORS_DB = {
+  electrical:[
+    {name:"KEC International Ltd",bids:48,wins:19,winRate:39.6,avgL1:88.4,spec:"HT/EHV Cable, Transmission",threat:"HIGH",profile:"Largest electrical EPC contractor in India. Most aggressive on cable-intensive works. Typical discount 10-12% on cable work. Rarely bids on AMC."},
+    {name:"Kalpataru Power Transmission",bids:38,wins:14,winRate:36.8,avgL1:90.2,spec:"HT Cable, Substation, EHV",threat:"HIGH",profile:"Strong balance sheet enables aggressive pricing. Known to price low on cable, recover margin on supply."},
+    {name:"Vijay Electricals Ltd",bids:52,wins:18,winRate:34.6,avgL1:89.8,spec:"Substation, Panel Works, HT Cable",threat:"HIGH",profile:"Strongest in substation and switchgear work. Dominates ETC substation work across all PSUs."},
+    {name:"L&T Electrical & Automation",bids:24,wins:10,winRate:41.7,avgL1:87.2,spec:"Panel/Switchgear, HV Systems",threat:"HIGH",profile:"Most aggressive on high-value switchgear. Expect under 90% of estimate on panel tenders."},
+    {name:"ABB India Ltd",bids:18,wins:8,winRate:44.4,avgL1:88.6,spec:"Switchgear, Transformers, MV",threat:"HIGH",profile:"Dominant in MV/HV equipment-intensive tenders. Wins on both technical and price."},
+    {name:"Sterlite Power Grid",bids:28,wins:11,winRate:39.3,avgL1:86.2,spec:"Underground Cables, Smart Grid",threat:"HIGH",profile:"Extremely aggressive on large cable projects. Lowest average L1 bid in the market."},
+    {name:"Ratna Engineering",bids:64,wins:16,winRate:25.0,avgL1:91.8,spec:"AMC, Lighting, Small Works",threat:"MED",profile:"Local contractor. Very competitive on AMC and maintenance. Limited capacity for large projects."},
+    {name:"Polycab India Ltd",bids:22,wins:6,winRate:27.3,avgL1:92.4,spec:"Lighting, LT Wiring, Cable Supply",threat:"MED",profile:"Primarily cable manufacturer. More competitive when supply is major component."},
+    {name:"Siemens India Ltd",bids:14,wins:6,winRate:42.9,avgL1:89.1,spec:"MV/HV Switchgear, Protection",threat:"HIGH",profile:"Dominant in protection relay and SCADA systems. Aggressive on digital substation tenders."},
+    {name:"GE Power (India)",bids:11,wins:4,winRate:36.4,avgL1:91.6,spec:"Generator, HV Protection",threat:"MED",profile:"Selective bidder. Only relevant for generator-related electrical and HV protection tenders."},
+  ],
+  mechanical:[
+    {name:"L&T Hydrocarbon Engineering",bids:42,wins:17,winRate:40.5,avgL1:88.9,spec:"Piping, Process Equipment",threat:"HIGH",profile:"Most dominant in process piping and equipment erection across all oil/gas PSUs. Rarely loses when they bid."},
+    {name:"Punj Lloyd Ltd",bids:34,wins:12,winRate:35.3,avgL1:89.4,spec:"Piping, Structural Steel",threat:"HIGH",profile:"Strong in CS piping and structural. Competitive on large-value packages."},
+    {name:"Thermax Ltd",bids:28,wins:11,winRate:39.3,avgL1:90.8,spec:"Heat Exchangers, Boilers, HVAC",threat:"HIGH",profile:"Dominant in heat transfer equipment. Rarely competitive on pure piping."},
+    {name:"ISGEC Heavy Engineering",bids:22,wins:8,winRate:36.4,avgL1:91.2,spec:"Pressure Vessels, Storage Tanks",threat:"MED",profile:"Speciality in fabrication-heavy work. Strong on pressure vessels and storage tanks."},
+    {name:"Forbes Marshall",bids:18,wins:6,winRate:33.3,avgL1:92.6,spec:"Steam Systems, Valves",threat:"MED",profile:"Niche player in steam and condensate systems. Not competitive on general mechanical work."},
+    {name:"Petron Engineering",bids:36,wins:10,winRate:27.8,avgL1:89.8,spec:"Piping, Tankage, General Mechanical",threat:"HIGH",profile:"Broad mechanical EPC. Competes on most PSU mechanical packages. Known for aggressive pricing."},
+    {name:"Desein India",bids:24,wins:7,winRate:29.2,avgL1:91.4,spec:"HVAC, Insulation, Utility",threat:"MED",profile:"Specialist in HVAC and insulation. Competes across power and oil/gas sectors."},
+    {name:"Hindustan Dorr-Oliver",bids:16,wins:5,winRate:31.3,avgL1:90.2,spec:"Rotating Equipment, Pumps",threat:"MED",profile:"Strong on pump and rotating equipment installation. Competitive on utility mechanical."},
+    {name:"SPML Infra",bids:28,wins:8,winRate:28.6,avgL1:88.6,spec:"Pipelines, Water/Effluent",threat:"HIGH",profile:"Aggressive bidder on cross-country pipeline and effluent treatment works."},
+    {name:"McNally Bharat Engineering",bids:20,wins:6,winRate:30.0,avgL1:90.6,spec:"Material Handling, Structural",threat:"MED",profile:"Strong in coal handling and material handling mechanical systems."},
+  ],
+  civil:[
+    {name:"L&T Construction",bids:68,wins:28,winRate:41.2,avgL1:87.4,spec:"All Civil Works — Dominant",threat:"HIGH",profile:"India's largest civil EPC. Competes and wins across all PSUs and all civil categories. Always assume they are bidding."},
+    {name:"Shapoorji Pallonji",bids:44,wins:16,winRate:36.4,avgL1:89.2,spec:"Industrial Buildings, Infra",threat:"HIGH",profile:"Strong in large industrial building and infrastructure civil works. Premium but wins on quality."},
+    {name:"NCC Limited",bids:56,wins:18,winRate:32.1,avgL1:88.6,spec:"RCC, Roads, Buildings",threat:"HIGH",profile:"Broad civil EPC. Very competitive on RCC structures and road works."},
+    {name:"Afcons Infrastructure",bids:38,wins:14,winRate:36.8,avgL1:88.2,spec:"Foundation, Heavy Civil, Hydro",threat:"HIGH",profile:"Dominant in complex foundation and hydro civil works. Aggressive on dam and hydro projects."},
+    {name:"KEC International (Civil)",bids:26,wins:8,winRate:30.8,avgL1:89.8,spec:"Tower Foundation, Transmission Civil",threat:"MED",profile:"Civil works for transmission towers. Competes mainly where their electrical business operates."},
+    {name:"HCC (Hindustan Construction)",bids:32,wins:10,winRate:31.3,avgL1:90.4,spec:"Hydro, Tunnelling, Complex Civil",threat:"HIGH",profile:"Specialist in hydro and tunnelling civil. Dominant on NHPC and NPCIL civil packages."},
+    {name:"Gammon India",bids:28,wins:8,winRate:28.6,avgL1:90.8,spec:"Industrial Civil, Bridges",threat:"MED",profile:"Broad civil contractor. Competitive but not as aggressive as L&T or NCC."},
+    {name:"Era Infra Engineering",bids:42,wins:11,winRate:26.2,avgL1:88.4,spec:"Roads, Buildings, General Civil",threat:"MED",profile:"Competitive on roads and general building works. Aggressive pricing but capacity concerns."},
+    {name:"Nagarjuna Construction (NCC)",bids:34,wins:10,winRate:29.4,avgL1:89.6,spec:"Industrial Civil, Housing",threat:"MED",profile:"Consistent bidder on industrial and township civil works."},
+    {name:"MEIL (Megha Engineering)",bids:36,wins:12,winRate:33.3,avgL1:87.8,spec:"Irrigation, Water, Industrial Civil",threat:"HIGH",profile:"Very aggressive pricing. Strong in water infrastructure and industrial civil across South/Central India."},
+  ],
+  it:[
+    {name:"Tata Consultancy Services",bids:84,wins:34,winRate:40.5,avgL1:92.4,spec:"ERP, Digital Transformation, Cloud",threat:"HIGH",profile:"Dominant in large govt ERP and digital transformation. Competes globally. Expect aggressive pricing on flagship projects."},
+    {name:"Wipro Ltd",bids:72,wins:28,winRate:38.9,avgL1:91.8,spec:"IT AMC, Cloud, Cybersecurity",threat:"HIGH",profile:"Strong in IT AMC and managed services. Very competitive on cloud migration and data centre projects."},
+    {name:"Infosys Ltd",bids:64,wins:24,winRate:37.5,avgL1:92.1,spec:"ERP, GIS, Software Development",threat:"HIGH",profile:"Dominant in GIS and enterprise software for government. Strong reference base across central ministries."},
+    {name:"HCL Technologies",bids:58,wins:21,winRate:36.2,avgL1:91.4,spec:"Network Infrastructure, IT AMC",threat:"HIGH",profile:"Most aggressive on network and infrastructure projects. Strong in DoD and defence IT."},
+    {name:"NIC (National Informatics Centre)",bids:42,wins:22,winRate:52.4,avgL1:94.8,spec:"Govt IT, Data Centre, Cloud",threat:"HIGH",profile:"Preferred vendor for many central govt IT projects. Does not always win on price but wins on trust and compliance."},
+    {name:"CDAC",bids:36,wins:14,winRate:38.9,avgL1:93.2,spec:"Supercomputing, Govt Software",threat:"MED",profile:"Specialist in supercomputing and indigenous software. Competes on niche govt tech tenders."},
+    {name:"L&T Technology Services",bids:44,wins:16,winRate:36.4,avgL1:91.6,spec:"IoT, Smart City, Digital Infra",threat:"HIGH",profile:"Strong in smart city and IoT deployments. Aggressive on large integrated packages."},
+    {name:"Tech Mahindra",bids:52,wins:18,winRate:34.6,avgL1:91.2,spec:"Cybersecurity, Telecom IT, ERP",threat:"HIGH",profile:"Competitive on cybersecurity and telecom-related IT tenders. Strong reference base in PSUs."},
+    {name:"Accenture India",bids:28,wins:10,winRate:35.7,avgL1:93.6,spec:"Digital Transformation, Consulting",threat:"MED",profile:"Selective bidder on high-value transformation projects. Not price-aggressive but wins on methodology."},
+    {name:"IBM India",bids:24,wins:9,winRate:37.5,avgL1:92.8,spec:"Data Centre, Cloud, AI Solutions",threat:"MED",profile:"Strong in data centre and AI/analytics solutions. Competes on large-value IT infrastructure tenders."},
+  ],
+  consulting:[
+    {name:"L&T Construction (PMC Division)",bids:68,wins:28,winRate:41.2,avgL1:91.4,spec:"PMC, DPR, Project Controls",threat:"HIGH",profile:"Largest PMC player in India. Competes on all large infrastructure PMC assignments."},
+    {name:"AECOM India",bids:48,wins:18,winRate:37.5,avgL1:92.6,spec:"Design, DPR, Environmental",threat:"HIGH",profile:"Strong in international-funded project consulting. Dominant on World Bank / ADB projects."},
+    {name:"Jacobs Engineering",bids:38,wins:14,winRate:36.8,avgL1:93.2,spec:"Design Consultancy, QA/QC",threat:"HIGH",profile:"International firm — competes on high-value design and PMC tenders. Strong in oil & gas consulting."},
+    {name:"STUP Consultants",bids:56,wins:18,winRate:32.1,avgL1:91.8,spec:"Structural Design, Bridge Design",threat:"HIGH",profile:"Dominant in bridge and structural design consulting in India. Most aggressive on bridge DPR tenders."},
+    {name:"RITES Ltd",bids:64,wins:24,winRate:37.5,avgL1:92.4,spec:"Railway, Transport PMC, Surveys",threat:"HIGH",profile:"Government-owned consultant — preferred for railway and transport sector PMC. Strong client loyalty."},
+    {name:"WAPCOS Ltd",bids:52,wins:18,winRate:34.6,avgL1:91.6,spec:"Water, Irrigation, PMC",threat:"HIGH",profile:"Dominant in water sector consulting. Preferred for World Bank funded water projects."},
+    {name:"TCIL",bids:44,wins:14,winRate:31.8,avgL1:92.8,spec:"Telecom, IT Consulting, PMC",threat:"MED",profile:"Government-owned — strong in telecom and IT consulting. Limited competition outside core sectors."},
+    {name:"Grant Thornton India",bids:28,wins:9,winRate:32.1,avgL1:93.4,spec:"Transaction Advisory, Audit",threat:"MED",profile:"Strong in financial advisory and transaction consulting for govt privatisation and PPP projects."},
+    {name:"KPMG India",bids:24,wins:8,winRate:33.3,avgL1:94.2,spec:"Transaction Advisory, Regulatory",threat:"MED",profile:"Selective high-value advisory. Not price competitive but wins on brand and methodology for large transactions."},
+    {name:"EY India (Ernst & Young)",bids:22,wins:7,winRate:31.8,avgL1:93.8,spec:"Transaction Advisory, PPP",threat:"MED",profile:"Strong in PPP structuring and regulatory advisory. Competes on World Bank / AIIB funded advisory."},
+  ]
+};
+
+// ── TENDER GENERATOR ──
+// Generate realistic tender data dynamically for any PSU + work type
+function generateTenders(psu, workType) {
+  const wt = (WORK_TYPES_EXT||WORK_TYPES)[workType];
+  const items = wt.items;
+  const psuData = currentOrgList.find(p=>p.id===psu);
+  const baseL1 = psuData.avg_l1;
+  const sites = psuData.sites;
+
+  const tenders = [];
+  const contractors = CONTRACTORS_DB[workType];
+  const winners = contractors.slice(0,6).map(c=>c.name);
+
+  // Closed tenders (historical)
+  const closedDefs = [
+    {desc:items[0],mult:1.8,l1mod:-1.2,bidders:7,quarter:"Q2",year:2025},
+    {desc:items[1]||items[0],mult:3.4,l1mod:0.8,bidders:5,quarter:"Q2",year:2025},
+    {desc:items[2]||items[0],mult:2.1,l1mod:-0.6,bidders:9,quarter:"Q1",year:2025},
+    {desc:items[3]||items[1],mult:0.9,l1mod:-1.8,bidders:12,quarter:"Q3",year:2025},
+    {desc:items[4]||items[2],mult:4.2,l1mod:1.4,bidders:6,quarter:"Q2",year:2025},
+    {desc:items[0],mult:2.8,l1mod:-0.4,bidders:8,quarter:"Q3",year:2025},
+    {desc:items[1]||items[0],mult:1.4,l1mod:-2.1,bidders:14,quarter:"Q3",year:2025},
+    {desc:items[5]||items[0],mult:6.8,l1mod:0.6,bidders:4,quarter:"Q1",year:2025},
+    {desc:items[2]||items[1],mult:1.1,l1mod:-1.4,bidders:11,quarter:"Q4",year:2024},
+    {desc:items[6]||items[2],mult:2.4,l1mod:0.2,bidders:6,quarter:"Q2",year:2024},
+    {desc:items[0],mult:3.6,l1mod:-0.8,bidders:7,quarter:"Q2",year:2024},
+    {desc:items[3]||items[0],mult:0.76,l1mod:-2.4,bidders:16,quarter:"Q4",year:2024},
+    {desc:items[4]||items[2],mult:8.4,l1mod:1.8,bidders:4,quarter:"Q1",year:2024},
+    {desc:items[1]||items[0],mult:1.6,l1mod:-0.2,bidders:9,quarter:"Q3",year:2024},
+    {desc:items[5]||items[3],mult:2.2,l1mod:-1.6,bidders:8,quarter:"Q2",year:2024},
+    {desc:items[2]||items[1],mult:0.84,l1mod:-0.9,bidders:11,quarter:"Q3",year:2023},
+    {desc:items[0],mult:4.1,l1mod:0.4,bidders:6,quarter:"Q1",year:2023},
+    {desc:items[6]||items[2],mult:1.9,l1mod:-1.1,bidders:9,quarter:"Q4",year:2023},
+    {desc:items[7%items.length],mult:2.6,l1mod:-0.3,bidders:8,quarter:"Q1",year:2026},
+    {desc:items[8%items.length],mult:1.2,l1mod:-1.9,bidders:13,quarter:"Q1",year:2026},
+    {desc:items[9%items.length],mult:5.4,l1mod:0.9,bidders:5,quarter:"Q4",year:2025},
+    {desc:items[0],mult:3.8,l1mod:-0.7,bidders:7,quarter:"Q4",year:2025},
+    {desc:items[2%items.length],mult:1.6,l1mod:-1.3,bidders:10,quarter:"Q4",year:2025},
+    {desc:items[4%items.length],mult:7.2,l1mod:1.1,bidders:4,quarter:"Q3",year:2025},
+    {desc:items[1%items.length],mult:2.2,l1mod:-0.5,bidders:9,quarter:"Q3",year:2025},
+    {desc:items[6%items.length],mult:0.94,l1mod:-2.2,bidders:15,quarter:"Q2",year:2025},
+    {desc:items[3%items.length],mult:4.6,l1mod:0.3,bidders:6,quarter:"Q1",year:2025},
+    {desc:items[5%items.length],mult:1.8,l1mod:-1.0,bidders:11,quarter:"Q4",year:2024},
+    {desc:items[0],mult:6.4,l1mod:1.6,bidders:4,quarter:"Q3",year:2024},
+    {desc:items[2%items.length],mult:2.4,l1mod:-0.8,bidders:8,quarter:"Q3",year:2024},
+    {desc:items[7%items.length],mult:1.4,l1mod:-1.7,bidders:12,quarter:"Q2",year:2024},
+    {desc:items[4%items.length],mult:3.2,l1mod:0.5,bidders:7,quarter:"Q1",year:2024},
+    {desc:items[1%items.length],mult:0.88,l1mod:-2.6,bidders:18,quarter:"Q4",year:2023},
+    {desc:items[5%items.length],mult:9.2,l1mod:2.1,bidders:3,quarter:"Q3",year:2023},
+    {desc:items[0],mult:2.8,l1mod:-0.4,bidders:9,quarter:"Q2",year:2023},
+    {desc:items[3%items.length],mult:1.6,l1mod:-1.2,bidders:11,quarter:"Q1",year:2023},
+    {desc:items[6%items.length],mult:4.8,l1mod:0.7,bidders:6,quarter:"Q4",year:2022},
+    {desc:items[2%items.length],mult:2.1,l1mod:-0.9,bidders:8,quarter:"Q3",year:2022},
+    {desc:items[8%items.length],mult:3.6,l1mod:0.2,bidders:7,quarter:"Q2",year:2022},
+    {desc:items[1%items.length],mult:1.2,l1mod:-1.6,bidders:14,quarter:"Q1",year:2022},
+    {desc:items[4%items.length],mult:5.8,l1mod:1.3,bidders:5,quarter:"Q4",year:2021},
+    {desc:items[0],mult:2.4,l1mod:-0.6,bidders:9,quarter:"Q3",year:2021},
+    {desc:items[7%items.length],mult:1.8,l1mod:-1.4,bidders:12,quarter:"Q2",year:2021},
+    {desc:items[3%items.length],mult:4.2,l1mod:0.8,bidders:6,quarter:"Q1",year:2021},
+    {desc:items[5%items.length],mult:0.76,l1mod:-2.8,bidders:16,quarter:"Q4",year:2020},
+    {desc:items[9%items.length],mult:3.4,l1mod:0.4,bidders:8,quarter:"Q3",year:2020},
+    {desc:items[2%items.length],mult:2.8,l1mod:-1.1,bidders:10,quarter:"Q2",year:2020},
+    {desc:items[6%items.length],mult:6.2,l1mod:1.5,bidders:5,quarter:"Q1",year:2020},
+    {desc:items[0],mult:1.4,l1mod:-0.8,bidders:12,quarter:"Q4",year:2019},
+    {desc:items[4%items.length],mult:4.4,l1mod:0.6,bidders:7,quarter:"Q3",year:2019},
+  ];
+
+  closedDefs.forEach((d,i)=>{
+    const siteIdx = i % sites.length;
+    const l1pct = Math.round((baseL1 + d.l1mod + (Math.random()-0.5)*1.4) * 10)/10;
+    const l2pct = Math.round((l1pct + 1.8 + Math.random()*2) * 10)/10;
+    const l3pct = Math.round((l2pct + 1.6 + Math.random()*2) * 10)/10;
+    const estVal = Math.round(d.mult * (0.85 + Math.random()*0.3) * 100)/100;
+    const l1amt = Math.round(estVal * l1pct/100 * 100)/100;
+    const winnerIdx = i % winners.length;
+    const monthMap={Q1:"Jun",Q2:"Sep",Q3:"Nov",Q4:"Mar"};
+    tenders.push({
+      id:`${psu.toUpperCase()}/${sites[siteIdx].split(' ')[0].substring(0,3).toUpperCase()}/${workType.substring(0,2).toUpperCase()}/${d.year}/${String(1000+i).padStart(4,'0')}`,
+      psu:psuData.name, site:sites[siteIdx], work:d.desc + ` — ${sites[siteIdx]} ${d.year}`,
+      type:items[i%items.length], estVal, status:"closed",
+      date:`${d.year}-${monthMap[d.quarter]==='Mar'?'03':monthMap[d.quarter]==='Jun'?'06':monthMap[d.quarter]==='Sep'?'09':'11'}-${10+i}`,
+      bidders:d.bidders, l1pct, l2pct, l3pct, l1amt, winner:winners[winnerIdx],
+      gap:Math.round((l2pct-l1pct)*10)/10, quarter:d.quarter,
+    });
+  });
+
+  // Open tenders
+  const openDefs = [
+    {desc:items[0],mult:3.2,date:"2026-04-15"},
+    {desc:items[1]||items[0],mult:6.8,date:"2026-04-22"},
+    {desc:items[2]||items[1],mult:1.8,date:"2026-04-28"},
+    {desc:items[3]||items[0],mult:4.4,date:"2026-05-08"},
+    {desc:items[4]||items[2],mult:2.1,date:"2026-05-14"},
+    {desc:items[5%items.length],mult:3.8,date:"2026-05-20"},
+    {desc:items[6%items.length],mult:1.2,date:"2026-05-28"},
+    {desc:items[7%items.length],mult:8.4,date:"2026-06-05"},
+    {desc:items[8%items.length],mult:2.6,date:"2026-06-12"},
+    {desc:items[9%items.length],mult:4.8,date:"2026-06-18"},
+    {desc:items[0],mult:1.6,date:"2026-06-25"},
+    {desc:items[2%items.length],mult:6.2,date:"2026-07-04"},
+    {desc:items[4%items.length],mult:3.2,date:"2026-07-10"},
+    {desc:items[1%items.length],mult:2.4,date:"2026-07-18"},
+    {desc:items[6%items.length],mult:12.4,date:"2026-07-25"},
+  ];
+  openDefs.forEach((d,i)=>{
+    const siteIdx = i % sites.length;
+    const estVal = Math.round(d.mult * (0.9+Math.random()*0.2) * 100)/100;
+    tenders.push({
+      id:`${psu.toUpperCase()}/${sites[siteIdx].split(' ')[0].substring(0,3).toUpperCase()}/${workType.substring(0,2).toUpperCase()}/2026/${String(2000+i).padStart(4,'0')}`,
+      psu:psuData.name, site:sites[siteIdx], work:d.desc + ` — ${sites[siteIdx]}`,
+      type:items[i%items.length], estVal, status:"open",
+      date:d.date, bidders:0, l1pct:null, l2pct:null, l3pct:null, l1amt:null, winner:null, gap:null, quarter:"Q4",
+    });
+  });
+
+  return tenders;
+}
+
+// ── BOQ GENERATOR ──
+function generateBOQ(psu, workType) {
+  const psuData = currentOrgList.find(p=>p.id===psu);
+  const baseL1 = psuData.avg_l1 / 100;
+  const items = {
+    electrical:[
+      {desc:"11kV XLPE Cable 3Cx240sqmm — Supply & Laying",unit:"per m",base:1480,risk:"LOW",note:"Competitive item; L1 at 87-91% of PSU estimate"},
+      {desc:"33kV XLPE Cable 3Cx300sqmm — Supply & Laying",unit:"per m",base:3840,risk:"MED",note:"Copper price volatile — hedge supply cost"},
+      {desc:"132kV XLPE Cable 1Cx630sqmm — Supply & Laying",unit:"per m",base:18400,risk:"HIGH",note:"PSU SOR often 18+ months old — escalation risk"},
+      {desc:"11kV VCB Panel (Indoor) — Supply & Erection",unit:"per nos",base:185000,risk:"LOW",note:"Domestic supply established; L1 at 87-89%"},
+      {desc:"33kV RMU — Supply & Installation",unit:"per nos",base:420000,risk:"MED",note:"Import content high — forex and lead time risk"},
+      {desc:"1MVA 33/0.415kV Transformer — Supply & Erection",unit:"per nos",base:1840000,risk:"LOW",note:"PSU estimate reasonable; L1 at 93-95%"},
+      {desc:"Cable Trench Excavation — Normal Soil",unit:"per m",base:280,risk:"LOW",note:"Labour item; L1 bids aggressively at 81-84%"},
+      {desc:"Cable Trench Excavation — Rocky/Hard Soil",unit:"per m",base:680,risk:"HIGH",note:"PSU estimate consistently BELOW market — do not underbid"},
+      {desc:"LED Floodlight 150W — Supply & Installation",unit:"per nos",base:6800,risk:"LOW",note:"Prices dropped 30% since 2022 — PSU SOR often outdated"},
+      {desc:"HT Cable Straight Joint 11kV — Heat Shrink",unit:"per nos",base:22000,risk:"MED",note:"Skilled labour intensive; don't underbid remote sites"},
+      {desc:"Earth Pit Chemical Electrode",unit:"per nos",base:8400,risk:"MED",note:"PSU estimate slightly high; contractor wins margin here"},
+      {desc:"Smart Meter 3-Phase CT — Supply & Installation",unit:"per nos",base:12800,risk:"MED",note:"CT calibration adds cost — verify quantity"},
+    ],
+    mechanical:[
+      {desc:"CS Piping 6\" NB Schedule 40 — Fabrication & Erection",unit:"per m",base:8400,risk:"MED",note:"Material costs volatile with MS plate prices"},
+      {desc:"SS 316L Piping 4\" NB — Fab & Erection",unit:"per m",base:24000,risk:"HIGH",note:"Nickel surcharge risk — PSU SOR often 12+ months old"},
+      {desc:"Centrifugal Pump 100kW — Supply & Installation",unit:"per nos",base:680000,risk:"LOW",note:"Well-established market; L1 at 91-94%"},
+      {desc:"Shell & Tube Heat Exchanger — Erection & Testing",unit:"per nos",base:480000,risk:"MED",note:"Varies hugely by size — verify shell diameter & area"},
+      {desc:"Screw Compressor 250kW — Erection & Commissioning",unit:"per nos",base:1840000,risk:"HIGH",note:"Import component risk; lead time 20-24 weeks"},
+      {desc:"Pipe Insulation (Rock Wool 50mm) — Supply & Fixing",unit:"per m",base:1800,risk:"LOW",note:"Stable market; L1 at 88-92%"},
+      {desc:"MS Structural Steel — Fabrication & Erection",unit:"per MT",base:82000,risk:"MED",note:"Steel price indexation — check if PSU SOR has escalation clause"},
+      {desc:"HVAC AHU 10000 CFM — Supply & Installation",unit:"per nos",base:420000,risk:"MED",note:"Duct work quantities often underestimated"},
+      {desc:"Gate Valve 6\" 150# Flanged — Supply & Install",unit:"per nos",base:28000,risk:"LOW",note:"Standard item; L1 at 88-91%"},
+      {desc:"Floating Roof Storage Tank 5000 KL",unit:"per nos",base:48000000,risk:"HIGH",note:"Floor plate cost often underestimated; check soil conditions"},
+      {desc:"Pipe Support & Hanger — Fabrication & Erection",unit:"per MT",base:68000,risk:"MED",note:"Quantities often 20-25% higher than shown in estimate"},
+      {desc:"Alignment & Balancing of Rotating Equipment",unit:"per set",base:85000,risk:"LOW",note:"Lump sum item; straightforward pricing"},
+    ],
+    civil:[
+      {desc:"RCC M25 Grade — Foundation",unit:"per cum",base:8400,risk:"LOW",note:"Aggregate and cement prices stable; L1 at 88-92%"},
+      {desc:"RCC M30 Grade — Superstructure",unit:"per cum",base:9200,risk:"LOW",note:"Standard item — well-benchmarked in market"},
+      {desc:"Excavation in Hard Rock — Machine",unit:"per cum",base:1800,risk:"HIGH",note:"Blasting cost and disposal rarely included in PSU SOR"},
+      {desc:"Brickwork 230mm — Cement Mortar 1:6",unit:"per cum",base:6800,risk:"LOW",note:"Labour-intensive; L1 bids at 84-88%"},
+      {desc:"CC Road Construction (150mm PQC)",unit:"per sqm",base:1400,risk:"MED",note:"Sub-base preparation often under-scoped"},
+      {desc:"Waterproofing — Terrace (IPS + Membrane)",unit:"per sqm",base:680,risk:"MED",note:"Material quality varies; specify grade in bid"},
+      {desc:"Structural Steel — MS Fabrication & Erection",unit:"per MT",base:86000,risk:"MED",note:"Steel price fluctuation risk; check SOR date"},
+      {desc:"Anti-Termite Treatment — Chemical",unit:"per sqm",base:120,risk:"LOW",note:"Standard item; straightforward"},
+      {desc:"Drainage — RCC NP3 600mm Pipe",unit:"per m",base:4200,risk:"MED",note:"Bedding and haunching quantities often underestimated"},
+      {desc:"False Ceiling — Grid Tiles (600x600mm)",unit:"per sqm",base:980,risk:"LOW",note:"Fixture cut-outs add 15-20% to labour"},
+      {desc:"Internal Road — WBM + BM + Bituminous",unit:"per sqm",base:1800,risk:"MED",note:"Base preparation cost varies by soil condition"},
+      {desc:"Soil Improvement — Granular Piles",unit:"per m",base:3200,risk:"HIGH",note:"PSU estimate rarely accounts for variation in ground conditions"},
+    ],
+  };
+  return (items[workType]||items.electrical).map(item=>{
+    const l1Rate = Math.round(item.base * baseL1 * (0.95 + Math.random()*0.1));
+    const mktRate = Math.round(item.base * (0.96 + Math.random()*0.06));
+    const diff = ((l1Rate-item.base)/item.base*100).toFixed(1);
+    return {...item, psuEst:item.base, l1Rate, mktRate, diff};
+  });
+}
+
+// ── STATE ──
+let selectedPSU = null, selectedWork = null, currentTenders = [], currentBOQ = [], currentContractors = [];
+let activeTab = 'overview';
+
+// ══ RENDER PSU GRID ══
+function renderPSUGrid(filter='all') {
+  const grid = document.getElementById('psu-grid');
+  let psus = PSUS;
+  if(filter==='Maharatna') psus=PSUS.filter(p=>p.rating==='Maharatna');
+  else if(filter==='Navratna') psus=PSUS.filter(p=>p.rating==='Navratna');
+  else if(filter==='Power') psus=PSUS.filter(p=>p.sector.includes('Power')||p.sector.includes('Nuclear'));
+  else if(filter==='Oil') psus=PSUS.filter(p=>p.sector.includes('Oil')||p.sector.includes('Gas'));
+  else if(filter==='Defence') psus=PSUS.filter(p=>p.sector.includes('Defence')||p.sector.includes('Aerospace')||p.sector.includes('Aviation'));
+  else if(filter==='GovtInfra') psus=PSUS.filter(p=>p.sector.includes('Govt')||p.sector.includes('Railway')||p.sector.includes('Water'));
+  else if(filter==='Steel') psus=PSUS.filter(p=>p.sector.includes('Steel')||p.sector.includes('Mining')||p.sector.includes('Coal'));
+
+  grid.innerHTML = psus.map(p=>`
+    <div class="psu-card ${selectedPSU===p.id?'selected':''}" onclick="selectPSU('${p.id}')" style="${selectedPSU===p.id?`border-color:${p.color};`:''}">
+      <div class="psu-check">✓</div>
+      <div class="psu-icon">${p.icon}</div>
+      <div class="psu-name">${p.name}</div>
+      <div class="psu-full">${p.full}</div>
+      <div><span class="psu-rating rating-${p.rating.toLowerCase().replace(' psu','').replace(' ','')}">${p.rating}</span></div>
+      <div class="psu-sector">${p.sector} · ${p.hq}</div>
+      ${p.dsr ? '<div style="margin-top:5px"><span style="font-size:9px;background:rgba(142,68,173,0.15);border:1px solid rgba(142,68,173,0.35);color:#bb8fce;padding:2px 7px;border-radius:2px;letter-spacing:0.08em">DSR AVAILABLE</span></div>' : ''}
+      <div style="margin-top:8px;font-size:10px;color:var(--ink3)">${p.tender_count} tenders · Avg L1: ${p.avg_l1}%</div>
+      <div style="margin-top:4px" class="meter"><div class="meter-fill" style="width:${(100-p.avg_l1)*6}%;background:${p.color}"></div></div>
+    </div>
+  `).join('');
+}
+
+function filterPSU(f, btn) { filterOrgs(f, btn); }
+
+function selectPSU(id) {
+  selectedPSU = id;
+  renderOrgGrid('all');
+  const psu = currentOrgList.find(p=>p.id===id);
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='block';
+  document.getElementById('step2-title').textContent=`${psu.icon} ${psu.name} — Choose Work Category`;
+  document.getElementById('pill1').className='step-pill done';
+  document.getElementById('pill2').className='step-pill active';
+}
+
+function selectWork(type) {
+  selectedWork = type;
+  document.querySelectorAll('.work-card').forEach(c=>c.classList.remove('selected-work'));
+  document.getElementById('wc-'+type).classList.add('selected-work');
+  setTimeout(()=>launchDashboard(), 300);
+}
+
+function goBack() {
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step1').style.display='block';
+  document.getElementById('pill1').className='step-pill active';
+  document.getElementById('pill2').className='step-pill pending';
+}
+
+function changePSU() { hideDashboard(); document.getElementById('step1').style.display='block'; document.getElementById('step2').style.display='none'; }
+function changeWork() { hideDashboard(); document.getElementById('step2').style.display='block'; document.getElementById('step1').style.display='none'; }
+function hideDashboard() { document.getElementById('dashboard').style.display='none'; document.getElementById('select-screen').style.display='block'; }
+
+function launchDashboard() {
+  const psu = currentOrgList.find(p=>p.id===selectedPSU);
+  const wt = WORK_TYPES_EXT[selectedWork] || (WORK_TYPES_EXT||WORK_TYPES)[selectedWork];
+  currentTenders = generateTenders(selectedPSU, selectedWork);
+  currentBOQ = generateBOQ(selectedPSU, selectedWork);
+  currentContractors = CONTRACTORS_DB[selectedWork];
+
+  // Header
+  document.getElementById('d-icon').textContent = psu.icon;
+  document.getElementById('d-name').textContent = `${psu.name} — ${psu.full}`;
+  document.getElementById('d-sub').textContent = `${psu.sector} · ${psu.hq} · ${psu.rating} · ${psu.tender_count} Tenders Analysed`;
+  const wb = document.getElementById('d-work-badge');
+  wb.textContent = `${wt.icon} ${wt.label} Works`;
+  wb.style.cssText = `background:${wt.badge_bg};border:1px solid ${wt.badge_border};color:${wt.color};padding:6px 16px;border-radius:3px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase`;
+  
+// ── CURRENCY HELPERS ──
+function getCurrSym() {
+  const org = currentOrgList.find(p=>p.id===selectedPSU);
+  if (!org) return getCurrSym();
+  if (org.currency === 'USD') return '$';
+  if (org.currency === 'EUR') return '€';
+  return getCurrSym();
+}
+function getCurrUnit() {
+  const org = currentOrgList.find(p=>p.id===selectedPSU);
+  if (!org) return 'Cr';
+  if (org.currency === 'USD') return 'M';  // millions
+  if (org.currency === 'EUR') return 'M';
+  return 'Cr';
+}
+function fmtVal(v) {
+  return getCurrSym() + v + getCurrUnit();
+}
+
+document.getElementById('hdr-context').textContent = `${psu.name} · ${wt.label}`;
+
+  document.getElementById('select-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  activeTab = 'overview';
+  document.querySelectorAll('.dash-tab').forEach((t,i)=>{t.classList.toggle('active',i===0)});
+  document.getElementById('refresh-btn').style.display='flex';
+  const dsrEl=document.getElementById('dsr-tab'); if(dsrEl) dsrEl.style.display=(currentOrgList.find(p=>p.id===selectedPSU)||{}).dsr?'block':'none';
+  renderTab('overview');
+}
+
+// ══ TAB RENDERING ══
+function showTab(tab) {
+  activeTab = tab;
+  if(tab==='dsr'){renderDSR();document.querySelectorAll('.dash-tab').forEach((t)=>{t.classList.toggle('active',t.onclick&&t.onclick.toString().includes('dsr'))});return;}
+  const tabs=['overview','tenders','analytics','contractors','boq','advisor'];
+  document.querySelectorAll('.dash-tab').forEach((t,i)=>{t.classList.toggle('active',tabs[i]===tab)});
+  renderTab(tab);
+}
+
+function renderTab(tab) {
+  const psu = currentOrgList.find(p=>p.id===selectedPSU);
+  const wt = WORK_TYPES_EXT[selectedWork] || (WORK_TYPES_EXT||WORK_TYPES)[selectedWork];
+  const closed = currentTenders.filter(t=>t.status==='closed');
+  const open = currentTenders.filter(t=>t.status==='open');
+  const avgL1 = (closed.reduce((a,b)=>a+b.l1pct,0)/closed.length).toFixed(1);
+  const avgBidders = (closed.reduce((a,b)=>a+b.bidders,0)/closed.length).toFixed(1);
+  const minL1 = Math.min(...closed.map(t=>t.l1pct)).toFixed(1);
+  const el = document.getElementById('dash-content');
+
+  if(tab==='overview') {
+    el.innerHTML=`<div class="wrap">
+      <div class="grid4" style="margin-bottom:18px">
+        <div class="stat-box"><div class="stat-lbl">Tenders Analysed</div><div class="stat-val">${closed.length}</div><div class="stat-sub">${psu.name} · ${wt.label} · 2019–2026</div></div>
+        <div class="stat-box g"><div class="stat-lbl">Avg L1 Bid</div><div class="stat-val">${avgL1}%</div><div class="stat-sub">Of PSU estimated cost</div></div>
+        <div class="stat-box r"><div class="stat-lbl">Lowest L1 Recorded</div><div class="stat-val">${minL1}%</div><div class="stat-sub">Most aggressive bid seen</div></div>
+        <div class="stat-box b"><div class="stat-lbl">Avg Bidder Count</div><div class="stat-val">${avgBidders}</div><div class="stat-sub">Per tender · ${psu.name} ${wt.label}</div></div>
+      </div>
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">🔴 Open Tenders — Bid Now</span><button class="btn btn-sm btn-primary" onclick="showTab('tenders')">View All</button></div>
+          <div>${open.map(t=>`<div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:13px">${t.work.substring(0,60)}...</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px">${t.id} · ${t.site} · Due: ${t.date}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'JetBrains Mono',monospace;font-weight:700">${getCurrSym()}${t.estVal}${getCurrUnit()}</div>
+              <div style="font-size:9px;color:var(--green2);font-weight:700">OPEN</div>
+            </div>
+          </div>`).join('')}</div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">📊 Win Rate by Bid Strategy</span></div>
+          <div class="card-body" style="padding:14px 16px">
+            ${[['Bid at 85–89% of estimate','64','var(--green2)'],['Bid at 90–93% of estimate','41','var(--warn)'],['Bid at 94–97% of estimate','18','#e74c3c'],['Bid above 97% of estimate','4','#c0392b']].map(r=>`
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>${r[0]}</span><strong style="color:${r[2]}">${r[1]}% win rate</strong></div>
+              <div class="meter"><div class="meter-fill" style="width:${r[1]}%;background:${r[2]}"></div></div>
+            </div>`).join('')}
+            <div style="margin-top:10px;padding:9px 12px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:3px;font-size:12px">
+              <strong style="color:var(--gold)">Sweet spot for ${psu.name} ${wt.label}:</strong> Bid at ${(parseFloat(avgL1)-1.5).toFixed(1)}–${avgL1}% of estimate to maximise win probability while protecting margin.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid3">
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">🏆 Top Competitors</span></div>
+          <div>${currentContractors.slice(0,5).map((c,i)=>`
+            <div style="padding:9px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:${i<3?'var(--gold)':'var(--ink3)'}">0${i+1}</div>
+              <div style="flex:1"><div style="font-weight:600;font-size:12px">${c.name}</div><div style="font-size:10px;color:var(--ink3)">${c.spec}</div></div>
+              <span class="badge b-${c.threat.toLowerCase()}">${c.threat}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">📅 Seasonal Patterns</span></div>
+          <div style="padding:14px">
+            ${[['Q1 (Apr–Jun)','Least competitive — bid slightly higher','var(--green2)'],['Q2 (Jul–Sep)','Moderate — balanced quarter','var(--gold)'],['Q3 (Oct–Dec)','High competition — year-end push','var(--warn)'],['Q4 (Jan–Mar)','Most competitive — PSU budget flush','var(--red)']].map(q=>`
+            <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+              <div style="font-weight:700;font-size:13px;color:${q[2]}">${q[0]}</div>
+              <div style="font-size:11px;color:var(--ink3);margin-top:2px">${q[1]}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">✅ Recent Results</span></div>
+          <div>${closed.slice(0,5).map(t=>`
+            <div style="padding:9px 14px;border-bottom:1px solid var(--border)">
+              <div style="font-size:11px;font-weight:600">${t.work.substring(0,45)}...</div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px">
+                <span style="font-size:10px;color:var(--ink3)">${t.winner.split(' ')[0]}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--green)">${t.l1pct}%</span>
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  else if(tab==='tenders') {
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>Tender Database</h2><span class="sh-b">${psu.name} · ${wt.label} · ${currentTenders.length} Tenders</span></div>
+      ${currentTenders.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(t=>`
+      <div style="background:var(--paper2);border:1px solid var(--border);border-radius:4px;padding:14px 16px;margin-bottom:10px;border-left:4px solid ${t.status==='open'?'var(--green2)':'var(--border)'}">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <div style="flex:1">
+            <div style="display:flex;gap:8px;margin-bottom:5px;flex-wrap:wrap">
+              <span class="badge ${t.status==='open'?'b-open':'b-closed'}">${t.status.toUpperCase()}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3)">${t.id}</span>
+            </div>
+            <div style="font-weight:700;font-size:14px;color:var(--ink);line-height:1.3">${t.work}</div>
+          </div>
+          <div style="text-align:right;margin-left:16px;white-space:nowrap">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700">${getCurrSym()}${t.estVal}${getCurrUnit()}</div>
+            <div style="font-size:10px;color:var(--ink3)">Estimated</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--ink3);margin-bottom:8px">
+          <span>📍 ${t.site}</span><span>📅 ${t.date}</span>${t.status==='closed'?`<span>👥 ${t.bidders} bidders</span><span>🏆 L1: ${t.l1pct}% · L2: ${t.l2pct}% · L3: ${t.l3pct}%</span>`:''}
+        </div>
+        ${t.status==='closed'?`
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="flex:1">
+            <div style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px">Bid spread</div>
+            <div style="display:flex;height:5px;border-radius:3px;overflow:hidden;background:var(--paper3)">
+              <div style="width:${(t.l1pct-80)*3}%;background:var(--green2)"></div>
+              <div style="width:${(t.l2pct-t.l1pct)*6}%;background:var(--warn)"></div>
+              <div style="width:${(t.l3pct-t.l2pct)*6}%;background:var(--blue2)"></div>
+            </div>
+            <div style="font-size:10px;color:var(--ink3);margin-top:3px">Winner: <strong>${t.winner}</strong> · Gap L1-L2: ${t.gap}%</div>
+          </div>
+          <button class="btn btn-sm btn-primary" onclick="loadInAdvisor('${t.id}')">🤖 Analyse</button>
+        </div>`:
+        `<div style="padding:7px 12px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:3px;display:flex;align-items:center;justify-content:space-between;font-size:12px">
+          <span>⚡ <strong>Open for bidding</strong> — Deadline: ${t.date}</span>
+          <button class="btn btn-sm btn-success" onclick="loadInAdvisor('${t.id}')">Get AI Advice →</button>
+        </div>`}
+      </div>`).join('')}
+    </div>`;
+  }
+
+  else if(tab==='analytics') {
+    const byType={};
+    closed.forEach(t=>{if(!byType[t.type])byType[t.type]={count:0,l1:0,l2:0,l3:0,gap:0};byType[t.type].count++;byType[t.type].l1+=t.l1pct;byType[t.type].l2+=t.l2pct;byType[t.type].l3+=t.l3pct;byType[t.type].gap+=t.gap;});
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>Bid Analytics</h2><span class="sh-b">${closed.length} Closed Tenders · 2019–2026</span></div>
+      <div class="grid4" style="margin-bottom:16px">
+        <div class="stat-box"><div class="stat-lbl">Avg L1 Bid</div><div class="stat-val">${avgL1}%</div><div class="stat-sub">Of estimate · ${psu.name} ${wt.label}</div></div>
+        <div class="stat-box g"><div class="stat-lbl">Lowest L1 Seen</div><div class="stat-val">${minL1}%</div><div class="stat-sub">Most aggressive bid on record</div></div>
+        <div class="stat-box r"><div class="stat-lbl">Avg L1–L2 Gap</div><div class="stat-val">${(closed.reduce((a,b)=>a+b.gap,0)/closed.length).toFixed(1)}%</div><div class="stat-sub">Margin between winner & runner-up</div></div>
+        <div class="stat-box b"><div class="stat-lbl">Avg Bidders</div><div class="stat-val">${avgBidders}</div><div class="stat-sub">Competitiveness index</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-hdr"><span class="card-title">L1/L2/L3 Distribution by Work Item</span></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Work Type</th><th>Tenders</th><th>Avg L1%</th><th>Avg L2%</th><th>Avg L3%</th><th>Avg Gap</th><th>Competition</th></tr></thead>
+          <tbody>${Object.entries(byType).map(([type,d])=>{
+            const l1=(d.l1/d.count).toFixed(1);
+            const signal=parseFloat(l1)<88?'🔴 Highly competitive':parseFloat(l1)<91?'🟡 Moderate':'🟢 Less competitive';
+            return `<tr><td><strong>${type}</strong></td><td style="text-align:center">${d.count}</td>
+              <td style="font-weight:700;font-family:'JetBrains Mono',monospace;color:${parseFloat(l1)<88?'var(--green2)':parseFloat(l1)<91?'var(--warn)':'var(--blue2)'}">${l1}%</td>
+              <td>${(d.l2/d.count).toFixed(1)}%</td><td>${(d.l3/d.count).toFixed(1)}%</td>
+              <td>${(d.gap/d.count).toFixed(1)}%</td><td style="font-size:11px">${signal}</td></tr>`;
+          }).join('')}</tbody></table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">📊 Full Historical Record</span></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Tender No.</th><th>Site</th><th>Est Value</th><th>Bidders</th><th>L1%</th><th>L2%</th><th>L3%</th><th>L1-L2 Gap</th><th>Winner</th></tr></thead>
+          <tbody>${closed.map(t=>`<tr class="${t.l1pct<parseFloat(avgL1)?'winner-row':''}">
+            <td style="font-family:'JetBrains Mono',monospace;font-size:10px">${t.id}</td>
+            <td style="font-size:11px">${t.site}</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700">${getCurrSym()}${t.estVal}${getCurrUnit()}</td>
+            <td style="text-align:center">${t.bidders}</td>
+            <td style="font-weight:700;font-family:'JetBrains Mono',monospace;color:${t.l1pct<parseFloat(avgL1)?'var(--green2)':'var(--warn)'}">${t.l1pct}%</td>
+            <td>${t.l2pct}%</td><td>${t.l3pct}%</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${t.gap<2?'var(--red)':'var(--ink)'}">${t.gap}%</td>
+            <td style="font-size:11px">${t.winner}</td>
+          </tr>`).join('')}</tbody></table>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  else if(tab==='contractors') {
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>Contractor Intelligence</h2><span class="sh-b">${wt.label} Works · All India PSUs</span></div>
+      <div class="grid4" style="margin-bottom:16px">
+        <div class="stat-box"><div class="stat-lbl">Active Contractors</div><div class="stat-val">${currentContractors.length*4}</div><div class="stat-sub">Bid at least once in 2 years</div></div>
+        <div class="stat-box b"><div class="stat-lbl">High Threat Players</div><div class="stat-val">${currentContractors.filter(c=>c.threat==='HIGH').length}</div><div class="stat-sub">Win rate >35%</div></div>
+        <div class="stat-box r"><div class="stat-lbl">Most Aggressive</div><div class="stat-val">${Math.min(...currentContractors.map(c=>c.avgL1))}%</div><div class="stat-sub">Lowest avg L1 bid seen</div></div>
+        <div class="stat-box g"><div class="stat-lbl">Avg Win Rate</div><div class="stat-val">${(currentContractors.reduce((a,b)=>a+b.winRate,0)/currentContractors.length).toFixed(1)}%</div><div class="stat-sub">Across all active contractors</div></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">🏆 Contractor Leaderboard — ${wt.label} · All Major PSUs</span></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>#</th><th>Contractor</th><th>Bids</th><th>Won</th><th>Win Rate</th><th>Avg L1 Bid</th><th>Typical Discount</th><th>Specialisation</th><th>Threat</th></tr></thead>
+          <tbody>${currentContractors.map((c,i)=>`<tr>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:${i<3?'var(--gold)':'var(--ink3)'}">0${i+1}</td>
+            <td><strong>${c.name}</strong></td>
+            <td style="text-align:center;font-family:'JetBrains Mono',monospace">${c.bids}</td>
+            <td style="text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)">${c.wins}</td>
+            <td><div style="display:flex;align-items:center;gap:6px">
+              <div class="meter" style="width:60px"><div class="meter-fill" style="width:${c.winRate}%;background:${c.winRate>35?'var(--green2)':'var(--warn)'}"></div></div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700">${c.winRate}%</span>
+            </div></td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${c.avgL1<89?'var(--red)':c.avgL1<91?'var(--warn)':'var(--green)'}">${c.avgL1}%</td>
+            <td style="font-size:11px;color:${c.avgL1<90?'var(--red)':'var(--ink3)'}">-${(100-c.avgL1).toFixed(1)}% below est.</td>
+            <td style="font-size:11px;max-width:160px">${c.spec}</td>
+            <td><span class="badge b-${c.threat.toLowerCase()}">${c.threat}</span></td>
+          </tr>`).join('')}</tbody></table>
+        </div>
+        <div style="padding:14px 16px;background:rgba(201,168,76,0.06);border-top:1px solid var(--border)">
+          ${currentContractors.filter(c=>c.threat==='HIGH').map(c=>`
+          <div style="padding:10px 14px;margin-bottom:8px;background:var(--paper);border:1px solid var(--border);border-radius:3px;border-left:3px solid var(--red)">
+            <div style="font-weight:700;font-size:13px;margin-bottom:4px">⚠️ ${c.name} — ${c.threat} THREAT</div>
+            <div style="font-size:12px;color:var(--ink3);line-height:1.6">${c.profile}</div>
+            <div style="margin-top:6px;font-size:11px;color:var(--ink3)">To beat them: bid below <strong style="color:var(--red)">${(c.avgL1-1.5).toFixed(1)}%</strong> of estimate</div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  else if(tab==='boq') {
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>BOQ Benchmarks</h2><span class="sh-b">${wt.label} · ${psu.name} Historical Rates</span></div>
+      <div style="margin-bottom:14px;padding:10px 14px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:3px;font-size:13px">
+        <strong>How to use:</strong> Compare your quoted rates vs historical L1 rates. <span style="color:var(--red);font-weight:700">HIGH risk items</span> are where PSU estimate is below market — never underbid these.
+      </div>
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">⚠️ HIGH Risk Items — PSU Underestimates Market Rate</span></div>
+          ${currentBOQ.filter(b=>b.risk==='HIGH').map(b=>`
+          <div style="padding:10px 14px;border-bottom:1px solid var(--border)">
+            <div style="font-weight:600;font-size:12px;color:var(--red)">${b.desc}</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:3px">${b.note}</div>
+            <div style="display:flex;gap:14px;margin-top:4px;font-size:11px">
+              <span>PSU: <strong>${getCurrSym()}${b.psuEst.toLocaleString()}</strong></span>
+              <span>Market: <strong style="color:var(--red)">${getCurrSym()}${b.mktRate.toLocaleString()}</strong></span>
+              <span style="color:var(--red);font-weight:700">${b.diff}% vs est</span>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">✅ Safe Items — Well Benchmarked</span></div>
+          ${currentBOQ.filter(b=>b.risk==='LOW').slice(0,5).map(b=>`
+          <div style="padding:10px 14px;border-bottom:1px solid var(--border)">
+            <div style="font-weight:600;font-size:12px;color:var(--green)">${b.desc}</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:3px">${b.note}</div>
+            <div style="display:flex;gap:14px;margin-top:4px;font-size:11px">
+              <span>PSU: <strong>${getCurrSym()}${b.psuEst.toLocaleString()}</strong></span>
+              <span>L1 Rate: <strong style="color:var(--green)">${getCurrSym()}${b.l1Rate.toLocaleString()}</strong></span>
+              <span style="color:var(--green);font-weight:700">${b.diff}% vs est</span>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">📐 Full BOQ Rate Database — ${wt.label} Works · ${psu.name}</span></div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Item Description</th><th>Unit</th><th>PSU Est Rate</th><th>Typical L1 Rate</th><th>L1 vs Est</th><th>Market Rate</th><th>Risk</th><th>Notes</th></tr></thead>
+          <tbody>${currentBOQ.map(b=>`<tr>
+            <td style="font-size:12px;font-weight:600;max-width:220px">${b.desc}</td>
+            <td style="font-size:11px;text-align:center">${b.unit}</td>
+            <td style="font-family:'JetBrains Mono',monospace">${getCurrSym()}${b.psuEst.toLocaleString()}</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)">${getCurrSym()}${b.l1Rate.toLocaleString()}</td>
+            <td style="font-weight:700;color:${parseFloat(b.diff)<-10?'var(--red)':parseFloat(b.diff)<-5?'var(--warn)':'var(--green)'}">${b.diff}%</td>
+            <td style="font-family:'JetBrains Mono',monospace">${getCurrSym()}${b.mktRate.toLocaleString()}</td>
+            <td><span class="badge b-${b.risk.toLowerCase()}">${b.risk}</span></td>
+            <td style="font-size:10px;color:var(--ink3);max-width:180px">${b.note}</td>
+          </tr>`).join('')}</tbody></table>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  else if(tab==='advisor') {
+    el.innerHTML=`<div class="wrap">
+      <div class="sh"><h2>AI Bid Advisor</h2><span class="sh-b">${psu.name} · ${wt.label} · Powered by Claude AI</span></div>
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">📋 Your Tender Details</span></div>
+          <div style="padding:16px">
+            <div class="grid2">
+              <div class="fg"><label>PSU / Site</label><select id="ai-psu">${psu.sites.map(s=>`<option>${psu.name} — ${s}</option>`).join('')}</select></div>
+              <div class="fg"><label>Work Type</label><select id="ai-wt">${wt.items.map(i=>`<option>${i}</option>`).join('')}</select></div>
+            </div>
+            <div class="grid2">
+              <div class="fg"><label>Estimated Value (local currency)</label><input type="number" id="ai-est" placeholder="e.g. 4.75" step="0.01" oninput="calcQuickRange()"/></div>
+              <div class="fg"><label>Your Planned Bid (same currency)</label><input type="number" id="ai-quote" placeholder="Your bid amount" step="0.01"/></div>
+            </div>
+            <div class="fg"><label>Tender Reference No.</label><input type="text" id="ai-ref" placeholder="e.g. ${psu.name.toUpperCase()}/XXX/2026/0001"/></div>
+            <div class="fg"><label>Key BOQ Items</label><textarea id="ai-boq" placeholder="Paste main line items e.g.&#10;1. CS Piping 6&quot; NB 300m&#10;2. Pump 100kW — 4 nos&#10;3. Insulation lump sum"></textarea></div>
+            <div class="fg"><label>Known Competitors Bidding</label><input type="text" id="ai-comp" placeholder="e.g. ${currentContractors.slice(0,3).map(c=>c.name.split(' ')[0]).join(', ')}"/></div>
+            <div class="fg"><label>Special Notes / Conditions</label><textarea id="ai-notes" placeholder="Remote site, import requirements, tight timeline..." style="min-height:56px"></textarea></div>
+            <button class="btn btn-gold" onclick="runAdvisor()" id="ai-btn" style="width:100%;padding:12px;font-size:15px;margin-top:4px">⚡ Analyse This Bid</button>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px">
+            <div class="card-hdr"><span class="card-title">🎯 Quick Bid Range Calculator</span></div>
+            <div style="padding:14px">
+              <div id="calc-out" style="padding:12px;background:var(--ink);border-radius:3px;text-align:center;font-size:12px;color:rgba(245,240,232,0.4)">Enter estimated value above to see recommended bid ranges</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">🏁 Bid/No-Bid Signal</span></div>
+            <div style="padding:14px">
+              <div class="grid2">
+                <div class="fg" style="margin-bottom:0"><label>Your Margin Floor (%)</label><input type="number" id="bib-m" value="12" oninput="calcBNB()"/></div>
+                <div class="fg" style="margin-bottom:0"><label>Expected Bidders</label><input type="number" id="bib-b" value="7" oninput="calcBNB()"/></div>
+              </div>
+              <div id="bib-out" style="margin-top:10px;padding:10px;background:var(--paper3);border-radius:3px;font-size:12px;text-align:center;color:var(--ink3)">Fill details above to get signal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><span class="card-title">🤖 AI Analysis</span><span id="ai-status" style="font-size:10px;color:var(--ink3);letter-spacing:0.1em">AWAITING INPUT</span></div>
+        <div style="padding:16px">
+          <div class="ai-response" id="ai-out"><div style="color:rgba(245,240,232,0.25);font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-align:center;padding:20px">⚡ Enter tender details and click Analyse This Bid<br/><span style="font-size:10px;opacity:0.6;display:block;margin-top:6px">AI will give bid price recommendation, L1 threat forecast, BOQ risk flags & strategy</span></div></div>
+        </div>
+      </div>
+    </div>`;
+    // Attach advisor after render
+    window.calcQuickRange = function() {
+      const est = parseFloat(document.getElementById('ai-est')?.value);
+      const el2 = document.getElementById('calc-out');
+      if(!est||!el2)return;
+      const agg = (est*(parseFloat(avgL1)-2.5)/100).toFixed(2);
+      const bal = (est*(parseFloat(avgL1)-1.0)/100).toFixed(2);
+      const con = (est*parseFloat(avgL1)/100).toFixed(2);
+      el2.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.3);border-radius:3px;padding:9px;text-align:center">
+          <div style="font-size:9px;color:#27ae60;letter-spacing:0.1em;text-transform:uppercase">Aggressive</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#2ecc71">${getCurrSym()}${agg}${getCurrUnit()}</div>
+          <div style="font-size:9px;color:rgba(245,240,232,0.4)">Highest win %</div>
+        </div>
+        <div style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);border-radius:3px;padding:9px;text-align:center">
+          <div style="font-size:9px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase">Balanced</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--gold2)">${getCurrSym()}${bal}${getCurrUnit()}</div>
+          <div style="font-size:9px;color:rgba(245,240,232,0.4)">Best risk/reward</div>
+        </div>
+        <div style="background:rgba(41,128,185,0.15);border:1px solid rgba(41,128,185,0.3);border-radius:3px;padding:9px;text-align:center">
+          <div style="font-size:9px;color:#2980b9;letter-spacing:0.1em;text-transform:uppercase">Conservative</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#60a5fa">${getCurrSym()}${con}${getCurrUnit()}</div>
+          <div style="font-size:9px;color:rgba(245,240,232,0.4)">Higher margin</div>
+        </div>
+      </div><div style="margin-top:8px;font-size:10px;color:rgba(245,240,232,0.4);text-align:center">Based on historical L1 avg of ${avgL1}% for ${psu.name} ${wt.label}</div>`;
+      calcBNB();
+    };
+    window.calcBNB = function() {
+      const est = parseFloat(document.getElementById('ai-est')?.value);
+      const margin = parseFloat(document.getElementById('bib-m')?.value)||12;
+      const bidders = parseInt(document.getElementById('bib-b')?.value)||7;
+      const el2 = document.getElementById('bib-out');
+      if(!est||!el2)return;
+      const minBid = est*(parseFloat(avgL1)-2)/100;
+      const yourCost = est*(1-margin/100);
+      const canWin = minBid > yourCost;
+      const winP = Math.max(5,Math.round(100/bidders*(canWin?1.4:0.6)));
+      const sig = canWin&&bidders<8?'BID':canWin&&bidders>=8?'PROCEED WITH CAUTION':'RECONSIDER';
+      const sc = sig==='BID'?'var(--green)':sig==='PROCEED WITH CAUTION'?'var(--warn)':'var(--red)';
+      el2.innerHTML=`<div style="background:var(--ink);border-radius:3px;padding:10px;text-align:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:${sc}">${sig}</div>
+        <div style="font-size:10px;color:rgba(245,240,232,0.45);margin-top:4px">Est win probability: ${winP}% · ${bidders} competitors · ${margin}% margin floor</div>
+      </div>`;
+    };
+    window.runAdvisor = async function() {
+      const est = document.getElementById('ai-est').value;
+      const quote = document.getElementById('ai-quote').value;
+      const psuSite = document.getElementById('ai-psu').value;
+      const workItem = document.getElementById('ai-wt').value;
+      const boq = document.getElementById('ai-boq').value;
+      const comp = document.getElementById('ai-comp').value;
+      const notes = document.getElementById('ai-notes').value;
+      const ref = document.getElementById('ai-ref').value;
+      if(!est){document.getElementById('ai-out').innerHTML='<div style="color:#e74c3c;font-family:Rajdhani,sans-serif;font-size:13px">⚠ Please enter the PSU estimated value before analysing.</div>';return;}
+      const btn=document.getElementById('ai-btn');
+      btn.disabled=true;btn.textContent='⚡ Analysing...';
+      document.getElementById('ai-status').textContent='ANALYSING';
+      document.getElementById('ai-out').innerHTML=`<div class="thinking"><span>AI is analysing your bid</span><div class="dots"><span></span><span></span><span></span></div></div>`;
+      const prompt=`You are ZirconIQ, India's top PSU tender bid consultant with deep expertise in ${psu.name} (${psu.sector}) and all major Indian PSUs. You understand GEM portal, CPPP, eprocure systems, and have analysed 1000+ PSU tenders.
+
+TENDER DETAILS:
+- PSU/Site: ${psuSite}
+- Work Type: ${workItem} (${wt.label})
+- Estimated Value: ${getCurrSym()}${est} Crore
+- Tender Ref: ${ref||'Not provided'}
+- My Planned Bid: ${getCurrSym()}${quote||'Not decided'} Crore
+- Known Competitors: ${comp||'Unknown'}
+- BOQ Items: ${boq||'Not provided'}
+- Special Notes: ${notes||'None'}
+
+HISTORICAL DATABASE:
+- ${closed.length} similar tenders analysed for ${psu.name} ${wt.label} works
+- Historical average L1 bid: ${avgL1}% of estimate (${getCurrSym()}${(parseFloat(est)*parseFloat(avgL1)/100).toFixed(2)}${getCurrUnit()} on this tender)
+- Lowest recorded L1: ${minL1}% (${getCurrSym()}${(parseFloat(est)*parseFloat(minL1)/100).toFixed(2)}${getCurrUnit()} on this tender)
+- Average bidder count: ${avgBidders} per tender
+- Top competitors: ${currentContractors.filter(c=>c.threat==='HIGH').map(c=>c.name).join(', ')}
+
+Analyse in exactly these 5 sections:
+1. BID RECOMMENDATION — Specific value in local currency bid value with rationale
+2. L1 THREAT ANALYSIS — Where will L1 land? Who are the key threats?
+3. BOQ RISK FLAGS — Items likely underpriced or risky
+4. COMPETITIVE STRATEGY — How to position to win with margin protection
+5. KEY WATCH-OUTS — Document checks and pre-submission alerts
+
+Be specific, use local currency figures, reference the historical data. Professional English.`;
+      try{
+        const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
+        const d=await r.json();
+        const text=d.content?.map(c=>c.text||'').join('')||'';
+        const headers=[...text.matchAll(/(\d+\.\s+[A-Z][A-Z\s\/&]+—?)/g)].map(m=>m[1]);
+        const parts=text.split(/\d+\.\s+[A-Z][A-Z\s\/&]+—?/g).filter(s=>s.trim());
+        const icons=['💡','📊','⚠️','🎯','👁️'];
+        let html=headers.length>1?headers.map((h,i)=>`<div class="ai-sec"><h4>${icons[i]||'•'} ${h.replace(/^\d+\.\s+/,'').replace(/—$/,'').trim()}</h4><p>${(parts[i+1]||'').trim().replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>').replace(/\*\*(.*?)\*\*/g,'<span class="hi">$1</span>').replace(/([$€₹][\d.,]+\s*(?:Cr|M|K)?)/g,'<span class="hi">$1</span>')}</p></div>`).join(''):`<p>${text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>')}</p>`;
+        document.getElementById('ai-out').innerHTML=html;
+        document.getElementById('ai-status').textContent='COMPLETE';
+      }catch(e){
+        const recBid=(parseFloat(est)*(parseFloat(avgL1)-1.5)/100).toFixed(2);
+        document.getElementById('ai-out').innerHTML=`
+          <div class="ai-sec"><h4>💡 BID RECOMMENDATION</h4><p>Based on <span class="hi">${closed.length} historical ${psu.name} ${wt.label} tenders</span>, recommend bidding at <span class="hi">${getCurrSym()}${recBid}${getCurrUnit()} (${(parseFloat(recBid)/parseFloat(est)*100).toFixed(1)}% of estimate)</span>. This is 1.5% below the historical L1 average of ${avgL1}%, giving you a strong win probability while protecting margin.${quote&&parseFloat(quote)>(parseFloat(est)*parseFloat(avgL1)/100)?`<br/><span class="al">⚠ Your planned bid of ${getCurrSym()}${quote}${getCurrUnit()} appears above the expected L1 level — you risk losing.</span>`:''}</p></div>
+          <div class="ai-sec"><h4>📊 L1 THREAT ANALYSIS</h4><p>Historical data shows L1 for ${wt.label} at ${psu.name} ranges between <span class="hi">${getCurrSym()}${(parseFloat(est)*parseFloat(minL1)/100).toFixed(2)}${getCurrUnit()} and ${getCurrSym()}${(parseFloat(est)*parseFloat(avgL1)/100).toFixed(2)}${getCurrUnit()}</span>. Average ${avgBidders} bidders per tender.${comp?` Watch <span class="hi">${comp}</span> — check their historical patterns in Contractor Intel tab.`:' Expect 6–9 bidders based on historical averages for this PSU and work type.'}</p></div>
+          <div class="ai-sec"><h4>⚠️ BOQ RISK FLAGS</h4><p>${boq?'Review your BOQ against the benchmarks in the BOQ tab. Pay attention to HIGH risk items — especially any imported equipment or specialised soil/rock work items where PSU SOR underestimates market rate.':'BOQ not provided. Use the BOQ Benchmarks tab to compare your rates. HIGH risk items for '+wt.label+' works are flagged there — these are where PSUs consistently underestimate and contractors lose margin.'}</p></div>
+          <div class="ai-sec"><h4>🎯 COMPETITIVE STRATEGY</h4><p>For ${psu.name} ${wt.label} tenders, the optimal strategy is to bid at <span class="hi">${(parseFloat(avgL1)-1.5).toFixed(1)}–${avgL1}% of estimate</span>. Winning bids typically come in with a ${(closed.reduce((a,b)=>a+b.gap,0)/closed.length).toFixed(1)}% gap over L2. Focus margin protection on labour and logistics — these are hardest for competitors to accurately estimate in ${psu.sites[0]} region.</p></div>
+          <div class="ai-sec"><h4>👁️ KEY WATCH-OUTS</h4><p>1. Verify PSU Schedule of Rates (SOR) date — older SORs underestimate by 15-25%. 2. Check payment milestones and mobilisation advance. 3. Confirm EMD amount and PBG requirements. 4. Review defect liability period — longer DLP justifies higher bid. 5. Check if site access, security clearance or special permits are required at ${psu.name} premises.</p></div>`;
+        document.getElementById('ai-status').textContent='COMPLETE (Offline)';
+      }
+      btn.disabled=false;btn.textContent='⚡ Analyse This Bid';
+    };
+  }
+}
+
+function loadInAdvisor(tid) {
+  const t = currentTenders.find(x=>x.id===tid);
+  if(!t) return;
+  showTab('advisor');
+  setTimeout(()=>{
+    const el=document.getElementById('ai-est');if(el)el.value=t.estVal;
+    const el2=document.getElementById('ai-ref');if(el2)el2.value=t.id;
+    if(window.calcQuickRange)calcQuickRange();
+  },100);
+}
+
+
+// ── REGION LOGIC ──
+function selectRegion(region) {
+  currentRegion = region;
+  document.getElementById('region-screen').style.display = 'none';
+  document.getElementById('select-screen').style.display = 'block';
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+
+  const badges = {
+    india: '🇮🇳 INDIA', eu: '🇪🇺 EUROPEAN UNION', us: '🇺🇸 UNITED STATES'
+  };
+  const titles = {
+    india: 'India PSU Tender Intelligence',
+    eu: 'European Union Procurement Intelligence',
+    us: 'United States Government Procurement'
+  };
+  const subs = {
+    india: 'Select a PSU, Central Govt or State organisation to access bid data and analytics',
+    eu: 'Select an EU institution or national agency for procurement intelligence',
+    us: 'Select a Federal agency or State authority for procurement intelligence'
+  };
+  const filters = {
+    india: ['All','Maharatna','Navratna','Power','Oil','Defence','GovtInfra','Healthcare'],
+    eu: ['All','Pan-EU','Healthcare','Germany','France','Netherlands','Poland','Spain','Italy','Sweden','Belgium'],
+    us: ['All','Federal','Healthcare','California','New York','Texas','Florida','Illinois','Washington','Utility']
+  };
+
+  document.getElementById('region-badge').textContent = badges[region];
+  document.getElementById('step1-title').textContent = titles[region];
+  document.getElementById('step1-sub').textContent = subs[region];
+
+  if (region === 'india') currentOrgList = PSUS;
+  else if (region === 'eu') currentOrgList = EU_ORGS;
+  else currentOrgList = US_ORGS;
+
+  // Rebuild filter buttons
+  const filterRow = document.getElementById('filter-row');
+  if (filterRow) {
+    filterRow.innerHTML = '<span style="font-size:11px;letter-spacing:0.12em;color:var(--ink3);text-transform:uppercase">Filter:</span>';
+    filters[region].forEach((f, i) => {
+      const btn = document.createElement('button');
+      btn.className = i === 0 ? 'btn btn-sm' : 'btn btn-sm btn-outline';
+      if (i === 0) btn.style.cssText = 'background:var(--ink);color:var(--gold);border:1px solid var(--gold)';
+      btn.textContent = f;
+      btn.onclick = () => { filterOrgs(f === 'All' ? 'all' : f, btn); };
+      filterRow.appendChild(btn);
+    });
+  }
+
+  renderOrgGrid('all');
+}
+
+function goToRegion() {
+  document.getElementById('select-screen').style.display = 'none';
+  document.getElementById('region-screen').style.display = 'block';
+}
+
+function filterOrgs(f, btn) {
+  document.querySelectorAll('#filter-row .btn-sm').forEach(b => b.style.cssText = '');
+  btn.style.background = 'var(--ink)'; btn.style.color = 'var(--gold)'; btn.style.border = '1px solid var(--gold)';
+  renderOrgGrid(f);
+}
+
+function renderOrgGrid(filter) {
+  const grid = document.getElementById('psu-grid');
+  let orgs = currentOrgList;
+  if (filter !== 'all') {
+    orgs = currentOrgList.filter(o =>
+      o.rating.includes(filter) ||
+      o.sector.includes(filter) ||
+      o.hq.includes(filter) ||
+      (filter === 'Germany' && o.hq.includes('Germany')) ||
+      (filter === 'France' && o.hq.includes('France')) ||
+      (filter === 'Netherlands' && o.hq.includes('Netherlands')) ||
+      (filter === 'Poland' && o.hq.includes('Poland')) ||
+      (filter === 'Spain' && o.hq.includes('Spain')) ||
+      (filter === 'Italy' && o.hq.includes('Italy')) ||
+      (filter === 'Sweden' && o.hq.includes('Sweden')) ||
+      (filter === 'Belgium' && o.hq.includes('Belgium')) ||
+      (filter === 'California' && o.hq.includes('CA')) ||
+      (filter === 'New York' && o.hq.includes('NY')) ||
+      (filter === 'Texas' && o.hq.includes('TX')) ||
+      (filter === 'Florida' && o.hq.includes('FL')) ||
+      (filter === 'Illinois' && o.hq.includes('IL')) ||
+      (filter === 'Washington' && o.hq.includes('WA')) ||
+      (filter === 'Federal' && o.rating.includes('Federal')) ||
+      (filter === 'Utility' && o.sector.includes('Utility')) ||
+      (filter === 'Pan-EU' && o.rating === 'Pan-EU') ||
+      (filter === 'Healthcare' && o.sector.includes('Healthcare'))
+    );
+  }
+  const curr = selectedPSU;
+  const currency = currentRegion === 'us' ? 'USD' : currentRegion === 'eu' ? 'EUR' : 'INR';
+  const sym = currentRegion === 'us' ? '$' : currentRegion === 'eu' ? '€' : getCurrSym();
+  grid.innerHTML = orgs.map(p => `
+    <div class="psu-card ${curr===p.id?'selected':''}" onclick="selectPSU('${p.id}')" style="${curr===p.id?'border-color:'+p.color+';':''}">
+      <div class="psu-check">✓</div>
+      <div class="psu-icon">${p.icon}</div>
+      <div class="psu-name">${p.name}</div>
+      <div class="psu-full">${p.full}</div>
+      <div><span class="psu-rating rating-${p.rating.toLowerCase().replace(/ /g,'').replace(/[^a-z]/g,'').substring(0,10)}">${p.rating}</span></div>
+      <div class="psu-sector">${p.sector} · ${p.hq}</div>
+      ${p.dsr ? '<div style="margin-top:5px"><span style="font-size:9px;background:rgba(142,68,173,0.15);border:1px solid rgba(142,68,173,0.35);color:#bb8fce;padding:2px 7px;border-radius:2px;letter-spacing:0.08em">DSR AVAILABLE</span></div>' : ''}
+      <div style="margin-top:8px;font-size:10px;color:var(--ink3)">${p.tender_count} contracts · Avg L1: ${p.avg_l1}%</div>
+      <div style="margin-top:4px" class="meter"><div class="meter-fill" style="width:${(100-p.avg_l1)*6}%;background:${p.color}"></div></div>
+    </div>
+  `).join('');
+}
+
+// ══ INIT ══
+renderOrgGrid('all');
+document.getElementById('step2').style.display='none';
+// ── SUPABASE AUTH ──
+const _sb = supabase.createClient('https://xzstnkpwcxepvlooomdw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6c3Rua3B3Y3hlcHZsb29vbWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzY4MTEsImV4cCI6MjA4OTAxMjgxMX0.z5rWbBShix7WFzeka8AXGUZEacjjSHHI4RkyjU8siys');
+let _user = null;
+
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.innerHTML = inp.type === 'text' ? '&#128064;' : '&#128065;';
+}
+
+function switchTab(t) {
+  ['signin','register','forgot'].forEach(n => {
+    document.getElementById('aform-'+n).style.display = n===t ? 'block' : 'none';
+    const el = document.getElementById('atab-'+n);
+    if (el) el.classList.toggle('active', n===t);
+  });
+}
+
+function _msg(id, txt, type) {
+  const el = document.getElementById(id);
+  el.textContent = txt; el.className = 'auth-msg ' + type;
+}
+
+async function doSignIn() {
+  const email = document.getElementById('si-email').value.trim();
+  const pass  = document.getElementById('si-pass').value;
+  if (!email || !pass) { _msg('si-msg','Enter email and password.','err'); return; }
+  const btn = document.getElementById('si-btn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
+  if (error) { _msg('si-msg', error.message, 'err'); btn.disabled=false; btn.textContent='Sign In →'; }
+  else { _user = data.user; _showApp(data.user.email); }
+}
+
+async function doRegister() {
+  const name    = document.getElementById('reg-name').value.trim();
+  const company = document.getElementById('reg-company').value.trim();
+  const email   = document.getElementById('reg-email').value.trim();
+  const pass    = document.getElementById('reg-pass').value;
+  if (!name || !email || !pass) { _msg('reg-msg','Please fill all required fields.','err'); return; }
+  if (pass.length < 8) { _msg('reg-msg','Password must be at least 8 characters.','err'); return; }
+  const btn = document.getElementById('reg-btn');
+  btn.disabled=true; btn.textContent='Submitting...';
+  const { error } = await _sb.auth.signUp({ email, password: pass, options: { data: { full_name: name, company } } });
+  if (error) { _msg('reg-msg', error.message, 'err'); btn.disabled=false; btn.textContent='Request Access →'; }
+  else { _msg('reg-msg','Registration submitted! You will receive an email once your access is approved.','ok'); btn.disabled=true; }
+}
+
+async function doForgotPw() {
+  const email = document.getElementById('fp-email').value.trim();
+  if (!email) { _msg('fp-msg','Please enter your email.','err'); return; }
+  const btn = document.getElementById('fp-btn');
+  btn.disabled=true; btn.textContent='Sending...';
+  const { error } = await _sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://www.zirconique.com/tenders/' });
+  if (error) { _msg('fp-msg', error.message, 'err'); btn.disabled=false; btn.textContent='Send Reset Link →'; }
+  else { _msg('fp-msg','Reset link sent! Check your inbox.','ok'); btn.disabled=true; }
+}
+
+function _showApp(email) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-header').style.display = 'block';
+  document.getElementById('region-screen').style.display = 'block';
+  document.getElementById('hdr-user').textContent = email;
+}
+
+async function doSignOut() {
+  await _sb.auth.signOut(); _user = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('main-header').style.display = 'none';
+  document.getElementById('select-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('region-screen').style.display = 'none';
+  document.getElementById('select-screen').style.display = 'none';
+  document.getElementById('si-email').value='';
+  document.getElementById('si-pass').value='';
+  document.getElementById('si-msg').className='auth-msg';
+  switchTab('signin');
+}
+
+function goHome() {
+  if (!_user) return;
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('select-screen').style.display = 'none';
+  document.getElementById('region-screen').style.display = 'block';
+  
+// ── CURRENCY HELPERS ──
+function getCurrSym() {
+  const org = currentOrgList.find(p=>p.id===selectedPSU);
+  if (!org) return getCurrSym();
+  if (org.currency === 'USD') return '$';
+  if (org.currency === 'EUR') return '€';
+  return getCurrSym();
+}
+function getCurrUnit() {
+  const org = currentOrgList.find(p=>p.id===selectedPSU);
+  if (!org) return 'Cr';
+  if (org.currency === 'USD') return 'M';  // millions
+  if (org.currency === 'EUR') return 'M';
+  return 'Cr';
+}
+function fmtVal(v) {
+  return getCurrSym() + v + getCurrUnit();
+}
+
+document.getElementById('hdr-context').textContent = '';
+  document.getElementById('refresh-btn').style.display = 'none';
+  document.getElementById('last-refresh-lbl').textContent = '';
+  liveData = null;
+}
+
+// Restore session on load
+(async function() {
+  const { data } = await _sb.auth.getSession();
+  if (data.session) { _user = data.session.user; _showApp(data.session.user.email); }
+})();
+
+// ── LIVE REFRESH ──
+const PROXY_URL = 'REPLACE_WITH_WORKER_URL';
+let liveData = null;
+
+async function runLiveRefresh() {
+  if (!selectedPSU || !selectedWork) return;
+  const psu = PSUS.find(p => p.id === selectedPSU);
+  const wt  = (WORK_TYPES_EXT||WORK_TYPES)[selectedWork];
+  const btn = document.getElementById('refresh-btn');
+  const lbl = document.getElementById('last-refresh-lbl');
+  btn.innerHTML = '<span class="live-dot"></span>Fetching...';
+  btn.disabled = true;
+  let panel = document.getElementById('live-intel-panel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'live-intel-panel';
+    panel.style.marginBottom = '18px';
+    const wrap = document.querySelector('#dash-content .wrap');
+    if (wrap) wrap.insertBefore(panel, wrap.firstChild);
+  }
+  if (PROXY_URL === 'REPLACE_WITH_WORKER_URL') {
+    panel.innerHTML = '<div style="padding:14px 18px;background:var(--ink2);border-radius:4px;border-left:3px solid var(--gold);font-size:13px;color:rgba(245,240,232,0.7);line-height:1.8">Setup needed: configure Cloudflare Worker proxy. Email <a href="mailto:info@zirconique.com" style="color:var(--gold)">info@zirconique.com</a></div>';
+    btn.innerHTML = '<span class="live-dot"></span>Refresh Live Data'; btn.disabled=false; return;
+  }
+  panel.innerHTML = '<div style="padding:14px 18px;background:var(--ink);border-radius:4px;border-left:4px solid var(--green2);font-size:12px;color:rgba(245,240,232,0.55)">Searching PSU portals via AI...</div>';
+  try {
+    const prompt = 'Search for latest ' + wt.label + ' tenders from ' + psu.name + ' (' + psu.full + ') in India 2026. Find: new notices last 30 days, L1/L2/L3 results with rupee amounts, tenders on gem.gov.in or eprocure.gov.in, project awards. Specific numbers and dates.';
+    const resp = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt}) });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const d = await resp.json();
+    const text = d.text || '';
+    const ts = new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+    lbl.textContent = 'Live ' + ts;
+    liveData = {text, timestamp: new Date()};
+    const htm = text.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--gold2)">$1</strong>').replace(/\n/g,'<br/>');
+    panel.innerHTML = '<div style="background:var(--ink);border-radius:4px;border-left:4px solid var(--green2)"><div style="padding:10px 18px;border-bottom:1px solid rgba(39,174,96,0.2);display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--green2)">Live Intelligence</span><span style="font-size:10px;color:rgba(245,240,232,0.3)">' + ts + '</span></div><div style="padding:15px 18px;font-size:14px;line-height:1.8;color:rgba(245,240,232,0.82)">' + htm + '</div></div>';
+  } catch(e) {
+    panel.innerHTML = '<div style="padding:12px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);border-radius:4px;font-size:12px;color:var(--red)">Refresh failed: ' + e.message + '</div>';
+  }
+  btn.innerHTML = '<span class="live-dot"></span>Refresh Live Data'; btn.disabled=false;
+}
+
+// ── DSR TAB ──
+function renderDSR() {
+  const el = document.getElementById('dash-content');
+  el.innerHTML = `<div class="wrap">
+    <div class="sh"><h2>CPWD DSR Rates</h2><span class="sh-b">Delhi Schedule of Rates 2023 — Civil, Electrical &amp; Horticulture</span></div>
+    <div class="grid3" style="margin-bottom:18px">
+      <a href="https://cpwd.gov.in/Publication/DSR2023.pdf" target="_blank" style="text-decoration:none">
+        <div class="stat-box" style="cursor:pointer;border:1px solid rgba(142,68,173,0.3)"><div class="stat-lbl">DSR 2023 — Civil Works</div><div class="stat-val" style="font-size:18px">PDF</div><div class="stat-sub">RCC, masonry, roads, finishing</div></div>
+      </a>
+      <a href="https://cpwd.gov.in/Publication/DSR2023_E.pdf" target="_blank" style="text-decoration:none">
+        <div class="stat-box" style="cursor:pointer;border:1px solid rgba(142,68,173,0.3)"><div class="stat-lbl">DSR 2023 — Electrical</div><div class="stat-val" style="font-size:18px">PDF</div><div class="stat-sub">Wiring, cables, panels, lifts</div></div>
+      </a>
+      <a href="https://cpwd.gov.in/Publication/DSR2023_H.pdf" target="_blank" style="text-decoration:none">
+        <div class="stat-box" style="cursor:pointer;border:1px solid rgba(142,68,173,0.3)"><div class="stat-lbl">DSR 2023 — Horticulture</div><div class="stat-val" style="font-size:18px">PDF</div><div class="stat-sub">Landscaping, plantation</div></div>
+      </a>
+    </div>
+    <div class="sh"><h3>Key DSR 2023 Benchmark Rates — Delhi Base</h3></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Item</th><th>Unit</th><th>DSR Rate (Rs.)</th><th>Location Factor</th><th>Notes</th></tr></thead><tbody>
+      <tr><td>RCC M25 — Foundation</td><td>cum</td><td>7,840</td><td>Mumbai 1.12 · Chennai 1.08</td><td>Cement at Rs.380/bag basis</td></tr>
+      <tr><td>RCC M30 — Superstructure</td><td>cum</td><td>8,620</td><td>Mumbai 1.12 · Chennai 1.08</td><td>Shuttering included</td></tr>
+      <tr><td>Brickwork 230mm CM 1:6</td><td>cum</td><td>6,240</td><td>1.0 to 1.15 by region</td><td>Brick at Rs.8.50/nos basis</td></tr>
+      <tr><td>Plastering 12mm CM 1:6</td><td>sqm</td><td>184</td><td>1.0 to 1.12</td><td>Both sides extra</td></tr>
+      <tr><td>CC Road M30 150mm</td><td>sqm</td><td>1,280</td><td>1.0 to 1.10</td><td>Sub-base extra</td></tr>
+      <tr><td>Waterproofing Terrace</td><td>sqm</td><td>620</td><td>1.0 to 1.08</td><td>IPS + membrane</td></tr>
+      <tr><td>Structural Steel Erection</td><td>MT</td><td>74,000</td><td>1.0 to 1.18</td><td>Fab + erection</td></tr>
+      <tr><td>1.5sqmm FR Cable Wiring</td><td>per m</td><td>48</td><td>1.0</td><td>Conduit extra</td></tr>
+      <tr><td>25mm MS Conduit Concealed</td><td>per m</td><td>124</td><td>1.0</td><td>Wiring extra</td></tr>
+      <tr><td>6A 3-Pin Switch Socket</td><td>each</td><td>380</td><td>1.0</td><td>Modular ISI</td></tr>
+      <tr><td>LED Tube Light 20W</td><td>each</td><td>840</td><td>1.0</td><td>Complete fitting</td></tr>
+      <tr><td>Excavation Hard Rock Machine</td><td>cum</td><td>1,800</td><td>varies</td><td>Blasting + disposal extra</td></tr>
+    </tbody></table></div>
+    <div style="margin-top:14px;padding:12px 16px;background:var(--ink2);border-radius:4px;border-left:3px solid var(--gold);font-size:12px;color:rgba(245,240,232,0.65);line-height:1.8">
+      <strong style="color:var(--gold)">Note:</strong> DSR rates are revised periodically. Always verify the applicable DSR year in the NIT. Apply Market Rate Statement (MRS) factors where specified. Full DSR at <a href="https://cpwd.gov.in" target="_blank" style="color:var(--gold)">cpwd.gov.in</a>
+    </div>
+  </div>`;
+}
+
+// ── FOOTER ──
+(function(){
+  const f = document.createElement('footer');
+  f.style.cssText = 'background:var(--ink);color:rgba(245,240,232,0.35);padding:16px 24px;font-size:10px;letter-spacing:0.1em;border-top:1px solid rgba(201,168,76,0.15);margin-top:40px;position:relative;z-index:1';
+  f.innerHTML = '<div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">'
+    + '<span style="font-family:Rajdhani,sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Zircon<span style="color:var(--gold)">IQ</span></span>'
+    + '<div style="display:flex;gap:16px;flex-wrap:wrap"><span>Data from public PSU portals</span>'
+    + '<a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.
