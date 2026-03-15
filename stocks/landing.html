@@ -224,16 +224,55 @@ footer{background:var(--ink);color:rgba(250,248,243,.55);padding:48px;position:r
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
 
 /* RESPONSIVE */
+/* MOBILE BASE */
+html{-webkit-text-size-adjust:100%}
+button,input,textarea{touch-action:manipulation}
+img,svg{max-width:100%}
+
 @media(max-width:960px){
-  .feat-grid{grid-template-columns:1fr 1fr}.regions-grid{grid-template-columns:1fr 1fr}
-  .steps{grid-template-columns:1fr 1fr;gap:32px}.steps::before{display:none}
+  #top-nav{padding:0 20px}
+  .nav-links{display:none}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .regions-grid{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr;gap:36px}.steps::before{display:none}
   .contact-grid,.access-inner,.halal-wrap{grid-template-columns:1fr}
-  #top-nav{padding:0 24px}.nav-links{display:none}.sw{padding:70px 24px}
+  .sw{padding:72px 28px}
+  #hero{padding:100px 8vw 90px}
+  .hero-bg-num{font-size:clamp(160px,20vw,260px);opacity:.6}
 }
-@media(max-width:600px){
+@media(max-width:640px){
+  #top-nav{padding:0 16px;height:54px}
+  .nav-logo .sub{display:none}
+  .nbtn{padding:7px 14px;font-size:10px}
+  #hero{padding:86px 20px 90px;align-items:center;text-align:center}
+  .hero-rule{margin:0 auto 18px}
+  .hero-eyebrow{justify-content:center}
+  .hero-headline{font-size:clamp(34px,9vw,48px);max-width:100%}
+  .hero-sub{font-size:14px;max-width:100%}
+  .hero-btns{justify-content:center}
+  .hero-stats{flex-direction:column;gap:20px;align-items:center}
+  .hs{border:none;padding:0;margin:0;text-align:center}
+  .hero-bg-num{display:none}
   .feat-grid,.regions-grid{grid-template-columns:1fr}
-  .hero-stats{flex-direction:column;gap:20px}.hs{border:none;padding:0;margin:0}
-  #hero{padding:100px 24px 100px}
+  .steps{grid-template-columns:1fr}
+  .sw{padding:56px 20px}
+  .stitle{font-size:clamp(24px,7vw,36px)}
+  .auth-box{padding:36px 24px}
+  .feat{padding:28px 24px}
+  .rgcard{padding:24px 20px}
+  .acard{padding:32px 24px}
+  .aprice{font-size:48px}
+  footer{padding:36px 20px}
+  .fi{flex-direction:column;align-items:flex-start;gap:20px}
+  .flinks{gap:18px}
+  .ticker-item{font-size:10px;padding:0 18px}
+  .halal-ornament{width:160px;height:160px}
+}
+@media(max-width:400px){
+  .hbtn-p,.hbtn-s{padding:13px 22px;font-size:13px;width:100%;text-align:center;justify-content:center;display:block}
+  .hero-btns{flex-direction:column;gap:10px}
+  .auth-box{padding:28px 18px}
+  .nbtn.ghost{display:none}
 }
 </style>
 </head>
