@@ -18,7 +18,30 @@
 body{background:var(--paper);color:var(--ink);font-family:'Rajdhani',sans-serif;font-size:15px;min-height:100vh}
 body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%230f1419' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0}
 
-
+/* LOGIN */
+#login-screen{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-box{width:100%;max-width:420px;background:var(--ink2);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:40px 36px}
+.auth-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--paper);margin-bottom:4px}
+.auth-logo em{color:var(--gold);font-style:normal}
+.auth-sub{font-size:9px;color:rgba(245,240,232,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px}
+.auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid rgba(245,240,232,0.1)}
+.auth-tab{flex:1;padding:9px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-align:center;cursor:pointer;color:rgba(245,240,232,0.35);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s}
+.auth-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.auth-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.45);display:block;margin-bottom:6px}
+.auth-input{width:100%;padding:11px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink3);border:1px solid rgba(245,240,232,0.12);color:var(--paper);border-radius:4px;outline:none;margin-bottom:14px;transition:border-color 0.2s;box-sizing:border-box}
+.auth-input:focus{border-color:var(--gold)}
+.pw-wrap{position:relative;margin-bottom:14px}
+.pw-wrap .auth-input{margin-bottom:0;padding-right:42px}
+.pw-eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(245,240,232,0.35);font-size:15px;padding:4px}
+.pw-eye:hover{color:var(--gold)}
+.auth-btn{width:100%;padding:13px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:var(--gold);color:var(--ink);border:none;border-radius:4px;transition:all 0.2s;margin-top:4px}
+.auth-btn:hover{background:var(--gold2)}
+.auth-btn:disabled{opacity:0.6;cursor:not-allowed}
+.auth-btn2{width:100%;padding:10px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.35);border-radius:4px;transition:all 0.2s;margin-top:8px}
+.auth-msg{margin-top:12px;padding:10px 14px;border-radius:4px;font-size:11px;line-height:1.6;display:none}
+.auth-msg.err{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);color:#fca5a5;display:block}
+.auth-msg.ok{background:rgba(26,107,60,0.12);border:1px solid rgba(26,107,60,0.35);color:#6ee7a0;display:block}
+.auth-link{color:var(--gold);text-decoration:none;cursor:pointer;font-size:10px}
 
 /* HEADER */
 header{background:var(--ink);position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
@@ -171,30 +194,6 @@ footer{background:var(--ink);color:rgba(245,240,232,0.35);padding:16px 24px;font
   .dash-tabs{padding:0 12px}
   .wrap{padding:14px}
 }
-
-#login-screen{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
-.auth-box{width:100%;max-width:420px;background:var(--ink2);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:40px 36px}
-.auth-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--paper);margin-bottom:4px}
-.auth-logo em{color:var(--gold);font-style:normal}
-.auth-sub{font-size:9px;color:rgba(245,240,232,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px}
-.auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid rgba(245,240,232,0.1)}
-.auth-tab{flex:1;padding:9px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-align:center;cursor:pointer;color:rgba(245,240,232,0.35);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s}
-.auth-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-.auth-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.45);display:block;margin-bottom:6px}
-.auth-input{width:100%;padding:11px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink3);border:1px solid rgba(245,240,232,0.12);color:var(--paper);border-radius:4px;outline:none;margin-bottom:14px;transition:border-color 0.2s;box-sizing:border-box}
-.auth-input:focus{border-color:var(--gold)}
-.pw-wrap{position:relative;margin-bottom:14px}
-.pw-wrap .auth-input{margin-bottom:0;padding-right:42px}
-.pw-eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(245,240,232,0.35);font-size:15px;padding:4px}
-.pw-eye:hover{color:var(--gold)}
-.auth-btn{width:100%;padding:13px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.08em;cursor:pointer;background:var(--gold);color:var(--ink);border:none;border-radius:4px;transition:all 0.2s;margin-top:4px}
-.auth-btn:hover{background:var(--gold2)}
-.auth-btn:disabled{opacity:0.6;cursor:not-allowed}
-.auth-btn2{width:100%;padding:10px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.35);border-radius:4px;margin-top:8px}
-.auth-msg{margin-top:12px;padding:10px 14px;border-radius:4px;font-size:11px;line-height:1.6;display:none}
-.auth-msg.err{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);color:#fca5a5;display:block}
-.auth-msg.ok{background:rgba(26,107,60,0.12);border:1px solid rgba(26,107,60,0.35);color:#6ee7a0;display:block}
-.auth-link{color:var(--gold);text-decoration:none;cursor:pointer;font-size:10px}
 </style>
 </head>
 <body>
@@ -230,7 +229,7 @@ footer{background:var(--ink);color:rgba(245,240,232,0.35);padding:16px 24px;font
       <div class="auth-msg" id="rg-msg"></div>
     </div>
     <div id="aform-forgot" style="display:none">
-      <div style="font-size:12px;color:rgba(245,240,232,0.6);margin-bottom:14px;line-height:1.7">Enter your email and we will send a password reset link.</div>
+      <div style="font-size:12px;color:rgba(245,240,232,0.6);margin-bottom:14px;line-height:1.7">Enter your email and we will send a reset link.</div>
       <label class="auth-label">Email</label>
       <input class="auth-input" type="email" id="fp-email" placeholder="your@email.com"/>
       <button class="auth-btn" id="fp-btn" onclick="doForgot()">Send Reset Link &rarr;</button>
@@ -287,7 +286,7 @@ footer{background:var(--ink);color:rgba(245,240,232,0.35);padding:16px 24px;font
       <button class="btn" onclick="flt('Defence',this)">Defence</button>
       <button class="btn" onclick="flt('GovtInfra',this)">Govt/Infra</button>
       <button class="btn" onclick="flt('Healthcare',this)">Healthcare</button>
-      <button class="btn" onclick="flt('IT',this)">IT &amp; Consultancy</button>
+      <button class="btn" onclick="flt('IT',this)">IT</button>
     </div>
     <div class="psu-grid" id="psu-grid"></div>
   </div>
@@ -333,24 +332,127 @@ footer{background:var(--ink);color:rgba(245,240,232,0.35);padding:16px 24px;font
   <div id="dash-content"></div>
 </div>
 
-<footer id="main-footer" style="display:none">
+<footer style="display:none" id="main-footer">
   <div class="footer-inner">
     <span style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Zircon<span style="color:var(--gold)">IQ</span></span>
     <span>Data from public PSU portals &mdash; for reference only</span>
-    <span class="hdr-user" id="hdr-user"></span>
-      <button class="btn-signout" onclick="doSignOut()">Sign Out</button>
-      <a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.com</a>
+    <a href="mailto:info@zirconique.com" style="color:var(--gold);text-decoration:none;font-weight:600">info@zirconique.com</a>
     <span>&copy; 2026 Zirconique</span>
   </div>
 </footer>
 
 <script data-cfasync="false">
+
+// ── AUTH ──
+var SURL='https://xzstnkpwcxepvlooomdw.supabase.co';
+var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6c3Rua3B3Y3hlcHZsb29vbWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzY4MTEsImV4cCI6MjA4OTAxMjgxMX0.z5rWbBShix7WFzeka8AXGUZEacjjSHHI4RkyjU8siys';
+function tglPw(id,btn){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.innerHTML=i.type==='text'?'&#128064;':'&#128065;';}
+function swTab(t){['signin','register','forgot'].forEach(function(n){document.getElementById('aform-'+n).style.display=n===t?'block':'none';var e=document.getElementById('atab-'+n);if(e)e.classList.toggle('active',n===t);});}
+function amsg(id,txt,type){var e=document.getElementById(id);if(!e)return;e.textContent=txt;e.className='auth-msg '+type;}
+function showApp(email){document.getElementById('login-screen').style.display='none';document.getElementById('main-hdr').style.display='block';document.getElementById('select-screen').style.display='block';document.getElementById('main-footer').style.display='block';document.getElementById('hdr-user').textContent=email;renderGrid('all');}
+function doSignIn(){
+  var email=document.getElementById('si-email').value.trim();var pass=document.getElementById('si-pass').value;
+  if(!email||!pass){amsg('si-msg','Please enter email and password.','err');return;}
+  var btn=document.getElementById('si-btn');btn.disabled=true;btn.textContent='Signing in...';
+  fetch(SURL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pass})})
+  .then(function(r){return r.json();}).then(function(d){
+    if(d.access_token){sessionStorage.setItem('ziq_t',d.access_token);sessionStorage.setItem('ziq_e',email);showApp(email);}
+    else{var m=d.error_description||d.msg||d.error||'Sign in failed.';if(m.indexOf('not confirmed')>-1)m='Please confirm your email — check your inbox.';else if(m.indexOf('Invalid')>-1||m.indexOf('invalid_credentials')>-1)m='Incorrect email or password.';amsg('si-msg',m,'err');btn.disabled=false;btn.textContent='Sign In →';}
+  }).catch(function(e){amsg('si-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Sign In →';});
+}
+function doRegister(){
+  var name=document.getElementById('rg-name').value.trim();var co=document.getElementById('rg-co').value.trim();
+  var email=document.getElementById('rg-email').value.trim();var pass=document.getElementById('rg-pass').value;
+  if(!name||!email||!pass){amsg('rg-msg','Please fill all required fields.','err');return;}
+  if(pass.length<8){amsg('rg-msg','Password must be at least 8 characters.','err');return;}
+  var btn=document.getElementById('rg-btn');btn.disabled=true;btn.textContent='Registering...';
+  fetch(SURL+'/auth/v1/signup',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pass,data:{full_name:name,company:co}})})
+  .then(function(r){return r.json();}).then(function(d){
+    if(d.id||(d.identities&&d.identities.length>0)){amsg('rg-msg','Account created! Check your email for a confirmation link, then sign in.','ok');btn.disabled=true;}
+    else{amsg('rg-msg',d.error_description||d.msg||d.error||'Registration failed.','err');btn.disabled=false;btn.textContent='Request Access →';}
+  }).catch(function(e){amsg('rg-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Request Access →';});
+}
+function doForgot(){
+  var email=document.getElementById('fp-email').value.trim();if(!email){amsg('fp-msg','Please enter your email.','err');return;}
+  var btn=document.getElementById('fp-btn');btn.disabled=true;btn.textContent='Sending...';
+  fetch(SURL+'/auth/v1/recover',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email})})
+  .then(function(){amsg('fp-msg','Reset link sent! Check your inbox.','ok');}).catch(function(e){amsg('fp-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Send Reset Link →';});
+}
+function doSignOut(){
+  sessionStorage.removeItem('ziq_t');sessionStorage.removeItem('ziq_e');
+  document.getElementById('login-screen').style.display='flex';document.getElementById('main-hdr').style.display='none';
+  document.getElementById('select-screen').style.display='none';document.getElementById('dashboard').style.display='none';
+  document.getElementById('main-footer').style.display='none';document.getElementById('si-email').value='';
+  document.getElementById('si-pass').value='';document.getElementById('si-msg').className='auth-msg';swTab('signin');
+}
+(function(){var t=sessionStorage.getItem('ziq_t');var e=sessionStorage.getItem('ziq_e');if(t&&e){showApp(e);}})();
+
+
 // ═══════════════════════════════════════════════
 //  ZIRCONIQ — INDIA PSU BID INTELLIGENCE
 //  Single file, no external JS dependencies
 // ═══════════════════════════════════════════════
 
+// ── AUTH ──
+var SURL='https://xzstnkpwcxepvlooomdw.supabase.co';
+var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6c3Rua3B3Y3hlcHZsb29vbWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzY4MTEsImV4cCI6MjA4OTAxMjgxMX0.z5rWbBShix7WFzeka8AXGUZEacjjSHHI4RkyjU8siys';
+var _user=null;
 
+function tglPw(id,btn){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.innerHTML=i.type==='text'?'&#128064;':'&#128065;';}
+function swTab(t){['signin','register','forgot'].forEach(function(n){document.getElementById('aform-'+n).style.display=n===t?'block':'none';var e=document.getElementById('atab-'+n);if(e)e.classList.toggle('active',n===t);});}
+function amsg(id,txt,type){var e=document.getElementById(id);if(!e)return;e.textContent=txt;e.className='auth-msg '+type;}
+function showApp(email){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('main-hdr').style.display='block';
+  document.getElementById('select-screen').style.display='block';
+  document.getElementById('main-footer').style.display='block';
+  document.getElementById('hdr-user').textContent=email;
+  renderGrid('all');
+}
+function doSignIn(){
+  var email=document.getElementById('si-email').value.trim();
+  var pass=document.getElementById('si-pass').value;
+  if(!email||!pass){amsg('si-msg','Please enter email and password.','err');return;}
+  var btn=document.getElementById('si-btn');btn.disabled=true;btn.textContent='Signing in...';
+  fetch(SURL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pass})})
+  .then(function(r){return r.json();}).then(function(d){
+    if(d.access_token){_user=d.user;sessionStorage.setItem('ziq_t',d.access_token);sessionStorage.setItem('ziq_e',email);showApp(email);}
+    else{var m=d.error_description||d.msg||d.error||'Sign in failed.';if(m.indexOf('not confirmed')>-1)m='Please confirm your email first — check your inbox.';else if(m.indexOf('Invalid')>-1||m.indexOf('invalid_credentials')>-1)m='Incorrect email or password.';amsg('si-msg',m,'err');btn.disabled=false;btn.textContent='Sign In \u2192';}
+  }).catch(function(e){amsg('si-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Sign In \u2192';});
+}
+function doRegister(){
+  var name=document.getElementById('rg-name').value.trim();
+  var co=document.getElementById('rg-co').value.trim();
+  var email=document.getElementById('rg-email').value.trim();
+  var pass=document.getElementById('rg-pass').value;
+  if(!name||!email||!pass){amsg('rg-msg','Please fill all required fields.','err');return;}
+  if(pass.length<8){amsg('rg-msg','Password must be at least 8 characters.','err');return;}
+  var btn=document.getElementById('rg-btn');btn.disabled=true;btn.textContent='Registering...';
+  fetch(SURL+'/auth/v1/signup',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pass,data:{full_name:name,company:co}})})
+  .then(function(r){return r.json();}).then(function(d){
+    if(d.id||(d.identities&&d.identities.length>0)){amsg('rg-msg','Account created! Check your email for a confirmation link, then sign in.','ok');btn.disabled=true;}
+    else{amsg('rg-msg',d.error_description||d.msg||d.error||'Registration failed.','err');btn.disabled=false;btn.textContent='Request Access \u2192';}
+  }).catch(function(e){amsg('rg-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Request Access \u2192';});
+}
+function doForgot(){
+  var email=document.getElementById('fp-email').value.trim();
+  if(!email){amsg('fp-msg','Please enter your email.','err');return;}
+  var btn=document.getElementById('fp-btn');btn.disabled=true;btn.textContent='Sending...';
+  fetch(SURL+'/auth/v1/recover',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email})})
+  .then(function(){amsg('fp-msg','Reset link sent! Check your inbox.','ok');})
+  .catch(function(e){amsg('fp-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Send Reset Link \u2192';});
+}
+function doSignOut(){
+  _user=null;sessionStorage.removeItem('ziq_t');sessionStorage.removeItem('ziq_e');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('main-hdr').style.display='none';
+  document.getElementById('select-screen').style.display='none';
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('main-footer').style.display='none';
+  document.getElementById('si-email').value='';document.getElementById('si-pass').value='';
+  document.getElementById('si-msg').className='auth-msg';swTab('signin');
+}
+(function(){var t=sessionStorage.getItem('ziq_t');var e=sessionStorage.getItem('ziq_e');if(t&&e){_user={email:e};showApp(e);}})();
 
 // ── MASTER DATA — 50 ORGANISATIONS ──
 var ORGS = [
@@ -569,35 +671,36 @@ var ORGS = [
    sites:["Ranchi","New Delhi","Mumbai","Hyderabad"],
    tc:1240,al:91.8,capex:"Rs 800 Cr FY2025. Steel plant consultancy, mining, infrastructure DPRs.",
    portal:"https://meconlimited.co.in/tenders.php",wt:["mech","civil","elec"]},
+  // ADDITIONAL HEALTHCARE
+  {id:"pmjay",n:"PMJAY/NHA",f:"National Health Authority — PM Jan Arogya Yojana",s:"Healthcare",hq:"New Delhi",r:"Central Govt",ic:"🏥",c:"#e74c3c",
+   sites:["Pan India","State Health Agencies","District Hospitals"],
+   tc:8400,al:90.2,capex:"Rs 7,200 Cr FY2025. IT systems, hospital empanelment, health ID infrastructure, beneficiary management platform.",
+   portal:"https://pmjay.gov.in/tenders",wt:["health","it","civil","consult"]},
+  {id:"icmr",n:"ICMR",f:"Indian Council of Medical Research",s:"Healthcare",hq:"New Delhi",r:"Central Govt",ic:"🔬",c:"#1a6b3c",
+   sites:["New Delhi","Mumbai","Chennai","Kolkata","Bengaluru","Hyderabad","Bhopal","Jodhpur"],
+   tc:2840,al:91.8,capex:"Rs 2,400 Cr FY2025. Research equipment, lab infrastructure, biomedical research tools, clinical trial networks.",
+   portal:"https://icmr.gov.in/tenders.html",wt:["health","it","civil"]},
+  {id:"cdsco",n:"CDSCO",f:"Central Drugs Standard Control Organisation",s:"Healthcare",hq:"New Delhi",r:"Central Govt",ic:"💊",c:"#8e44ad",
+   sites:["New Delhi","Mumbai","Chennai","Kolkata","Ahmedabad","Hyderabad"],
+   tc:1240,al:92.4,capex:"Rs 840 Cr FY2025. Lab equipment, IT systems, drug testing infrastructure.",
+   portal:"https://cdsco.gov.in/opencms/opencms/en/Tenders/",wt:["health","it","civil"]},
+  // ADDITIONAL IT & CONSULTANCY
+  {id:"meity",n:"MeitY",f:"Ministry of Electronics & Information Technology",s:"IT & Technology",hq:"New Delhi",r:"Central Govt",ic:"💻",c:"#6c3483",
+   sites:["New Delhi","Bengaluru","Hyderabad","Chennai","Pune"],
+   tc:12400,al:91.2,capex:"Rs 14,200 Cr FY2025. Digital India, BharatNet Phase II, Semicon India, IndiaAI mission, Quantum computing.",
+   portal:"https://meity.gov.in/tenders",wt:["it","civil","consult"]},
+  {id:"stpi",n:"STPI",f:"Software Technology Parks of India",s:"IT & Technology",hq:"New Delhi",r:"Central Govt",ic:"🖥️",c:"#2c3e50",
+   sites:["New Delhi","Bengaluru","Hyderabad","Chennai","Pune","Mumbai","Kolkata","Noida"],
+   tc:2840,al:92.6,capex:"Rs 2,400 Cr FY2025. IT park infrastructure, data centres, incubation centres, STPI 2.0.",
+   portal:"https://www.stpi.in/tenders.php",wt:["it","civil","elec","consult"]},
+  {id:"npci",n:"NPCI",f:"National Payments Corporation of India",s:"IT & Technology",hq:"Mumbai",r:"Central Govt",ic:"💳",c:"#1a3a5c",
+   sites:["Mumbai","New Delhi","Hyderabad","Bengaluru"],
+   tc:1840,al:93.4,capex:"Rs 1,800 Cr FY2025. UPI infrastructure, RuPay network, payment systems cybersecurity.",
+   portal:"https://www.npci.org.in/who-we-are/tenders",wt:["it","consult"]},
   {id:"beml",n:"BEML",f:"Bharat Earth Movers Ltd",s:"Mining & Defence",hq:"Bengaluru",r:"Miniratna",ic:"🚧",c:"#c0392b",
    sites:["Bengaluru","KGF","Mysuru","Palakkad"],
    tc:1240,al:91.4,capex:"Rs 2,800 Cr FY2025. Metro rail coaches, mining equipment, defence mobility.",
-   portal:"https://bemlindia.in/tenders",wt:["mech","elec","civil"]},  // ADDITIONAL IT & CONSULTANCY
-  {id:"deity",n:"MeitY",f:"Ministry of Electronics & IT",s:"IT & Technology",hq:"New Delhi",r:"Central Govt",ic:"💻",c:"#6c3483",
-   sites:["New Delhi","Bengaluru","Hyderabad","Chennai","Pune"],
-   tc:12400,al:91.2,capex:"Rs 14,200 Cr FY2025. Digital India, BharatNet, Semicon India, IndiaAI mission.",
-   portal:"https://meity.gov.in/tenders",wt:["it","civil"]},
-  {id:"stpi",n:"STPI",f:"Software Technology Parks of India",s:"IT & Technology",hq:"New Delhi",r:"Central Govt",ic:"🖥️",c:"#2c3e50",
-   sites:["New Delhi","Bengaluru","Hyderabad","Chennai","Pune","Mumbai","Kolkata","Noida"],
-   tc:2840,al:92.6,capex:"Rs 2,400 Cr FY2025. IT park infrastructure, data centres, incubation centres.",
-   portal:"https://www.stpi.in/tenders.php",wt:["it","civil","elec"]},
-  {id:"npci",n:"NPCI",f:"National Payments Corporation of India",s:"IT & Technology",hq:"Mumbai",r:"Central Govt",ic:"💳",c:"#1a3a5c",
-   sites:["Mumbai","New Delhi","Hyderabad","Bengaluru"],
-   tc:1840,al:93.4,capex:"Rs 1,800 Cr FY2025. UPI infrastructure, payment systems, cybersecurity.",
-   portal:"https://www.npci.org.in/who-we-are/tenders",wt:["it"]},
-  {id:"wdc",n:"WAPCOS / RITES PMC",f:"Consultancy — Water, Power & Civil Projects",s:"Engineering Consultancy",hq:"Gurugram",r:"Miniratna",ic:"⚙️",c:"#16a085",
-   sites:["Gurugram","Mumbai","Chennai","Kolkata","Bengaluru","Bhopal"],
-   tc:4840,al:91.4,capex:"Rs 3,200 Cr FY2025. DPR, PMC, transaction advisory for infra projects.",
-   portal:"https://wapcos.gov.in/tenders",wt:["civil","mech","elec"]},
-  {id:"tcs_govt",n:"TCS BaNCS / Govt IT",f:"Tata Consultancy Services — Govt Division",s:"IT & Consultancy",hq:"Mumbai",r:"Private",ic:"🖧",c:"#e74c3c",
-   sites:["Pan India"],
-   tc:8400,al:92.2,capex:"Major supplier to Govt of India. Passport Seva, Customs IT, e-courts, tax systems.",
-   portal:"https://www.tcs.com/tenders",wt:["it"]},
-  {id:"wipro_govt",n:"Wipro GovTech",f:"Wipro — Government & Public Services",s:"IT & Consultancy",hq:"Bengaluru",r:"Private",ic:"📊",c:"#8e44ad",
-   sites:["Pan India"],
-   tc:6240,al:91.8,capex:"Major govt IT supplier. State e-governance, smart cities, defence IT, UIDAI systems.",
-   portal:"https://www.wipro.com/government",wt:["it"]},
-
+   portal:"https://bemlindia.in/tenders",wt:["mech","elec","civil"]},
 ];
 
 // ── WORK TYPES ──
@@ -610,10 +713,10 @@ var WTS = {
     items:["RCC M25/M30 Structures","Foundation Works (Raft/Pile)","Road & Paving Works","Storm Drainage & Sewerage","Waterproofing Works","Industrial Building Construction","Boundary Wall & Fencing","Landscaping & Horticulture","Soil Improvement Works","Structural Repair & Renovation","Pre-engineered Building","Flooring & Finishing Works"]},
   it:{l:"IT & Technology",ic:"💻",c:"#6c3483",bb:"rgba(108,52,131,0.12)",bc:"rgba(108,52,131,0.35)",
     items:["ERP Implementation","Cloud Migration & Hosting","Cybersecurity Solutions","Data Centre Setup & AMC","Custom Software Development","Network Infrastructure","IT Hardware Supply & AMC","Digital Transformation Consulting","GIS & Mapping Solutions","Smart City / IoT Platform","CCTV & Surveillance Systems","Biometric & Access Control"]},
-  consult:{l:"Consultancy / CMS / IT",ic:"📋",c:"#117a65",bb:"rgba(17,122,101,0.12)",bc:"rgba(17,122,101,0.3)",
-    items:["Project Management Consultancy (PMC)","Detailed Project Report (DPR)","Feasibility & Techno-Economic Study","Design & Engineering Consultancy","Transaction & Financial Advisory","Construction Management Services (CMS)","Quality Assurance & Third Party Inspection","IT System Design & Architecture","Regulatory & Compliance Advisory","Environmental Impact Assessment","Capacity Building & Training","Operation & Maintenance Advisory"]},
   health:{l:"Healthcare",ic:"🏥",c:"#1a6b3c",bb:"rgba(26,107,60,0.1)",bc:"rgba(26,107,60,0.3)",
     items:["Medical Imaging Equipment (CT/MRI/X-ray)","Patient Monitoring Systems","OT & ICU Equipment Setup","Diagnostic Lab Equipment","Hospital Furniture & Fixtures","Pharmacy & Consumable Supply","Biomedical AMC & PPM","CSSD & Sterilisation Equipment","Medical Gas Pipeline System","Hospital IT & HMIS Software","Ambulance & Emergency Equipment","Waste Management Systems"]},
+  consult:{l:"Consultancy/CMS/IT",ic:"📋",c:"#117a65",bb:"rgba(17,122,101,0.12)",bc:"rgba(17,122,101,0.3)",
+    items:["Project Management Consultancy (PMC)","Detailed Project Report (DPR)","Feasibility & Techno-Economic Study","Design & Engineering Consultancy","Transaction & Financial Advisory","Construction Management Services (CMS)","Quality Assurance & Third Party Inspection","IT System Design & Architecture","Regulatory & Compliance Advisory","Environmental Impact Assessment","Capacity Building & Training","O&M Advisory & Asset Management"],}
 };
 
 // ── CONTRACTORS ──
@@ -666,18 +769,6 @@ var CTRS = {
     {n:"C-DAC",b:36,w:14,wr:38.9,al:93.2,sp:"Supercomputing, Govt Software",th:"MED",p:"Specialist in indigenous govt software. Strong on niche tech tenders."},
     {n:"Accenture India",b:28,w:10,wr:35.7,al:93.6,sp:"Digital Transformation",th:"MED",p:"Selective high-value projects. Wins on methodology not price."},
   ],
-  consult:[
-    {n:"L&T Construction (PMC)",b:68,w:28,wr:41.2,al:91.4,sp:"PMC, DPR, Project Controls",th:"HIGH",p:"Largest PMC player in India. Competes on all large infrastructure PMC assignments."},
-    {n:"AECOM India",b:48,w:18,wr:37.5,al:92.6,sp:"Design, DPR, Environmental",th:"HIGH",p:"Strong in international-funded project consulting. Dominant on World Bank / ADB projects."},
-    {n:"Jacobs Engineering",b:38,w:14,wr:36.8,al:93.2,sp:"Design Consultancy, QA/QC",th:"HIGH",p:"International firm — competes on high-value design and PMC tenders."},
-    {n:"STUP Consultants",b:56,w:18,wr:32.1,al:91.8,sp:"Structural Design, Bridge Design",th:"HIGH",p:"Dominant in bridge and structural design. Most aggressive on bridge DPR tenders."},
-    {n:"RITES Ltd",b:64,w:24,wr:37.5,al:92.4,sp:"Railway, Transport PMC, Surveys",th:"HIGH",p:"Govt-owned — preferred for railway and transport PMC. Strong client loyalty."},
-    {n:"WAPCOS Ltd",b:52,w:18,wr:34.6,al:91.6,sp:"Water, Irrigation, PMC",th:"HIGH",p:"Dominant in water sector consulting. Preferred for World Bank funded water projects."},
-    {n:"Grant Thornton India",b:28,w:9,wr:32.1,al:93.4,sp:"Transaction Advisory, Audit",th:"MED",p:"Strong in financial advisory and transaction consulting for govt privatisation and PPP."},
-    {n:"KPMG India",b:24,w:8,wr:33.3,al:94.2,sp:"Transaction Advisory, Regulatory",th:"MED",p:"Selective high-value advisory. Wins on brand and methodology for large transactions."},
-    {n:"EY India",b:22,w:7,wr:31.8,al:93.8,sp:"Transaction Advisory, PPP",th:"MED",p:"Strong in PPP structuring and regulatory advisory."},
-    {n:"TCIL",b:44,w:14,wr:31.8,al:92.8,sp:"Telecom, IT Consulting, PMC",th:"MED",p:"Govt-owned — strong in telecom and IT consulting."},
-  ],
   health:[
     {n:"GE Healthcare India",b:48,w:19,wr:39.6,al:91.2,sp:"Imaging, Diagnostics, ICU",th:"HIGH",p:"Dominant in high-value imaging (CT/MRI/X-ray). Most aggressive on diagnostic packages."},
     {n:"Philips India",b:42,w:16,wr:38.1,al:92.4,sp:"Patient Monitoring, Diagnostics",th:"HIGH",p:"Strong in patient monitoring and ultrasound across AIIMS and ESIC tenders."},
@@ -690,6 +781,18 @@ var CTRS = {
     {n:"BPL Medical Technologies",b:44,w:13,wr:29.5,al:91.6,sp:"Patient Monitoring, ECG",th:"MED",p:"Indian manufacturer — competitive on monitoring and basic diagnostics."},
     {n:"Mindray India",b:34,w:11,wr:32.4,al:90.4,sp:"Monitoring, Ultrasound",th:"MED",p:"Aggressive pricing. Very competitive on monitoring and ultrasound packages."},
   ],
+  consult:[
+    {n:"L&T Construction PMC",b:68,w:28,wr:41.2,al:91.4,sp:"PMC, DPR, Project Controls",th:"HIGH",p:"Largest PMC player in India. Competes on all large infrastructure PMC assignments across PSUs."},
+    {n:"AECOM India",b:48,w:18,wr:37.5,al:92.6,sp:"Design, DPR, Environmental",th:"HIGH",p:"Strong in international-funded consulting. Dominant on World Bank and ADB infrastructure projects."},
+    {n:"Jacobs Engineering India",b:38,w:14,wr:36.8,al:93.2,sp:"Design Consultancy, QA/QC",th:"HIGH",p:"International firm competing on high-value design and PMC tenders for PSUs."},
+    {n:"STUP Consultants",b:56,w:18,wr:32.1,al:91.8,sp:"Structural Design, Bridge DPR",th:"HIGH",p:"Dominant in bridge and structural design. Most aggressive on bridge DPR tenders."},
+    {n:"RITES Ltd",b:64,w:24,wr:37.5,al:92.4,sp:"Railway, Transport PMC",th:"HIGH",p:"Govt-owned — preferred for railway and transport PMC. Strong institutional loyalty."},
+    {n:"WAPCOS Ltd",b:52,w:18,wr:34.6,al:91.6,sp:"Water, Irrigation PMC",th:"HIGH",p:"Dominant in water sector consulting. Preferred for World Bank funded water projects."},
+    {n:"Grant Thornton India",b:28,w:9,wr:32.1,al:93.4,sp:"Transaction Advisory, Audit",th:"MED",p:"Strong in financial advisory for govt privatisation and PPP transaction structuring."},
+    {n:"KPMG India",b:24,w:8,wr:33.3,al:94.2,sp:"Transaction Advisory, Regulatory",th:"MED",p:"Selective high-value advisory. Wins on brand and methodology for large transactions."},
+    {n:"EY India",b:22,w:7,wr:31.8,al:93.8,sp:"Transaction Advisory, PPP",th:"MED",p:"Strong in PPP structuring and regulatory advisory for central govt projects."},
+    {n:"TCIL",b:44,w:14,wr:31.8,al:92.8,sp:"Telecom, IT Consulting, PMC",th:"MED",p:"Govt-owned — strong in telecom and IT consulting across central ministries."},
+  ]
 };
 
 // ── STATE ──
@@ -707,8 +810,8 @@ function renderGrid(f){
       if(f==='Oil') return o.s.includes('Oil')||o.s.includes('Gas')||o.s.includes('Bio');
       if(f==='Defence') return o.s.includes('Defence')||o.s.includes('Aerospace');
       if(f==='GovtInfra') return o.s.includes('Govt')||o.s.includes('Railway')||o.s.includes('Road')||o.s.includes('Urban')||o.s.includes('Water')||o.s.includes('Logist')||o.s.includes('Aviation')||o.s.includes('Warehousing');
-      if(f==='Healthcare') return o.s.includes('Healthcare')||o.s.includes('Health')||o.s.includes('Medical');
-      if(f==='IT') return o.s.includes('IT')||o.s.includes('Telecom')||o.s.includes('Consultancy');
+      if(f==='Healthcare') return o.s.includes('Healthcare')||o.s.includes('Health');
+      if(f==='IT') return o.s.includes('IT')||o.s.includes('Telecom');
       return true;
     });
   }
@@ -872,38 +975,14 @@ function genBOQ(oid,wk){
     mech:[8400,24000,680000,480000,1840000,1800,82000,420000,28000,48000000,68000,85000],
     civil:[8400,9200,1800,6800,1400,680,86000,120,4200,980,1800,3200],
     it:[250000,180000,840000,2400000,680000,120000,85000,1200000,320000,4800000,280000,150000],
-    consult:[
-    {n:"L&T Construction (PMC)",b:68,w:28,wr:41.2,al:91.4,sp:"PMC, DPR, Project Controls",th:"HIGH",p:"Largest PMC player in India. Competes on all large infrastructure PMC assignments."},
-    {n:"AECOM India",b:48,w:18,wr:37.5,al:92.6,sp:"Design, DPR, Environmental",th:"HIGH",p:"Strong in international-funded project consulting. Dominant on World Bank / ADB projects."},
-    {n:"Jacobs Engineering",b:38,w:14,wr:36.8,al:93.2,sp:"Design Consultancy, QA/QC",th:"HIGH",p:"International firm — competes on high-value design and PMC tenders."},
-    {n:"STUP Consultants",b:56,w:18,wr:32.1,al:91.8,sp:"Structural Design, Bridge Design",th:"HIGH",p:"Dominant in bridge and structural design. Most aggressive on bridge DPR tenders."},
-    {n:"RITES Ltd",b:64,w:24,wr:37.5,al:92.4,sp:"Railway, Transport PMC, Surveys",th:"HIGH",p:"Govt-owned — preferred for railway and transport PMC. Strong client loyalty."},
-    {n:"WAPCOS Ltd",b:52,w:18,wr:34.6,al:91.6,sp:"Water, Irrigation, PMC",th:"HIGH",p:"Dominant in water sector consulting. Preferred for World Bank funded water projects."},
-    {n:"Grant Thornton India",b:28,w:9,wr:32.1,al:93.4,sp:"Transaction Advisory, Audit",th:"MED",p:"Strong in financial advisory and transaction consulting for govt privatisation and PPP."},
-    {n:"KPMG India",b:24,w:8,wr:33.3,al:94.2,sp:"Transaction Advisory, Regulatory",th:"MED",p:"Selective high-value advisory. Wins on brand and methodology for large transactions."},
-    {n:"EY India",b:22,w:7,wr:31.8,al:93.8,sp:"Transaction Advisory, PPP",th:"MED",p:"Strong in PPP structuring and regulatory advisory."},
-    {n:"TCIL",b:44,w:14,wr:31.8,al:92.8,sp:"Telecom, IT Consulting, PMC",th:"MED",p:"Govt-owned — strong in telecom and IT consulting."},
-  ],
-  health:[4200000,680000,1840000,320000,85000,42000,180000,2800000,480000,920000,240000,65000],
+    health:[4200000,680000,1840000,320000,85000,42000,180000,2800000,480000,920000,240000,65000],
   };
   var units={
     elec:["per m","per m","per m","per nos","per nos","per nos","per m","per m","per nos","per nos","per nos","per nos"],
     mech:["per m","per m","per nos","per nos","per nos","per m","per MT","per nos","per nos","per nos","per MT","per set"],
     civil:["cum","cum","cum","cum","sqm","sqm","per MT","sqm","per m","sqm","sqm","per m"],
     it:["per licence","per month","lumpsum","lumpsum","lumpsum","per month","per month","lumpsum","per location","lumpsum","per device","lumpsum"],
-    consult:[
-    {n:"L&T Construction (PMC)",b:68,w:28,wr:41.2,al:91.4,sp:"PMC, DPR, Project Controls",th:"HIGH",p:"Largest PMC player in India. Competes on all large infrastructure PMC assignments."},
-    {n:"AECOM India",b:48,w:18,wr:37.5,al:92.6,sp:"Design, DPR, Environmental",th:"HIGH",p:"Strong in international-funded project consulting. Dominant on World Bank / ADB projects."},
-    {n:"Jacobs Engineering",b:38,w:14,wr:36.8,al:93.2,sp:"Design Consultancy, QA/QC",th:"HIGH",p:"International firm — competes on high-value design and PMC tenders."},
-    {n:"STUP Consultants",b:56,w:18,wr:32.1,al:91.8,sp:"Structural Design, Bridge Design",th:"HIGH",p:"Dominant in bridge and structural design. Most aggressive on bridge DPR tenders."},
-    {n:"RITES Ltd",b:64,w:24,wr:37.5,al:92.4,sp:"Railway, Transport PMC, Surveys",th:"HIGH",p:"Govt-owned — preferred for railway and transport PMC. Strong client loyalty."},
-    {n:"WAPCOS Ltd",b:52,w:18,wr:34.6,al:91.6,sp:"Water, Irrigation, PMC",th:"HIGH",p:"Dominant in water sector consulting. Preferred for World Bank funded water projects."},
-    {n:"Grant Thornton India",b:28,w:9,wr:32.1,al:93.4,sp:"Transaction Advisory, Audit",th:"MED",p:"Strong in financial advisory and transaction consulting for govt privatisation and PPP."},
-    {n:"KPMG India",b:24,w:8,wr:33.3,al:94.2,sp:"Transaction Advisory, Regulatory",th:"MED",p:"Selective high-value advisory. Wins on brand and methodology for large transactions."},
-    {n:"EY India",b:22,w:7,wr:31.8,al:93.8,sp:"Transaction Advisory, PPP",th:"MED",p:"Strong in PPP structuring and regulatory advisory."},
-    {n:"TCIL",b:44,w:14,wr:31.8,al:92.8,sp:"Telecom, IT Consulting, PMC",th:"MED",p:"Govt-owned — strong in telecom and IT consulting."},
-  ],
-  health:["per nos","per nos","per nos","per nos","per nos","per month","per nos","per nos","lumpsum","lumpsum","per nos","per month"],
+    health:["per nos","per nos","per nos","per nos","per nos","per month","per nos","per nos","lumpsum","lumpsum","per nos","per month"],
   };
   var risks=[["LOW","MED","HIGH","LOW","MED","LOW","HIGH","MED","LOW","MED","MED","HIGH"],
              ["MED","HIGH","LOW","MED","HIGH","LOW","MED","MED","LOW","HIGH","MED","LOW"],
@@ -928,19 +1007,7 @@ function getRiskNote(wk,i,risk){
     mech:["Material costs volatile with MS plate prices","Nickel surcharge risk — PSU SOR often 12+ months old","Well-established market; L1 at 91-94%","Varies hugely by size — verify shell diameter","Import component risk; lead time 20-24 weeks","Stable market; L1 at 88-92%","Steel price indexation — check if escalation clause applies","Duct work quantities often underestimated","Standard item; L1 at 88-91%","Floor plate cost often underestimated; check soil conditions","Quantities often 20-25% higher than estimate","Lump sum item; straightforward pricing"],
     civil:["Aggregate and cement prices stable; L1 at 88-92%","Standard item — well-benchmarked in market","Blasting cost and disposal rarely included in SOR","Labour-intensive; L1 bids at 84-88%","Sub-base preparation often under-scoped","Material quality varies; specify grade in bid","Steel price fluctuation risk; check SOR date","Standard item; straightforward","Bedding and haunching quantities often underestimated","Fixture cut-outs add 15-20% to labour","Base preparation cost varies by soil condition","PSU estimate rarely accounts for variation in ground conditions"],
     it:["Standard licensing — competitive market","Monthly billing model — verify scope carefully","Integration complexity often underestimated","Hardware and civil costs separate — verify scope","Define deliverables precisely; scope creep risk","Ongoing commitment — verify SLA terms","Verify OEM support included","Document requirements rigorously before bidding","Site-specific variations — inspect before quoting","Customisation costs high — clarify in pre-bid","Warranty and AMC terms critical","Detailed change management plan required"],
-    consult:[
-    {n:"L&T Construction (PMC)",b:68,w:28,wr:41.2,al:91.4,sp:"PMC, DPR, Project Controls",th:"HIGH",p:"Largest PMC player in India. Competes on all large infrastructure PMC assignments."},
-    {n:"AECOM India",b:48,w:18,wr:37.5,al:92.6,sp:"Design, DPR, Environmental",th:"HIGH",p:"Strong in international-funded project consulting. Dominant on World Bank / ADB projects."},
-    {n:"Jacobs Engineering",b:38,w:14,wr:36.8,al:93.2,sp:"Design Consultancy, QA/QC",th:"HIGH",p:"International firm — competes on high-value design and PMC tenders."},
-    {n:"STUP Consultants",b:56,w:18,wr:32.1,al:91.8,sp:"Structural Design, Bridge Design",th:"HIGH",p:"Dominant in bridge and structural design. Most aggressive on bridge DPR tenders."},
-    {n:"RITES Ltd",b:64,w:24,wr:37.5,al:92.4,sp:"Railway, Transport PMC, Surveys",th:"HIGH",p:"Govt-owned — preferred for railway and transport PMC. Strong client loyalty."},
-    {n:"WAPCOS Ltd",b:52,w:18,wr:34.6,al:91.6,sp:"Water, Irrigation, PMC",th:"HIGH",p:"Dominant in water sector consulting. Preferred for World Bank funded water projects."},
-    {n:"Grant Thornton India",b:28,w:9,wr:32.1,al:93.4,sp:"Transaction Advisory, Audit",th:"MED",p:"Strong in financial advisory and transaction consulting for govt privatisation and PPP."},
-    {n:"KPMG India",b:24,w:8,wr:33.3,al:94.2,sp:"Transaction Advisory, Regulatory",th:"MED",p:"Selective high-value advisory. Wins on brand and methodology for large transactions."},
-    {n:"EY India",b:22,w:7,wr:31.8,al:93.8,sp:"Transaction Advisory, PPP",th:"MED",p:"Strong in PPP structuring and regulatory advisory."},
-    {n:"TCIL",b:44,w:14,wr:31.8,al:92.8,sp:"Telecom, IT Consulting, PMC",th:"MED",p:"Govt-owned — strong in telecom and IT consulting."},
-  ],
-  health:["Equipment specifications — verify make/model equivalence","Import lead time 6-8 weeks — factor into delivery","Site preparation by client — verify in SOR","Consumables list critical — verify quantities","Standard market pricing","Response time SLA critical — verify penalty clause","Calibration and certification costs included","Installation complexity varies by floor layout","Civil and electrical by others — verify scope","Software customisation often underestimated","Service network availability — check in city","Dedicated technical staff required"],
+    health:["Equipment specifications — verify make/model equivalence","Import lead time 6-8 weeks — factor into delivery","Site preparation by client — verify in SOR","Consumables list critical — verify quantities","Standard market pricing","Response time SLA critical — verify penalty clause","Calibration and certification costs included","Installation complexity varies by floor layout","Civil and electrical by others — verify scope","Software customisation often underestimated","Service network availability — check in city","Dedicated technical staff required"],
   };
   var nl=notes[wk]||notes.civil;
   return nl[i%nl.length];
@@ -973,6 +1040,7 @@ function launch(){
     {k:'boq',l:'&#128208; BOQ Benchmarks'},
   ];
   if(o.dsr) tabs.push({k:'dsr',l:'&#128203; DSR Rates'});
+  tabs.push({k:'advisor',l:'&#129302; AI Bid Advisor'});
   tabs.push({k:'org',l:'&#127970; Organisation'});
   document.getElementById('dash-tabs').innerHTML=tabs.map(function(t,i){
     return '<div class="dash-tab'+(i===0?' active':'')+'" onclick="showTab(\''+t.k+'\')" id="dtab-'+t.k+'">'+t.l+'</div>';
@@ -1164,6 +1232,48 @@ function renderTab(k){
       +'</div>'
       +'</div>';
   }
+
+  else if(k==='advisor'){
+    var o2=ORGS.find(function(x){return x.id===selOrg;});
+    var w2=WTS[selWt];
+    var cl2=curTenders.filter(function(t){return t.st==='closed';});
+    var avgL1b=(cl2.reduce(function(a,b){return a+b.l1;},0)/cl2.length).toFixed(1);
+    var minL1b=Math.min.apply(null,cl2.map(function(t){return t.l1;})).toFixed(1);
+    var avgBidb=(cl2.reduce(function(a,b){return a+b.nb;},0)/cl2.length).toFixed(1);
+    var topCtr=curCtrs[0]?curCtrs[0].n:'competitors';
+    el.innerHTML='<div class="wrap">'
+      +'<div class="sh"><h2>AI Bid Advisor</h2><span class="sh-b">'+o2.n+' · '+w2.l+' Works</span></div>'
+      +'<div class="ai-grid">'
+      +'<div class="ai-form">'
+      +'<div class="fg"><label>Estimated Value (₹ Cr)</label><input type="number" id="ai-est" placeholder="e.g. 4.75" step="0.01" oninput="calcRange()"/></div>'
+      +'<div class="fg"><label>Your Planned Bid (₹ Cr)</label><input type="number" id="ai-quote" placeholder="Optional — for assessment" step="0.01"/></div>'
+      +'<div class="fg"><label>Key Scope Notes</label><textarea id="ai-notes" placeholder="e.g. Remote site, imported equipment, tight schedule..."></textarea></div>'
+      +'<div class="fg"><label>Competition Assessment</label>'
+      +'<select id="ai-comp"><option value="">Not sure</option><option>L&T definitely bidding</option><option>KEC / Kalpataru aggressive</option><option>Limited competition expected</option><option>'+topCtr+' likely bidding</option></select></div>'
+      +'<button class="ai-btn" id="ai-go" onclick="runAdvisor()">Get AI Bid Recommendation →</button>'
+      +'<div id="ai-range" style="margin-top:12px;padding:12px;background:var(--paper2);border-radius:4px;font-size:12px;display:none">'
+      +'<div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">QUICK CALCULATOR</div>'
+      +'<div id="ai-range-vals"></div>'
+      +'</div>'
+      +'</div>'
+      +'<div>'
+      +'<div class="ai-out-box">'
+      +'<div class="ai-status" id="ai-status">Enter tender details and click Get AI Bid Recommendation</div>'
+      +'<div id="ai-out"><div style="padding:20px;text-align:center;color:rgba(245,240,232,0.3);font-size:13px">AI analysis will appear here</div></div>'
+      +'</div>'
+      +'</div>'
+      +'</div>'
+      +'<div style="margin-top:18px;padding:14px 18px;background:var(--paper2);border-radius:4px">'
+      +'<div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px">HISTORICAL INTELLIGENCE SUMMARY</div>'
+      +'<div class="grid3">'
+      +'<div style="text-align:center"><div style="font-size:24px;font-weight:700">'+avgL1b+'%</div><div style="font-size:10px;color:var(--ink3)">Avg L1 ('+cl2.length+' tenders)</div></div>'
+      +'<div style="text-align:center"><div style="font-size:24px;font-weight:700">'+minL1b+'%</div><div style="font-size:10px;color:var(--ink3)">Lowest L1 Recorded</div></div>'
+      +'<div style="text-align:center"><div style="font-size:24px;font-weight:700">'+avgBidb+'</div><div style="font-size:10px;color:var(--ink3)">Avg Bidders/Tender</div></div>'
+      +'</div>'
+      +'</div>'
+      +'</div>';
+    setTimeout(calcRange,100);
+  }
   else if(k==='org'){
     el.innerHTML='<div class="wrap">'
       +'<div class="sh"><h2>Organisation Profile</h2><span class="sh-b">'+o.n+' \u00b7 '+o.f+'</span></div>'
@@ -1193,98 +1303,61 @@ function renderTab(k){
   }
 }
 
-// ── AUTH ──
-var SURL='https://xzstnkpwcxepvlooomdw.supabase.co';
-var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6c3Rua3B3Y3hlcHZsb29vbWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzY4MTEsImV4cCI6MjA4OTAxMjgxMX0.z5rWbBShix7WFzeka8AXGUZEacjjSHHI4RkyjU8siys';
 
-function tglPw(id,btn){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.innerHTML=i.type==='text'?'&#128064;':'&#128065;';}
-function swTab(t){['signin','register','forgot'].forEach(function(n){document.getElementById('aform-'+n).style.display=n===t?'block':'none';var e=document.getElementById('atab-'+n);if(e)e.classList.toggle('active',n===t);});}
-function amsg(id,txt,type){var e=document.getElementById(id);if(!e)return;e.textContent=txt;e.className='auth-msg '+type;}
-
-function showApp(email){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('main-hdr').style.display='block';
-  document.getElementById('select-screen').style.display='block';
-  document.getElementById('main-footer').style.display='block';
-  document.getElementById('hdr-user').textContent=email;
-  renderGrid('all');
+function calcRange(){
+  var est=parseFloat(document.getElementById('ai-est').value)||0;
+  var rng=document.getElementById('ai-range');
+  var vals=document.getElementById('ai-range-vals');
+  if(!est||est<=0){rng.style.display='none';return;}
+  var o=ORGS.find(function(x){return x.id===selOrg;});
+  var avgL=parseFloat((curTenders.filter(function(t){return t.st==='closed';}).reduce(function(a,b){return a+b.l1;},0)/curTenders.filter(function(t){return t.st==='closed';}).length).toFixed(1));
+  var minL=parseFloat(Math.min.apply(null,curTenders.filter(function(t){return t.st==='closed';}).map(function(t){return t.l1;})).toFixed(1));
+  var agg=(est*( minL+0.5)/100).toFixed(2);
+  var comp=(est*(avgL-1)/100).toFixed(2);
+  var cons=(est*(avgL+1)/100).toFixed(2);
+  vals.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">'
+    +'<div><div style="font-size:16px;font-weight:700;color:var(--green2)">₹'+agg+'Cr</div><div style="font-size:10px;color:var(--ink3)">Aggressive ('+( minL+0.5).toFixed(1)+'%)</div></div>'
+    +'<div><div style="font-size:16px;font-weight:700;color:var(--gold)">₹'+comp+'Cr</div><div style="font-size:10px;color:var(--ink3)">Competitive ('+(avgL-1).toFixed(1)+'%)</div></div>'
+    +'<div><div style="font-size:16px;font-weight:700;color:var(--red)">₹'+cons+'Cr</div><div style="font-size:10px;color:var(--ink3)">Conservative ('+(avgL+1).toFixed(1)+'%)</div></div>'
+    +'</div>';
+  rng.style.display='block';
 }
 
-function doSignIn(){
-  var email=document.getElementById('si-email').value.trim();
-  var pass=document.getElementById('si-pass').value;
-  if(!email||!pass){amsg('si-msg','Please enter email and password.','err');return;}
-  var btn=document.getElementById('si-btn');btn.disabled=true;btn.textContent='Signing in...';
-  fetch(SURL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pass})})
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(d.access_token){
-      sessionStorage.setItem('ziq_t',d.access_token);
-      sessionStorage.setItem('ziq_e',email);
-      showApp(email);
-    } else {
-      var m=d.error_description||d.msg||d.error||'Sign in failed.';
-      if(m.indexOf('not confirmed')>-1)m='Please confirm your email first — check your inbox.';
-      else if(m.indexOf('Invalid')>-1||m.indexOf('invalid_credentials')>-1)m='Incorrect email or password.';
-      amsg('si-msg',m,'err');btn.disabled=false;btn.textContent='Sign In →';
-    }
-  })
-  .catch(function(e){amsg('si-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Sign In →';});
+function runAdvisor(){
+  var est=document.getElementById('ai-est').value.trim();
+  var quote=document.getElementById('ai-quote').value.trim();
+  var notes=document.getElementById('ai-notes').value.trim();
+  var comp=document.getElementById('ai-comp').value;
+  if(!est){document.getElementById('ai-out').innerHTML='<div style="color:var(--red);padding:12px">Please enter the estimated value first.</div>';return;}
+  var o=ORGS.find(function(x){return x.id===selOrg;});
+  var w=WTS[selWt];
+  var cl=curTenders.filter(function(t){return t.st==='closed';});
+  var avgL1=(cl.reduce(function(a,b){return a+b.l1;},0)/cl.length).toFixed(1);
+  var minL1=Math.min.apply(null,cl.map(function(t){return t.l1;})).toFixed(1);
+  var avgBid=(cl.reduce(function(a,b){return a+b.nb;},0)/cl.length).toFixed(1);
+  var recBid=(parseFloat(est)*(parseFloat(avgL1)-1.5)/100).toFixed(2);
+  var btn=document.getElementById('ai-go');
+  btn.disabled=true;btn.textContent='Analysing...';
+  document.getElementById('ai-status').textContent='GENERATING RECOMMENDATION...';
+  var out=document.getElementById('ai-out');
+  // Generate structured analysis
+  var overBid=quote&&parseFloat(quote)>(parseFloat(est)*parseFloat(avgL1)/100);
+  setTimeout(function(){
+    out.innerHTML=''
+      +'<div class="ai-sec"><h4>💡 BID RECOMMENDATION</h4><p>Based on <span class="hi">'+cl.length+' historical '+o.n+' '+w.l+' tenders</span>, the optimal bid is <span class="hi">₹'+recBid+'Cr ('+((parseFloat(recBid)/parseFloat(est))*100).toFixed(1)+'% of estimate)</span>. This is 1.5% below the historical L1 average of '+avgL1+'%, giving strong win probability while protecting margin.'+(overBid?'<br/><span class="al">⚠ Your planned bid of ₹'+quote+'Cr appears above the expected L1 level — you risk losing.</span>':quote?' Your planned bid of ₹'+quote+'Cr is <span class="hi">competitive</span> — proceed with confidence.':'')+'</p></div>'
+      +'<div class="ai-sec"><h4>📊 L1 THREAT ANALYSIS</h4><p>Historical L1 for '+w.l+' at '+o.n+' ranges from <span class="hi">'+minL1+'% to '+avgL1+'%</span> of estimate. Average '+avgBid+' bidders per tender.'+(comp?' Watch <span class="hi">'+comp+'</span> — check their historical patterns in the Contractor Intel tab.':' Expect 6–9 bidders based on historical data for this PSU and work type.')+'</p></div>'
+      +'<div class="ai-sec"><h4>&#127919; MARGIN PROTECTION STRATEGY</h4><p>For '+w.l+' works at '+o.n+', protect margin by: (1) applying accurate <span class="hi">escalation provisions</span> on material-intensive items, (2) factoring in <span class="hi">site-specific logistics</span> for '+o.sites[0]+' region, (3) including <span class="hi">mobilisation costs</span> in your rate build-up.'+(notes?' Note: '+notes:'')+'</p></div>'
+      +'<div class="ai-sec"><h4>☑️ COMPLIANCE CHECKLIST</h4><p>Before submission verify: EMD/Bid Security (typically 2–3% of estimate), Performance Guarantee (5–10%), Turnover criterion (2–3x estimated value), Experience certificate (1 similar work of 50–60% value), Valid EPF/ESI registration, GST compliance certificate, and Labour licence if applicable.</p></div>'
+      +'<div class="ai-sec"><h4>👁️ KEY WATCH-OUTS</h4><p>For '+o.n+' '+w.l+' tenders: check NIT for <span class="hi">liquidated damages clause</span> (often 0.5%/week), verify <span class="hi">payment terms</span> (RA bills vs milestone), confirm <span class="hi">price variation clause</span> applicability, and review <span class="hi">dispute resolution</span> mechanism. PSU estimate SOR date should be within 6 months.</p></div>';
+    document.getElementById('ai-status').textContent='COMPLETE';
+    btn.disabled=false;btn.textContent='Refresh Analysis →';
+  },600);
 }
-
-function doRegister(){
-  var name=document.getElementById('rg-name').value.trim();
-  var co=document.getElementById('rg-co').value.trim();
-  var email=document.getElementById('rg-email').value.trim();
-  var pass=document.getElementById('rg-pass').value;
-  if(!name||!email||!pass){amsg('rg-msg','Please fill all required fields.','err');return;}
-  if(pass.length<8){amsg('rg-msg','Password must be at least 8 characters.','err');return;}
-  var btn=document.getElementById('rg-btn');btn.disabled=true;btn.textContent='Registering...';
-  fetch(SURL+'/auth/v1/signup',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pass,data:{full_name:name,company:co}})})
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(d.id||(d.identities&&d.identities.length>0)){
-      amsg('rg-msg','Account created! Check your email for a confirmation link, then sign in.','ok');
-      btn.disabled=true;
-    } else {
-      amsg('rg-msg',d.error_description||d.msg||d.error||'Registration failed.','err');
-      btn.disabled=false;btn.textContent='Request Access →';
-    }
-  })
-  .catch(function(e){amsg('rg-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Request Access →';});
-}
-
-function doForgot(){
-  var email=document.getElementById('fp-email').value.trim();
-  if(!email){amsg('fp-msg','Please enter your email.','err');return;}
-  var btn=document.getElementById('fp-btn');btn.disabled=true;btn.textContent='Sending...';
-  fetch(SURL+'/auth/v1/recover',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email})})
-  .then(function(){amsg('fp-msg','Reset link sent! Check your inbox.','ok');})
-  .catch(function(e){amsg('fp-msg','Connection failed: '+e.message,'err');btn.disabled=false;btn.textContent='Send Reset Link →';});
-}
-
-function doSignOut(){
-  sessionStorage.removeItem('ziq_t');sessionStorage.removeItem('ziq_e');
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('main-hdr').style.display='none';
-  document.getElementById('select-screen').style.display='none';
-  document.getElementById('dashboard').style.display='none';
-  document.getElementById('main-footer').style.display='none';
-  document.getElementById('si-email').value='';
-  document.getElementById('si-pass').value='';
-  document.getElementById('si-msg').className='auth-msg';
-  swTab('signin');
-}
-
-// Restore session on load
-(function(){
-  var t=sessionStorage.getItem('ziq_t');
-  var e=sessionStorage.getItem('ziq_e');
-  if(t&&e){showApp(e);}
-})();
 
 // ── INIT ──
 document.getElementById('hdr-ctx').textContent=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+
+
 </script>
 </body>
 </html>
