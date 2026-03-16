@@ -562,7 +562,7 @@ img,svg{max-width:100%}
           <li>War-impact drop tracking</li>
           <li>Mosaic card &amp; table views</li>
         </ul>
-        <a href="app.html" class="abtn" onclick="openAuth('signup');return false">Get Full Access →</a>
+        <a href="app.html" class="abtn" onclick="handleAccessBtn(event)">Get Full Access →</a>
       </div>
       <div class="acopy reveal d1">
         <blockquote>"Buy when there's blood in the streets, even if the blood is your own."</blockquote>
@@ -581,8 +581,8 @@ img,svg{max-width:100%}
     </div>
     <div class="contact-grid">
       <div class="cinfo reveal">
-        <div class="citem"><div class="citem-icon">✉️</div><div><div class="clabel">General</div><div class="cval"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b9d1dcd5d5d6f9d4d8cbd2dccdd0c897d8c9c9">[email&#160;protected]</a></div></div></div>
-        <div class="citem"><div class="citem-icon">🛠</div><div><div class="clabel">Support</div><div class="cval"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f3808683839c8187b39e92819896879a82dd928383">[email&#160;protected]</a></div></div></div>
+        <div class="citem"><div class="citem-icon">✉️</div><div><div class="clabel">General</div><div class="cval">hello@marketiq.app</div></div></div>
+        <div class="citem"><div class="citem-icon">🛠</div><div><div class="clabel">Support</div><div class="cval">support@marketiq.app</div></div></div>
         <div class="citem"><div class="citem-icon">🌐</div><div><div class="clabel">Coverage</div><div class="cval">United States · Europe · India</div></div></div>
         <div class="citem"><div class="citem-icon">⏱</div><div><div class="clabel">Response Time</div><div class="cval">Within 24 hours</div></div></div>
       </div>
@@ -610,7 +610,7 @@ img,svg{max-width:100%}
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const { createClient } = supabase;
 const sb = createClient(
   "https://wiphtdgqtsuuspuomqab.supabase.co",
@@ -620,7 +620,7 @@ let currentUser = null;
 sb.auth.onAuthStateChange((event, session) => {
   currentUser = session?.user || null;
   updateNav();
-  if (event === 'SIGNED_IN') { closeAuth(); toast('Welcome to MarketIQ! 🎯', 'success'); }
+  if (event === 'SIGNED_IN') { closeAuth(); toast('Welcome to MarketIQ! 🎯', 'success'); setTimeout(()=>{ window.location.href='app.html'; }, 1200); }
 });
 window.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await sb.auth.getSession();
@@ -699,4 +699,20 @@ const TICKS=[
 ];
 function buildTicker(){
   document.getElementById('ticker-track').innerHTML=[...TICKS,...TICKS].map(t=>
-    `<div class="ticker-item"><span class="sym">${t.sym}</span><span>${t.p}</span><span class="${t.u?'up':'dn'}">${t.ch}</sp
+    `<div class="ticker-item"><span class="sym">${t.sym}</span><span>${t.p}</span><span class="${t.u?'up':'dn'}">${t.ch}</span></div>`
+  ).join('');
+}
+function handleAccessBtn(e){
+  e.preventDefault();
+  if(currentUser){ window.location.href='app.html'; }
+  else{ openAuth('signup'); }
+}
+function initReveal(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*60);obs.unobserve(e.target);}});
+  },{threshold:.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+</script>
+</body>
+</html>
