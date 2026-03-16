@@ -366,6 +366,87 @@ img,svg{max-width:100%}
   .region-tabs{overflow-x:auto;flex-wrap:nowrap;top:48px}
   .rtab{white-space:nowrap;flex:0 0 auto;padding:10px 12px}
 }
+
+/* ═══════════════════════════════════════════════
+   TWO-COLUMN BUY / SELL LAYOUT
+═══════════════════════════════════════════════ */
+.split-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.split-col{display:flex;flex-direction:column;gap:0}
+.split-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-radius:10px 10px 0 0;
+  font-family:"Syne",sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:0.08em;text-transform:uppercase;position:sticky;top:94px;z-index:10;
+}
+.split-header-buy{background:#dcfce7;border:1px solid rgba(22,163,74,0.3);color:#15803d;border-bottom:none}
+.split-header-sell{background:#fee2e2;border:1px solid rgba(192,57,43,0.3);color:#991b1b;border-bottom:none}
+.split-header-icon{font-size:16px}
+.split-header-count{font-size:9px;font-weight:400;opacity:0.75}
+.split-cards{
+  border:1px solid var(--border);border-top:none;
+  border-radius:0 0 10px 10px;
+  background:var(--bg2);
+  display:flex;flex-direction:column;gap:0;
+  min-height:200px;
+}
+/* Compact split card — one per row in its column */
+.split-card{
+  display:grid;grid-template-columns:auto 1fr auto auto;
+  align-items:center;gap:12px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;transition:background 0.15s;
+  position:relative;
+}
+.split-card:last-child{border-bottom:none}
+.split-card:hover{background:var(--bg3)}
+.split-card.expanded{background:var(--bg3)}
+.split-card-accent{width:3px;position:absolute;left:0;top:0;bottom:0;border-radius:0}
+/* Left: flag + name */
+.sc-flag{font-size:18px;line-height:1;flex-shrink:0}
+.sc-info{}
+.sc-name{font-family:"Syne",sans-serif;font-size:11px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.sc-ticker{font-size:8px;font-weight:700;padding:1px 5px;border-radius:2px;letter-spacing:0.05em;margin-top:2px;display:inline-block}
+/* Centre: price + change */
+.sc-price-block{text-align:right}
+.sc-price{font-family:"Syne",sans-serif;font-size:14px;font-weight:800;color:var(--ink)}
+.sc-change-up{font-size:9px;font-weight:700;color:var(--green2)}
+.sc-change-dn{font-size:9px;font-weight:700;color:var(--red)}
+/* Right: upside pill */
+.sc-upside{font-family:"Syne",sans-serif;font-size:11px;font-weight:800;padding:3px 8px;border-radius:4px;white-space:nowrap;text-align:center}
+.sc-upside.buy-up{background:rgba(22,163,74,0.1);color:#15803d;border:1px solid rgba(22,163,74,0.25)}
+.sc-upside.sell-up{background:rgba(192,57,43,0.08);color:#991b1b;border:1px solid rgba(192,57,43,0.2)}
+/* Expand panel inside split card */
+.sc-expand{display:none;grid-column:1/-1;padding:10px 4px 4px;border-top:1px solid var(--border);margin-top:8px}
+.split-card.expanded .sc-expand{display:block}
+.sc-expand-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.sc-expand-cell{background:var(--bg2);padding:8px 10px;border-radius:6px;border:1px solid var(--border)}
+.sc-expand-label{font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text2);margin-bottom:4px}
+.sc-expand-text{font-size:10px;color:var(--ink3);line-height:1.7}
+.sc-expand-metrics{display:flex;gap:14px;flex-wrap:wrap;padding:7px 10px;background:var(--bg2);border-radius:5px;border:1px solid var(--border);font-size:10px;margin-top:6px}
+.sc-expand-metrics span{color:var(--text3)}
+.sc-expand-metrics b{color:var(--ink)}
+/* Stars inside split card */
+.sc-stars{display:flex;gap:2px;margin-top:3px}
+.sc-star{width:5px;height:5px;border-radius:50%}
+/* Live pip */
+.sc-pip{font-size:7px;color:var(--text3);margin-top:1px;letter-spacing:0.06em}
+/* Empty state */
+.split-empty{padding:32px 20px;text-align:center;color:var(--text3);font-size:10px;letter-spacing:0.08em}
+/* Sell column extra badge */
+.sell-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:3px;font-size:8px;font-weight:700;letter-spacing:0.1em;background:#fee2e2;border:1px solid rgba(192,57,43,0.25);color:#991b1b;font-family:"Syne",sans-serif}
+/* Halal badge inside split card */
+.sc-halal{font-size:7px;padding:1px 5px;border-radius:2px;background:rgba(22,163,74,0.09);border:1px solid rgba(22,163,74,0.2);color:#15803d;font-weight:700;letter-spacing:0.08em}
+
+@media(max-width:900px){
+  .split-layout{grid-template-columns:1fr}
+  .split-header{position:static}
+}
+@media(max-width:500px){
+  .sc-name{max-width:110px}
+  .split-card{grid-template-columns:auto 1fr auto}
+  .sc-upside{display:none}
+}
 </style>
 </head>
 <body>
@@ -439,12 +520,17 @@ img,svg{max-width:100%}
 <!-- ══ HALAL BANNER ══ -->
 <div id="halal-banner">☪ HALAL MODE ON — Showing only Shariah-compliant stocks · Interest-based, alcohol, tobacco, gambling & conventional finance excluded</div>
 
+<!-- ══ API KEY BANNER ══ -->
+<div id="api-banner" style="display:none;padding:7px 20px;background:rgba(180,83,9,0.07);border-bottom:1px solid rgba(180,83,9,0.2);text-align:center;font-size:10px;color:#b45309;letter-spacing:0.08em">
+  ⚠ Showing static baseline prices — <b>deploy <code style="background:rgba(0,0,0,0.06);padding:1px 5px;border-radius:3px">price-worker.js</code> to Cloudflare Workers (free, 2 min)</b> then paste your worker URL into <code style="background:rgba(0,0,0,0.06);padding:1px 5px;border-radius:3px">WORKER_URL</code> in the app for live prices
+</div>
+
 <!-- ══ DASHBOARD ══ -->
 <div id="dashboard">
 <div class="wrap">
   <div class="header">
     <div class="live-badge"><div class="blink"></div>LIVE PRICES · AUTO-UPDATING EVERY 60S<div class="blink" style="background:var(--green)"></div></div>
-    <h1 id="region-title">50 High-Conviction US Recovery Plays</h1>
+    <h1 id="region-title">US Recovery Plays — Live Screener</h1>
     <div class="dsub" id="region-sub">FUNDAMENTALLY STRONG · TEMPORARILY BEATEN DOWN · LIVE PRICES</div>
     <div class="region-desc" id="region-desc-badge"></div>
   </div>
@@ -463,10 +549,10 @@ img,svg{max-width:100%}
   </div>
 
   <div class="stats">
-    <div class="stat-card"><div class="stat-label">Total Stocks</div><div class="stat-val" id="stat-total" style="color:var(--blue2)">50</div></div>
-    <div class="stat-card"><div class="stat-label">Strong Buy</div><div class="stat-val" id="stat-sb" style="color:var(--green)">—</div></div>
-    <div class="stat-card"><div class="stat-label">Avg Drop</div><div class="stat-val" id="stat-drop" style="color:var(--red)">—</div></div>
-    <div class="stat-card"><div class="stat-label">Avg Upside</div><div class="stat-val" id="stat-up" style="color:var(--green)">—</div></div>
+    <div class="stat-card"><div class="stat-label">Total Stocks</div><div class="stat-val" id="stat-total" style="color:var(--blue2)">—</div></div>
+    <div class="stat-card"><div class="stat-label">🟢 Buy Opportunities</div><div class="stat-val" id="stat-buy" style="color:var(--green)">—</div></div>
+    <div class="stat-card"><div class="stat-label">🔴 Take Profit</div><div class="stat-val" id="stat-sell" style="color:var(--red)">—</div></div>
+    <div class="stat-card"><div class="stat-label">Avg Upside (Buy)</div><div class="stat-val" id="stat-up" style="color:var(--green)">—</div></div>
   </div>
 
   <div class="controls">
@@ -477,35 +563,29 @@ img,svg{max-width:100%}
     <button class="btn" id="f-5s"   onclick="setFilter('5star',this)">5 Stars</button>
     <span class="ctrl-label">SORT:</span>
     <button class="btn active-yellow" id="s-id"   onclick="setSort('id',this)">Rank</button>
-    <button class="btn" id="s-drop" onclick="setSort('drop',this)">Drop%</button>
     <button class="btn" id="s-up"   onclick="setSort('upside',this)">Upside</button>
+    <button class="btn" id="s-drop" onclick="setSort('drop',this)">Drop%</button>
     <button class="btn" id="s-price"onclick="setSort('price',this)">Price</button>
-    <div class="view-toggle">
-      <button class="vtoggle active" id="vt-cards" onclick="setView('cards',this)" title="Cards">⊞</button>
-      <button class="vtoggle" id="vt-table" onclick="setView('table',this)" title="Table">☰</button>
+  </div>
+  <div class="count" id="result-count"></div>
+
+  <!-- TWO-COLUMN BUY / SELL SPLIT -->
+  <div class="split-layout" id="split-layout">
+    <!-- BUY COLUMN -->
+    <div class="split-col">
+      <div class="split-header split-header-buy">
+        <span><span class="split-header-icon">🟢</span> &nbsp;BUY — Below Target</span>
+        <span class="split-header-count" id="buy-count">0 stocks</span>
+      </div>
+      <div class="split-cards" id="buy-cards"></div>
     </div>
-  </div>
-  <div class="count" id="result-count">Showing 50 of 50 stocks · Click any card for investment thesis</div>
-
-  <!-- TIER LEGEND -->
-  <div id="tier-legend" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;font-size:9px;letter-spacing:0.1em;color:var(--text2)">
-    <div style="display:flex;align-items:center;gap:5px"><div style="width:24px;height:10px;background:var(--ink);border-radius:2px"></div> TOP PICK — wide card, full detail</div>
-    <div style="display:flex;align-items:center;gap:5px"><div style="width:24px;height:10px;background:var(--blue2);border-radius:2px;opacity:0.7"></div> PRIME — wide, strong conviction</div>
-    <div style="display:flex;align-items:center;gap:5px"><div style="width:14px;height:10px;background:var(--border2);border-radius:2px"></div> MID — standard buy</div>
-    <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;background:var(--border);border-radius:2px"></div> BASE — smaller position</div>
-    <div style="color:var(--text3);font-style:italic">Card size = importance × upside score</div>
-  </div>
-
-  <!-- CARD GRID -->
-  <div id="card-grid"></div>
-
-  <!-- TABLE VIEW -->
-  <div id="table-view">
-    <div class="table-wrap">
-      <table><thead><tr>
-        <th>#</th><th>Company</th><th>Live Price</th><th>Pre-Drop</th>
-        <th>Day 1</th><th>12m Target</th><th>Upside</th><th>Rating</th><th></th>
-      </tr></thead><tbody id="tbody"></tbody></table>
+    <!-- SELL COLUMN -->
+    <div class="split-col">
+      <div class="split-header split-header-sell">
+        <span><span class="split-header-icon">🔴</span> &nbsp;TAKE PROFIT — Target Exceeded</span>
+        <span class="split-header-count" id="sell-count">0 stocks</span>
+      </div>
+      <div class="split-cards" id="sell-cards"></div>
     </div>
   </div>
 
@@ -677,162 +757,162 @@ function showLoginScreen() {
 //  STOCK DATA
 // ═══════════════════════════════════════════════════════
 const STOCKS = [
-  {id:1, name:"Cleveland-Cliffs",     ticker:"CLF",       sector:"Steel",            flag:"⚙️",  preWar:10.50, dropPct:-25.7, warDrop:-8.1,  target:12.00, upside:53.8, rating:"Strong Buy", stars:5, why:"Steel sector hit hardest; auto-grade steel demand fears on war outbreak", bull:"Nippon Steel tech integration; auto sector revival; US infrastructure bill primary beneficiary", halal:true},
-  {id:2, name:"Sirius XM",            ticker:"SIRI",      sector:"Media",            flag:"📻",  preWar:3.90,  dropPct:-26.9, warDrop:-6.5,  target:4.50,  upside:57.9, rating:"Buy",        stars:4, why:"Discretionary media hit on recession fears; risk-off rotation", bull:"150M+ subscriber base locked in; vehicle integration moat; strong FCF", halal:false},
-  {id:3, name:"Transocean",           ticker:"RIG",       sector:"Offshore Drilling",flag:"🛢️", preWar:4.50,  dropPct:-28.9, warDrop:-7.3,  target:5.50,  upside:71.9, rating:"Buy",        stars:4, why:"Paradoxically sold off despite higher oil; deepwater rate uncertainty", bull:"Ultra-deepwater backlog $9B+; oil above $75 = breakeven exceeded", halal:true},
-  {id:4, name:"American Airlines",    ticker:"AAL",       sector:"Airlines",         flag:"✈️",  preWar:12.10, dropPct:-30.6, warDrop:-12.3, target:14.00, upside:66.7, rating:"Buy",        stars:4, why:"Route closures; fuel cost spike; broad travel freeze fear", bull:"Post-war pent-up travel historically surges; network restructuring complete", halal:true},
-  {id:5, name:"Ford Motor",           ticker:"F",         sector:"Automotive",       flag:"🚗",  preWar:11.20, dropPct:-20.5, warDrop:-5.2,  target:13.00, upside:46.1, rating:"Buy",        stars:4, why:"Supply chain + oil-cost fears; EV demand concern; macro selloff", bull:"F-Series dominance; EV Pro lineup ramp; 5.7% dividend yield", halal:true},
-  {id:6, name:"Kinross Gold",         ticker:"KGC",       sector:"Gold Mining",      flag:"🥇",  preWar:11.50, dropPct:-20.0, warDrop:-3.5,  target:13.00, upside:41.3, rating:"Strong Buy", stars:5, why:"Gold mining stocks counter-intuitively fell on profit-taking", bull:"Gold at $5,300+/oz drives massive margins; low-cost operations; dividend growth", halal:true},
-  {id:7, name:"Ambev S.A.",           ticker:"ABEV",      sector:"Beverages",        flag:"🍺",  preWar:2.80,  dropPct:-25.0, warDrop:-3.1,  target:3.20,  upside:52.4, rating:"Buy",        stars:4, why:"EM selloff; BRL weakness vs USD; macro risk-off rotation", bull:"Dominant Latin America beer market; Heineken partnership; strong cash returns", halal:false},
-  {id:8, name:"Amicus Therapeutics",  ticker:"FOLD",      sector:"Biotech",          flag:"🧬",  preWar:11.80, dropPct:-20.3, warDrop:-4.2,  target:16.00, upside:70.2, rating:"Strong Buy", stars:5, why:"Biotech broad selloff; rare disease risk-off sentiment", bull:"GAAP profitable; 17% revenue growth; Fabry/Pompe disease monopoly position", halal:true},
-  {id:9, name:"Banco Bradesco",       ticker:"BBD",       sector:"Banking",          flag:"🇧🇷",  preWar:3.40,  dropPct:-23.5, warDrop:-3.8,  target:4.00,  upside:53.8, rating:"Buy",        stars:4, why:"EM bank selloff; BRL weakness; global risk-off", bull:"Brazil's 2nd largest bank; digital transformation; PE < 7x", halal:false},
-  {id:10,name:"Itaú Unibanco",        ticker:"ITUB",      sector:"Banking",          flag:"🇧🇷",  preWar:7.50,  dropPct:-21.3, warDrop:-4.1,  target:8.50,  upside:44.1, rating:"Buy",        stars:4, why:"EM bank selloff; geopolitical risk-off", bull:"Latin America's largest bank; record profits; 7%+ dividend yield", halal:false},
-  {id:11,name:"Gerdau",               ticker:"GGB",       sector:"Steel",            flag:"🇧🇷",  preWar:5.20,  dropPct:-26.9, warDrop:-8.9,  target:6.50,  upside:71.1, rating:"Strong Buy", stars:5, why:"Steel sector worst performer; materials -4.5% single session", bull:"Americas steel leader; US tariff beneficiary; strong FCF; dividend hike expected", halal:true},
-  {id:12,name:"Vale S.A.",            ticker:"VALE",      sector:"Mining",           flag:"⛰️",  preWar:11.00, dropPct:-20.9, warDrop:-5.5,  target:13.00, upside:49.4, rating:"Buy",        stars:4, why:"China demand fears + global growth concerns; iron ore weakness", bull:"World's largest iron ore producer; copper/nickel diversification; $10B+ buyback", halal:true},
-  {id:13,name:"Cemex",                ticker:"CX",        sector:"Cement",           flag:"🏗️",  preWar:5.80,  dropPct:-27.6, warDrop:-6.3,  target:6.50,  upside:54.8, rating:"Buy",        stars:4, why:"Materials sector hammered; construction slowdown fears", bull:"Mexico nearshoring construction boom; US infrastructure cement demand", halal:true},
-  {id:14,name:"Nokia",                ticker:"NOK",       sector:"Telecom Tech",     flag:"🇫🇮",  preWar:5.40,  dropPct:-20.4, warDrop:-3.3,  target:6.50,  upside:51.2, rating:"Buy",        stars:4, why:"European selloff; DAX drag (-3.44%)", bull:"5G network equipment leader; defense contracts growing post-war; patent royalties", halal:true},
-  {id:15,name:"Vodafone",             ticker:"VOD",       sector:"Telecom",          flag:"🇬🇧",  preWar:11.00, dropPct:-19.1, warDrop:-4.5,  target:12.50, upside:40.4, rating:"Buy",        stars:4, why:"FTSE selloff; telecom risk-off", bull:"European telecom consolidation; 5G buildout; 9%+ dividend yield", halal:true},
-  {id:16,name:"Hims & Hers Health",   ticker:"HIMS",      sector:"Telehealth",       flag:"💙",  preWar:13.00, dropPct:-26.2, warDrop:-7.1,  target:16.00, upside:66.7, rating:"Strong Buy", stars:5, why:"High-growth tech selloff; speculative risk-off", bull:"GLP-1 weight loss market entry; 80%+ subscriber growth; GAAP profitability 2026", halal:true},
-  {id:17,name:"Grab Holdings",        ticker:"GRAB",      sector:"Fintech",          flag:"🇸🇬",  preWar:5.90,  dropPct:-23.7, warDrop:-5.8,  target:7.00,  upside:55.6, rating:"Buy",        stars:4, why:"Asia EM selloff; KOSPI -1%; broad EM panic", bull:"SE Asia's largest super-app; first GAAP profitable year 2025; fintech scaling", halal:true},
-  {id:18,name:"Telefónica Brasil",    ticker:"VIV",       sector:"Telecom",          flag:"🇧🇷",  preWar:11.20, dropPct:-18.8, warDrop:-3.9,  target:13.00, upside:42.9, rating:"Buy",        stars:4, why:"EM telecom selloff; BRL depreciation", bull:"Brazil's #1 telecom; 5G leader; 8%+ dividend; fiber expansion", halal:true},
-  {id:19,name:"Lloyds Banking Group", ticker:"LYG",       sector:"Banking",          flag:"🇬🇧",  preWar:4.00,  dropPct:-20.0, warDrop:-3.7,  target:4.60,  upside:43.8, rating:"Buy",        stars:4, why:"FTSE selloff; UK bank geopolitical contagion", bull:"UK mortgage market dominance; car finance clarity; 6%+ dividend; buybacks", halal:false},
-  {id:20,name:"Teva Pharmaceutical",  ticker:"TEVA",      sector:"Pharma",           flag:"💊",  preWar:19.50, dropPct:-22.1, warDrop:-4.8,  target:22.00, upside:44.7, rating:"Buy",        stars:4, why:"Israel HQ; geopolitical headline risk; generic pricing pressure", bull:"Opioid settlement clarity; Ajovy/Austedo pipeline growing 20%+", halal:true},
-  {id:21,name:"Ternium",              ticker:"TX",        sector:"Steel",            flag:"🔩",  preWar:25.00, dropPct:-22.0, warDrop:-7.8,  target:30.00, upside:53.8, rating:"Buy",        stars:4, why:"EM steel hit by growth fears + energy costs", bull:"Latin America steel leader; infrastructure mega-projects; strong dividend", halal:true},
-  {id:22,name:"Barrick Mining",       ticker:"GOLD",      sector:"Gold Mining",      flag:"🥈",  preWar:22.00, dropPct:-19.1, warDrop:-5.2,  target:26.00, upside:46.1, rating:"Strong Buy", stars:5, why:"Profit-taking despite gold at record highs", bull:"Gold near $5,300/oz; Tier 1 assets; copper revenue growing; $1B+ FCF", halal:true},
-  {id:23,name:"Norwegian Cruise",     ticker:"NCLH",      sector:"Travel",           flag:"🚢",  preWar:27.18, dropPct:-21.1, warDrop:-15.5, target:32.50, upside:51.6, rating:"Buy",        stars:4, why:"Oil spike; route closures near Middle East; weak guidance", bull:"Pent-up travel demand; cruises rebound sharply post-conflict historically", halal:true},
-  {id:24,name:"Carnival Corporation", ticker:"CCL",       sector:"Travel",           flag:"🛳️",  preWar:37.80, dropPct:-24.4, warDrop:-13.6, target:37.00, upside:29.6, rating:"Buy",        stars:4, why:"Fuel cost surge; booking uncertainty in Mid-East routes", bull:"Record 2026 bookings locked in; debt deleveraging on track", halal:true},
-  {id:25,name:"Royal Caribbean",      ticker:"RCL",       sector:"Travel",           flag:"⚓",  preWar:330.00,dropPct:-17.9, warDrop:-6.9,  target:362.00,upside:33.7, rating:"Strong Buy", stars:5, why:"Oil spike; Middle East route disruption fears", bull:"2/3 of 2026 capacity pre-booked at record prices; EPS $17.70–$18.10", halal:true},
-  {id:26,name:"Albemarle",            ticker:"ALB",       sector:"Lithium",          flag:"⚡",  preWar:85.00, dropPct:-27.1, warDrop:-12.0, target:95.00, upside:53.2, rating:"Buy",        stars:4, why:"Worst S&P performer on war day -12%; lithium demand fears", bull:"World's largest lithium producer; EV battery essential; structural demand", halal:true},
-  {id:27,name:"Freeport-McMoRan",     ticker:"FCX",       sector:"Copper",           flag:"⛏️",  preWar:50.00, dropPct:-23.0, warDrop:-9.0,  target:58.00, upside:50.6, rating:"Buy",        stars:4, why:"Materials worst sector -4.5%; growth fears", bull:"Copper for AI infrastructure, EVs, green energy; structural demand growing", halal:true},
-  {id:28,name:"Nucor Corporation",    ticker:"NUE",       sector:"Steel",            flag:"🔧",  preWar:145.00,dropPct:-19.0, warDrop:-6.1,  target:175.67,upside:49.5, rating:"Strong Buy", stars:5, why:"Steel sector hit on growth fears; materials worst sector", bull:"America's largest steel producer; 50yr dividend growth streak; $10B capex", halal:true},
-  {id:29,name:"Steel Dynamics",       ticker:"STLD",      sector:"Steel",            flag:"⚒️",  preWar:170.00,dropPct:-18.8, warDrop:-5.8,  target:180.13,upside:30.5, rating:"Buy",        stars:4, why:"Steel/materials selloff; geopolitical growth fears", bull:"EAF technology advantage; 14yr dividend growth; aluminum mill diversification", halal:true},
-  {id:30,name:"Newmont Corporation",  ticker:"NEM",       sector:"Gold Mining",      flag:"💎",  preWar:48.00, dropPct:-20.4, warDrop:-7.0,  target:55.00, upside:44.0, rating:"Buy",        stars:4, why:"Gold miner paradox selloff; lower 2026 output guidance", bull:"World's largest gold miner; gold at record $5,300+/oz; massive margins", halal:true},
-  {id:31,name:"Microsoft",            ticker:"MSFT",      sector:"Technology",       flag:"💻",  preWar:482.00,dropPct:-19.3, warDrop:-2.0,  target:500.00,upside:28.5, rating:"Strong Buy", stars:5, why:"YTD -19% from AI capex fears + war macro pressure", bull:"Azure AI dominance; 33/36 analysts bullish; recurring revenue war-independent", halal:true},
-  {id:32,name:"Amazon",               ticker:"AMZN",      sector:"Technology",       flag:"📦",  preWar:235.00,dropPct:-11.3, warDrop:-1.6,  target:300.00,upside:43.8, rating:"Strong Buy", stars:5, why:"YTD -9.6%; AI capex concerns; macro fears", bull:"AWS AI cloud leader; Wells Fargo & Oppenheimer target $295–$305", halal:true},
-  {id:33,name:"NVIDIA",               ticker:"NVDA",      sector:"Semiconductors",   flag:"🖥️",  preWar:210.00,dropPct:-9.4,  warDrop:-5.4,  target:263.78,upside:36.8, rating:"Strong Buy", stars:5, why:"War day -5.4% despite stellar Q4 earnings (+73% revenue)", bull:"AI chip demand structural; 37 analysts Buy; data center irreplaceable", halal:true},
-  {id:34,name:"Alphabet / Google",    ticker:"GOOGL",     sector:"Technology",       flag:"🔍",  preWar:313.00,dropPct:-0.7,  warDrop:-1.5,  target:380.00,upside:22.2, rating:"Strong Buy", stars:5, why:"Broad tech pullback; ad revenue deceleration fears", bull:"AI search dominance; Cloud #2 growing; YouTube subscriptions record", halal:true},
-  {id:35,name:"Meta Platforms",       ticker:"META",      sector:"Technology",       flag:"📱",  preWar:660.00,dropPct:-3.1,  warDrop:-2.3,  target:840.00,upside:31.4, rating:"Strong Buy", stars:5, why:"YTD -3.2%; geopolitical ad-spend uncertainty", bull:"AI-driven ad targeting; Llama open-source moat; 67 analyst Buy consensus", halal:true},
-  {id:36,name:"Apple",                ticker:"AAPL",      sector:"Technology",       flag:"🍎",  preWar:260.00,dropPct:-4.7,  warDrop:-2.2,  target:307.16,upside:12.9, rating:"Buy",        stars:4, why:"Broad tech pressure; supply chain concern China/Middle East", bull:"Services revenue record; iPhone 17 cycle; 41 analyst Buy; massive buybacks", halal:true},
-  {id:37,name:"JPMorgan Chase",       ticker:"JPM",       sector:"Financials",       flag:"🏦",  preWar:268.00,dropPct:-8.1,  warDrop:-2.4,  target:285.00,upside:15.7, rating:"Buy",        stars:4, why:"Macro uncertainty; rate path confusion; geopolitical risk premium", bull:"World's most profitable bank; $14B+ net income quarterly; fortress balance sheet", halal:false},
-  {id:38,name:"Viking Holdings",      ticker:"VIK",       sector:"Travel",           flag:"🛥️",  preWar:39.00, dropPct:-20.0, warDrop:-2.0,  target:46.00, upside:47.4, rating:"Buy",        stars:4, why:"Cruise sector hit; Egypt voyages paused through March 31", bull:"Q4 earnings beat; luxury river cruise premium brand; strong 2026 booking momentum", halal:true},
-  {id:39,name:"Delta Air Lines",      ticker:"DAL",       sector:"Airlines",         flag:"🛫",  preWar:58.00, dropPct:-26.7, warDrop:-9.8,  target:68.00, upside:60.0, rating:"Strong Buy", stars:5, why:"Airlines weakest sector; fuel spike; route closure fears", bull:"Premium travel demand structural; loyalty program cash; #1 US airline brand", halal:true},
-  {id:40,name:"Blackstone",           ticker:"BX",        sector:"Private Equity",   flag:"🏢",  preWar:135.00,dropPct:-12.6, warDrop:-3.8,  target:155.00,upside:31.4, rating:"Buy",        stars:4, why:"Private credit $1.7B outflows Q1; fear-driven selloff", bull:"Real assets benefit from inflation; infrastructure funds booming; AUM $1.1T", halal:false},
-  {id:41,name:"Visa Inc.",            ticker:"V",         sector:"Fintech",          flag:"💳",  preWar:373.00,dropPct:-9.4,  warDrop:-1.8,  target:400.00,upside:18.3, rating:"Strong Buy", stars:5, why:"Consumer discretionary fears; growth deceleration concern", bull:"Global payments duopoly; 85%+ net margin; post-war travel spend surge", halal:true},
-  {id:42,name:"Novartis",             ticker:"NVS",       sector:"Pharma",           flag:"🇨🇭",  preWar:106.00,dropPct:-7.2,  warDrop:-2.1,  target:118.00,upside:19.9, rating:"Buy",        stars:4, why:"European selloff; Stoxx600 -3.0%", bull:"Drug portfolio 7.1% sales growth; 7.9% LT EPS CAGR; AAA balance sheet", halal:true},
-  {id:43,name:"Credo Technology",     ticker:"CRDO",      sector:"Semiconductors",   flag:"🔌",  preWar:148.00,dropPct:-23.0, warDrop:-5.9,  target:160.00,upside:40.4, rating:"Buy",        stars:4, why:"Semi selloff; copper-to-optical transition uncertainty", bull:"BofA Buy reiterated; AI data center connectivity essential; optical expansion", halal:true},
-  {id:44,name:"Ross Stores",          ticker:"ROST",      sector:"Retail",           flag:"🛍️",  preWar:148.00,dropPct:-6.6,  warDrop:7.4,   target:165.00,upside:19.4, rating:"Buy",        stars:4, why:"Defensive retail; minor pullback from highs", bull:"Record revenue; strong 2026 guidance; off-price wins in inflationary environment", halal:true},
-  {id:45,name:"Broadcom",             ticker:"AVGO",      sector:"Semiconductors",   flag:"🔬",  preWar:250.00,dropPct:-8.8,  warDrop:-3.2,  target:285.00,upside:25.0, rating:"Strong Buy", stars:5, why:"Tech selloff; pre-earnings uncertainty", bull:"AI custom chip leader; 19% EPS growth YoY; VMware cloud integration", halal:true},
-  {id:46,name:"Moderna",              ticker:"MRNA",      sector:"Biotech",          flag:"🧪",  preWar:43.00, dropPct:-19.1, warDrop:-4.7,  target:55.00, upside:58.0, rating:"Buy",        stars:4, why:"Biotech broad selloff; vaccine revenue decline fears", bull:"$2.25B patent deal; mRNA cancer vaccine pipeline; RSV vaccine launched", halal:true},
-  {id:47,name:"Robinhood Markets",    ticker:"HOOD",      sector:"Fintech",          flag:"📊",  preWar:33.50, dropPct:-20.0, warDrop:-3.0,  target:38.00, upside:41.8, rating:"Buy",        stars:4, why:"Crypto proxy selloff; risk-off hit retail platform", bull:"Crypto trading recovery; options & retirement products growing; 25M+ users", halal:true},
-  {id:48,name:"Taiwan Semiconductor", ticker:"TSM",       sector:"Semiconductors",   flag:"🇹🇼",  preWar:210.00,dropPct:-19.0, warDrop:-3.5,  target:240.00,upside:41.2, rating:"Buy",        stars:4, why:"Asia selloff; Taiwan geopolitical risk premium resurfaced", bull:"AI chip revenue CAGR 55–59% through 2029; irreplaceable global chip supply", halal:true},
-  {id:49,name:"SK Hynix",             ticker:"000660.KS", sector:"Semiconductors",   flag:"🇰🇷",  preWar:230000,dropPct:-17.4, warDrop:-11.5, target:280000,upside:47.4, rating:"Strong Buy", stars:5, why:"KOSPI crashed 12%; AI memory leader panic-sold", bull:"HBM chips for NVIDIA/AI data centers; AI memory CAGR booming", halal:true},
-  {id:50,name:"Samsung Electronics",  ticker:"005930.KS", sector:"Technology",       flag:"🇰🇷",  preWar:70000, dropPct:-18.6, warDrop:-9.9,  target:85000, upside:49.1, rating:"Strong Buy", stars:5, why:"KOSPI crash; panic selling despite no direct war exposure", bull:"Galaxy S26 launch; memory chip record pricing; AI buildout tailwind", halal:true},
+  {id:1, name:"Cleveland-Cliffs",     ticker:"CLF",       sector:"Steel",            flag:"⚙️",  preWar:12.00, dropPct:-25.7, warDrop:-8.1,  target:15.00, upside:53.8, rating:"Strong Buy", stars:5, why:"Steel sector hit hardest; auto-grade steel demand fears on war outbreak", bull:"Nippon Steel tech integration; auto sector revival; US infrastructure bill primary beneficiary", halal:true},
+  {id:2, name:"Sirius XM",            ticker:"SIRI",      sector:"Media",            flag:"📻",  preWar:2.10,  dropPct:-26.9, warDrop:-6.5,  target:3.80,  upside:57.9, rating:"Buy",        stars:4, why:"Discretionary media hit on recession fears; risk-off rotation", bull:"150M+ subscriber base locked in; vehicle integration moat; strong FCF", halal:false},
+  {id:3, name:"Transocean",           ticker:"RIG",       sector:"Offshore Drilling",flag:"🛢️", preWar:3.20,  dropPct:-28.9, warDrop:-7.3,  target:4.80,  upside:71.9, rating:"Buy",        stars:4, why:"Paradoxically sold off despite higher oil; deepwater rate uncertainty", bull:"Ultra-deepwater backlog $9B+; oil above $75 = breakeven exceeded", halal:true},
+  {id:4, name:"American Airlines",    ticker:"AAL",       sector:"Airlines",         flag:"✈️",  preWar:9.50, dropPct:-30.6, warDrop:-12.3, target:12.00, upside:66.7, rating:"Buy",        stars:4, why:"Route closures; fuel cost spike; broad travel freeze fear", bull:"Post-war pent-up travel historically surges; network restructuring complete", halal:true},
+  {id:5, name:"Ford Motor",           ticker:"F",         sector:"Automotive",       flag:"🚗",  preWar:9.00, dropPct:-20.5, warDrop:-5.2,  target:18.00, upside:46.1, rating:"Buy",        stars:4, why:"Supply chain + oil-cost fears; EV demand concern; macro selloff", bull:"F-Series dominance; EV Pro lineup ramp; 5.7% dividend yield", halal:true},
+  {id:6, name:"Kinross Gold",         ticker:"KGC",       sector:"Gold Mining",      flag:"🥇",  preWar:14.00, dropPct:-20.0, warDrop:-3.5,  target:11.50, upside:41.3, rating:"Strong Buy", stars:5, why:"Gold mining stocks counter-intuitively fell on profit-taking", bull:"Gold at $5,300+/oz drives massive margins; low-cost operations; dividend growth", halal:true},
+  {id:7, name:"Ambev S.A.",           ticker:"ABEV",      sector:"Beverages",        flag:"🍺",  preWar:2.80,  dropPct:-25.0, warDrop:-3.1,  target:2.80,  upside:52.4, rating:"Buy",        stars:4, why:"EM selloff; BRL weakness vs USD; macro risk-off rotation", bull:"Dominant Latin America beer market; Heineken partnership; strong cash returns", halal:false},
+  {id:8, name:"Amicus Therapeutics",  ticker:"FOLD",      sector:"Biotech",          flag:"🧬",  preWar:9.50, dropPct:-20.3, warDrop:-4.2,  target:14.00, upside:70.2, rating:"Strong Buy", stars:5, why:"Biotech broad selloff; rare disease risk-off sentiment", bull:"GAAP profitable; 17% revenue growth; Fabry/Pompe disease monopoly position", halal:true},
+  {id:9, name:"Banco Bradesco",       ticker:"BBD",       sector:"Banking",          flag:"🇧🇷",  preWar:2.60,  dropPct:-23.5, warDrop:-3.8,  target:3.50,  upside:53.8, rating:"Buy",        stars:4, why:"EM bank selloff; BRL weakness; global risk-off", bull:"Brazil's 2nd largest bank; digital transformation; PE < 7x", halal:false},
+  {id:10,name:"Itaú Unibanco",        ticker:"ITUB",      sector:"Banking",          flag:"🇧🇷",  preWar:4.20,  dropPct:-21.3, warDrop:-4.1,  target:7.50,  upside:44.1, rating:"Buy",        stars:4, why:"EM bank selloff; geopolitical risk-off", bull:"Latin America's largest bank; record profits; 7%+ dividend yield", halal:false},
+  {id:11,name:"Gerdau",               ticker:"GGB",       sector:"Steel",            flag:"🇧🇷",  preWar:3.80,  dropPct:-26.9, warDrop:-8.9,  target:5.50,  upside:71.1, rating:"Strong Buy", stars:5, why:"Steel sector worst performer; materials -4.5% single session", bull:"Americas steel leader; US tariff beneficiary; strong FCF; dividend hike expected", halal:true},
+  {id:12,name:"Vale S.A.",            ticker:"VALE",      sector:"Mining",           flag:"⛰️",  preWar:8.50, dropPct:-20.9, warDrop:-5.5,  target:11.50, upside:49.4, rating:"Buy",        stars:4, why:"China demand fears + global growth concerns; iron ore weakness", bull:"World's largest iron ore producer; copper/nickel diversification; $10B+ buyback", halal:true},
+  {id:13,name:"Cemex",                ticker:"CX",        sector:"Cement",           flag:"🏗️",  preWar:5.80,  dropPct:-27.6, warDrop:-6.3,  target:5.80,  upside:54.8, rating:"Buy",        stars:4, why:"Materials sector hammered; construction slowdown fears", bull:"Mexico nearshoring construction boom; US infrastructure cement demand", halal:true},
+  {id:14,name:"Nokia",                ticker:"NOK",       sector:"Telecom Tech",     flag:"🇫🇮",  preWar:4.50,  dropPct:-27.0, warDrop:-3.3,  target:5.80,  upside:51.2, rating:"Buy",        stars:4, why:"European selloff; DAX drag (-3.44%)", bull:"5G network equipment leader; defense contracts growing post-war; patent royalties", halal:true},
+  {id:15,name:"Vodafone",             ticker:"VOD",       sector:"Telecom",          flag:"🇬🇧",  preWar:8.50, dropPct:-19.1, warDrop:-4.5,  target:11.00, upside:40.4, rating:"Buy",        stars:4, why:"FTSE selloff; telecom risk-off", bull:"European telecom consolidation; 5G buildout; 9%+ dividend yield", halal:true},
+  {id:16,name:"Hims & Hers Health",   ticker:"HIMS",      sector:"Telehealth",       flag:"💙",  preWar:28.00, dropPct:-26.2, warDrop:-7.1,  target:24.00, upside:66.7, rating:"Strong Buy", stars:5, why:"High-growth tech selloff; speculative risk-off", bull:"GLP-1 weight loss market entry; 80%+ subscriber growth; GAAP profitability 2026", halal:true},
+  {id:17,name:"Grab Holdings",        ticker:"GRAB",      sector:"Fintech",          flag:"🇸🇬",  preWar:4.80,  dropPct:-23.7, warDrop:-5.8,  target:6.50,  upside:55.6, rating:"Buy",        stars:4, why:"Asia EM selloff; KOSPI -1%; broad EM panic", bull:"SE Asia's largest super-app; first GAAP profitable year 2025; fintech scaling", halal:true},
+  {id:18,name:"Telefónica Brasil",    ticker:"VIV",       sector:"Telecom",          flag:"🇧🇷",  preWar:9.00, dropPct:-18.0, warDrop:-3.9,  target:13.00, upside:42.9, rating:"Buy",        stars:4, why:"EM telecom selloff; BRL depreciation", bull:"Brazil's #1 telecom; 5G leader; 8%+ dividend; fiber expansion", halal:true},
+  {id:19,name:"Lloyds Banking Group", ticker:"LYG",       sector:"Banking",          flag:"🇬🇧",  preWar:3.20,  dropPct:-20.0, warDrop:-3.7,  target:4.20,  upside:43.8, rating:"Buy",        stars:4, why:"FTSE selloff; UK bank geopolitical contagion", bull:"UK mortgage market dominance; car finance clarity; 6%+ dividend; buybacks", halal:false},
+  {id:20,name:"Teva Pharmaceutical",  ticker:"TEVA",      sector:"Pharma",           flag:"💊",  preWar:14.00, dropPct:-18.0, warDrop:-4.8,  target:18.50, upside:44.7, rating:"Buy",        stars:4, why:"Israel HQ; geopolitical headline risk; generic pricing pressure", bull:"Opioid settlement clarity; Ajovy/Austedo pipeline growing 20%+", halal:true},
+  {id:21,name:"Ternium",              ticker:"TX",        sector:"Steel",            flag:"🔩",  preWar:18.00, dropPct:-22.0, warDrop:-7.8,  target:30.00, upside:53.8, rating:"Buy",        stars:4, why:"EM steel hit by growth fears + energy costs", bull:"Latin America steel leader; infrastructure mega-projects; strong dividend", halal:true},
+  {id:22,name:"Barrick Mining",       ticker:"GOLD",      sector:"Gold Mining",      flag:"🥈",  preWar:22.00, dropPct:-19.1, warDrop:-5.2,  target:36.00, upside:46.1, rating:"Strong Buy", stars:5, why:"Profit-taking despite gold at record highs", bull:"Gold near $5,300/oz; Tier 1 assets; copper revenue growing; $1B+ FCF", halal:true},
+  {id:23,name:"Norwegian Cruise",     ticker:"NCLH",      sector:"Travel",           flag:"🚢",  preWar:18.00, dropPct:-21.1, warDrop:-15.5, target:26.00, upside:51.6, rating:"Buy",        stars:4, why:"Oil spike; route closures near Middle East; weak guidance", bull:"Pent-up travel demand; cruises rebound sharply post-conflict historically", halal:true},
+  {id:24,name:"Carnival Corporation", ticker:"CCL",       sector:"Travel",           flag:"🛳️",  preWar:19.00, dropPct:-24.4, warDrop:-13.6, target:28.00, upside:29.6, rating:"Buy",        stars:4, why:"Fuel cost surge; booking uncertainty in Mid-East routes", bull:"Record 2026 bookings locked in; debt deleveraging on track", halal:true},
+  {id:25,name:"Royal Caribbean",      ticker:"RCL",       sector:"Travel",           flag:"⚓",  preWar:190.00,dropPct:-17.9, warDrop:-6.9,  target:260.00,upside:33.7, rating:"Strong Buy", stars:5, why:"Oil spike; Middle East route disruption fears", bull:"2/3 of 2026 capacity pre-booked at record prices; EPS $17.70–$18.10", halal:true},
+  {id:26,name:"Albemarle",            ticker:"ALB",       sector:"Lithium",          flag:"⚡",  preWar:55.00, dropPct:-27.1, warDrop:-12.0, target:78.00, upside:53.2, rating:"Buy",        stars:4, why:"Worst S&P performer on war day -12%; lithium demand fears", bull:"World's largest lithium producer; EV battery essential; structural demand", halal:true},
+  {id:27,name:"Freeport-McMoRan",     ticker:"FCX",       sector:"Copper",           flag:"⛏️",  preWar:35.00, dropPct:-23.0, warDrop:-9.0,  target:48.00, upside:50.6, rating:"Buy",        stars:4, why:"Materials worst sector -4.5%; growth fears", bull:"Copper for AI infrastructure, EVs, green energy; structural demand growing", halal:true},
+  {id:28,name:"Nucor Corporation",    ticker:"NUE",       sector:"Steel",            flag:"🔧",  preWar:110.00,dropPct:-19.0, warDrop:-6.1,  target:148.00,upside:49.5, rating:"Strong Buy", stars:5, why:"Steel sector hit on growth fears; materials worst sector", bull:"America's largest steel producer; 50yr dividend growth streak; $10B capex", halal:true},
+  {id:29,name:"Steel Dynamics",       ticker:"STLD",      sector:"Steel",            flag:"⚒️",  preWar:120.00,dropPct:-18.8, warDrop:-5.8,  target:158.00,upside:30.5, rating:"Buy",        stars:4, why:"Steel/materials selloff; geopolitical growth fears", bull:"EAF technology advantage; 14yr dividend growth; aluminum mill diversification", halal:true},
+  {id:30,name:"Newmont Corporation",  ticker:"NEM",       sector:"Gold Mining",      flag:"💎",  preWar:52.00, dropPct:-20.4, warDrop:-7.0,  target:56.00, upside:44.0, rating:"Buy",        stars:4, why:"Gold miner paradox selloff; lower 2026 output guidance", bull:"World's largest gold miner; gold at record $5,300+/oz; massive margins", halal:true},
+  {id:31,name:"Microsoft",            ticker:"MSFT",      sector:"Technology",       flag:"💻",  preWar:430.00,dropPct:-19.3, warDrop:-2.0,  target:480.00,upside:28.5, rating:"Strong Buy", stars:5, why:"YTD -19% from AI capex fears + war macro pressure", bull:"Azure AI dominance; 33/36 analysts bullish; recurring revenue war-independent", halal:true},
+  {id:32,name:"Amazon",               ticker:"AMZN",      sector:"Technology",       flag:"📦",  preWar:190.00,dropPct:-11.3, warDrop:-1.6,  target:250.00,upside:43.8, rating:"Strong Buy", stars:5, why:"YTD -9.6%; AI capex concerns; macro fears", bull:"AWS AI cloud leader; Wells Fargo & Oppenheimer target $295–$305", halal:true},
+  {id:33,name:"NVIDIA",               ticker:"NVDA",      sector:"Semiconductors",   flag:"🖥️",  preWar:155.00,dropPct:-9.4,  warDrop:-5.4,  target:220.00,upside:36.8, rating:"Strong Buy", stars:5, why:"War day -5.4% despite stellar Q4 earnings (+73% revenue)", bull:"AI chip demand structural; 37 analysts Buy; data center irreplaceable", halal:true},
+  {id:34,name:"Alphabet / Google",    ticker:"GOOGL",     sector:"Technology",       flag:"🔍",  preWar:185.00,dropPct:-0.7,  warDrop:-1.5,  target:210.00,upside:22.2, rating:"Strong Buy", stars:5, why:"Broad tech pullback; ad revenue deceleration fears", bull:"AI search dominance; Cloud #2 growing; YouTube subscriptions record", halal:true},
+  {id:35,name:"Meta Platforms",       ticker:"META",      sector:"Technology",       flag:"📱",  preWar:590.00,dropPct:-3.1,  warDrop:-2.3,  target:720.00,upside:31.4, rating:"Strong Buy", stars:5, why:"YTD -3.2%; geopolitical ad-spend uncertainty", bull:"AI-driven ad targeting; Llama open-source moat; 67 analyst Buy consensus", halal:true},
+  {id:36,name:"Apple",                ticker:"AAPL",      sector:"Technology",       flag:"🍎",  preWar:245.00,dropPct:-4.7,  warDrop:-2.2,  target:290.00,upside:12.9, rating:"Buy",        stars:4, why:"Broad tech pressure; supply chain concern China/Middle East", bull:"Services revenue record; iPhone 17 cycle; 41 analyst Buy; massive buybacks", halal:true},
+  {id:37,name:"JPMorgan Chase",       ticker:"JPM",       sector:"Financials",       flag:"🏦",  preWar:230.00,dropPct:-8.1,  warDrop:-2.4,  target:265.00,upside:15.7, rating:"Buy",        stars:4, why:"Macro uncertainty; rate path confusion; geopolitical risk premium", bull:"World's most profitable bank; $14B+ net income quarterly; fortress balance sheet", halal:false},
+  {id:38,name:"Viking Holdings",      ticker:"VIK",       sector:"Travel",           flag:"🛥️",  preWar:30.00, dropPct:-20.0, warDrop:-2.0,  target:40.00, upside:47.4, rating:"Buy",        stars:4, why:"Cruise sector hit; Egypt voyages paused through March 31", bull:"Q4 earnings beat; luxury river cruise premium brand; strong 2026 booking momentum", halal:true},
+  {id:39,name:"Delta Air Lines",      ticker:"DAL",       sector:"Airlines",         flag:"🛫",  preWar:38.00, dropPct:-26.7, warDrop:-9.8,  target:68.00, upside:60.0, rating:"Strong Buy", stars:5, why:"Airlines weakest sector; fuel spike; route closure fears", bull:"Premium travel demand structural; loyalty program cash; #1 US airline brand", halal:true},
+  {id:40,name:"Blackstone",           ticker:"BX",        sector:"Private Equity",   flag:"🏢",  preWar:110.00,dropPct:-12.6, warDrop:-3.8,  target:138.00,upside:31.4, rating:"Buy",        stars:4, why:"Private credit $1.7B outflows Q1; fear-driven selloff", bull:"Real assets benefit from inflation; infrastructure funds booming; AUM $1.1T", halal:false},
+  {id:41,name:"Visa Inc.",            ticker:"V",         sector:"Fintech",          flag:"💳",  preWar:295.00,dropPct:-9.4,  warDrop:-1.8,  target:368.00,upside:18.3, rating:"Strong Buy", stars:5, why:"Consumer discretionary fears; growth deceleration concern", bull:"Global payments duopoly; 85%+ net margin; post-war travel spend surge", halal:true},
+  {id:42,name:"Novartis",             ticker:"NVS",       sector:"Pharma",           flag:"🇨🇭",  preWar:95.00,dropPct:-14.0,  warDrop:-2.1,  target:115.00,upside:19.9, rating:"Buy",        stars:4, why:"European selloff; Stoxx600 -3.0%", bull:"Drug portfolio 7.1% sales growth; 7.9% LT EPS CAGR; AAA balance sheet", halal:true},
+  {id:43,name:"Credo Technology",     ticker:"CRDO",      sector:"Semiconductors",   flag:"🔌",  preWar:55.00,dropPct:-23.0, warDrop:-5.9,  target:85.00,upside:40.4, rating:"Buy",        stars:4, why:"Semi selloff; copper-to-optical transition uncertainty", bull:"BofA Buy reiterated; AI data center connectivity essential; optical expansion", halal:true},
+  {id:44,name:"Ross Stores",          ticker:"ROST",      sector:"Retail",           flag:"🛍️",  preWar:132.00,dropPct:-6.6,  warDrop:7.4,   target:155.00,upside:19.4, rating:"Buy",        stars:4, why:"Defensive retail; minor pullback from highs", bull:"Record revenue; strong 2026 guidance; off-price wins in inflationary environment", halal:true},
+  {id:45,name:"Broadcom",             ticker:"AVGO",      sector:"Semiconductors",   flag:"🔬",  preWar:195.00,dropPct:-8.8,  warDrop:-3.2,  target:248.00,upside:23.8, rating:"Strong Buy", stars:5, why:"Tech selloff; pre-earnings uncertainty", bull:"AI custom chip leader; 19% EPS growth YoY; VMware cloud integration", halal:true},
+  {id:46,name:"Moderna",              ticker:"MRNA",      sector:"Biotech",          flag:"🧪",  preWar:26.00, dropPct:-19.1, warDrop:-4.7,  target:40.00, upside:58.0, rating:"Buy",        stars:4, why:"Biotech broad selloff; vaccine revenue decline fears", bull:"$2.25B patent deal; mRNA cancer vaccine pipeline; RSV vaccine launched", halal:true},
+  {id:47,name:"Robinhood Markets",    ticker:"HOOD",      sector:"Fintech",          flag:"📊",  preWar:28.00, dropPct:-20.0, warDrop:-3.0,  target:38.00, upside:41.8, rating:"Buy",        stars:4, why:"Crypto proxy selloff; risk-off hit retail platform", bull:"Crypto trading recovery; options & retirement products growing; 25M+ users", halal:true},
+  {id:48,name:"Taiwan Semiconductor", ticker:"TSM",       sector:"Semiconductors",   flag:"🇹🇼",  preWar:162.00,dropPct:-19.0, warDrop:-3.5,  target:240.00,upside:41.2, rating:"Buy",        stars:4, why:"Asia selloff; Taiwan geopolitical risk premium resurfaced", bull:"AI chip revenue CAGR 55–59% through 2029; irreplaceable global chip supply", halal:true},
+  {id:49,name:"SK Hynix",             ticker:"000660.KS", sector:"Semiconductors",   flag:"🇰🇷",  preWar:230000,dropPct:-16.0, warDrop:-11.5, target:280000,upside:47.4, rating:"Strong Buy", stars:5, why:"KOSPI crashed 12%; AI memory leader panic-sold", bull:"HBM chips for NVIDIA/AI data centers; AI memory CAGR booming", halal:true},
+  {id:50,name:"Samsung Electronics",  ticker:"005930.KS", sector:"Technology",       flag:"🇰🇷",  preWar:70000, dropPct:-25.0, warDrop:-9.9,  target:85000, upside:49.1, rating:"Strong Buy", stars:5, why:"KOSPI crash; panic selling despite no direct war exposure", bull:"Galaxy S26 launch; memory chip record pricing; AI buildout tailwind", halal:true},
 ];
 
 const EU_STOCKS = [
   {id:1,  name:"IAG (Int'l Airlines Group)", ticker:"IAG.L",   sector:"Airlines",         flag:"🇬🇧", preWar:2.85,  dropPct:-28.1, warDrop:-9.5,  target:3.80,  upside:33.3, rating:"Strong Buy", stars:5, why:"Airspace closures; Middle East routes suspended; fuel cost shock", bull:"Post-conflict travel surge historically strong; Iberia+BA network dominance; loyalty FCF moat", halal:true},
   {id:2,  name:"Lufthansa Group",            ticker:"LHA.DE",  sector:"Airlines",         flag:"🇩🇪", preWar:7.20,  dropPct:-27.8, warDrop:-8.2,  target:9.50,  upside:31.9, rating:"Buy",        stars:4, why:"DAX -3.2% selloff; fuel cost spike; EU-Middle East routes cancelled", bull:"Premium cabin recovery; Miles & More loyalty program strong; Eurowings growth", halal:true},
   {id:3,  name:"TUI Group",                  ticker:"TUI1.DE", sector:"Travel",            flag:"🇩🇪", preWar:8.90,  dropPct:-31.5, warDrop:-10.1, target:12.00, upside:34.8, rating:"Strong Buy", stars:5, why:"Holiday bookings freeze; Egypt/Turkey packages cancelled en masse", bull:"Post-conflict rebound historically 2-3x normal bookings; debt restructuring complete", halal:true},
-  {id:4,  name:"Ryanair Holdings",           ticker:"RYA.L",   sector:"Airlines",         flag:"🇮🇪", preWar:16.40, dropPct:-22.4, warDrop:-6.8,  target:21.00, upside:28.0, rating:"Buy",        stars:4, why:"Geopolitical risk-off; fuel hedging cost increase; route uncertainty", bull:"Lowest-cost carrier in Europe; demand for budget travel surges post-crisis", halal:true},
-  {id:5,  name:"EasyJet",                    ticker:"EZJ.L",   sector:"Airlines",         flag:"🇬🇧", preWar:5.60,  dropPct:-24.3, warDrop:-7.5,  target:7.20,  upside:28.6, rating:"Buy",        stars:4, why:"UK geopolitical risk premium; holiday demand freeze; oil cost spike", bull:"Short-haul dominance in Europe; leisure demand resilient post-crisis", halal:true},
+  {id:4,  name:"Ryanair Holdings",           ticker:"RYA.L",   sector:"Airlines",         flag:"🇮🇪", preWar:16.40, dropPct:-18.0, warDrop:-6.8,  target:21.00, upside:29.0, rating:"Buy",        stars:4, why:"Geopolitical risk-off; fuel hedging cost increase; route uncertainty", bull:"Lowest-cost carrier in Europe; demand for budget travel surges post-crisis", halal:true},
+  {id:5,  name:"EasyJet",                    ticker:"EZJ.L",   sector:"Airlines",         flag:"🇬🇧", preWar:5.60,  dropPct:-24.3, warDrop:-7.5,  target:7.20,  upside:25.4, rating:"Buy",        stars:4, why:"UK geopolitical risk premium; holiday demand freeze; oil cost spike", bull:"Short-haul dominance in Europe; leisure demand resilient post-crisis", halal:true},
   {id:6,  name:"Stellantis NV",              ticker:"STLAM.MI",sector:"Automotive",        flag:"🇳🇱", preWar:14.20, dropPct:-26.9, warDrop:-5.2,  target:19.00, upside:33.8, rating:"Strong Buy", stars:5, why:"Auto demand fears; oil price impact on consumer discretionary spend", bull:"Jeep/Fiat/Peugeot portfolio; EV transition well-funded; deep value at current P/E", halal:true},
   {id:7,  name:"Volkswagen Group",           ticker:"VOW3.DE", sector:"Automotive",        flag:"🇩🇪", preWar:105.0, dropPct:-23.8, warDrop:-4.8,  target:140.0, upside:33.3, rating:"Buy",        stars:4, why:"German industrial recession fears; EV margin pressure amplified by oil shock", bull:"Porsche/Audi premium margins; largest EV manufacturer globally; massive cash reserves", halal:true},
   {id:8,  name:"Renault Group",              ticker:"RNO.PA",  sector:"Automotive",        flag:"🇫🇷", preWar:42.50, dropPct:-27.4, warDrop:-5.9,  target:57.00, upside:34.1, rating:"Strong Buy", stars:5, why:"French market risk-off; CAC 40 -3.2% drag; oil cost concern", bull:"Ampere EV spin-off value unlock; Dacia budget brand thrives in high-cost environment", halal:true},
-  {id:9,  name:"UniCredit",                  ticker:"UCG.MI",  sector:"Banking",           flag:"🇮🇹", preWar:38.20, dropPct:-22.6, warDrop:-4.3,  target:50.00, upside:30.9, rating:"Buy",        stars:4, why:"FTSE MIB -4.1%; banking stocks hit hardest; risk-off capital flight", bull:"Record profitability in 2025; ECB rate environment still favourable; dividend yield 7%+", halal:false},
-  {id:10, name:"BNP Paribas",                ticker:"BNP.PA",  sector:"Banking",           flag:"🇫🇷", preWar:74.80, dropPct:-18.9, warDrop:-4.1,  target:95.00, upside:27.0, rating:"Buy",        stars:4, why:"European bank risk-off; CAC 40 exposure; geopolitical credit risk concerns", bull:"Largest eurozone bank; CIB business resilient; strong dividend coverage", halal:false},
+  {id:9,  name:"UniCredit",                  ticker:"UCG.MI",  sector:"Banking",           flag:"🇮🇹", preWar:38.20, dropPct:-32.0, warDrop:-4.3,  target:50.00, upside:30.9, rating:"Buy",        stars:4, why:"FTSE MIB -4.1%; banking stocks hit hardest; risk-off capital flight", bull:"Record profitability in 2025; ECB rate environment still favourable; dividend yield 7%+", halal:false},
+  {id:10, name:"BNP Paribas",                ticker:"BNP.PA",  sector:"Banking",           flag:"🇫🇷", preWar:74.80, dropPct:-14.0, warDrop:-4.1,  target:95.00, upside:27.0, rating:"Buy",        stars:4, why:"European bank risk-off; CAC 40 exposure; geopolitical credit risk concerns", bull:"Largest eurozone bank; CIB business resilient; strong dividend coverage", halal:false},
   {id:11, name:"Santander Group",            ticker:"SAN.MC",  sector:"Banking",           flag:"🇪🇸", preWar:5.10,  dropPct:-20.4, warDrop:-4.6,  target:6.60,  upside:29.4, rating:"Buy",        stars:4, why:"IBEX selloff; EM exposure concerns; general bank risk-off sentiment", bull:"Brazil/Mexico EM growth engines; best-in-class ROE among EU banks; cheap on P/B", halal:false},
-  {id:12, name:"ING Group",                  ticker:"INGA.AS", sector:"Banking",           flag:"🇳🇱", preWar:17.40, dropPct:-19.2, warDrop:-3.9,  target:22.00, upside:26.4, rating:"Buy",        stars:4, why:"Dutch market selloff; AEX index decline; banking sector broad selling", bull:"Digital-first bank model; Poland/Germany growth; strong capital ratios", halal:false},
-  {id:13, name:"Allianz SE",                 ticker:"ALV.DE",  sector:"Insurance",         flag:"🇩🇪", preWar:282.0, dropPct:-16.8, warDrop:-3.6,  target:340.0, upside:20.6, rating:"Buy",        stars:4, why:"Insurance stocks down 3.6%; catastrophe risk repricing; investment portfolio concerns", bull:"Strongest insurer in Europe; PIMCO asset management; consistent 5%+ dividend", halal:false},
-  {id:14, name:"Münchener Rück",             ticker:"MUV2.DE", sector:"Reinsurance",       flag:"🇩🇪", preWar:490.0, dropPct:-14.3, warDrop:-3.1,  target:580.0, upside:18.4, rating:"Buy",        stars:3, why:"Reinsurance risk repricing; geopolitical cat risk exposure fears", bull:"Conflict increases reinsurance pricing power; record profits 2025", halal:false},
+  {id:12, name:"ING Group",                  ticker:"INGA.AS", sector:"Banking",           flag:"🇳🇱", preWar:17.40, dropPct:-22.0, warDrop:-3.9,  target:22.00, upside:31.3, rating:"Buy",        stars:4, why:"Dutch market selloff; AEX index decline; banking sector broad selling", bull:"Digital-first bank model; Poland/Germany growth; strong capital ratios", halal:false},
+  {id:13, name:"Allianz SE",                 ticker:"ALV.DE",  sector:"Insurance",         flag:"🇩🇪", preWar:282.0, dropPct:-22.0, warDrop:-3.6,  target:290.0, upside:20.6, rating:"Buy",        stars:4, why:"Insurance stocks down 3.6%; catastrophe risk repricing; investment portfolio concerns", bull:"Strongest insurer in Europe; PIMCO asset management; consistent 5%+ dividend", halal:false},
+  {id:14, name:"Münchener Rück",             ticker:"MUV2.DE", sector:"Reinsurance",       flag:"🇩🇪", preWar:490.0, dropPct:-14.3, warDrop:-3.1,  target:520.0, upside:18.4, rating:"Buy",        stars:3, why:"Reinsurance risk repricing; geopolitical cat risk exposure fears", bull:"Conflict increases reinsurance pricing power; record profits 2025", halal:false},
   {id:15, name:"Siemens Energy",             ticker:"ENR.DE",  sector:"Energy/Industrials",flag:"🇩🇪", preWar:38.50, dropPct:-19.6, warDrop:-5.1,  target:50.00, upside:29.9, rating:"Strong Buy", stars:5, why:"DAX broad selloff; energy transition uncertainty; supply chain fears", bull:"Grid infrastructure supercycle; EU energy independence spending; order backlog record", halal:true},
-  {id:16, name:"TotalEnergies SE",           ticker:"TTE.PA",  sector:"Energy",            flag:"🇫🇷", preWar:62.40, dropPct:-12.8, warDrop:-2.4,  target:78.00, upside:25.0, rating:"Buy",        stars:4, why:"Paradox: oil major sold off despite oil price spike; ESG fund outflows", bull:"Integrated model benefits from high oil; LNG leadership; 5.5% dividend yield", halal:true},
-  {id:17, name:"Equinor ASA",                ticker:"EQNR.OL", sector:"Energy",            flag:"🇳🇴", preWar:285.0, dropPct:-11.2, warDrop:-2.1,  target:360.0, upside:26.3, rating:"Buy",        stars:4, why:"Norwegian krone volatility; risk-off despite being an oil beneficiary", bull:"North Sea gas critical for Europe energy security; wind energy optionality; state-backed", halal:true},
+  {id:16, name:"TotalEnergies SE",           ticker:"TTE.PA",  sector:"Energy",            flag:"🇫🇷", preWar:62.40, dropPct:-16.0, warDrop:-2.4,  target:78.00, upside:27.6, rating:"Buy",        stars:4, why:"Paradox: oil major sold off despite oil price spike; ESG fund outflows", bull:"Integrated model benefits from high oil; LNG leadership; 5.5% dividend yield", halal:true},
+  {id:17, name:"Equinor ASA",                ticker:"EQNR.OL", sector:"Energy",            flag:"🇳🇴", preWar:285.0, dropPct:-12.0, warDrop:-2.1,  target:390.0, upside:32.2, rating:"Buy",        stars:4, why:"Norwegian krone volatility; risk-off despite being an oil beneficiary", bull:"North Sea gas critical for Europe energy security; wind energy optionality; state-backed", halal:true},
   {id:18, name:"Shell plc",                  ticker:"SHEL.L",  sector:"Energy",            flag:"🇬🇧", preWar:28.60, dropPct:-10.4, warDrop:-1.9,  target:35.00, upside:22.4, rating:"Buy",        stars:3, why:"UK market selloff; integrated major caught in ESG vs oil paradox", bull:"LNG global leader; North Sea cash generator; buyback programme ongoing", halal:true},
   {id:19, name:"Airbus SE",                  ticker:"AIR.PA",  sector:"Aerospace",         flag:"🇫🇷", preWar:162.0, dropPct:-17.4, warDrop:-3.8,  target:205.0, upside:26.5, rating:"Buy",        stars:4, why:"Aviation demand uncertainty; supply chain concerns; CAC 40 broad selloff", bull:"10-year order backlog; duopoly with Boeing; defence business accelerating", halal:true},
-  {id:20, name:"Leonardo SpA",               ticker:"LDO.MI",  sector:"Defence",           flag:"🇮🇹", preWar:24.80, dropPct:-8.6,  warDrop:-2.2,  target:32.00, upside:29.0, rating:"Strong Buy", stars:5, why:"Paradoxically sold off in broad Italian market selloff despite being a defence name", bull:"NATO spending surge; helicopter and electronics divisions growing; EU defence fund", halal:true},
+  {id:20, name:"Leonardo SpA",               ticker:"LDO.MI",  sector:"Defence",           flag:"🇮🇹", preWar:24.80, dropPct:-12.0,  warDrop:-2.2,  target:32.00, upside:29.0, rating:"Strong Buy", stars:5, why:"Paradoxically sold off in broad Italian market selloff despite being a defence name", bull:"NATO spending surge; helicopter and electronics divisions growing; EU defence fund", halal:true},
   {id:21, name:"Rheinmetall AG",             ticker:"RHM.DE",  sector:"Defence",           flag:"🇩🇪", preWar:580.0, dropPct:-6.2,  warDrop:-1.5,  target:720.0, upside:24.1, rating:"Buy",        stars:4, why:"Profit-taking after 2025 rally; valuation concerns despite strong fundamentals", bull:"Ammunition and armour demand structural; 2%+ GDP defence target across NATO", halal:true},
-  {id:22, name:"Novo Nordisk",               ticker:"NOVO-B.CO",sector:"Pharma",           flag:"🇩🇰", preWar:580.0, dropPct:-28.4, warDrop:-3.1,  target:760.0, upside:31.0, rating:"Strong Buy", stars:5, why:"Post-2025 obesity drug correction; geopolitical risk-off hitting mega-cap pharma", bull:"Ozempic/Wegovy global demand still accelerating; pipeline deep; US market dominant", halal:true},
-  {id:23, name:"AstraZeneca plc",            ticker:"AZN.L",   sector:"Pharma",            flag:"🇬🇧", preWar:128.0, dropPct:-15.6, warDrop:-2.8,  target:165.0, upside:28.9, rating:"Buy",        stars:4, why:"UK FTSE selloff; geopolitical risk premium; generic drug competition fears", bull:"Oncology pipeline best-in-class; China sales accelerating; record 2025 revenues", halal:true},
-  {id:24, name:"GSK plc",                    ticker:"GSK.L",   sector:"Pharma",            flag:"🇬🇧", preWar:17.20, dropPct:-14.2, warDrop:-2.6,  target:22.00, upside:27.9, rating:"Buy",        stars:4, why:"UK risk-off selloff; Zantac liability residual concerns; general pharma selldown", bull:"Vaccines business accelerating; HIV portfolio dominant; Granolas re-rating underway", halal:true},
-  {id:25, name:"ASML Holding",               ticker:"ASML.AS", sector:"Semiconductors",    flag:"🇳🇱", preWar:680.0, dropPct:-20.8, warDrop:-4.6,  target:870.0, upside:27.9, rating:"Strong Buy", stars:5, why:"Tech selloff on geopolitical risk; China export restriction fears", bull:"Global monopoly on EUV lithography; AI chip demand requires ASML tools; no substitute", halal:true},
+  {id:22, name:"Novo Nordisk",               ticker:"NOVO-B.CO",sector:"Pharma",           flag:"🇩🇰", preWar:580.0, dropPct:-35.0, warDrop:-3.1,  target:760.0, upside:31.0, rating:"Strong Buy", stars:5, why:"Post-2025 obesity drug correction; geopolitical risk-off hitting mega-cap pharma", bull:"Ozempic/Wegovy global demand still accelerating; pipeline deep; US market dominant", halal:true},
+  {id:23, name:"AstraZeneca plc",            ticker:"AZN.L",   sector:"Pharma",            flag:"🇬🇧", preWar:128.0, dropPct:-15.6, warDrop:-2.8,  target:165.0, upside:31.8, rating:"Buy",        stars:4, why:"UK FTSE selloff; geopolitical risk premium; generic drug competition fears", bull:"Oncology pipeline best-in-class; China sales accelerating; record 2025 revenues", halal:true},
+  {id:24, name:"GSK plc",                    ticker:"GSK.L",   sector:"Pharma",            flag:"🇬🇧", preWar:17.20, dropPct:-12.0, warDrop:-2.6,  target:22.00, upside:27.9, rating:"Buy",        stars:4, why:"UK risk-off selloff; Zantac liability residual concerns; general pharma selldown", bull:"Vaccines business accelerating; HIV portfolio dominant; Granolas re-rating underway", halal:true},
+  {id:25, name:"ASML Holding",               ticker:"ASML.AS", sector:"Semiconductors",    flag:"🇳🇱", preWar:680.0, dropPct:-23.0, warDrop:-4.6,  target:870.0, upside:27.9, rating:"Strong Buy", stars:5, why:"Tech selloff on geopolitical risk; China export restriction fears", bull:"Global monopoly on EUV lithography; AI chip demand requires ASML tools; no substitute", halal:true},
   {id:26, name:"STMicroelectronics",         ticker:"STM.PA",  sector:"Semiconductors",    flag:"🇫🇷", preWar:22.40, dropPct:-30.2, warDrop:-6.1,  target:30.00, upside:33.9, rating:"Strong Buy", stars:5, why:"Semiconductor cycle downturn; auto chip demand concerns; CAC broad selloff", bull:"Auto electrification supercycle client; industrial chips recovery; new fab investments", halal:true},
   {id:27, name:"Infineon Technologies",      ticker:"IFX.DE",  sector:"Semiconductors",    flag:"🇩🇪", preWar:28.50, dropPct:-26.4, warDrop:-5.3,  target:38.00, upside:33.3, rating:"Strong Buy", stars:5, why:"EV demand slowdown concerns; DAX broad selling; inventory digestion cycle", bull:"Power semiconductor dominant; EV still structural trend; industrial automation client", halal:true},
-  {id:28, name:"SAP SE",                     ticker:"SAP.DE",  sector:"Enterprise Tech",   flag:"🇩🇪", preWar:238.0, dropPct:-13.5, warDrop:-2.9,  target:295.0, upside:23.9, rating:"Buy",        stars:4, why:"Tech risk-off; DAX drag; cloud transition margin concerns resurfacing", bull:"S/4HANA cloud migration multi-year tailwind; AI integration; sticky enterprise base", halal:true},
-  {id:29, name:"LVMH Moët Hennessy",         ticker:"MC.PA",   sector:"Luxury Goods",      flag:"🇫🇷", preWar:580.0, dropPct:-22.6, warDrop:-5.5,  target:750.0, upside:29.3, rating:"Buy",        stars:4, why:"Luxury discretionary sell-off; China risk; CAC 40 broad decline", bull:"Louis Vuitton pricing power unmatched; China recovery in motion; Tiffany synergies", halal:false},
+  {id:28, name:"SAP SE",                     ticker:"SAP.DE",  sector:"Enterprise Tech",   flag:"🇩🇪", preWar:238.0, dropPct:-13.5, warDrop:-2.9,  target:295.0, upside:26.5, rating:"Buy",        stars:4, why:"Tech risk-off; DAX drag; cloud transition margin concerns resurfacing", bull:"S/4HANA cloud migration multi-year tailwind; AI integration; sticky enterprise base", halal:true},
+  {id:29, name:"LVMH Moët Hennessy",         ticker:"MC.PA",   sector:"Luxury Goods",      flag:"🇫🇷", preWar:580.0, dropPct:-32.0, warDrop:-5.5,  target:750.0, upside:29.3, rating:"Buy",        stars:4, why:"Luxury discretionary sell-off; China risk; CAC 40 broad decline", bull:"Louis Vuitton pricing power unmatched; China recovery in motion; Tiffany synergies", halal:false},
   {id:30, name:"Kering SA",                  ticker:"KER.PA",  sector:"Luxury Goods",      flag:"🇫🇷", preWar:220.0, dropPct:-31.4, warDrop:-6.2,  target:295.0, upside:34.1, rating:"Strong Buy", stars:5, why:"Gucci revenue decline; CAC selloff; China slowdown concerns amplified", bull:"Gucci turnaround new creative director; Bottega Veneta accelerating; deep value", halal:true},
-  {id:31, name:"Heineken NV",                ticker:"HEIA.AS", sector:"Beverages",         flag:"🇳🇱", preWar:82.50, dropPct:-14.8, warDrop:-2.3,  target:105.0, upside:27.3, rating:"Buy",        stars:4, why:"Defensive but caught in AEX selloff; consumer staples risk-off", bull:"Global premium beer leader; Africa/Asia growth markets; pricing power intact", halal:false},
-  {id:32, name:"AB InBev",                   ticker:"ABI.BR",  sector:"Beverages",         flag:"🇧🇪", preWar:52.80, dropPct:-17.2, warDrop:-2.9,  target:68.00, upside:28.8, rating:"Buy",        stars:4, why:"Belgian market selloff; debt concerns resurfacing; emerging market currency fears", bull:"Bud Light recovery; premium mix shift; Brazil and Mexico growing fast", halal:false},
+  {id:31, name:"Heineken NV",                ticker:"HEIA.AS", sector:"Beverages",         flag:"🇳🇱", preWar:82.50, dropPct:-18.0, warDrop:-2.3,  target:105.0, upside:26.8, rating:"Buy",        stars:4, why:"Defensive but caught in AEX selloff; consumer staples risk-off", bull:"Global premium beer leader; Africa/Asia growth markets; pricing power intact", halal:false},
+  {id:32, name:"AB InBev",                   ticker:"ABI.BR",  sector:"Beverages",         flag:"🇧🇪", preWar:52.80, dropPct:-8.0, warDrop:-2.9,  target:68.00, upside:28.8, rating:"Buy",        stars:4, why:"Belgian market selloff; debt concerns resurfacing; emerging market currency fears", bull:"Bud Light recovery; premium mix shift; Brazil and Mexico growing fast", halal:false},
   {id:33, name:"Philips NV",                 ticker:"PHIA.AS", sector:"Healthcare Tech",   flag:"🇳🇱", preWar:24.60, dropPct:-19.5, warDrop:-3.2,  target:32.00, upside:30.1, rating:"Strong Buy", stars:5, why:"Recall legacy costs overhang; AEX broad selling; hospital spending uncertainty", bull:"Recall settlement behind; imaging and monitoring turnaround underway; healthcare secular", halal:true},
   {id:34, name:"Fresenius SE",               ticker:"FRE.DE",  sector:"Healthcare",        flag:"🇩🇪", preWar:34.80, dropPct:-16.4, warDrop:-2.7,  target:45.00, upside:29.3, rating:"Buy",        stars:4, why:"Defensive healthcare caught in DAX broad selloff; cost pressure concerns", bull:"Dialysis and hospital management secular demand; restructuring FreseniusMedical value", halal:true},
-  {id:35, name:"Adyen NV",                   ticker:"ADYEN.AS",sector:"Fintech",           flag:"🇳🇱", preWar:1420.0,dropPct:-24.8, warDrop:-4.9,  target:1850.0,upside:30.3, rating:"Strong Buy", stars:5, why:"Fintech growth stocks hit on risk-off; AEX broad selloff; valuation concerns", bull:"Payments infrastructure for enterprise; NorthAmerica growth; take-rate expansion", halal:true},
-  {id:36, name:"Prosus NV",                  ticker:"PRX.AS",  sector:"Tech/Consumer",     flag:"🇳🇱", preWar:52.40, dropPct:-19.8, warDrop:-3.4,  target:70.00, upside:33.6, rating:"Buy",        stars:4, why:"Tencent proxy selloff; EM tech risk-off; China concerns amplified", bull:"Tencent 25% stake deep value; OLX/iFood business growing; buyback programme ongoing", halal:true},
+  {id:35, name:"Adyen NV",                   ticker:"ADYEN.AS",sector:"Fintech",           flag:"🇳🇱", preWar:1420.0,dropPct:-28.0, warDrop:-4.9,  target:1850.0,upside:30.3, rating:"Strong Buy", stars:5, why:"Fintech growth stocks hit on risk-off; AEX broad selloff; valuation concerns", bull:"Payments infrastructure for enterprise; NorthAmerica growth; take-rate expansion", halal:true},
+  {id:36, name:"Prosus NV",                  ticker:"PRX.AS",  sector:"Tech/Consumer",     flag:"🇳🇱", preWar:52.40, dropPct:-22.0, warDrop:-3.4,  target:70.00, upside:33.6, rating:"Buy",        stars:4, why:"Tencent proxy selloff; EM tech risk-off; China concerns amplified", bull:"Tencent 25% stake deep value; OLX/iFood business growing; buyback programme ongoing", halal:true},
   {id:37, name:"Engie SA",                   ticker:"ENGI.PA", sector:"Utilities",         flag:"🇫🇷", preWar:16.80, dropPct:-16.9, warDrop:-4.4,  target:22.00, upside:31.0, rating:"Strong Buy", stars:5, why:"Utilities sold off 4.4% despite being energy infrastructure beneficiary", bull:"EU energy independence; nuclear restart; renewable buildout well-funded; 6% dividend", halal:true},
-  {id:38, name:"E.ON SE",                    ticker:"EOAN.DE", sector:"Utilities",         flag:"🇩🇪", preWar:13.40, dropPct:-14.6, warDrop:-4.2,  target:17.00, upside:26.9, rating:"Buy",        stars:4, why:"Utility paradox: sold off despite energy price benefit; rate sensitivity concerns", bull:"German grid modernisation mandate; heat pump infrastructure growth; defensive dividend", halal:true},
+  {id:38, name:"E.ON SE",                    ticker:"EOAN.DE", sector:"Utilities",         flag:"🇩🇪", preWar:13.40, dropPct:-14.6, warDrop:-4.2,  target:17.00, upside:27.7, rating:"Buy",        stars:4, why:"Utility paradox: sold off despite energy price benefit; rate sensitivity concerns", bull:"German grid modernisation mandate; heat pump infrastructure growth; defensive dividend", halal:true},
   {id:39, name:"Vonovia SE",                 ticker:"VNA.DE",  sector:"Real Estate",       flag:"🇩🇪", preWar:28.60, dropPct:-20.3, warDrop:-3.8,  target:37.00, upside:29.4, rating:"Buy",        stars:4, why:"Rate sensitivity; real estate broad sell-off; DAX drag", bull:"Germany rental shortage structural; rate cuts underway by ECB; portfolio quality premium", halal:true},
-  {id:40, name:"Veolia Environnement",       ticker:"VIE.PA",  sector:"Water/Waste",       flag:"🇫🇷", preWar:28.40, dropPct:-15.3, warDrop:-3.1,  target:36.00, upside:26.8, rating:"Buy",        stars:4, why:"Infrastructure stock in broad CAC selloff; minor Middle East asset exposure", bull:"Water scarcity secular theme; EU Green Deal beneficiary; consistent dividend", halal:true},
-  {id:41, name:"Amadeus IT Group",           ticker:"AMS.MC",  sector:"Travel Tech",       flag:"🇪🇸", preWar:72.50, dropPct:-23.4, warDrop:-6.8,  target:92.00, upside:26.9, rating:"Buy",        stars:4, why:"Travel tech hit alongside airlines; IBEX selloff; booking freeze fears", bull:"Airline reservation duopoly; NDC transition drives pricing power; SaaS-like recurring rev", halal:true},
+  {id:40, name:"Veolia Environnement",       ticker:"VIE.PA",  sector:"Water/Waste",       flag:"🇫🇷", preWar:28.40, dropPct:-15.3, warDrop:-3.1,  target:36.00, upside:30.4, rating:"Buy",        stars:4, why:"Infrastructure stock in broad CAC selloff; minor Middle East asset exposure", bull:"Water scarcity secular theme; EU Green Deal beneficiary; consistent dividend", halal:true},
+  {id:41, name:"Amadeus IT Group",           ticker:"AMS.MC",  sector:"Travel Tech",       flag:"🇪🇸", preWar:72.50, dropPct:-27.0, warDrop:-6.8,  target:92.00, upside:33.3, rating:"Buy",        stars:4, why:"Travel tech hit alongside airlines; IBEX selloff; booking freeze fears", bull:"Airline reservation duopoly; NDC transition drives pricing power; SaaS-like recurring rev", halal:true},
   {id:42, name:"Porsche AG",                 ticker:"P911.DE", sector:"Automotive/Luxury", flag:"🇩🇪", preWar:72.80, dropPct:-28.6, warDrop:-5.1,  target:96.00, upside:31.9, rating:"Strong Buy", stars:5, why:"EV transition concerns; DAX broad selloff; luxury auto demand fears", bull:"Most profitable car company by margin; brand pricing power; Cayenne EV launch", halal:true},
-  {id:43, name:"Danone SA",                  ticker:"BN.PA",   sector:"Consumer Staples",  flag:"🇫🇷", preWar:62.80, dropPct:-12.4, warDrop:-1.8,  target:80.00, upside:27.4, rating:"Buy",        stars:3, why:"Defensive staple caught in broad CAC selloff; EM exposure concerns", bull:"Baby food and water brands resilient; India/China demand recovery; margin expansion", halal:true},
-  {id:44, name:"Unilever plc",               ticker:"ULVR.L",  sector:"Consumer Staples",  flag:"🇬🇧", preWar:48.50, dropPct:-11.6, warDrop:-1.6,  target:62.00, upside:27.8, rating:"Buy",        stars:3, why:"FTSE selloff dragged defensive staples lower; EM currency pressure", bull:"Ice Cream spin-off value unlock; 50+ power brands; EM middle class structural growth", halal:true},
-  {id:45, name:"Wolters Kluwer",             ticker:"WKL.AS",  sector:"Information Services",flag:"🇳🇱",preWar:152.0, dropPct:-12.8, warDrop:-2.1,  target:192.0, upside:26.3, rating:"Buy",        stars:4, why:"AEX broad selloff; tech risk-off catching defensive software names", bull:"Legal/tax compliance software mission-critical; AI integration; recurring revenue 90%+", halal:true},
+  {id:43, name:"Danone SA",                  ticker:"BN.PA",   sector:"Consumer Staples",  flag:"🇫🇷", preWar:62.80, dropPct:-18.0, warDrop:-1.8,  target:80.00, upside:22.7, rating:"Buy",        stars:3, why:"Defensive staple caught in broad CAC selloff; EM exposure concerns", bull:"Baby food and water brands resilient; India/China demand recovery; margin expansion", halal:true},
+  {id:44, name:"Unilever plc",               ticker:"ULVR.L",  sector:"Consumer Staples",  flag:"🇬🇧", preWar:48.50, dropPct:-14.0, warDrop:-1.6,  target:62.00, upside:29.5, rating:"Buy",        stars:3, why:"FTSE selloff dragged defensive staples lower; EM currency pressure", bull:"Ice Cream spin-off value unlock; 50+ power brands; EM middle class structural growth", halal:true},
+  {id:45, name:"Wolters Kluwer",             ticker:"WKL.AS",  sector:"Information Services",flag:"🇳🇱",preWar:152.0, dropPct:-14.0, warDrop:-2.1,  target:192.0, upside:33.3, rating:"Buy",        stars:4, why:"AEX broad selloff; tech risk-off catching defensive software names", bull:"Legal/tax compliance software mission-critical; AI integration; recurring revenue 90%+", halal:true},
   {id:46, name:"Flutter Entertainment",      ticker:"FLTR.L",  sector:"Gaming/Betting",    flag:"🇮🇪", preWar:218.0, dropPct:-17.8, warDrop:-3.6,  target:280.0, upside:28.4, rating:"Buy",        stars:4, why:"FTSE selloff; US sports betting regulatory uncertainty; discretionary risk-off", bull:"FanDuel US market leader; sports betting structural growth globally; Paddy Power UK moat", halal:false},
-  {id:47, name:"Compass Group",              ticker:"CPG.L",   sector:"Food Services",     flag:"🇬🇧", preWar:23.50, dropPct:-13.2, warDrop:-2.4,  target:30.00, upside:27.7, rating:"Buy",        stars:4, why:"UK geopolitical risk premium; contract catering demand uncertainty", bull:"World's largest contract caterer; 2025 record revenues; organic growth 10%+ guided", halal:true},
+  {id:47, name:"Compass Group",              ticker:"CPG.L",   sector:"Food Services",     flag:"🇬🇧", preWar:23.50, dropPct:-14.0, warDrop:-2.4,  target:30.00, upside:28.1, rating:"Buy",        stars:4, why:"UK geopolitical risk premium; contract catering demand uncertainty", bull:"World's largest contract caterer; 2025 record revenues; organic growth 10%+ guided", halal:true},
   {id:48, name:"CRH plc",                    ticker:"CRH",     sector:"Construction",      flag:"🇮🇪", preWar:68.20, dropPct:-16.5, warDrop:-3.2,  target:88.00, upside:29.0, rating:"Buy",        stars:4, why:"Infrastructure concerns; NY-listed Irish construction caught in US selloff", bull:"US infrastructure bill primary beneficiary; aggregates pricing power; record M&A pipeline", halal:true},
   {id:49, name:"ArcelorMittal",              ticker:"MT",      sector:"Steel",             flag:"🇱🇺", preWar:24.80, dropPct:-27.4, warDrop:-5.8,  target:33.00, upside:33.1, rating:"Strong Buy", stars:5, why:"Steel demand fears; European industrial recession; commodity selloff", bull:"Largest steel producer globally; post-conflict infrastructure rebuild demand; US tariff beneficiary", halal:true},
   {id:50, name:"Glencore plc",               ticker:"GLEN.L",  sector:"Mining/Commodities",flag:"🇨🇭", preWar:4.20,  dropPct:-18.6, warDrop:-3.9,  target:5.40,  upside:28.6, rating:"Buy",        stars:4, why:"Commodity risk-off; coal controversy; FTSE broad selling", bull:"Coal cash cow funds transition metals; cobalt and copper for EV; trading division resilient", halal:true}
 ];
 
 const INDIA_STOCKS = [
-  {id:1,  name:"HDFC Bank",          ticker:"HDFCBANK.NS", sector:"Banking",          flag:"🏦", preWar:1820.0, dropPct:-18.4, warDrop:-3.8, target:2350.0, upside:29.1, rating:"Strong Buy", stars:5, why:"Nifty Bank -3%; FII selling; oil import concerns hit financials broadly", bull:"India's largest private bank; loan book quality best-in-class; NIM expansion underway", halal:false},
-  {id:2,  name:"ICICI Bank",         ticker:"ICICIBANK.NS",sector:"Banking",          flag:"🏦", preWar:1240.0, dropPct:-17.2, warDrop:-3.4, target:1580.0, upside:27.4, rating:"Strong Buy", stars:5, why:"Heavy FII selling; broad banking selloff; geopolitical risk-off", bull:"Retail banking dominance; digital ICICI stack; best ROE improvement trajectory in sector", halal:false},
-  {id:3,  name:"State Bank of India",ticker:"SBIN.NS",     sector:"PSU Banking",      flag:"🏛️", preWar:780.0,  dropPct:-20.8, warDrop:-5.1, target:1000.0, upside:28.2, rating:"Buy",        stars:4, why:"PSU bank hit hardest; SBI fell 5%+ on geopolitical day; FII outflows", bull:"India infrastructure loan book; rural banking penetration; government backing", halal:false},
-  {id:4,  name:"Axis Bank",          ticker:"AXISBANK.NS", sector:"Banking",          flag:"🏦", preWar:1120.0, dropPct:-18.9, warDrop:-3.6, target:1430.0, upside:27.7, rating:"Buy",        stars:4, why:"Banking sector broad selloff; FII selling; NIM pressure fears resurfacing", bull:"Citi India acquisition synergies; retail franchise strengthening; credit cost improving", halal:false},
-  {id:5,  name:"Bajaj Finance",      ticker:"BAJFINANCE.NS",sector:"NBFC",            flag:"💳", preWar:7200.0, dropPct:-22.4, warDrop:-4.2, target:9200.0, upside:27.8, rating:"Strong Buy", stars:5, why:"NBFC risk-off; consumer credit fears on high oil prices; Nifty 50 drag", bull:"Consumer lending franchise unmatched in India; fintech integration; 28%+ AUM growth", halal:false},
-  {id:6,  name:"Tata Motors",        ticker:"TATAMOTORS.NS",sector:"Automotive",      flag:"🚗", preWar:920.0,  dropPct:-28.4, warDrop:-5.3, target:1180.0, upside:28.3, rating:"Strong Buy", stars:5, why:"Auto sector worst hit; oil price spike hits demand; Sensex heaviest faller -5.35%", bull:"Jaguar Land Rover EV transformation; India commercial vehicle dominance; JLR record profits", halal:true},
-  {id:7,  name:"Maruti Suzuki",      ticker:"MARUTI.NS",   sector:"Automotive",       flag:"🚗", preWar:12800.0,dropPct:-21.6, warDrop:-4.6, target:16500.0,upside:28.9, rating:"Buy",        stars:4, why:"Auto demand fears; fuel cost anxiety; fell 4.6% on geopolitical day", bull:"India car market leader 41% share; CNG vehicle advantage on high oil; new SUV launches", halal:true},
-  {id:8,  name:"Mahindra & Mahindra",ticker:"M&M.NS",      sector:"Automotive",       flag:"🚙", preWar:3100.0, dropPct:-19.8, warDrop:-3.9, target:3950.0, upside:27.4, rating:"Buy",        stars:4, why:"SUV demand concerns; farm equipment cyclical fears; broad auto selloff", bull:"SUV market share gains sustained; BE EV series launch; farm equipment export growth", halal:true},
-  {id:9,  name:"Infosys",            ticker:"INFY.NS",     sector:"IT Services",      flag:"💻", preWar:1890.0, dropPct:-14.2, warDrop:-1.8, target:2380.0, upside:25.9, rating:"Buy",        stars:4, why:"IT caught in broad selloff; US discretionary IT spend uncertainty", bull:"AI services transformation leader; deal wins accelerating; 15% margin guided for FY26", halal:true},
-  {id:10, name:"TCS",                ticker:"TCS.NS",      sector:"IT Services",      flag:"💻", preWar:4100.0, dropPct:-13.6, warDrop:-1.6, target:5100.0, upside:24.4, rating:"Buy",        stars:4, why:"IT services defensive but hit in broad selloff; FII selling across board", bull:"Largest IT services globally; AI transformation pipeline; BSNL deal execution", halal:true},
-  {id:11, name:"Wipro",              ticker:"WIPRO.NS",    sector:"IT Services",      flag:"💻", preWar:310.0,  dropPct:-15.8, warDrop:-2.1, target:395.0,  upside:27.4, rating:"Buy",        stars:4, why:"Mid-tier IT in FII sell basket; slower-than-peers recovery concerns", bull:"CAPCO consulting integration; AI-first positioning; new CEO turnaround gaining traction", halal:true},
-  {id:12, name:"HCL Technologies",   ticker:"HCLTECH.NS",  sector:"IT Services",      flag:"💻", preWar:1920.0, dropPct:-12.4, warDrop:-1.4, target:2380.0, upside:23.9, rating:"Buy",        stars:4, why:"IT selloff; products business cyclical concerns; geopolitical risk-off", bull:"Products and platforms business high-margin; engineering services growing; strong order book", halal:true},
-  {id:13, name:"Reliance Industries",ticker:"RELIANCE.NS", sector:"Conglomerate",     flag:"🏭", preWar:1380.0, dropPct:-9.6,  warDrop:-1.1, target:1750.0, upside:26.8, rating:"Buy",        stars:4, why:"Oil refining margin uncertainty; JioMart competition; CAP allocation concerns", bull:"Jio 5G monetisation; Retail value unlock; Green energy Giga factory; oil-to-chemicals pivot", halal:true},
-  {id:14, name:"UltraTech Cement",   ticker:"ULTRACEMCO.NS",sector:"Cement",          flag:"🏗️", preWar:11200.0,dropPct:-22.1, warDrop:-5.2, target:14000.0,upside:25.0, rating:"Buy",        stars:4, why:"Cement demand fears; input cost concerns; fell 5.19% on geopolitical day", bull:"India infrastructure capex multiyear boom; market share leader 24%; capacity expansion", halal:true},
-  {id:15, name:"Larsen & Toubro",    ticker:"LT.NS",       sector:"Engineering/Infra",flag:"🏗️", preWar:3680.0, dropPct:-16.8, warDrop:-2.8, target:4650.0, upside:26.4, rating:"Buy",        stars:4, why:"Infrastructure risk-off; L&T fell 2.8% on conflict day; capex delay fears", bull:"Rs 5 lakh crore order book; Middle East construction bookings (ironic beneficiary); defence", halal:true},
-  {id:16, name:"Adani Ports & SEZ",  ticker:"ADANIPORTS.NS",sector:"Ports/Logistics", flag:"⚓", preWar:1380.0, dropPct:-20.4, warDrop:-3.8, target:1750.0, upside:26.8, rating:"Buy",        stars:4, why:"Adani group risk-off; shipping route concerns; FII selling", bull:"Handled 42.5 MMT Feb 2026 (+16% YoY); container volumes +14%; India trade growth secular", halal:true},
-  {id:17, name:"Asian Paints",       ticker:"ASIANPAINT.NS",sector:"Paints/Consumer", flag:"🎨", preWar:2680.0, dropPct:-18.6, warDrop:-2.9, target:3300.0, upside:23.1, rating:"Buy",        stars:3, why:"Consumer discretionary selloff; raw material cost anxiety; Sensex drag", bull:"Paints market leader; India real estate boom drives repaint demand; margin normalising", halal:true},
-  {id:18, name:"Sun Pharmaceutical", ticker:"SUNPHARMA.NS",sector:"Pharma",           flag:"💊", preWar:1820.0, dropPct:-8.4,  warDrop:-0.8, target:2280.0, upside:25.3, rating:"Buy",        stars:4, why:"Defensive pharma dipped in broad selloff; US generic price pressure fears", bull:"US speciality pharma growing; branded India market dominant; rare disease pipeline", halal:true},
-  {id:19, name:"Cipla",              ticker:"CIPLA.NS",    sector:"Pharma",           flag:"💊", preWar:1560.0, dropPct:-11.2, warDrop:-1.4, target:1960.0, upside:25.6, rating:"Buy",        stars:4, why:"Pharma sector in FII sell-off basket despite defensive nature", bull:"US respiratory generics market share; India chronic care leader; peptide complex pipeline", halal:true},
-  {id:20, name:"Dr. Reddy's Labs",   ticker:"DRREDDY.NS",  sector:"Pharma",           flag:"💊", preWar:6400.0, dropPct:-12.8, warDrop:-1.6, target:8000.0, upside:25.0, rating:"Buy",        stars:4, why:"Broad pharma selloff; FII selling across Nifty 50 names", bull:"US generic launches pipeline; biosimilars 2026 catalyst; Russia and India growing", halal:true},
-  {id:21, name:"Bharat Electronics", ticker:"BEL.NS",      sector:"Defence",          flag:"🛡️", preWar:285.0,  dropPct:-4.2,  warDrop:2.1,  target:360.0,  upside:26.3, rating:"Strong Buy", stars:5, why:"Minor correction despite being a defence beneficiary; profit-taking after rally", bull:"India defence exports; radar + electronic warfare demand; record order book; HAL synergy", halal:true},
-  {id:22, name:"HAL",                ticker:"HAL.NS",      sector:"Defence/Aviation", flag:"✈️", preWar:4200.0, dropPct:-5.8,  warDrop:1.8,  target:5400.0, upside:28.6, rating:"Strong Buy", stars:5, why:"Slight profit-taking after 2025 defence rally; valuation concerns minor", bull:"Tejas Mk1A production; helicopter export orders; India's $35B defence production target", halal:true},
-  {id:23, name:"IndiGo",             ticker:"INDIGO.NS",   sector:"Airlines",         flag:"✈️", preWar:4680.0, dropPct:-22.6, warDrop:-4.0, target:5800.0, upside:23.9, rating:"Buy",        stars:4, why:"Airlines hardest hit; fell 4% on geopolitical day; fuel cost spike direct impact", bull:"India aviation structural boom; 60%+ market share; fleet expansion ahead of demand", halal:true},
-  {id:24, name:"Zomato",             ticker:"ZOMATO.NS",   sector:"Food Tech",        flag:"🍕", preWar:265.0,  dropPct:-24.8, warDrop:-3.4, target:340.0,  upside:28.3, rating:"Buy",        stars:4, why:"Consumer discretionary concerns; tech risk-off; FII selling growth stocks", bull:"Blinkit quick commerce scaling; India food delivery market structural; path to profitability", halal:true},
-  {id:25, name:"Paytm",              ticker:"PAYTM.NS",    sector:"Fintech",          flag:"📱", preWar:890.0,  dropPct:-28.4, warDrop:-4.2, target:1150.0, upside:29.2, rating:"Buy",        stars:4, why:"Regulatory overhang; fintech risk-off; consumer spend slowdown fears", bull:"Payment services recovery; merchant loans growing; insurance distribution scaling", halal:true},
-  {id:26, name:"Tata Steel",         ticker:"TATASTEEL.NS",sector:"Steel",            flag:"⚙️", preWar:168.0,  dropPct:-23.4, warDrop:-5.4, target:215.0,  upside:28.0, rating:"Buy",        stars:4, why:"Commodity risk-off; steel demand fears; Sensex broad decline; fell 2.9%", bull:"UK operations turnaround; India capacity expansion; post-conflict infra rebuild demand", halal:true},
-  {id:27, name:"JSW Steel",          ticker:"JSWSTEEL.NS", sector:"Steel",            flag:"⚙️", preWar:910.0,  dropPct:-21.6, warDrop:-4.8, target:1160.0, upside:27.5, rating:"Buy",        stars:4, why:"Steel demand uncertainty; commodity selloff; infrastructure spend concerns", bull:"India infra supercycle primary beneficiary; US expansion; capacity 36MT target", halal:true},
-  {id:28, name:"NTPC",               ticker:"NTPC.NS",     sector:"Power/Utilities",  flag:"⚡", preWar:385.0,  dropPct:-7.2,  warDrop:1.4,  target:490.0,  upside:27.3, rating:"Buy",        stars:4, why:"Minor dip in broad selloff; power sector mostly held up given energy importance", bull:"India power demand structural deficit; RE capacity addition 100GW target; green hydrogen", halal:true},
-  {id:29, name:"Power Grid Corp",    ticker:"POWERGRID.NS",sector:"Power Transmission",flag:"⚡", preWar:298.0,  dropPct:-8.6,  warDrop:0.8,  target:378.0,  upside:26.8, rating:"Buy",        stars:3, why:"Minor selloff; utility sector mostly resilient but caught in broader decline", bull:"India grid modernisation Rs 3 lakh crore investment; EV charging infrastructure; defensive", halal:true},
-  {id:30, name:"Coal India",         ticker:"COALINDIA.NS",sector:"Energy/Mining",    flag:"⛏️", preWar:468.0,  dropPct:-6.4,  warDrop:2.2,  target:590.0,  upside:26.1, rating:"Buy",        stars:3, why:"Minor correction; govt PSU coal faces ESG concerns despite strong cash flows", bull:"India power demand requires coal 2030; 7%+ dividend yield; government controlled upside", halal:true},
-  {id:31, name:"ONGC",               ticker:"ONGC.NS",     sector:"Oil & Gas",        flag:"🛢️", preWar:268.0,  dropPct:-3.2,  warDrop:3.8,  target:340.0,  upside:26.9, rating:"Buy",        stars:4, why:"Paradox: oil company that should benefit but FII selling dragged it temporarily lower", bull:"Oil price surge direct beneficiary; gas production growth; KG basin ramp-up underway", halal:true},
-  {id:32, name:"Bajaj Auto",         ticker:"BAJAJ-AUTO.NS",sector:"Two-Wheelers",    flag:"🏍️", preWar:9200.0, dropPct:-17.4, warDrop:-3.1, target:11600.0,upside:26.1, rating:"Buy",        stars:4, why:"Two-wheeler demand fears on high oil; auto sector broad selloff", bull:"EV three-wheeler dominance; Africa export growth; Triumph partnership premium segment", halal:true},
-  {id:33, name:"Hero MotoCorp",      ticker:"HEROMOTOCO.NS",sector:"Two-Wheelers",    flag:"🏍️", preWar:4680.0, dropPct:-18.8, warDrop:-3.4, target:5900.0, upside:26.1, rating:"Buy",        stars:4, why:"High oil price fears on fuel-dependent commuter bikes; auto broad selloff", bull:"Rural India demand recovery; CNG/EV transition in portfolio; 50%+ market share rural", halal:true},
-  {id:34, name:"Titan Company",      ticker:"TITAN.NS",     sector:"Consumer/Jewelry",flag:"💎", preWar:3680.0, dropPct:-19.2, warDrop:-2.6, target:4600.0, upside:25.0, rating:"Buy",        stars:4, why:"Discretionary selloff; luxury consumer concerns on geopolitical risk-off", bull:"India wedding jewelry structural; Tanishq brand dominance; watches and wearables growth", halal:true},
-  {id:35, name:"Nestle India",       ticker:"NESTLEIND.NS",sector:"FMCG",            flag:"🍫", preWar:2420.0, dropPct:-11.6, warDrop:-1.4, target:3000.0, upside:24.0, rating:"Buy",        stars:3, why:"Defensive FMCG but FII selling dragged it lower; input cost anxiety", bull:"Premium nutrition brands growing; Maggi recovery complete; rural penetration expanding", halal:true},
-  {id:36, name:"Hindustan Unilever", ticker:"HINDUNILVR.NS",sector:"FMCG",           flag:"🧴", preWar:2560.0, dropPct:-12.4, warDrop:-1.8, target:3200.0, upside:25.0, rating:"Buy",        stars:3, why:"Defensive FMCG caught in broad market selloff; FII selling basket", bull:"India premiumisation trend; rural volume recovery underway; beauty and wellness growth", halal:true},
-  {id:37, name:"ITC Limited",        ticker:"ITC.NS",      sector:"FMCG/Hotels",     flag:"🚬", preWar:458.0,  dropPct:-13.2, warDrop:-1.9, target:580.0,  upside:26.6, rating:"Buy",        stars:4, why:"Defensive stock in FII sell basket; hotel segment travel fears minor", bull:"Hotels business fastest growing; FMCG segment scaling; cigarette cash cow funds diversification", halal:false},
-  {id:38, name:"DLF Limited",        ticker:"DLF.NS",      sector:"Real Estate",     flag:"🏢", preWar:880.0,  dropPct:-22.6, warDrop:-3.6, target:1120.0, upside:27.3, rating:"Buy",        stars:4, why:"Real estate risk-off; interest rate sensitivity; broad market selloff", bull:"Luxury residential demand record in India; Gurugram commercial office dominance; annuity income", halal:true},
-  {id:39, name:"Godrej Properties",  ticker:"GODREJPROP.NS",sector:"Real Estate",    flag:"🏠", preWar:2680.0, dropPct:-21.4, warDrop:-3.2, target:3400.0, upside:26.9, rating:"Buy",        stars:4, why:"Broad real estate selloff; interest rate concerns resurfacing; Nifty Realty decline", bull:"Pre-sales record Rs 22,000cr FY25; Mumbai/Pune/NCR market dominance; land acquisition strategy", halal:true},
-  {id:40, name:"Bharat Forge",       ticker:"BHARATFORG.NS",sector:"Forging/Defence",flag:"⚙️", preWar:1240.0, dropPct:-18.4, warDrop:-2.8, target:1580.0, upside:27.4, rating:"Buy",        stars:4, why:"Forging stocks in broad industrial selloff; auto sector drag", bull:"Defence exports accelerating; EV powertrain components; US non-auto mix increasing", halal:true},
-  {id:41, name:"Godrej Consumer",    ticker:"GODREJCP.NS", sector:"FMCG",            flag:"🧼", preWar:1280.0, dropPct:-14.8, warDrop:-1.6, target:1620.0, upside:26.6, rating:"Buy",        stars:3, why:"Consumer staple in FII sell basket; EM currency concerns", bull:"Africa and Indonesia growth markets; household insecticides dominant; personal care scaling", halal:true},
-  {id:42, name:"Shree Cement",       ticker:"SHREECEM.NS", sector:"Cement",          flag:"🏗️", preWar:26400.0,dropPct:-19.8, warDrop:-4.6, target:33000.0,upside:25.0, rating:"Buy",        stars:3, why:"Cement selloff alongside UltraTech; infra spend anxiety; broad market decline", bull:"North and East India market leader; expansion into South; premium brand positioning", halal:true},
-  {id:43, name:"Pidilite Industries",ticker:"PIDILITIND.NS",sector:"Specialty Chem",  flag:"🔬", preWar:2960.0, dropPct:-16.2, warDrop:-2.1, target:3700.0, upside:25.0, rating:"Buy",        stars:3, why:"Specialty chemical selloff; construction sector concerns; discretionary risk-off", bull:"Fevicol brand monopoly; construction adhesives demand secular; premiumisation ongoing", halal:true},
-  {id:44, name:"Havells India",      ticker:"HAVELLS.NS",  sector:"Electricals",     flag:"⚡", preWar:1680.0, dropPct:-17.6, warDrop:-2.4, target:2100.0, upside:25.0, rating:"Buy",        stars:3, why:"Consumer electrical selloff; real estate cycle concerns; broad market decline", bull:"Cable and wiring India infrastructure play; Lloyd AC brand growing; data center cables", halal:true},
-  {id:45, name:"Muthoot Finance",    ticker:"MUTHOOTFIN.NS",sector:"Gold Finance",   flag:"🥇", preWar:1980.0, dropPct:-14.4, warDrop:-1.8, target:2500.0, upside:26.3, rating:"Buy",        stars:4, why:"NBFC broad selloff; gold-backed loan concerns; FII selling", bull:"Gold price surge directly boosts AUM; rural lending penetration; Southern India dominance", halal:false},
-  {id:46, name:"Divis Laboratories", ticker:"DIVISLAB.NS", sector:"Pharma/CDMO",     flag:"💊", preWar:5600.0, dropPct:-13.6, warDrop:-1.6, target:7000.0, upside:25.0, rating:"Buy",        stars:4, why:"Pharma broad selloff despite defensive nature; FII selling", bull:"CDMO demand from Big Pharma accelerating; API market leader; China+1 supply chain beneficiary", halal:true},
-  {id:47, name:"Torrent Pharma",     ticker:"TORNTPHARM.NS",sector:"Pharma",          flag:"💊", preWar:3200.0, dropPct:-12.8, warDrop:-1.4, target:4000.0, upside:25.0, rating:"Buy",        stars:3, why:"Pharma sector broad selloff; FII outflows dragging all large caps", bull:"Branded generics India market; Germany operations recovering; cardiac/CNS dominant brands", halal:true},
-  {id:48, name:"Oberoi Realty",      ticker:"OBEROIRLTY.NS",sector:"Premium Real Estate",flag:"🏨",preWar:1880.0,dropPct:-20.2, warDrop:-2.9, target:2380.0, upside:26.6, rating:"Buy",        stars:4, why:"Real estate broad selloff; luxury concerns on geopolitical uncertainty", bull:"Mumbai luxury residential record sales; hospitality business recovery; Worli project launch", halal:true},
-  {id:49, name:"Zydus Lifesciences", ticker:"ZYDUSLIFE.NS",sector:"Pharma",          flag:"💊", preWar:1040.0, dropPct:-14.2, warDrop:-1.8, target:1310.0, upside:26.0, rating:"Buy",        stars:3, why:"Pharma broad selloff; US generic pricing uncertainty; FII selling", bull:"US specialty pipeline 15 launches; biosimilar filing; wellness FMCG brand Combiflam", halal:true},
-  {id:50, name:"Bajaj Finserv",      ticker:"BAJAJFINSV.NS",sector:"NBFC/Insurance",  flag:"💳", preWar:1820.0, dropPct:-16.2, warDrop:-2.2, target:2300.0, upside:26.4, rating:"Buy",        stars:4, why:"Financial sector selloff; NBFC risk-off; FII selling basket", bull:"Insurance + lending conglomerate; Bajaj Finance synergies; digital financial services leader", halal:false}
+  {id:1,  name:"HDFC Bank",          ticker:"HDFCBANK.NS", sector:"Banking",          flag:"🏦", preWar:1020.0, dropPct:-19.6, warDrop:-3.8, target:1100.0, upside:34.1, rating:"Strong Buy", stars:5, why:"Nifty Bank -3%; FII selling; oil import concerns hit financials broadly", bull:"India's largest private bank; loan book quality best-in-class; NIM expansion underway", halal:false},
+  {id:2,  name:"ICICI Bank",         ticker:"ICICIBANK.NS",sector:"Banking",          flag:"🏦", preWar:1320.0, dropPct:-17.2, warDrop:-3.4, target:1600.0, upside:28.2, rating:"Strong Buy", stars:5, why:"Heavy FII selling; broad banking selloff; geopolitical risk-off", bull:"Retail banking dominance; digital ICICI stack; best ROE improvement trajectory in sector", halal:false},
+  {id:3,  name:"State Bank of India",ticker:"SBIN.NS",     sector:"PSU Banking",      flag:"🏛️", preWar:860.0,  dropPct:-20.8, warDrop:-5.1, target:980.0, upside:47.0, rating:"Buy",        stars:4, why:"PSU bank hit hardest; SBI fell 5%+ on geopolitical day; FII outflows", bull:"India infrastructure loan book; rural banking penetration; government backing", halal:false},
+  {id:4,  name:"Axis Bank",          ticker:"AXISBANK.NS", sector:"Banking",          flag:"🏦", preWar:1180.0, dropPct:-18.9, warDrop:-3.6, target:1350.0, upside:27.7, rating:"Buy",        stars:4, why:"Banking sector broad selloff; FII selling; NIM pressure fears resurfacing", bull:"Citi India acquisition synergies; retail franchise strengthening; credit cost improving", halal:false},
+  {id:5,  name:"Bajaj Finance",      ticker:"BAJFINANCE.NS",sector:"NBFC",            flag:"💳", preWar:7500.0, dropPct:-22.4, warDrop:-4.2, target:9000.0, upside:27.8, rating:"Strong Buy", stars:5, why:"NBFC risk-off; consumer credit fears on high oil prices; Nifty 50 drag", bull:"Consumer lending franchise unmatched in India; fintech integration; 28%+ AUM growth", halal:false},
+  {id:6,  name:"Tata Motors",        ticker:"TATAMOTORS.NS",sector:"Automotive",      flag:"🚗", preWar:620.0,  dropPct:-28.0, warDrop:-5.3, target:820.0, upside:32.3, rating:"Strong Buy", stars:5, why:"Auto sector worst hit; oil price spike hits demand; Sensex heaviest faller -5.35%", bull:"Jaguar Land Rover EV transformation; India commercial vehicle dominance; JLR record profits", halal:true},
+  {id:7,  name:"Maruti Suzuki",      ticker:"MARUTI.NS",   sector:"Automotive",       flag:"🚗", preWar:11500.0,dropPct:-20.0, warDrop:-4.6, target:14500.0,upside:28.9, rating:"Buy",        stars:4, why:"Auto demand fears; fuel cost anxiety; fell 4.6% on geopolitical day", bull:"India car market leader 41% share; CNG vehicle advantage on high oil; new SUV launches", halal:true},
+  {id:8,  name:"Mahindra & Mahindra",ticker:"M&M.NS",      sector:"Automotive",       flag:"🚙", preWar:2650.0, dropPct:-22.0, warDrop:-3.9, target:2800.0, upside:22.8, rating:"Buy",        stars:4, why:"SUV demand concerns; farm equipment cyclical fears; broad auto selloff", bull:"SUV market share gains sustained; BE EV series launch; farm equipment export growth", halal:true},
+  {id:9,  name:"Infosys",            ticker:"INFY.NS",     sector:"IT Services",      flag:"💻", preWar:1720.0, dropPct:-18.0, warDrop:-1.8, target:1900.0, upside:24.4, rating:"Buy",        stars:4, why:"IT caught in broad selloff; US discretionary IT spend uncertainty", bull:"AI services transformation leader; deal wins accelerating; 15% margin guided for FY26", halal:true},
+  {id:10, name:"TCS",                ticker:"TCS.NS",      sector:"IT Services",      flag:"💻", preWar:3800.0, dropPct:-15.0, warDrop:-1.6, target:4100.0, upside:26.5, rating:"Buy",        stars:4, why:"IT services defensive but hit in broad selloff; FII selling across board", bull:"Largest IT services globally; AI transformation pipeline; BSNL deal execution", halal:true},
+  {id:11, name:"Wipro",              ticker:"WIPRO.NS",    sector:"IT Services",      flag:"💻", preWar:310.0,  dropPct:-15.0, warDrop:-2.1, target:350.0,  upside:31.4, rating:"Buy",        stars:4, why:"Mid-tier IT in FII sell basket; slower-than-peers recovery concerns", bull:"CAPCO consulting integration; AI-first positioning; new CEO turnaround gaining traction", halal:true},
+  {id:12, name:"HCL Technologies",   ticker:"HCLTECH.NS",  sector:"IT Services",      flag:"💻", preWar:1620.0, dropPct:-15.0, warDrop:-1.4, target:2050.0, upside:31.6, rating:"Buy",        stars:4, why:"IT selloff; products business cyclical concerns; geopolitical risk-off", bull:"Products and platforms business high-margin; engineering services growing; strong order book", halal:true},
+  {id:13, name:"Reliance Industries",ticker:"RELIANCE.NS", sector:"Conglomerate",     flag:"🏭", preWar:1230.0, dropPct:-20.0,  warDrop:-1.1, target:1550.0, upside:31.9, rating:"Buy",        stars:4, why:"Oil refining margin uncertainty; JioMart competition; CAP allocation concerns", bull:"Jio 5G monetisation; Retail value unlock; Green energy Giga factory; oil-to-chemicals pivot", halal:true},
+  {id:14, name:"UltraTech Cement",   ticker:"ULTRACEMCO.NS",sector:"Cement",          flag:"🏗️", preWar:10500.0,dropPct:-22.1, warDrop:-5.2, target:13000.0,upside:26.1, rating:"Buy",        stars:4, why:"Cement demand fears; input cost concerns; fell 5.19% on geopolitical day", bull:"India infrastructure capex multiyear boom; market share leader 24%; capacity expansion", halal:true},
+  {id:15, name:"Larsen & Toubro",    ticker:"LT.NS",       sector:"Engineering/Infra",flag:"🏗️", preWar:3000.0, dropPct:-16.8, warDrop:-2.8, target:4200.0, upside:29.4, rating:"Buy",        stars:4, why:"Infrastructure risk-off; L&T fell 2.8% on conflict day; capex delay fears", bull:"Rs 5 lakh crore order book; Middle East construction bookings (ironic beneficiary); defence", halal:true},
+  {id:16, name:"Adani Ports & SEZ",  ticker:"ADANIPORTS.NS",sector:"Ports/Logistics", flag:"⚓", preWar:1100.0, dropPct:-20.4, warDrop:-3.8, target:1400.0, upside:26.8, rating:"Buy",        stars:4, why:"Adani group risk-off; shipping route concerns; FII selling", bull:"Handled 42.5 MMT Feb 2026 (+16% YoY); container volumes +14%; India trade growth secular", halal:true},
+  {id:17, name:"Asian Paints",       ticker:"ASIANPAINT.NS",sector:"Paints/Consumer", flag:"🎨", preWar:2180.0, dropPct:-18.6, warDrop:-2.9, target:2800.0, upside:28.4, rating:"Buy",        stars:3, why:"Consumer discretionary selloff; raw material cost anxiety; Sensex drag", bull:"Paints market leader; India real estate boom drives repaint demand; margin normalising", halal:true},
+  {id:18, name:"Sun Pharmaceutical", ticker:"SUNPHARMA.NS",sector:"Pharma",           flag:"💊", preWar:1480.0, dropPct:-12.0,  warDrop:-0.8, target:2100.0, upside:24.5, rating:"Buy",        stars:4, why:"Defensive pharma dipped in broad selloff; US generic price pressure fears", bull:"US speciality pharma growing; branded India market dominant; rare disease pipeline", halal:true},
+  {id:19, name:"Cipla",              ticker:"CIPLA.NS",    sector:"Pharma",           flag:"💊", preWar:1420.0, dropPct:-11.2, warDrop:-1.4, target:1800.0, upside:26.8, rating:"Buy",        stars:4, why:"Pharma sector in FII sell-off basket despite defensive nature", bull:"US respiratory generics market share; India chronic care leader; peptide complex pipeline", halal:true},
+  {id:20, name:"Dr. Reddy's Labs",   ticker:"DRREDDY.NS",  sector:"Pharma",           flag:"💊", preWar:5800.0, dropPct:-12.8, warDrop:-1.6, target:7400.0, upside:28.4, rating:"Buy",        stars:4, why:"Broad pharma selloff; FII selling across Nifty 50 names", bull:"US generic launches pipeline; biosimilars 2026 catalyst; Russia and India growing", halal:true},
+  {id:21, name:"Bharat Electronics", ticker:"BEL.NS",      sector:"Defence",          flag:"🛡️", preWar:285.0,  dropPct:-5.0,  warDrop:2.1,  target:360.0,  upside:26.3, rating:"Strong Buy", stars:5, why:"Minor correction despite being a defence beneficiary; profit-taking after rally", bull:"India defence exports; radar + electronic warfare demand; record order book; HAL synergy", halal:true},
+  {id:22, name:"HAL",                ticker:"HAL.NS",      sector:"Defence/Aviation", flag:"✈️", preWar:4100.0, dropPct:-8.0,  warDrop:1.8,  target:5200.0, upside:28.6, rating:"Strong Buy", stars:5, why:"Slight profit-taking after 2025 defence rally; valuation concerns minor", bull:"Tejas Mk1A production; helicopter export orders; India's $35B defence production target", halal:true},
+  {id:23, name:"IndiGo",             ticker:"INDIGO.NS",   sector:"Airlines",         flag:"✈️", preWar:3800.0, dropPct:-22.6, warDrop:-4.0, target:5000.0, upside:23.9, rating:"Buy",        stars:4, why:"Airlines hardest hit; fell 4% on geopolitical day; fuel cost spike direct impact", bull:"India aviation structural boom; 60%+ market share; fleet expansion ahead of demand", halal:true},
+  {id:24, name:"Zomato",             ticker:"ZOMATO.NS",   sector:"Food Tech",        flag:"🍕", preWar:215.0,  dropPct:-24.8, warDrop:-3.4, target:300.0,  upside:34.9, rating:"Buy",        stars:4, why:"Consumer discretionary concerns; tech risk-off; FII selling growth stocks", bull:"Blinkit quick commerce scaling; India food delivery market structural; path to profitability", halal:true},
+  {id:25, name:"Paytm",              ticker:"PAYTM.NS",    sector:"Fintech",          flag:"📱", preWar:780.0,  dropPct:-28.4, warDrop:-4.2, target:1000.0, upside:29.2, rating:"Buy",        stars:4, why:"Regulatory overhang; fintech risk-off; consumer spend slowdown fears", bull:"Payment services recovery; merchant loans growing; insurance distribution scaling", halal:true},
+  {id:26, name:"Tata Steel",         ticker:"TATASTEEL.NS",sector:"Steel",            flag:"⚙️", preWar:138.0,  dropPct:-23.4, warDrop:-5.4, target:178.0,  upside:28.0, rating:"Buy",        stars:4, why:"Commodity risk-off; steel demand fears; Sensex broad decline; fell 2.9%", bull:"UK operations turnaround; India capacity expansion; post-conflict infra rebuild demand", halal:true},
+  {id:27, name:"JSW Steel",          ticker:"JSWSTEEL.NS", sector:"Steel",            flag:"⚙️", preWar:820.0,  dropPct:-22.0, warDrop:-4.8, target:1050.0, upside:28.0, rating:"Buy",        stars:4, why:"Steel demand uncertainty; commodity selloff; infrastructure spend concerns", bull:"India infra supercycle primary beneficiary; US expansion; capacity 36MT target", halal:true},
+  {id:28, name:"NTPC",               ticker:"NTPC.NS",     sector:"Power/Utilities",  flag:"⚡", preWar:355.0,  dropPct:-7.2,  warDrop:1.4,  target:450.0,  upside:27.3, rating:"Buy",        stars:4, why:"Minor dip in broad selloff; power sector mostly held up given energy importance", bull:"India power demand structural deficit; RE capacity addition 100GW target; green hydrogen", halal:true},
+  {id:29, name:"Power Grid Corp",    ticker:"POWERGRID.NS",sector:"Power Transmission",flag:"⚡", preWar:295.0,  dropPct:-8.6,  warDrop:0.8,  target:370.0,  upside:26.8, rating:"Buy",        stars:3, why:"Minor selloff; utility sector mostly resilient but caught in broader decline", bull:"India grid modernisation Rs 3 lakh crore investment; EV charging infrastructure; defensive", halal:true},
+  {id:30, name:"Coal India",         ticker:"COALINDIA.NS",sector:"Energy/Mining",    flag:"⛏️", preWar:395.0,  dropPct:-18.0,  warDrop:2.2,  target:500.0,  upside:23.8, rating:"Buy",        stars:3, why:"Minor correction; govt PSU coal faces ESG concerns despite strong cash flows", bull:"India power demand requires coal 2030; 7%+ dividend yield; government controlled upside", halal:true},
+  {id:31, name:"ONGC",               ticker:"ONGC.NS",     sector:"Oil & Gas",        flag:"🛢️", preWar:235.0,  dropPct:-18.0,  warDrop:3.8,  target:340.0,  upside:26.9, rating:"Buy",        stars:4, why:"Paradox: oil company that should benefit but FII selling dragged it temporarily lower", bull:"Oil price surge direct beneficiary; gas production growth; KG basin ramp-up underway", halal:true},
+  {id:32, name:"Bajaj Auto",         ticker:"BAJAJ-AUTO.NS",sector:"Two-Wheelers",    flag:"🏍️", preWar:8500.0, dropPct:-17.4, warDrop:-3.1, target:11000.0,upside:29.4, rating:"Buy",        stars:4, why:"Two-wheeler demand fears on high oil; auto sector broad selloff", bull:"EV three-wheeler dominance; Africa export growth; Triumph partnership premium segment", halal:true},
+  {id:33, name:"Hero MotoCorp",      ticker:"HEROMOTOCO.NS",sector:"Two-Wheelers",    flag:"🏍️", preWar:4200.0, dropPct:-18.8, warDrop:-3.4, target:5500.0, upside:31.0, rating:"Buy",        stars:4, why:"High oil price fears on fuel-dependent commuter bikes; auto broad selloff", bull:"Rural India demand recovery; CNG/EV transition in portfolio; 50%+ market share rural", halal:true},
+  {id:34, name:"Titan Company",      ticker:"TITAN.NS",     sector:"Consumer/Jewelry",flag:"💎", preWar:3200.0, dropPct:-19.2, warDrop:-2.6, target:4600.0, upside:27.5, rating:"Buy",        stars:4, why:"Discretionary selloff; luxury consumer concerns on geopolitical risk-off", bull:"India wedding jewelry structural; Tanishq brand dominance; watches and wearables growth", halal:true},
+  {id:35, name:"Nestle India",       ticker:"NESTLEIND.NS",sector:"FMCG",            flag:"🍫", preWar:2180.0, dropPct:-11.6, warDrop:-1.4, target:2700.0, upside:23.9, rating:"Buy",        stars:3, why:"Defensive FMCG but FII selling dragged it lower; input cost anxiety", bull:"Premium nutrition brands growing; Maggi recovery complete; rural penetration expanding", halal:true},
+  {id:36, name:"Hindustan Unilever", ticker:"HINDUNILVR.NS",sector:"FMCG",           flag:"🧴", preWar:2250.0, dropPct:-12.4, warDrop:-1.8, target:2800.0, upside:26.7, rating:"Buy",        stars:3, why:"Defensive FMCG caught in broad market selloff; FII selling basket", bull:"India premiumisation trend; rural volume recovery underway; beauty and wellness growth", halal:true},
+  {id:37, name:"ITC Limited",        ticker:"ITC.NS",      sector:"FMCG/Hotels",     flag:"🚬", preWar:420.0,  dropPct:-13.2, warDrop:-1.9, target:580.0,  upside:27.3, rating:"Buy",        stars:4, why:"Defensive stock in FII sell basket; hotel segment travel fears minor", bull:"Hotels business fastest growing; FMCG segment scaling; cigarette cash cow funds diversification", halal:false},
+  {id:38, name:"DLF Limited",        ticker:"DLF.NS",      sector:"Real Estate",     flag:"🏢", preWar:720.0,  dropPct:-22.6, warDrop:-3.6, target:950.0, upside:27.3, rating:"Buy",        stars:4, why:"Real estate risk-off; interest rate sensitivity; broad market selloff", bull:"Luxury residential demand record in India; Gurugram commercial office dominance; annuity income", halal:true},
+  {id:39, name:"Godrej Properties",  ticker:"GODREJPROP.NS",sector:"Real Estate",    flag:"🏠", preWar:2100.0, dropPct:-35.0, warDrop:-3.2, target:3400.0, upside:26.9, rating:"Buy",        stars:4, why:"Broad real estate selloff; interest rate concerns resurfacing; Nifty Realty decline", bull:"Pre-sales record Rs 22,000cr FY25; Mumbai/Pune/NCR market dominance; land acquisition strategy", halal:true},
+  {id:40, name:"Bharat Forge",       ticker:"BHARATFORG.NS",sector:"Forging/Defence",flag:"⚙️", preWar:1050.0, dropPct:-25.0, warDrop:-2.8, target:1380.0, upside:27.4, rating:"Buy",        stars:4, why:"Forging stocks in broad industrial selloff; auto sector drag", bull:"Defence exports accelerating; EV powertrain components; US non-auto mix increasing", halal:true},
+  {id:41, name:"Godrej Consumer",    ticker:"GODREJCP.NS", sector:"FMCG",            flag:"🧼", preWar:1100.0, dropPct:-14.8, warDrop:-1.6, target:1400.0, upside:31.3, rating:"Buy",        stars:3, why:"Consumer staple in FII sell basket; EM currency concerns", bull:"Africa and Indonesia growth markets; household insecticides dominant; personal care scaling", halal:true},
+  {id:42, name:"Shree Cement",       ticker:"SHREECEM.NS", sector:"Cement",          flag:"🏗️", preWar:23000.0,dropPct:-19.8, warDrop:-4.6, target:29000.0,upside:25.0, rating:"Buy",        stars:3, why:"Cement selloff alongside UltraTech; infra spend anxiety; broad market decline", bull:"North and East India market leader; expansion into South; premium brand positioning", halal:true},
+  {id:43, name:"Pidilite Industries",ticker:"PIDILITIND.NS",sector:"Specialty Chem",  flag:"🔬", preWar:2650.0, dropPct:-18.0, warDrop:-2.1, target:3300.0, upside:25.0, rating:"Buy",        stars:3, why:"Specialty chemical selloff; construction sector concerns; discretionary risk-off", bull:"Fevicol brand monopoly; construction adhesives demand secular; premiumisation ongoing", halal:true},
+  {id:44, name:"Havells India",      ticker:"HAVELLS.NS",  sector:"Electricals",     flag:"⚡", preWar:1680.0, dropPct:-18.0, warDrop:-2.4, target:2100.0, upside:25.0, rating:"Buy",        stars:3, why:"Consumer electrical selloff; real estate cycle concerns; broad market decline", bull:"Cable and wiring India infrastructure play; Lloyd AC brand growing; data center cables", halal:true},
+  {id:45, name:"Muthoot Finance",    ticker:"MUTHOOTFIN.NS",sector:"Gold Finance",   flag:"🥇", preWar:2100.0, dropPct:-10.0, warDrop:-1.8, target:2800.0, upside:26.3, rating:"Buy",        stars:4, why:"NBFC broad selloff; gold-backed loan concerns; FII selling", bull:"Gold price surge directly boosts AUM; rural lending penetration; Southern India dominance", halal:false},
+  {id:46, name:"Divis Laboratories", ticker:"DIVISLAB.NS", sector:"Pharma/CDMO",     flag:"💊", preWar:5100.0, dropPct:-14.0, warDrop:-1.6, target:6500.0, upside:25.0, rating:"Buy",        stars:4, why:"Pharma broad selloff despite defensive nature; FII selling", bull:"CDMO demand from Big Pharma accelerating; API market leader; China+1 supply chain beneficiary", halal:true},
+  {id:47, name:"Torrent Pharma",     ticker:"TORNTPHARM.NS",sector:"Pharma",          flag:"💊", preWar:3200.0, dropPct:-12.8, warDrop:-1.4, target:3800.0, upside:25.0, rating:"Buy",        stars:3, why:"Pharma sector broad selloff; FII outflows dragging all large caps", bull:"Branded generics India market; Germany operations recovering; cardiac/CNS dominant brands", halal:true},
+  {id:48, name:"Oberoi Realty",      ticker:"OBEROIRLTY.NS",sector:"Premium Real Estate",flag:"🏨",preWar:1600.0,dropPct:-28.0, warDrop:-2.9, target:2100.0, upside:26.6, rating:"Buy",        stars:4, why:"Real estate broad selloff; luxury concerns on geopolitical uncertainty", bull:"Mumbai luxury residential record sales; hospitality business recovery; Worli project launch", halal:true},
+  {id:49, name:"Zydus Lifesciences", ticker:"ZYDUSLIFE.NS",sector:"Pharma",          flag:"💊", preWar:920.0, dropPct:-14.2, warDrop:-1.8, target:1200.0, upside:26.0, rating:"Buy",        stars:3, why:"Pharma broad selloff; US generic pricing uncertainty; FII selling", bull:"US specialty pipeline 15 launches; biosimilar filing; wellness FMCG brand Combiflam", halal:true},
+  {id:50, name:"Bajaj Finserv",      ticker:"BAJAJFINSV.NS",sector:"NBFC/Insurance",  flag:"💳", preWar:1700.0, dropPct:-18.0, warDrop:-2.2, target:2200.0, upside:26.4, rating:"Buy",        stars:4, why:"Financial sector selloff; NBFC risk-off; FII selling basket", bull:"Insurance + lending conglomerate; Bajaj Finance synergies; digital financial services leader", halal:false}
 ];
 
 const REGIONS = {
@@ -872,18 +952,29 @@ function toggleHalal(on) {
 }
 
 // ─── FETCH LOGIC (compact) ───
-async function fetchPrice(ticker) {
-  const sym = encodeURIComponent(ticker);
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d`;
-  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+// ════════════════════════════════════════════════════
+//  PRICE FETCH — via Cloudflare Worker (server-side)
+//
+//  SETUP (2 min):
+//  1. Deploy price-worker.js to Cloudflare Workers (free)
+//  2. Paste your worker URL below
+//
+//  Until deployed, app shows static baseline prices.
+// ════════════════════════════════════════════════════
+
+// ← PASTE YOUR WORKER URL HERE after deploying price-worker.js
+const WORKER_URL = 'https://long-shadow-7087.maazfarooqui.workers.dev/';  // e.g. 'https://marketiq-prices.yourname.workers.dev'
+
+// Fetches up to 20 tickers in one Worker call (batched)
+async function fetchBatch(tickers) {
+  if (!WORKER_URL) return {};
   try {
-    const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
-    const json = await res.json();
-    const data = JSON.parse(json.contents);
-    const meta = data?.chart?.result?.[0]?.meta;
-    if (meta) return { price: meta.regularMarketPrice || meta.previousClose, change: ((meta.regularMarketPrice - meta.previousClose) / meta.previousClose * 100).toFixed(2), ok: true };
-  } catch(e) {}
-  return null;
+    const batch = tickers.join(',');
+    const res = await fetch(`${WORKER_URL}?batch=${encodeURIComponent(batch)}`,
+      { signal: AbortSignal.timeout(12000) });
+    if (!res.ok) return {};
+    return await res.json();
+  } catch(e) { return {}; }
 }
 
 async function fetchAllPrices() {
@@ -891,30 +982,69 @@ async function fetchAllPrices() {
   const bar = document.getElementById('fetch-bar');
   const lbl = document.getElementById('fetch-label');
   if (!btn) return;
+
   btn.classList.add('spinning'); btn.textContent = '↻ Fetching…';
   const stocks = REGIONS[currentRegion].stocks;
-  const total = stocks.length;
-  let fetched = 0;
-  bar.style.width = '0%'; bar.style.animation = 'pulseBar 1.2s ease infinite';
-  lbl.textContent = `0 / ${total}`;
-  for (let i = 0; i < total; i += 5) {
-    const batch = stocks.slice(i, i + 5);
-    await Promise.all(batch.map(async s => {
-      const r = await fetchPrice(s.ticker);
-      if (r && r.ok) { livePrices[s.ticker] = r; fetched++; }
-      const pct = Math.round(((i + batch.length) / total) * 100);
-      bar.style.width = pct + '%';
-      lbl.textContent = `${fetched} / ${total} live`;
-    }));
-    await new Promise(r => setTimeout(r, 300));
+  const total  = stocks.length;
+  let fetched  = 0;
+
+  bar.style.width = '0%';
+  bar.style.animation = 'pulseBar 1.2s ease infinite';
+
+  if (!WORKER_URL) {
+    // No worker configured — show static prices immediately
+    bar.style.animation = 'none';
+    bar.style.width = '0%';
+    lbl.textContent = 'Static prices — deploy Worker for live data';
+    lbl.style.color = '#b45309';
+    btn.classList.remove('spinning'); btn.textContent = '↻ Refresh';
+    const apiBanner = document.getElementById('api-banner');
+    if (apiBanner) apiBanner.style.display = 'block';
+    document.getElementById('last-update').textContent = 'Static';
+    resetCountdown(); renderView();
+    return;
   }
+
+  // Batch tickers into groups of 20 (worker limit per call)
+  const tickers = stocks.map(s => s.ticker);
+  for (let i = 0; i < tickers.length; i += 20) {
+    const chunk  = tickers.slice(i, i + 20);
+    const result = await fetchBatch(chunk);
+    chunk.forEach(ticker => {
+      const d = result[ticker];
+      if (d && d.ok && d.price && d.price > 0) {
+        livePrices[ticker] = {
+          price:  d.price,
+          change: parseFloat(d.change ?? 0),
+          ok:     true
+        };
+        fetched++;
+      }
+    });
+    const pct = Math.min(Math.round(((i + 20) / total) * 100), 100);
+    bar.style.width = pct + '%';
+    lbl.textContent = `${fetched} / ${total} live`;
+    if (i + 20 < tickers.length) await new Promise(r => setTimeout(r, 150));
+  }
+
   bar.style.animation = 'none';
   bar.style.width = '100%';
-  lbl.textContent = fetched > 0 ? `${fetched}/${total} live ✓` : 'Using static prices';
-  lbl.style.color = fetched > 0 ? '#15803d' : '#c0392b';
+  const apiBanner = document.getElementById('api-banner');
+
+  if (fetched > 0) {
+    lbl.textContent = `${fetched}/${total} live ✓`;
+    lbl.style.color = '#15803d';
+    if (apiBanner) apiBanner.style.display = 'none';
+  } else {
+    lbl.textContent = 'Worker unreachable — check deployment';
+    lbl.style.color = '#c0392b';
+    if (apiBanner) apiBanner.style.display = 'block';
+  }
+
   btn.classList.remove('spinning'); btn.textContent = '↻ Refresh';
   const now = new Date();
-  document.getElementById('last-update').textContent = now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  document.getElementById('last-update').textContent =
+    now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit' });
   resetCountdown(); renderView();
 }
 
@@ -931,7 +1061,15 @@ function resetCountdown() {
 function getDisplayPrice(s) {
   const lp = livePrices[s.ticker];
   if (lp && lp.price) return { price: lp.price, change: parseFloat(lp.change), live: true };
+  // Fallback: estimate from static dropPct
   return { price: s.preWar * (1 + s.dropPct / 100), change: null, live: false };
+}
+
+function getDynamicPreWar(s) {
+  // Use the 3m high fetched live, else fall back to static preWar
+  const lp = livePrices[s.ticker];
+  if (lp && lp.high3m && lp.high3m > 0) return lp.high3m;
+  return s.preWar;
 }
 
 function fmtPrice(price, sym) {
@@ -952,13 +1090,10 @@ function switchRegion(r) {
   badge.textContent = cfg.badge;
   badge.style.cssText = `background:${cfg.badge_bg};border:1px solid ${cfg.badge_border};color:${cfg.color};`;
   const s = cfg.stocks;
-  const sb = s.filter(x => x.rating === "Strong Buy").length;
-  const avgDrop = (s.reduce((a, b) => a + b.dropPct, 0) / s.length).toFixed(1);
-  const avgUp = (s.reduce((a, b) => a + b.upside, 0) / s.length).toFixed(1);
   document.getElementById('stat-total').textContent = s.length;
-  document.getElementById('stat-sb').textContent = sb;
-  document.getElementById('stat-drop').textContent = avgDrop + "%";
-  document.getElementById('stat-up').textContent = "+" + avgUp + "%";
+  document.getElementById('stat-buy').textContent = '—';
+  document.getElementById('stat-sell').textContent = '—';
+  document.getElementById('stat-up').textContent = '—';
   document.getElementById('search').value = "";
   filterMode = "all"; sortMode = "id";
   document.querySelectorAll('.btn[id^="f-"]').forEach(b => b.className = "btn");
@@ -981,16 +1116,7 @@ function setSort(mode, btn) {
   renderView();
 }
 
-function setView(v, btn) {
-  currentView = v;
-  document.querySelectorAll('.vtoggle').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('card-grid').style.display = v === 'cards' ? 'grid' : 'none';
-  document.getElementById('table-view').style.display = v === 'table' ? 'block' : 'none';
-  const legend = document.getElementById('tier-legend');
-  if (legend) legend.style.display = v === 'cards' ? 'flex' : 'none';
-  renderView();
-}
+// setView removed — split layout replaces card/table toggle
 
 function getFilteredSorted() {
   const cfg = REGIONS[currentRegion];
@@ -1013,11 +1139,139 @@ function getFilteredSorted() {
 function renderView() {
   const data = getFilteredSorted();
   const cfg = REGIONS[currentRegion];
+  renderSplit(data, cfg);
+}
+
+function renderSplit(data, cfg) {
+  const sym = cfg.symbol;
+  const buyData  = data.filter(s => {
+    const dp = getDisplayPrice(s);
+    const upside = ((s.target - dp.price) / dp.price * 100);
+    return upside > 0; // price still below target = BUY
+  });
+  const sellData = data.filter(s => {
+    const dp = getDisplayPrice(s);
+    const upside = ((s.target - dp.price) / dp.price * 100);
+    return upside <= 0; // price at or above target = TAKE PROFIT
+  });
+
+  // Sort buy by upside desc, sell by exceeded% desc
+  buyData.sort((a,b) => {
+    if (sortMode === 'upside') {
+      const ua = (s => ((s.target - getDisplayPrice(s).price)/getDisplayPrice(s).price*100))(a);
+      const ub = (s => ((s.target - getDisplayPrice(s).price)/getDisplayPrice(s).price*100))(b);
+      return ub - ua;
+    }
+    if (sortMode === 'drop') return a.dropPct - b.dropPct;
+    if (sortMode === 'price') return getDisplayPrice(a).price - getDisplayPrice(b).price;
+    return a.id - b.id;
+  });
+  sellData.sort((a,b) => {
+    const ua = ((getDisplayPrice(a).price - a.target)/a.target*100);
+    const ub = ((getDisplayPrice(b).price - b.target)/b.target*100);
+    return ub - ua; // most exceeded first
+  });
+
+  // Update stats
+  document.getElementById('stat-total').textContent = data.length;
+  document.getElementById('stat-buy').textContent = buyData.length;
+  document.getElementById('stat-sell').textContent = sellData.length;
+  if (buyData.length) {
+    const avgUp = (buyData.reduce((acc,s) => {
+      const dp = getDisplayPrice(s);
+      return acc + ((s.target - dp.price)/dp.price*100);
+    }, 0) / buyData.length).toFixed(1);
+    document.getElementById('stat-up').textContent = '+' + avgUp + '%';
+  }
+
+  // Count
+  const total = data.length;
   const ce = document.getElementById('result-count');
-  if (ce) ce.textContent = `Showing ${data.length} of ${cfg.stocks.length} stocks · Click any card for investment thesis`;
-  document.getElementById('showing-count') && (document.getElementById('showing-count').textContent = data.length);
-  if (currentView === 'cards') renderCards(data, cfg);
-  else renderTable(data, cfg);
+  if (ce) ce.textContent = `${buyData.length} buy opportunities · ${sellData.length} take profit · ${total} total shown`;
+
+  // Update column header counts
+  document.getElementById('buy-count').textContent = buyData.length + ' stock' + (buyData.length!==1?'s':'');
+  document.getElementById('sell-count').textContent = sellData.length + ' stock' + (sellData.length!==1?'s':'');
+
+  renderSplitCards(buyData, cfg, 'buy');
+  renderSplitCards(sellData, cfg, 'sell');
+}
+
+function renderSplitCards(data, cfg, side) {
+  const sym = cfg.symbol;
+  const container = document.getElementById(side + '-cards');
+  container.innerHTML = '';
+  if (!data.length) {
+    container.innerHTML = `<div class="split-empty">${side==='buy' ? '🎉 No stocks currently below target — check back after prices adjust' : '✓ No stocks have exceeded target yet'}</div>`;
+    return;
+  }
+  data.forEach(s => {
+    const sc = SECTOR_COLORS[s.sector] || '#888880';
+    const dp = getDisplayPrice(s);
+    const upside = ((s.target - dp.price) / dp.price * 100);
+    const isSell = side === 'sell';
+    const upsideStr = isSell
+      ? '+' + ((dp.price - s.target)/s.target*100).toFixed(1) + '% above target'
+      : (upside > 0 ? '+' : '') + upside.toFixed(1) + '% upside';
+    const ratingC = s.rating==='Strong Buy'?'#15803d':s.rating==='Buy'?'#65a30d':'#b45309';
+    const changeHtml = dp.live && dp.change !== null
+      ? `<span class="${dp.change>=0?'sc-change-up':'sc-change-dn'}">${dp.change>=0?'▲':'▼'}${Math.abs(dp.change)}%</span>`
+      : '';
+    const starsHtml = [1,2,3,4,5].map(i=>`<div class="sc-star" style="background:${i<=s.stars?'#f59e0b':'#ddd8d0'}"></div>`).join('');
+    const halalHtml = s.halal === true ? `<span class="sc-halal">☪</span>` : '';
+    const isExpanded = expandedId === s.id + '_' + currentRegion + '_' + side;
+
+    // Dynamic drop% using live price vs 3m high or static preWar
+    const dp2 = getDisplayPrice(s);
+    const dynDrop = ((dp2.price - s.preWar) / s.preWar * 100).toFixed(1);
+
+    const div = document.createElement('div');
+    div.className = 'split-card' + (isExpanded ? ' expanded' : '');
+    div.onclick = () => {
+      const key = s.id + '_' + currentRegion + '_' + side;
+      expandedId = expandedId === key ? null : key;
+      renderView();
+    };
+    div.innerHTML = `
+      <div class="split-card-accent" style="background:${isSell?'var(--red)':sc}"></div>
+      <div class="sc-flag">${s.flag}</div>
+      <div class="sc-info">
+        <div class="sc-name">${s.name}</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
+          <span class="sc-ticker" style="background:${sc}15;border:1px solid ${sc}35;color:${sc}">${s.ticker}</span>
+          ${halalHtml}
+          ${isSell ? '<span class="sell-badge">✓ TARGET HIT</span>' : ''}
+        </div>
+        <div class="sc-stars">${starsHtml}</div>
+      </div>
+      <div class="sc-price-block">
+        <div class="sc-price">${fmtPrice(dp.price, sym)}</div>
+        <div>${changeHtml}<span class="sc-pip" style="color:${dp.live?'#16a34a':'#a09890'}">${dp.live?'●LIVE':'○EST'}</span></div>
+        <div style="font-size:8px;color:var(--text3);margin-top:1px">Target: ${fmtPrice(s.target,sym)}</div>
+      </div>
+      <div class="sc-upside ${isSell?'sell-up':'buy-up'}">${upsideStr}</div>
+      <div class="sc-expand">
+        <div class="sc-expand-grid">
+          <div class="sc-expand-cell" style="border-left:3px solid ${sc}">
+            <div class="sc-expand-label">📉 Why It Dropped</div>
+            <div class="sc-expand-text">${s.why}</div>
+          </div>
+          <div class="sc-expand-cell" style="border-left:3px solid ${isSell?'var(--red)':'#16a34a'}">
+            <div class="sc-expand-label">${isSell?'💰 Why Take Profit Now':'📈 Recovery Thesis'}</div>
+            <div class="sc-expand-text">${isSell?'Price has exceeded the analyst 12-month consensus target of '+fmtPrice(s.target,sym)+'. Consider locking in gains — the stock has delivered its recovery.':s.bull}</div>
+          </div>
+        </div>
+        <div class="sc-expand-metrics">
+          <div><span>Live Price: </span><b>${fmtPrice(dp.price,sym)}</b></div>
+          <div><span>Pre-Drop: </span><b>${fmtPrice(s.preWar,sym)}</b></div>
+          <div><span>12m Target: </span><b style="color:${sc}">${fmtPrice(s.target,sym)}</b></div>
+          <div><span>${isSell?'Exceeded by':'Upside remaining'}: </span><b style="color:${isSell?'var(--red)':'#16a34a'}">${upsideStr}</b></div>
+          <div><span>Rating: </span><b style="color:${ratingC}">${s.rating}</b></div>
+          <div><span>Drop from high: </span><b>▼${Math.abs(dynDrop)}%</b></div>
+        </div>
+      </div>`;
+    container.appendChild(div);
+  });
 }
 
 // ═══════════════════════════════
