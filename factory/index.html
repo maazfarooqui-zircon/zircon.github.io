@@ -1,331 +1,2088 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Zirconique — APFC Panels & Noise Damping Solutions</title>
-  <meta name="description" content="Zirconique – APFC panels, electrical systems and industrial noise damping materials." />
-  <!-- Tailwind CDN for quick prototyping -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* small helper for gradient text on buttons when needed */
-    .glass { background: rgba(255,255,255,0.06); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#1e3c72">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Zircon India - Electrical Power & Acoustic Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 0.8rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            touch-action: manipulation;
+        }
+
+        .logo svg {
+            height: 50px;
+            width: auto;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+            touch-action: manipulation;
+            padding: 0.5rem;
+        }
+
+        nav a:hover, nav a:active {
+            opacity: 0.8;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            touch-action: manipulation;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 999;
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mobile-menu li {
+            padding: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 1rem 1.5rem;
+            touch-action: manipulation;
+        }
+
+        .mobile-menu a:active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 1.5rem 80px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s backwards;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 1s ease 0.4s backwards;
+            cursor: pointer;
+            border: none;
+            touch-action: manipulation;
+            font-size: 1rem;
+        }
+
+        .cta-button:active {
+            transform: scale(0.95);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 1rem;
+            color: #1e3c72;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: #666;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .service-card:active {
+            transform: scale(0.98);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .service-content {
+            padding: 1.5rem;
+        }
+
+        .service-card h3 {
+            color: #2a5298;
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .detail-hero {
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 1.5rem 80px;
+            margin-top: 60px;
+            position: relative;
+        }
+
+        .detail-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+
+        .detail-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .detail-hero h1 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .detail-hero p {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+        }
+
+        .detail-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-box h3 {
+            color: #2a5298;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.95rem;
+        }
+
+        .feature-list li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            border: none;
+            touch-action: manipulation;
+            font-size: 1rem;
+        }
+
+        .back-button:active {
+            background: #5568d3;
+            transform: scale(0.95);
+        }
+
+        .industries {
+            background: #f8f9fa;
+            padding: 3rem 1.5rem;
+        }
+
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .industry-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: background 0.3s, color 0.3s, transform 0.3s;
+            touch-action: manipulation;
+        }
+
+        .industry-item:active {
+            transform: scale(0.95);
+        }
+
+        .industry-item h3 {
+            margin-top: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .contact {
+            text-align: center;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 3rem 1.5rem;
+        }
+
+        .contact h2 {
+            margin-bottom: 1.5rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+        }
+
+        .contact-info {
+            margin: 1.5rem 0;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            line-height: 1.8;
+        }
+
+        .contact-button {
+            display: inline-block;
+            background: white;
+            color: #1e3c72;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+            margin: 0.5rem;
+            touch-action: manipulation;
+            font-size: 1rem;
+        }
+
+        .contact-button:active {
+            transform: scale(0.95);
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 2rem 1.5rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Live Acoustic Analyzer Styles */
+        .analyzer-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 80px 1rem 2rem;
+        }
+
+        .analyzer-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .analyzer-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+        }
+
+        .analyzer-subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .controls button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+            touch-action: manipulation;
+            margin: 0.5rem;
+        }
+
+        .controls button:active {
+            transform: scale(0.95);
+        }
+
+        #startBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        #stopBtn {
+            background: #e74c3c;
+            color: white;
+            display: none;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            padding: 1.2rem;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .metric-card.db {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .metric-card.freq {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .metric-card.status {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: bold;
+        }
+
+        .visualization {
+            margin-bottom: 1.5rem;
+        }
+
+        .visualization h3 {
+            color: #2a5298;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        canvas {
+            width: 100%;
+            background: #1a1a1a;
+            border-radius: 10px;
+            display: block;
+            touch-action: none;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .info-box h3 {
+            color: #2a5298;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .info-box li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Desktop Navigation - Hide on mobile */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .logo svg {
+                height: 45px;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
+
+            .industry-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 100px 1rem 60px;
+            }
+
+            .detail-hero {
+                padding: 100px 1rem 60px;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .detail-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .contact-button {
+                display: block;
+                margin: 0.5rem auto;
+                max-width: 280px;
+            }
+
+            .metric-value {
+                font-size: 2rem;
+            }
+
+            .analyzer-container {
+                padding: 70px 0.5rem 1rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .detail-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Improve touch targets for accessibility */
+        @media (hover: none) and (pointer: coarse) {
+            .service-card,
+            .industry-item,
+            button,
+            a {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+    </style>
 </head>
-<body class="antialiased bg-gray-50 text-gray-900">
-
-  <!-- Header -->
-  <header class="bg-white shadow">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="flex justify-between items-center py-6">
-        <div class="flex items-center gap-3">
-          <!-- Logo -->
-          <div class="flex items-center gap-2">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="1" y="1" width="22" height="22" rx="5" fill="#4f46e5" />
-              <path d="M7 12h10M7 8h10M7 16h6" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </div>
-
-          <div>
-            <h1 class="text-lg font-semibold">Zirconique</h1>
-            <p class="text-xs text-gray-500">APFC · Electrical Systems · Noise Damping Solutions</p>
-          </div>
-        </div>
-
-        <nav class="hidden md:flex items-center gap-6 text-sm">
-          <a href="#solutions" class="hover:text-indigo-600">Solutions</a>
-          <a href="#products" class="hover:text-indigo-600">Products</a>
-          <a href="#case-studies" class="hover:text-indigo-600">Case Studies</a>
-          <a href="#about" class="hover:text-indigo-600">About</a>
-          <a href="#contact" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-500">Contact</a>
+<body>
+    <header>
+        <nav>
+            <div class="logo" onclick="showPage('home')">
+                <svg width="200" height="70" viewBox="0 0 280 120">
+                    <path d="M50,20 L40,60 L55,60 L45,100 L70,50 L55,50 L65,20 Z" 
+                          fill="#ffd700" stroke="#fff" stroke-width="2"/>
+                    <path d="M85,40 Q95,40 95,60 Q95,80 85,80" 
+                          fill="none" stroke="#6dd5ed" stroke-width="3"/>
+                    <path d="M95,30 Q110,30 110,60 Q110,90 95,90" 
+                          fill="none" stroke="#6dd5ed" stroke-width="3"/>
+                    <text x="130" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#fff">ZIRCON</text>
+                    <text x="130" y="75" font-family="Arial, sans-serif" font-size="16" fill="#6dd5ed">INDIA</text>
+                </svg>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
+            <ul>
+                <li><a onclick="showPage('home')">Home</a></li>
+                <li><a onclick="scrollToSection('power')">Power Solutions</a></li>
+                <li><a onclick="scrollToSection('acoustics')">Acoustics</a></li>
+                <li><a onclick="scrollToSection('industries')">About us</a></li>
+                <li><a onclick="scrollToSection('contact')">Contact</a></li>
+            </ul>
         </nav>
+    </header>
 
-        <div class="md:hidden">
-          <button aria-label="Open menu" class="inline-flex items-center justify-center rounded-md border border-gray-200 p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <main>
-    <section class="bg-gradient-to-r from-indigo-600 to-indigo-500 text-white">
-      <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20">
-        <div class="grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 class="text-4xl font-bold leading-tight mb-4">Power factor optimization & industrial noise control — engineered right</h2>
-            <p class="text-lg text-indigo-100 mb-6">Design, manufacture and support of APFC panels, electrical distribution systems and advanced noise damping materials for factories, plants and OEMs.</p>
-            <div class="flex gap-3">
-              <a href="#contact" class="px-5 py-3 bg-white text-indigo-600 rounded-md font-semibold">Request a Quote</a>
-              <a href="#products" class="px-5 py-3 border border-white rounded-md">View Products</a>
-            </div>
-          </div>
-
-          <div class="glass p-6 rounded-lg">
-            <ul class="space-y-4 text-sm">
-              <li class="flex items-start gap-3">
-                <div class="w-3 h-3 rounded-full bg-white/90 mt-2"></div>
-                <div>
-                  <strong>Energy Savings</strong>
-                  <div class="text-indigo-100">Power factor correction, harmonic management, and efficient distribution.</div>
-                </div>
-              </li>
-              <li class="flex items-start gap-3">
-                <div class="w-3 h-3 rounded-full bg-white/90 mt-2"></div>
-                <div>
-                  <strong>Low-Noise Designs</strong>
-                  <div class="text-indigo-100">Acoustic materials and enclosure design to meet regulatory dB(A) limits.</div>
-                </div>
-              </li>
-              <li class="flex items-start gap-3">
-                <div class="w-3 h-3 rounded-full bg-white/90 mt-2"></div>
-                <div>
-                  <strong>Turnkey Delivery</strong>
-                  <div class="text-indigo-100">From site survey, design, FAT to commissioning and support.</div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Solutions -->
-    <section id="solutions" class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-      <h2 class="text-2xl font-bold mb-6">Our Solutions</h2>
-      <div class="grid gap-6 md:grid-cols-3">
-        <article class="p-6 bg-white rounded-lg shadow-sm">
-          <h3 class="font-semibold mb-2">APFC Panels & Power Factor Solutions</h3>
-          <p class="text-sm text-gray-600">Reduce energy bills, avoid penalties and improve voltage stability with our modular APFC systems. SCADA-ready and tailored to your site.</p>
-        </article>
-
-        <article class="p-6 bg-white rounded-lg shadow-sm">
-          <h3 class="font-semibold mb-2">Electrical Products & Panels</h3>
-          <p class="text-sm text-gray-600">Distribution boards, custom control panels, motor starters, and complete electrical balance-of-system equipment.</p>
-        </article>
-
-        <article class="p-6 bg-white rounded-lg shadow-sm">
-          <h3 class="font-semibold mb-2">Noise Damping Technologies</h3>
-          <p class="text-sm text-gray-600">Acoustic foams, constrained layer damping, mounts & enclosures to reduce noise and vibration in industrial environments.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- Products -->
-    <section id="products" class="bg-white py-12">
-      <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <h2 class="text-2xl font-bold mb-6">Featured Products</h2>
-
-        <div class="grid gap-6 md:grid-cols-3">
-          <!-- Product 1 -->
-          <div class="p-6 bg-gray-50 rounded-lg shadow-sm">
-            <div class="flex justify-between items-start">
-              <div>
-                <h4 class="font-semibold">Automatic Power Factor Correction (APFC) Panel - Model A</h4>
-                <p class="text-xs text-gray-500">APFC Panels</p>
-              </div>
-              <div class="text-sm font-semibold">Contact</div>
-            </div>
-
-            <p class="text-sm text-gray-600 mt-3">Modular 3-stage APFC panel with thyristor control, &lt;50ms response, and remote monitoring.</p>
-
-            <ul class="text-xs text-gray-500 mt-3 space-y-1">
-              <li>• Up to 1000 kVAR</li>
-              <li>• Compact modular design</li>
-              <li>• Web/Modbus monitoring</li>
-            </ul>
-
-            <div class="mt-4 flex gap-2">
-              <button class="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm">Request Quote</button>
-              <button class="px-3 py-2 border rounded-md text-sm">Datasheet</button>
-            </div>
-          </div>
-
-          <!-- Product 2 -->
-          <div class="p-6 bg-gray-50 rounded-lg shadow-sm">
-            <div class="flex justify-between items-start">
-              <div>
-                <h4 class="font-semibold">LT Distribution Board - IP54</h4>
-                <p class="text-xs text-gray-500">Electrical Products</p>
-              </div>
-              <div class="text-sm font-semibold">Contact</div>
-            </div>
-
-            <p class="text-sm text-gray-600 mt-3">Customizable LT DBs for industrial & commercial installations with MCCB/MCB options.</p>
-
-            <ul class="text-xs text-gray-500 mt-3 space-y-1">
-              <li>• IP54</li>
-              <li>• Copper busbar</li>
-              <li>• Up to 400A</li>
-            </ul>
-
-            <div class="mt-4 flex gap-2">
-              <button class="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm">Request Quote</button>
-              <button class="px-3 py-2 border rounded-md text-sm">Datasheet</button>
-            </div>
-          </div>
-
-          <!-- Product 3 -->
-          <div class="p-6 bg-gray-50 rounded-lg shadow-sm">
-            <div class="flex justify-between items-start">
-              <div>
-                <h4 class="font-semibold">Acoustic Foam Panel - High NRC</h4>
-                <p class="text-xs text-gray-500">Noise Damping</p>
-              </div>
-              <div class="text-sm font-semibold">From $45/m²</div>
-            </div>
-
-            <p class="text-sm text-gray-600 mt-3">Class-leading noise absorption panels for plant rooms and enclosures.</p>
-
-            <ul class="text-xs text-gray-500 mt-3 space-y-1">
-              <li>• NRC 0.85+</li>
-              <li>• Fire-retardant</li>
-              <li>• Easy install</li>
-            </ul>
-
-            <div class="mt-4 flex gap-2">
-              <button class="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm">Request Quote</button>
-              <button class="px-3 py-2 border rounded-md text-sm">Datasheet</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Case Studies -->
-    <section id="case-studies" class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-      <h2 class="text-2xl font-bold mb-6">Case Studies</h2>
-      <div class="grid gap-6 md:grid-cols-2">
-        <div class="p-6 bg-white rounded-lg shadow-sm">
-          <h4 class="font-semibold mb-2">Factory APFC Retrofit — 600 kVAR</h4>
-          <p class="text-sm text-gray-600">Installed a staged APFC solution for a textile factory resulting in 12% energy savings and eliminated PF penalties.</p>
-          <div class="mt-4">
-            <button class="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm">Read More</button>
-          </div>
-        </div>
-
-        <div class="p-6 bg-white rounded-lg shadow-sm">
-          <h4 class="font-semibold mb-2">Acoustic Enclosure for Compressor Room</h4>
-          <p class="text-sm text-gray-600">Reduced dB(A) at the site boundary by 10 dB using multi-layer absorbers and CLD-treated panels.</p>
-          <div class="mt-4">
-            <button class="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm">Read More</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About -->
-    <section id="about" class="bg-white py-12">
-      <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <h2 class="text-2xl font-bold mb-4">About Us</h2>
-        <p class="text-gray-600 mb-4">We design, manufacture, and supply APFC panels, electrical distribution equipment and advanced noise damping materials for industrial customers. Our team combines power electronics engineers, acousticians and manufacturing specialists to deliver turnkey solutions.</p>
-
-        <ul class="grid md:grid-cols-3 gap-4 text-sm">
-          <li class="p-4 bg-gray-50 rounded-lg shadow-sm">
-            <strong>Design & Engineering</strong>
-            <div class="text-gray-600">Custom APFC tuning, harmonic filtering and enclosure design.</div>
-          </li>
-          <li class="p-4 bg-gray-50 rounded-lg shadow-sm">
-            <strong>Manufacturing</strong>
-            <div class="text-gray-600">ISO-quality assembly and testing — FAT packages available.</div>
-          </li>
-          <li class="p-4 bg-gray-50 rounded-lg shadow-sm">
-            <strong>Testing & Commissioning</strong>
-            <div class="text-gray-600">On-site PF validation and acoustic verification.</div>
-          </li>
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a onclick="showPage('home'); closeMobileMenu()">Home</a></li>
+            <li><a onclick="scrollToSection('power'); closeMobileMenu()">Power Solutions</a></li>
+            <li><a onclick="scrollToSection('acoustics'); closeMobileMenu()">Acoustics</a></li>
+            <li><a onclick="scrollToSection('industries'); closeMobileMenu()">About us</a></li>
+            <li><a onclick="scrollToSection('contact'); closeMobileMenu()">Contact</a></li>
         </ul>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-      <h2 class="text-2xl font-bold mb-6">Contact & Get a Quote</h2>
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="p-6 bg-gray-50 rounded-lg">
-          <h3 class="font-semibold mb-2">Request a Quote</h3>
-          <p class="text-sm text-gray-600 mb-4">Tell us your requirements and we'll prepare a tailored solution.</p>
-
-          <form class="space-y-4" onsubmit="alert('This is a demo form — integrate backend to receive requests'); return false;">
-            <div>
-              <label class="block text-xs text-gray-700">Name</label>
-              <input class="mt-1 w-full rounded-md border border-gray-200 shadow-sm p-2" placeholder="Your name" required />
-            </div>
-            <div>
-              <label class="block text-xs text-gray-700">Email</label>
-              <input type="email" class="mt-1 w-full rounded-md border border-gray-200 shadow-sm p-2" placeholder="name@company.com" required />
-            </div>
-            <div>
-              <label class="block text-xs text-gray-700">Project Details</label>
-              <textarea class="mt-1 w-full rounded-md border border-gray-200 shadow-sm p-2" rows="4" placeholder="Describe your site, kVAR needs, noise issue, etc." required></textarea>
-            </div>
-            <div>
-              <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md">Send Request</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="p-6 bg-gray-50 rounded-lg">
-          <h3 class="font-semibold mb-2">Contact Info</h3>
-          <p class="text-sm text-gray-600">Phone: +44 20 7946 0123</p>
-          <p class="text-sm text-gray-600">Email: <a href="mailto:sales@zirconique.com" class="text-indigo-600">sales@zirconique.com</a></p>
-          <div class="mt-4">
-            <h4 class="text-sm font-medium">Visit Us</h4>
-            <p class="text-sm text-gray-600">Unit 12, Industrial Park, Anytown</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-gray-200 py-8 mt-12">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-3 gap-6">
-      <div>
-        <div class="flex items-center gap-2">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="1" y="1" width="22" height="22" rx="5" fill="#fff" />
-            <path d="M7 12h10M7 8h10M7 16h6" stroke="#111827" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </div>
-        <p class="text-sm text-gray-400 mt-2">© <span id="year"></span> Zircon India — All rights reserved.</p>
-      </div>
-
-      <div>
-        <h4 class="font-semibold mb-2">Quick Links</h4>
-        <ul class="text-sm text-gray-400 space-y-1">
-          <li><a href="#solutions" class="hover:text-white">Solutions</a></li>
-          <li><a href="#products" class="hover:text-white">Products</a></li>
-          <li><a href="#case-studies" class="hover:text-white">Case Studies</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 class="font-semibold mb-2">Subscribe</h4>
-        <p class="text-sm text-gray-400 mb-2">Get product updates and acoustic tips.</p>
-        <div class="flex gap-2">
-          <input id="subsEmail" class="rounded-md p-2 w-full text-gray-800" placeholder="email@domain.com" />
-          <button id="subsBtn" class="px-3 py-2 bg-indigo-600 rounded-md">Subscribe</button>
-        </div>
-      </div>
     </div>
-  </footer>
 
-  <!-- Small scripts -->
-  <script>
-    // Year in footer
-    document.getElementById('year').textContent = new Date().getFullYear();
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <section class="hero">
+            <h1>Complete Electrical Power & Acoustic Engineering</h1>
+            <p>Comprehensive Solutions from Solar to Sound Control</p>
+            <div class="hero-subtitle">Gorakhpur, Uttar Pradesh | Serving Industries Across India</div>
+            <button class="cta-button" onclick="scrollToSection('contact')">Get Started</button>
+        </section>
 
-    // Demo subscribe button handler
-    document.getElementById('subsBtn').addEventListener('click', function () {
-      const e = document.getElementById('subsEmail').value;
-      if (!e) { alert('Please enter your email to subscribe.'); return; }
-      alert('Thanks — subscription demo. Integrate with backend to save.');
-    });
-  </script>
+        <section id="power" class="container">
+            <h2 class="section-title">Electrical Power Solutions</h2>
+            <p class="section-subtitle">End-to-end electrical engineering services for industrial and commercial applications</p>
+            <div class="services">
+                <div class="service-card" onclick="showPage('solar')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">☀️</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Solar Power</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Solar Panel Systems</h3>
+                        <p>Complete solar energy solutions for sustainable power generation.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('apfc')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #434343 0%, #000000 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">⚡</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">APFC Systems</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>APFC Panels</h3>
+                        <p>Advanced Automatic Power Factor Correction for optimal efficiency.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('distribution')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">🔌</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Distribution</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Electrical Distribution Systems</h3>
+                        <p>Complete electrical infrastructure design and installation.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('battery')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">🔋</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Energy Storage</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Battery & UPS Systems</h3>
+                        <p>Reliable backup power and energy storage solutions.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('motor')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">⚙️</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Motor Control</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Motor Control Centers</h3>
+                        <p>Efficient motor control and automation solutions.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('led')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">💡</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">LED Lighting</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>LED Lighting Solutions</h3>
+                        <p>Energy-efficient lighting systems for all spaces.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="acoustics" class="container" style="background: #f8f9fa; padding: 3rem 1.5rem;">
+            <h2 class="section-title">Acoustic Engineering Solutions</h2>
+            <p class="section-subtitle">Specialized acoustic materials and noise control systems</p>
+            <div class="services">
+                <div class="service-card" onclick="showPage('noise')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">🔊🎤</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Live Noise Test</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Live Noise Measurements</h3>
+                        <p>Know your problematic noise frequencies and levels.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('concert')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">🎭</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Concert Halls</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Concert Hall Acoustics</h3>
+                        <p>Premium acoustic design for performance spaces.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('lowfreq')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">🔊</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Low Frequency</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Low Frequency Noise Control</h3>
+                        <p>Specialized bass and infrasonic noise solutions.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('aviation')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">✈️</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Aviation</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Aviation Aeroacoustics</h3>
+                        <p>Advanced aerospace noise reduction.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('transport')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #ed6ea0 0%, #ec8c69 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">🚗</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Transport</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Transport Vehicle Acoustics</h3>
+                        <p>Automotive, rail, and marine noise control.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('building')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">🏢</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Buildings</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Building Acoustics</h3>
+                        <p>Architectural soundproofing solutions.</p>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="showPage('industrial')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 3rem;">⚙️</div>
+                            <div style="font-size: 1rem; margin-top: 0.5rem;">Industrial</div>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Industrial Machinery</h3>
+                        <p>Factory and machinery noise control.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="industries" class="industries">
+   
+            <section id="industries" class="About us">
+            <div style="max-width: 1200px; margin: 0 auto;">
+              
+                
+                <!-- Zircon India Heritage -->
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 2rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(102,126,234,0.3);">
+                        <div style="font-size: clamp(2.5rem, 6vw, 4rem); font-weight: bold; margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">50+ Years</div>
+                        <div style="font-size: clamp(1.2rem, 3vw, 1.8rem); margin-bottom: 1.5rem; opacity: 0.95;">of Excellence in Electrical & Mechanical Works</div>
+                        <div style="max-width: 800px; margin: 0 auto; font-size: clamp(1rem, 2.5vw, 1.2rem); line-height: 1.8; opacity: 0.9;">
+                            <strong>Zircon India</strong> is a proud part of <strong>Sheema & Company</strong>, an ISO 9001:2008 certified organization with over five decades of expertise in service providing, electrical and mechanical contracting across India.
+                        </div>
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.3);">
+                            <div style="font-size: 1.1rem; font-weight: 600;">'A' Class Approved Electrical service provider</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Our Group Companies -->
+                <div style="margin-bottom: 4rem;">
+                    <h3 class="section-title" style="font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: 2rem;">Our Group Companies</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto;">
+                        <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s;">
+                            <div style="width: 70px; height: 70px; margin: 0 auto 1rem; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">⚡</div>
+                            <h4 style="color: #1e3c72; margin-bottom: 0.8rem; font-size: 1.3rem; font-weight: 600;">Sheema & Co.</h4>
+                            <p style="font-size: 1rem; color: #666; line-height: 1.6;">Electrification, Installation & Commissioning</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s;">
+                            <div style="width: 70px; height: 70px; margin: 0 auto 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🔌</div>
+                            <h4 style="color: #1e3c72; margin-bottom: 0.8rem; font-size: 1.3rem; font-weight: 600;">Sheema Electro Digitech</h4>
+                            <p style="font-size: 1rem; color: #666; line-height: 1.6;">Complete Electrical Solutions & Supply</p>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            <!-- Prestigious Clients -->
+            <div style="max-width: 1200px; margin: 0 auto 3rem;">
+                <h3 style="text-align: center; color: #2a5298; margin-bottom: 2rem; font-size: 1.8rem;">Our Prestigious Clients</h3>
+                
+                <!-- Central Government -->
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="font-size: 2rem; margin-right: 1rem;">🏛️</div>
+                        <h4 style="color: #2a5298; font-size: 1.5rem; margin: 0;">Central Government</h4>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="padding: 0.8rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong>Govt. Opium & Alkaloid Works</strong><br><span style="font-size: 0.9rem; color: #666;">Ghazipur</span>
+                        </div>
+                        <div style="padding: 0.8rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong>Central Public Works Department (CPWD)</strong><br><span style="font-size: 0.9rem; color: #666;">Varanasi</span>
+                        </div>
+                        <div style="padding: 0.8rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong>Central Water Commission (CWC)</strong><br><span style="font-size: 0.9rem; color: #666;">Lucknow</span>
+                        </div>
+                        
+                        <div style="padding: 0.8rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong>Air Force Naval Housing Board (AFNHB)</strong><br><span style="font-size: 0.9rem; color: #666;">New Delhi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- State Government & Public Undertaking -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                    <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                            <div style="font-size: 2rem; margin-right: 1rem;">🏢</div>
+                            <h4 style="color: #2a5298; font-size: 1.3rem; margin: 0;">State Government</h4>
+                        </div>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✓ UP Tourism</li>
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✓ UP Jal Nigam</li>
+                            <li style="padding: 0.5rem 0;">✓ Rajkiya Nirman Nigam</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                            <div style="font-size: 2rem; margin-right: 1rem;">⚡</div>
+                            <h4 style="color: #2a5298; font-size: 1.3rem; margin: 0;">Public Sector</h4>
+                        </div>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✓ NTPC (Tanda, Korba)</li>
+                            <li style="padding: 0.5rem 0;">✓ UPL (BSES & NTPC JV)</li>
+                        </ul>
+                    </div>
+                </div>
+
+               
+            </div>
+
+            <!-- Our Expertise -->
+            <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 2rem; border-radius: 15px; color: white; max-width: 1000px; margin: 0 auto 3rem;">
+                <h3 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.8rem;">Our Core Expertise</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚡</div>
+                        <strong>Project Execution</strong>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔧</div>
+                        <strong>Commissioning</strong>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚙️</div>
+                        <strong>Operation & Maintenance</strong>
+                    </div>
+                   
+                </div>
+            </div>
+
+        
+        </section>
+        </section>
+
+        <section id="contact" class="contact">
+            <h2>Ready to Transform Your Systems?</h2>
+            <p style="margin-bottom: 1.5rem;">Contact us today for a comprehensive consultation</p>
+            <div class="contact-info">
+                <div><strong>Zircon India</strong></div>
+                <div>DE 1/D, Sec 13, GIDA</div>
+                <div>Gorakhpur - 273001</div>
+                <div>Uttar Pradesh, India</div>
+                <div style="margin-top: 1rem;">📧 info@zirconique.com</div>
+                <div>🌐 www.zirconique.com</div>
+            </div>
+            <a href="mailto:info@zirconique.com" class="contact-button">Email Us</a>
+            <a href="http://www.zirconique.com" class="contact-button">Visit Website</a>
+        </section>
+    </div>
+
+    <!-- LIVE NOISE ANALYZER PAGE -->
+    <div id="noise" class="page">
+        <div class="analyzer-container">
+            <div class="container">
+                <h1 class="analyzer-title">🎵 Live Acoustic Analysis</h1>
+                <p class="analyzer-subtitle">Real-time Audio Monitoring & Frequency Analysis</p>
+
+                <div class="analyzer-box">
+                    <div class="controls">
+                        <button id="startBtn">🎤 Start Analysis</button>
+                        <button id="stopBtn">⏹️ Stop Analysis</button>
+                    </div>
+
+                    <div class="metrics">
+                        <div class="metric-card db">
+                            <div class="metric-label">Sound Level</div>
+                            <div class="metric-value" id="dbLevel">-- dB</div>
+                        </div>
+                        <div class="metric-card freq">
+                            <div class="metric-label">Peak Frequency</div>
+                            <div class="metric-value" id="peakFreq">-- Hz</div>
+                        </div>
+                        <div class="metric-card status">
+                            <div class="metric-label">Status</div>
+                            <div class="metric-value" id="status" style="font-size: 1.3rem;">Ready</div>
+                        </div>
+                    </div>
+
+                    <div class="visualization">
+                        <h3>📊 Frequency Spectrum</h3>
+                        <canvas id="frequencyCanvas" width="800" height="250"></canvas>
+                    </div>
+
+                    <div class="visualization">
+                        <h3>〰️ Waveform</h3>
+                        <canvas id="waveformCanvas" width="800" height="180"></canvas>
+                    </div>
+                </div>
+
+                <button class="back-button" onclick="showPage('home')" style="background: white; color: #667eea; margin-bottom: 1rem;">← Back to Services</button>
+
+                <div class="info-box">
+                    <h3>Understanding the Results</h3>
+                    <ul>
+                        <li><strong>Sound Level (dB):</strong> Measures loudness. 30 dB is whisper-quiet, 60 dB is normal conversation, 85+ dB can cause hearing damage</li>
+                        <li><strong>Peak Frequency:</strong> The dominant frequency in the sound, helps identify noise sources</li>
+                        <li><strong>Frequency Spectrum:</strong> Shows energy distribution across frequencies</li>
+                        <li><strong>Waveform:</strong> Visual representation of sound wave amplitude</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>Technical Features</h3>
+                    <ul>
+                        <li>Real-time FFT frequency spectrum analysis</li>
+                        <li>Sound pressure level measurement (dB)</li>
+                        <li>Peak frequency detection and tracking</li>
+                        <li>Live waveform visualization</li>
+                        <li>Frequency range: 20 Hz - 20 kHz (full audible spectrum)</li>
+                        <li>High-resolution time-domain display</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOLAR PAGE -->
+    <div id="solar" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(246,211,101,0.9), rgba(253,160,133,0.9));">
+            <div class="detail-hero-content">
+                <h1>Solar Panel Systems</h1>
+                <p>Harness Clean, Renewable Energy</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+             <div>
+  <div class="detail-image" 
+       style="background-image: url('solar.jpg'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+</div>
+                <div>
+                    <h2>Complete Solar Energy Solutions</h2>
+                    <p>Comprehensive solar panel installation and maintenance services designed to reduce your energy costs and carbon footprint.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Our Solar Services Include:</h3>
+                <ul class="feature-list">
+                    <li>Rooftop Solar Panel Installation</li>
+                    <li>Ground-Mounted Solar Arrays</li>
+                    <li>Grid-Tied Solar Systems</li>
+                    <li>Off-Grid Solar Solutions</li>
+                    <li>Solar Battery Storage Integration</li>
+                    <li>Solar Water Heating Systems</li>
+                    <li>Performance Monitoring & Analytics</li>
+                    <li>Government Subsidy Processing</li>
+                    <li>Annual Maintenance Contracts</li>
+                    <li>Solar Panel Cleaning Services</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Why Choose Solar Energy?</h3>
+                <ul class="feature-list">
+                    <li>Reduce electricity bills by up to 80%</li>
+                    <li>25+ year lifespan with minimal maintenance</li>
+                    <li>Government subsidies available</li>
+                    <li>Protect against rising electricity costs</li>
+                    <li>Increase property value</li>
+                    <li>Reduce carbon footprint</li>
+                    <li>Energy independence and security</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Ready to Go Solar?</h2>
+                <p>Contact us for a free site assessment</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Get Free Quote</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- APFC PAGE -->
+    <div id="apfc" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(67,67,67,0.9), rgba(0,0,0,0.9));">
+            <div class="detail-hero-content">
+                <h1>APFC Panels</h1>
+                <p>Optimize Power Factor, Reduce Costs</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                <div>
+  <div class="detail-image" 
+       style="background-image: url('apfc.png'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Automatic Power Factor Correction</h2>
+                    <p>Our APFC panels automatically maintain optimal power factor, eliminating penalties while reducing energy consumption.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>APFC Panel Features:</h3>
+                <ul class="feature-list">
+                    <li>Microprocessor-based intelligent control</li>
+                    <li>Real-time power factor monitoring</li>
+                    <li>Capacitor bank switching with step control</li>
+                    <li>Harmonic filtering and protection</li>
+                    <li>Digital display for all parameters</li>
+                    <li>Automatic/manual operation modes</li>
+                    <li>Over-voltage and under-voltage protection</li>
+                    <li>Temperature monitoring and control</li>
+                    <li>Remote monitoring via SCADA</li>
+                    <li>Custom panel design available</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Benefits:</h3>
+                <ul class="feature-list">
+                    <li>Eliminate power factor penalty charges</li>
+                    <li>Reduce current drawn from supply</li>
+                    <li>Increase available power capacity</li>
+                    <li>Extend equipment life</li>
+                    <li>Improve voltage regulation</li>
+                    <li>Reduce transformer KVA requirements</li>
+                    <li>Lower maintenance costs</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Improve Your Power Factor</h2>
+                <p>Contact us for a power quality audit</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Request Audit</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DISTRIBUTION PAGE -->
+    <div id="distribution" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(102,126,234,0.9), rgba(118,75,162,0.9));">
+            <div class="detail-hero-content">
+                <h1>Electrical Distribution Systems</h1>
+                <p>Safe, Reliable Power Distribution</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                 <div>
+  <div class="detail-image" 
+       style="background-image: url('elec.jpg'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Complete Power Distribution</h2>
+                    <p>Comprehensive electrical distribution systems ensuring safe and efficient power delivery throughout your facility.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Our Distribution Services:</h3>
+                <ul class="feature-list">
+                    <li>LT Panel Design & Manufacturing</li>
+                    <li>HT Panel Solutions (11kV, 33kV)</li>
+                    <li>Main Distribution Boards (MDB)</li>
+                    <li>Sub Distribution Boards (SDB)</li>
+                    <li>Power Distribution Boards (PDB)</li>
+                    <li>Busbar Systems & Trunking</li>
+                    <li>Switchgear Installation</li>
+                    <li>Cable Tray & Conduit Systems</li>
+                    <li>Earthing & Lightning Protection</li>
+                    <li>Load Flow Analysis</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Safety & Compliance:</h3>
+                <ul class="feature-list">
+                    <li>IS/IEC standard compliant designs</li>
+                    <li>Arc flash analysis and mitigation</li>
+                    <li>Fault level calculations</li>
+                    <li>Protection coordination studies</li>
+                    <li>Comprehensive testing and commissioning</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Need Distribution Infrastructure?</h2>
+                <p>Let our experts design your system</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Consult Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BATTERY PAGE -->
+    <div id="battery" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(17,153,142,0.9), rgba(56,239,125,0.9));">
+            <div class="detail-hero-content">
+                <h1>Battery & UPS Systems</h1>
+                <p>Uninterrupted Power for Critical Operations</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                <div>
+ <div class="detail-image" 
+       style="background-image: url('battery.png'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Reliable Energy Storage</h2>
+                    <p>Ensure business continuity with our advanced UPS and battery storage solutions for critical infrastructure.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>UPS & Battery Solutions:</h3>
+                <ul class="feature-list">
+                    <li>Online UPS Systems (10kVA to 1000kVA+)</li>
+                    <li>Modular UPS with N+1 Redundancy</li>
+                    <li>Industrial Battery Systems</li>
+                    <li>Battery Energy Storage Systems (BESS)</li>
+                    <li>Solar Battery Integration</li>
+                    <li>DC Power Systems for Telecom</li>
+                    <li>Inverter Systems</li>
+                    <li>Generator Integration</li>
+                    <li>Automatic Transfer Switch Systems</li>
+                    <li>Remote Monitoring & Management</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Key Features:</h3>
+                <ul class="feature-list">
+                    <li>Zero transfer time for critical loads</li>
+                    <li>Pure sine wave output</li>
+                    <li>Wide input voltage range</li>
+                    <li>Battery health monitoring</li>
+                    <li>Energy-efficient ECO mode</li>
+                    <li>Scalable and modular architecture</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Protect Your Critical Systems</h2>
+                <p>Get expert guidance on UPS solutions</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Contact Us</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOTOR PAGE -->
+    <div id="motor" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(252,74,26,0.9), rgba(247,183,51,0.9));">
+            <div class="detail-hero-content">
+                <h1>Motor Control Centers</h1>
+                <p>Intelligent Motor Control & Automation</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                <div>
+  <div class="detail-image" 
+       style="background-image: url('motorr.jpg'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Advanced Motor Control</h2>
+                    <p>Optimize industrial processes with motor control centers featuring VFDs, PLCs, and intelligent automation.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Motor Control Services:</h3>
+                <ul class="feature-list">
+                    <li>Variable Frequency Drive (VFD) Panels</li>
+                    <li>Soft Starter Control Panels</li>
+                    <li>Direct-On-Line (DOL) Starters</li>
+                    <li>Star-Delta Starter Systems</li>
+                    <li>PLC-based Automation Panels</li>
+                    <li>Motor Control Centers (MCC)</li>
+                    <li>SCADA Integration & HMI</li>
+                    <li>Motor Protection Relay Systems</li>
+                    <li>Process Control Automation</li>
+                    <li>Energy Monitoring & Analytics</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Benefits:</h3>
+                <ul class="feature-list">
+                    <li>Energy savings up to 50% with VFD</li>
+                    <li>Reduced mechanical stress on motors</li>
+                    <li>Precise speed and torque control</li>
+                    <li>Extended equipment lifespan</li>
+                    <li>Improved process quality</li>
+                    <li>Remote monitoring and diagnostics</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Automate Your Processes</h2>
+                <p>Discover motor control solutions</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Get Consultation</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LED PAGE -->
+    <div id="led" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(142,45,226,0.9), rgba(74,0,224,0.9));">
+            <div class="detail-hero-content">
+                <h1>LED Lighting Solutions</h1>
+                <p>Energy-Efficient Illumination</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                 <div class="detail-image" 
+       style="background-image: url('led1.jpg'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Modern LED Lighting</h2>
+                    <p>Transform spaces with energy-efficient LED lighting that reduces costs by up to 80% while providing superior illumination.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>LED Lighting Products:</h3>
+                <ul class="feature-list">
+                    <li>Industrial High Bay LED Fixtures</li>
+                    <li>Warehouse and Factory Lighting</li>
+                    <li>Street & Highway LED Lights</li>
+                    <li>Parking Lot and Area Lighting</li>
+                    <li>Commercial Office LED Panels</li>
+                    <li>Explosion-Proof LED Fixtures</li>
+                    <li>Emergency & Exit Lighting</li>
+                    <li>Architectural & Decorative LED</li>
+                    <li>Solar-Powered LED Street Lights</li>
+                    <li>Smart Lighting Control Systems</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Smart Features:</h3>
+                <ul class="feature-list">
+                    <li>Motion sensor integration</li>
+                    <li>Daylight harvesting systems</li>
+                    <li>IoT-enabled remote control</li>
+                    <li>Dimming and color adjustment</li>
+                    <li>Scheduled operation for zones</li>
+                    <li>Energy consumption analytics</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Upgrade to LED Today</h2>
+                <p>Request a lighting audit</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Schedule Audit</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCERT HALL PAGE -->
+    <div id="concert" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(33,147,176,0.9), rgba(109,213,237,0.9));">
+            <div class="detail-hero-content">
+                <h1>Concert Hall Acoustics</h1>
+                <p>Perfect Sound Environments</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                 <div class="detail-image" 
+       style="background-image: url('concert.jpg'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Premium Performance Space Acoustics</h2>
+                    <p>World-class acoustic treatments for concert halls, theaters, and performance venues ensuring optimal sound clarity.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Acoustic Solutions:</h3>
+                <ul class="feature-list">
+                    <li>Acoustic Wall Panels</li>
+                    <li>Acoustic Ceiling Clouds and Baffles</li>
+                    <li>Diffuser Systems for Sound Scattering</li>
+                    <li>Bass Traps for Low Frequency Control</li>
+                    <li>Reverberation Time Optimization</li>
+                    <li>Sound Isolation Doors and Seals</li>
+                    <li>Floating Floor Systems</li>
+                    <li>Stage Acoustic Shells</li>
+                    <li>Audience Seating Acoustics</li>
+                    <li>Acoustic Modeling and Simulation</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Design Services:</h3>
+                <ul class="feature-list">
+                    <li>Computer-aided acoustic modeling</li>
+                    <li>RT60 reverberation time analysis</li>
+                    <li>Speech intelligibility optimization</li>
+                    <li>Sound level distribution mapping</li>
+                    <li>Custom acoustic panel design</li>
+                    <li>Post-installation acoustic tuning</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Build the Perfect Space</h2>
+                <p>Consult with our acoustic experts</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Start Project</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOW FREQUENCY PAGE -->
+    <div id="lowfreq" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(19,78,94,0.9), rgba(113,178,128,0.9));">
+            <div class="detail-hero-content">
+                <h1>Low Frequency Noise Control</h1>
+                <p>Specialized Bass and Infrasonic Solutions</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                <div>
+                    <div class="detail-image" style="background: linear-gradient(135deg, rgba(19,78,94,0.8), rgba(113,178,128,0.8)), repeating-linear-gradient(0deg, transparent 0px, transparent 30px, rgba(255,255,255,0.1) 30px, rgba(255,255,255,0.1) 31px);"></div>
+                </div>
+                <div>
+                    <h2>Challenging Low Frequency Problems</h2>
+                    <p>Low frequency noise (20-250 Hz) and infrasound require specialized treatment. Our expert solutions address these challenges effectively.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Low Frequency Control Solutions:</h3>
+                <ul class="feature-list">
+                    <li>Deep Bass Trap Panels</li>
+                    <li>Membrane Absorbers</li>
+                    <li>Helmholtz Resonators (Custom-tuned)</li>
+                    <li>Mass-Loaded Vinyl Barriers</li>
+                    <li>Spring and Elastomeric Isolators</li>
+                    <li>Floating Floor and Ceiling Systems</li>
+                    <li>Structural Decoupling Solutions</li>
+                    <li>Active Noise Cancellation Systems</li>
+                    <li>Heavy Machinery Isolation Mounts</li>
+                    <li>HVAC Low Frequency Silencers</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Common Applications:</h3>
+                <ul class="feature-list">
+                    <li>Generator room noise isolation</li>
+                    <li>Transformer hum elimination</li>
+                    <li>HVAC rumble and vibration control</li>
+                    <li>Industrial compressor noise</li>
+                    <li>Traffic and railway vibration isolation</li>
+                    <li>Pump room acoustics</li>
+                    <li>Studio control room bass management</li>
+                    <li>Home theater bass optimization</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Solve Low Frequency Noise</h2>
+                <p>Get expert analysis and solutions</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Contact Specialists</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- AVIATION PAGE -->
+    <div id="aviation" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(15,32,39,0.9), rgba(44,83,100,0.9));">
+            <div class="detail-hero-content">
+                <h1>Aviation Aeroacoustics</h1>
+                <p>Advanced Aerospace Noise Reduction</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                 <div class="detail-image" 
+       style="background-image: url('noise.png'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Specialized Aviation Acoustic Engineering</h2>
+                    <p>Comprehensive aeroacoustic solutions for aircraft, airports, and aerospace facilities meeting stringent regulatory requirements.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Aviation Acoustic Services:</h3>
+                <ul class="feature-list">
+                    <li>Aircraft Cabin Soundproofing</li>
+                    <li>Engine Nacelle Acoustic Liners</li>
+                    <li>Exhaust Noise Suppression Systems</li>
+                    <li>Landing Gear Noise Reduction</li>
+                    <li>Airframe Noise Mitigation</li>
+                    <li>Airport Terminal Acoustics</li>
+                    <li>Hangar Noise Control</li>
+                    <li>Ground Support Equipment Silencing</li>
+                    <li>Noise Monitoring Systems</li>
+                    <li>Regulatory Compliance Consulting</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Technical Capabilities:</h3>
+                <ul class="feature-list">
+                    <li>Computational Fluid Dynamics (CFD) analysis</li>
+                    <li>Aeroacoustic simulation and modeling</li>
+                    <li>Wind tunnel testing coordination</li>
+                    <li>Fly-over noise prediction</li>
+                    <li>Community noise impact assessment</li>
+                    <li>Lightweight composite acoustic materials</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Aviation Noise Challenges?</h2>
+                <p>Consult with aeroacoustic specialists</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Get Expert Help</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRANSPORT PAGE -->
+    <div id="transport" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(237,110,160,0.9), rgba(236,140,105,0.9));">
+            <div class="detail-hero-content">
+                <h1>Transport Vehicle Acoustics</h1>
+                <p>Noise Control for All Transport Modes</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                <div class="detail-image" 
+       style="background-image: url('auto.png'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Complete Transport Noise Solutions</h2>
+                    <p>Reduce cabin noise, improve passenger comfort, and meet environmental regulations with specialized acoustic treatments.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Transport Acoustic Solutions:</h3>
+                <ul class="feature-list">
+                    <li>Automotive Cabin Soundproofing</li>
+                    <li>Engine Bay Acoustic Insulation</li>
+                    <li>Exhaust System Noise Reduction</li>
+                    <li>Wheel Well and Undercarriage Damping</li>
+                    <li>Railway Car Interior Acoustics</li>
+                    <li>Metro and Train Noise Barriers</li>
+                    <li>Ship and Boat Cabin Treatment</li>
+                    <li>Marine Engine Room Insulation</li>
+                    <li>Electric Vehicle NVH Solutions</li>
+                    <li>Vibration Damping Materials</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Materials and Products:</h3>
+                <ul class="feature-list">
+                    <li>Mass-loaded vinyl sound barriers</li>
+                    <li>Closed-cell foam absorbers</li>
+                    <li>Butyl rubber damping sheets</li>
+                    <li>Composite acoustic panels</li>
+                    <li>Thermal-acoustic insulation</li>
+                    <li>Fire-rated acoustic materials</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Improve Vehicle Comfort</h2>
+                <p>Get custom acoustic solutions</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Request Quote</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BUILDING PAGE -->
+    <div id="building" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(102,126,234,0.9), rgba(118,75,162,0.9));">
+            <div class="detail-hero-content">
+                <h1>Building Acoustic Materials</h1>
+                <p>Comprehensive Soundproofing for Architecture</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                <div class="detail-image" 
+       style="background-image: url('room.jpg'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Architectural Soundproofing Excellence</h2>
+                    <p>Transform buildings into peaceful, productive spaces with comprehensive acoustic solutions for all facilities.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Building Acoustic Products:</h3>
+                <ul class="feature-list">
+                    <li>Acoustic Insulation Batts</li>
+                    <li>Soundproof Drywall and Green Glue</li>
+                    <li>Acoustic Doors (STC 45-55 rated)</li>
+                    <li>Sound-Rated Windows and Glazing</li>
+                    <li>Floor Impact Noise Underlayment</li>
+                    <li>Resilient Channel Systems</li>
+                    <li>Acoustic Sealants and Gaskets</li>
+                    <li>Sound Masking Systems</li>
+                    <li>Fabric-Wrapped Wall Panels</li>
+                    <li>Perforated Wood Acoustic Panels</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Applications:</h3>
+                <ul class="feature-list">
+                    <li>Recording Studios and Music Rooms</li>
+                    <li>Home Theaters and Media Rooms</li>
+                    <li>Open-Plan Office Acoustics</li>
+                    <li>Conference and Meeting Rooms</li>
+                    <li>Hotel Room Soundproofing</li>
+                    <li>Residential Party Wall Treatment</li>
+                    <li>Restaurant and Café Noise Control</li>
+                    <li>Educational Facility Classrooms</li>
+                    <li>Healthcare Facility Acoustics</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Create Quiet Spaces</h2>
+                <p>Consult on your building acoustics</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Get Solution</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- INDUSTRIAL PAGE -->
+    <div id="industrial" class="page">
+        <div class="detail-hero" style="background: linear-gradient(45deg, rgba(240,147,251,0.9), rgba(245,87,108,0.9));">
+            <div class="detail-hero-content">
+                <h1>Industrial Machinery Acoustics</h1>
+                <p>Factory Noise Control & Worker Protection</p>
+            </div>
+        </div>
+        <div class="detail-content">
+            <button class="back-button" onclick="showPage('home')">← Back to Services</button>
+            
+            <div class="detail-grid">
+                <div class="detail-image" 
+       style="background-image: url('ind.jpg'); 
+              background-size: cover; 
+              background-position: center; 
+              background-repeat: no-repeat; 
+              width: 100%; 
+              height: 300px;">
+  </div>
+                    </div>
+                <div>
+                    <h2>Industrial Noise Mitigation</h2>
+                    <p>Protect workers, meet OSHA requirements, and improve work environments with industrial acoustic solutions.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Industrial Acoustic Solutions:</h3>
+                <ul class="feature-list">
+                    <li>Custom Acoustic Enclosures for Machinery</li>
+                    <li>Industrial Noise Barriers and Curtains</li>
+                    <li>Exhaust and Intake Silencers</li>
+                    <li>Compressor and Blower Enclosures</li>
+                    <li>Generator and Engine Canopies</li>
+                    <li>Ventilated Acoustic Panels</li>
+                    <li>Industrial Mufflers and Attenuators</li>
+                    <li>Conveyor Noise Reduction</li>
+                    <li>Press and Stamping Noise Control</li>
+                    <li>HVAC Industrial Silencers</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Safety & Compliance:</h3>
+                <ul class="feature-list">
+                    <li>OSHA noise exposure compliance</li>
+                    <li>Workplace noise surveys and mapping</li>
+                    <li>Personal protective equipment consulting</li>
+                    <li>Hearing conservation program support</li>
+                    <li>Fire-rated acoustic materials</li>
+                    <li>High-temperature resistant solutions</li>
+                    <li>Easy-access maintenance designs</li>
+                </ul>
+            </div>
+
+            <div class="contact" style="margin-top: 2rem; border-radius: 15px;">
+                <h2>Protect Your Workers</h2>
+                <p>Request an industrial noise assessment</p>
+                <a href="mailto:info@zirconique.com" class="contact-button" style="margin-top: 1rem;">Schedule Assessment</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Zircon India. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">DE 1/D, Sec 13, GIDA, Gorakhpur - 273001, UP, India</p>
+    </footer>
+
+    <script>
+        let audioContext;
+        let analyser;
+        let microphone;
+        let dataArray;
+        let bufferLength;
+        let animationId;
+        let stream;
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.remove('active');
+        }
+
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+            closeMobileMenu();
+        }
+
+        function scrollToSection(sectionId) {
+            const homePage = document.getElementById('home');
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            homePage.classList.add('active');
+            closeMobileMenu();
+            
+            setTimeout(() => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
+
+        // Live Acoustic Analyzer
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const frequencyCanvas = document.getElementById('frequencyCanvas');
+        const waveformCanvas = document.getElementById('waveformCanvas');
+        let freqCtx, waveCtx;
+
+        if (frequencyCanvas && waveformCanvas) {
+            freqCtx = frequencyCanvas.getContext('2d');
+            waveCtx = waveformCanvas.getContext('2d');
+
+            function setupCanvas() {
+                const containerWidth = frequencyCanvas.parentElement.offsetWidth - 32;
+                frequencyCanvas.width = Math.min(containerWidth, 800);
+                frequencyCanvas.height = 250;
+                waveformCanvas.width = Math.min(containerWidth, 800);
+                waveformCanvas.height = 180;
+            }
+
+            window.addEventListener('load', setupCanvas);
+            window.addEventListener('resize', setupCanvas);
+
+            startBtn.addEventListener('click', async () => {
+                try {
+                    setupCanvas();
+                    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    analyser = audioContext.createAnalyser();
+                    microphone = audioContext.createMediaStreamSource(stream);
+                    
+                    analyser.fftSize = 2048;
+                    analyser.smoothingTimeConstant = 0.8;
+                    bufferLength = analyser.frequencyBinCount;
+                    dataArray = new Uint8Array(bufferLength);
+                    
+                    microphone.connect(analyser);
+                    
+                    startBtn.style.display = 'none';
+                    stopBtn.style.display = 'inline-block';
+                    document.getElementById('status').textContent = 'Active';
+                    
+                    draw();
+                } catch (err) {
+                    alert('❌ Microphone access denied. Please allow microphone access to use this feature.');
+                    console.error('Error accessing microphone:', err);
+                    document.getElementById('status').textContent = 'Error';
+                }
+            });
+
+            stopBtn.addEventListener('click', () => {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+                
+                if (microphone) {
+                    microphone.disconnect();
+                    microphone = null;
+                }
+                
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                    stream = null;
+                }
+                
+                if (audioContext) {
+                    audioContext.close();
+                    audioContext = null;
+                }
+                
+                startBtn.style.display = 'inline-block';
+                stopBtn.style.display = 'none';
+                document.getElementById('status').textContent = 'Stopped';
+                document.getElementById('dbLevel').textContent = '-- dB';
+                document.getElementById('peakFreq').textContent = '-- Hz';
+                
+                freqCtx.fillStyle = '#1a1a1a';
+                freqCtx.fillRect(0, 0, frequencyCanvas.width, frequencyCanvas.height);
+                waveCtx.fillStyle = '#1a1a1a';
+                waveCtx.fillRect(0, 0, waveformCanvas.width, waveformCanvas.height);
+            });
+
+            function draw() {
+                animationId = requestAnimationFrame(draw);
+                
+                if (!analyser) return;
+                
+                analyser.getByteFrequencyData(dataArray);
+                
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    sum += dataArray[i];
+                }
+                const average = sum / bufferLength;
+                const db = Math.round(20 * Math.log10(Math.max(average / 255, 0.001)) + 100);
+                document.getElementById('dbLevel').textContent = (db > 0 && db < 120) ? db + ' dB' : '0 dB';
+                
+                let maxVal = 0;
+                let maxIndex = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    if (dataArray[i] > maxVal) {
+                        maxVal = dataArray[i];
+                        maxIndex = i;
+                    }
+                }
+                const nyquist = audioContext.sampleRate / 2;
+                const peakFrequency = Math.round((maxIndex * nyquist) / bufferLength);
+                document.getElementById('peakFreq').textContent = peakFrequency + ' Hz';
+                
+                freqCtx.fillStyle = '#1a1a1a';
+                freqCtx.fillRect(0, 0, frequencyCanvas.width, frequencyCanvas.height);
+                
+                const barWidth = (frequencyCanvas.width / bufferLength) * 2.5;
+                let x = 0;
+                
+                for (let i = 0; i < bufferLength; i++) {
+                    const barHeight = (dataArray[i] / 255) * frequencyCanvas.height;
+                    
+                    const hue = (i / bufferLength) * 280;
+                    const lightness = 50 + (dataArray[i] / 255) * 20;
+                    freqCtx.fillStyle = `hsl(${hue}, 100%, ${lightness}%)`;
+                    freqCtx.fillRect(x, frequencyCanvas.height - barHeight, barWidth, barHeight);
+                    
+                    x += barWidth + 1;
+                }
+                
+                const waveData = new Uint8Array(analyser.fftSize);
+                analyser.getByteTimeDomainData(waveData);
+                
+                waveCtx.fillStyle = '#1a1a1a';
+                waveCtx.fillRect(0, 0, waveformCanvas.width, waveformCanvas.height);
+                
+                waveCtx.lineWidth = 2;
+                waveCtx.strokeStyle = '#00ff88';
+                waveCtx.beginPath();
+                
+                const sliceWidth = waveformCanvas.width / analyser.fftSize;
+                let wx = 0;
+                
+                for (let i = 0; i < analyser.fftSize; i++) {
+                    const v = waveData[i] / 128.0;
+                    const y = (v * waveformCanvas.height) / 2;
+                    
+                    if (i === 0) {
+                        waveCtx.moveTo(wx, y);
+                    } else {
+                        waveCtx.lineTo(wx, y);
+                    }
+                    
+                    wx += sliceWidth;
+                }
+                
+                waveCtx.stroke();
+            }
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('mobileMenu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (menu.classList.contains('active') && 
+                !menu.contains(e.target) && 
+                !menuBtn.contains(e.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        // Prevent page zoom on double tap for iOS
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
 </body>
 </html>
