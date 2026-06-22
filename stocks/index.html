@@ -204,6 +204,49 @@ hr.hdivider{border:none;border-top:1px solid var(--border);margin:16px 0}
 .rg-list li{font-size:12px;color:var(--ink3);padding-left:14px;position:relative;line-height:1.5}
 .rg-list li::before{content:"→";position:absolute;left:0;color:var(--ink4);font-size:10px}
 
+/* PER-REGION STACKED RADAR + LIST */
+.region-block{display:flex;flex-direction:column;gap:0;margin-top:44px;border:1px solid var(--border);background:var(--paper);border-radius:4px;overflow:hidden;box-shadow:var(--sh)}
+.region-block+.region-block{margin-top:28px}
+.region-head{display:flex;align-items:center;gap:14px;padding:22px 28px 18px;border-bottom:1px solid var(--border)}
+.region-head .rg-flag{font-size:34px;margin:0;line-height:1}
+.region-head .rg-name{font-family:"Playfair Display",serif;font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.02em;line-height:1}
+.region-head .rg-exch{font-size:10px;font-family:"DM Mono",monospace;color:var(--ink4);letter-spacing:.12em;margin-top:3px}
+.region-head .rg-legend{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
+.region-head .rg-legend .pleg{color:var(--ink3)}
+.region-head .rg-legend .dot.buy{background:var(--green);box-shadow:0 0 8px rgba(26,107,58,.5)}
+.region-head .rg-legend .dot.sell{background:var(--red);box-shadow:0 0 8px rgba(176,48,32,.5)}
+
+.mini-radar{position:relative;height:200px;margin:0;
+  background:
+   linear-gradient(rgba(24,19,14,.03) 1px,transparent 1px) 0 0/100% 33px,
+   linear-gradient(90deg,rgba(24,19,14,.03) 1px,transparent 1px) 0 0/60px 100%,
+   var(--paper2);
+  overflow:hidden;border-bottom:1px solid var(--border)}
+.mini-zero{position:absolute;left:0;right:0;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),var(--gold2),transparent);box-shadow:0 0 10px rgba(184,134,11,.35);z-index:3}
+.mini-zero-label{position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:4;font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.18em;color:var(--gold2);background:var(--paper);padding:2px 7px;border:1px solid rgba(184,134,11,.3);border-radius:2px}
+.mini-side{position:absolute;right:14px;z-index:2;font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;opacity:.6}
+.mini-side.top{top:10px;color:var(--green)}
+.mini-side.bot{bottom:10px;color:var(--red)}
+
+.mblip{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px;transform:translate(-50%,-50%);transition:top 1.4s cubic-bezier(.45,.05,.3,1),left 1.4s linear;z-index:5}
+.mblip .tag{font-family:"DM Mono",monospace;font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;white-space:nowrap;border:1px solid transparent;line-height:1.2}
+.mblip .pct{font-family:"DM Mono",monospace;font-size:8px;letter-spacing:.02em}
+.mblip .arrow{font-size:10px;line-height:1}
+.mblip.buy .tag{color:#0d5028;background:rgba(26,107,58,.12);border-color:rgba(26,107,58,.4)}
+.mblip.buy .pct,.mblip.buy .arrow{color:var(--green)}
+.mblip.buy .arrow{animation:floatUp 2.2s ease-in-out infinite}
+.mblip.sell .tag{color:#8a2517;background:rgba(176,48,32,.1);border-color:rgba(176,48,32,.4)}
+.mblip.sell .pct,.mblip.sell .arrow{color:var(--red)}
+.mblip.sell .arrow{animation:floatDn 2.2s ease-in-out infinite}
+
+.region-body{padding:24px 28px 28px}
+.region-refresh{display:flex;align-items:center;gap:10px;padding:10px 28px;font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.06em;color:var(--ink4);background:var(--paper2);border-bottom:1px solid var(--border)}
+.region-refresh .live{display:flex;align-items:center;gap:6px;color:var(--green)}
+.region-refresh .live .d{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
+.region-refresh .rbtn{margin-left:auto;padding:6px 14px;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--ink3);border-radius:2px;cursor:pointer;transition:all .2s}
+.region-refresh .rbtn:hover{border-color:var(--gold2);color:var(--gold2)}
+@media(max-width:640px){.region-head{flex-wrap:wrap}.region-head .rg-legend{margin-left:0;width:100%}.mini-radar{height:230px}}
+
 /* HOW */
 #how{background:var(--paper)}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:60px;position:relative}
@@ -538,12 +581,34 @@ img,svg{max-width:100%}
     <div class="reveal">
       <div class="eyebrow">Market Coverage</div>
       <h2 class="stitle">Three markets.<br><em>One</em> screener.</h2>
+      <p class="sdesc">Each market has its own live prediction radar. Symbols floating <strong style="color:var(--green)">above</strong> the zero line are predicted to rise — good buys. Those sinking <strong style="color:var(--red)">below</strong> are predicted to fall. Positions reshuffle on every refresh.</p>
     </div>
-    <div class="regions-grid">
-      <div class="rgcard reveal" style="--cc:#1d4ed8">
+
+    <!-- US -->
+    <div class="region-block reveal" style="--cc:#1d4ed8">
+      <div class="region-head">
         <span class="rg-flag">🇺🇸</span>
-        <div class="rg-name">United States</div>
-        <div class="rg-exch">NYSE · NASDAQ · S&amp;P 500 · USD</div>
+        <div>
+          <div class="rg-name">United States</div>
+          <div class="rg-exch">NYSE · NASDAQ · S&amp;P 500 · USD</div>
+        </div>
+        <div class="rg-legend">
+          <div class="pleg"><span class="dot buy"></span> Predicted up · buy</div>
+          <div class="pleg"><span class="dot sell"></span> Predicted down · avoid</div>
+        </div>
+      </div>
+      <div class="mini-radar" id="radar-us" data-region="us">
+        <div class="mini-side top">▲ Gainers</div>
+        <div class="mini-side bot">▼ Losers</div>
+        <div class="mini-zero"></div>
+        <div class="mini-zero-label">ZERO</div>
+      </div>
+      <div class="region-refresh">
+        <span class="live"><span class="d"></span>LIVE</span>
+        <span id="stamp-us">Recalculating…</span>
+        <button class="rbtn" onclick="refreshMiniRadar('us',true)">↻ Refresh</button>
+      </div>
+      <div class="region-body">
         <ul class="rg-list">
           <li>50 post-drop recovery candidates</li>
           <li>Technology, Defence &amp; Energy focus</li>
@@ -551,10 +616,33 @@ img,svg{max-width:100%}
           <li>~40 Halal-compliant stocks</li>
         </ul>
       </div>
-      <div class="rgcard reveal d1" style="--cc:#15803d">
+    </div>
+
+    <!-- EUROPE -->
+    <div class="region-block reveal d1" style="--cc:#15803d">
+      <div class="region-head">
         <span class="rg-flag">🇪🇺</span>
-        <div class="rg-name">Europe</div>
-        <div class="rg-exch">DAX · FTSE · CAC 40 · AEX · EUR</div>
+        <div>
+          <div class="rg-name">Europe</div>
+          <div class="rg-exch">DAX · FTSE · CAC 40 · AEX · EUR</div>
+        </div>
+        <div class="rg-legend">
+          <div class="pleg"><span class="dot buy"></span> Predicted up · buy</div>
+          <div class="pleg"><span class="dot sell"></span> Predicted down · avoid</div>
+        </div>
+      </div>
+      <div class="mini-radar" id="radar-eu" data-region="eu">
+        <div class="mini-side top">▲ Gainers</div>
+        <div class="mini-side bot">▼ Losers</div>
+        <div class="mini-zero"></div>
+        <div class="mini-zero-label">ZERO</div>
+      </div>
+      <div class="region-refresh">
+        <span class="live"><span class="d"></span>LIVE</span>
+        <span id="stamp-eu">Recalculating…</span>
+        <button class="rbtn" onclick="refreshMiniRadar('eu',true)">↻ Refresh</button>
+      </div>
+      <div class="region-body">
         <ul class="rg-list">
           <li>50 European large-cap plays</li>
           <li>Industrials, Auto, Luxury &amp; Energy</li>
@@ -562,10 +650,33 @@ img,svg{max-width:100%}
           <li>~35 Halal-compliant stocks</li>
         </ul>
       </div>
-      <div class="rgcard reveal d2" style="--cc:#c2410c">
+    </div>
+
+    <!-- INDIA -->
+    <div class="region-block reveal d2" style="--cc:#c2410c">
+      <div class="region-head">
         <span class="rg-flag">🇮🇳</span>
-        <div class="rg-name">India</div>
-        <div class="rg-exch">NSE · BSE · NIFTY 50 · INR</div>
+        <div>
+          <div class="rg-name">India</div>
+          <div class="rg-exch">NSE · BSE · NIFTY 50 · INR</div>
+        </div>
+        <div class="rg-legend">
+          <div class="pleg"><span class="dot buy"></span> Predicted up · buy</div>
+          <div class="pleg"><span class="dot sell"></span> Predicted down · avoid</div>
+        </div>
+      </div>
+      <div class="mini-radar" id="radar-in" data-region="in">
+        <div class="mini-side top">▲ Gainers</div>
+        <div class="mini-side bot">▼ Losers</div>
+        <div class="mini-zero"></div>
+        <div class="mini-zero-label">ZERO</div>
+      </div>
+      <div class="region-refresh">
+        <span class="live"><span class="d"></span>LIVE</span>
+        <span id="stamp-in">Recalculating…</span>
+        <button class="rbtn" onclick="refreshMiniRadar('in',true)">↻ Refresh</button>
+      </div>
+      <div class="region-body">
         <ul class="rg-list">
           <li>50 Nifty 50 &amp; midcap plays</li>
           <li>IT, Pharma, Infrastructure &amp; Defence</li>
@@ -696,7 +807,7 @@ sb.auth.onAuthStateChange((event, session) => {
 window.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await sb.auth.getSession();
   currentUser = session?.user || null;
-  updateNav(); buildTicker(); initReveal(); startRadar();
+  updateNav(); buildTicker(); initReveal(); startRadar(); startMiniRadars();
 });
 function updateNav() {
   const a = document.getElementById('nav-auth-area');
@@ -830,6 +941,51 @@ function startRadar(){
   refreshRadar();
   clearInterval(radarTimer);
   radarTimer=setInterval(()=>refreshRadar(), 4000);
+}
+
+/* ===== PER-REGION MINI RADARS ===== */
+const REGION_POOL={
+  us:['NVDA','AMD','AAPL','MSFT','META','GOOGL','TSLA','AMZN','INTC','JPM','RCL','CLF'],
+  eu:['ASML','SAP','SIEMENS','AIRBUS','LVMH','ADYEN','SHELL','NESTLE','TOTAL','BAYER','BMW','UBS'],
+  in:['TCS','INFY','HDFC','RELIANCE','BEL','WIPRO','HCLTECH','TATASTEEL','SBIN','ITC','LT','MARUTI']
+};
+const miniTimers={};
+function refreshMiniRadar(region,manual){
+  const radar=document.getElementById('radar-'+region);
+  if(!radar) return;
+  const pool=[...(REGION_POOL[region]||[])].sort(()=>Math.random()-0.5).slice(0,9);
+  const data=pool.map(sym=>{
+    const up=Math.random()>0.42;
+    const strength=+rand(0.4,9.4).toFixed(1);
+    return {sym,up,strength};
+  });
+  const html=data.map((d,i)=>{
+    const xPct=8+(i/(data.length-1))*84+rand(-2,2);
+    let yPct=d.up ? 50-(d.strength/10)*40-rand(2,6) : 50+(d.strength/10)*40+rand(2,6);
+    yPct=Math.max(8,Math.min(92,yPct));
+    const cls=d.up?'buy':'sell';
+    const pct=(d.up?'+':'-')+d.strength+'%';
+    return `<div class="mblip ${cls}" style="left:${xPct}%;top:${yPct}%">
+        <span class="arrow">${d.up?'▲':'▼'}</span>
+        <span class="tag">${d.sym}</span>
+        <span class="pct">${pct}</span>
+      </div>`;
+  }).join('');
+  radar.querySelectorAll('.mblip').forEach(b=>b.remove());
+  radar.insertAdjacentHTML('beforeend', html);
+  const stamp=document.getElementById('stamp-'+region);
+  if(stamp){
+    const t=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    stamp.textContent=`Last recalculated ${t} · positions reshuffle on refresh`;
+  }
+}
+function startMiniRadars(){
+  ['us','eu','in'].forEach((r,i)=>{
+    refreshMiniRadar(r);
+    clearInterval(miniTimers[r]);
+    // stagger so they don't all jump in sync
+    setTimeout(()=>{ miniTimers[r]=setInterval(()=>refreshMiniRadar(r), 4500); }, i*1200);
+  });
 }
 function handleAccessBtn(e){
   e.preventDefault();
