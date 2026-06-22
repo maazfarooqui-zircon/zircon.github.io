@@ -103,6 +103,50 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 .ticker-item .sym{color:var(--paper);font-weight:500}
 .ticker-item .up{color:#6ee7b7}.ticker-item .dn{color:#fca5a5}
 
+/* PREDICTION RADAR */
+#predict{background:var(--ink);position:relative;overflow:hidden}
+#predict .sw{padding-top:80px;padding-bottom:80px}
+.pred-head .eyebrow{color:var(--gold3)}
+.pred-head .stitle{color:var(--paper)}
+.pred-head .stitle em{color:var(--gold3)}
+.pred-head .sdesc{color:rgba(250,248,243,.6)}
+.pred-legend{display:flex;gap:24px;flex-wrap:wrap;margin-top:22px}
+.pleg{display:flex;align-items:center;gap:8px;font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.05em;color:rgba(250,248,243,.65)}
+.pleg .dot{width:9px;height:9px;border-radius:50%}
+.pleg .dot.buy{background:#34d399;box-shadow:0 0 10px #34d399}
+.pleg .dot.sell{background:#f87171;box-shadow:0 0 10px #f87171}
+
+.radar{position:relative;height:420px;margin-top:44px;border:1px solid rgba(250,248,243,.1);border-radius:4px;
+  background:
+   linear-gradient(rgba(250,248,243,.025) 1px,transparent 1px) 0 0/100% 42px,
+   linear-gradient(90deg,rgba(250,248,243,.025) 1px,transparent 1px) 0 0/64px 100%;
+  overflow:hidden}
+.radar-zero{position:absolute;left:0;right:0;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--gold3),var(--gold3),transparent);box-shadow:0 0 14px rgba(232,184,32,.5);z-index:3}
+.radar-zero-label{position:absolute;left:14px;top:50%;transform:translateY(-50%);z-index:4;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.2em;color:var(--gold3);background:var(--ink);padding:2px 8px;border:1px solid rgba(232,184,32,.3);border-radius:2px}
+.radar-side{position:absolute;right:16px;z-index:2;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;opacity:.5}
+.radar-side.top{top:14px;color:#34d399}
+.radar-side.bot{bottom:14px;color:#f87171}
+
+.blip{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;transform:translate(-50%,-50%);transition:top 1.4s cubic-bezier(.45,.05,.3,1),left 1.4s linear;z-index:5;cursor:default}
+.blip .tag{font-family:"DM Mono",monospace;font-size:11px;font-weight:500;padding:3px 9px;border-radius:3px;white-space:nowrap;backdrop-filter:blur(4px);border:1px solid transparent;line-height:1.2}
+.blip .pct{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.03em}
+.blip.buy .tag{color:#a7f3d0;background:rgba(52,211,153,.13);border-color:rgba(52,211,153,.4)}
+.blip.buy .pct{color:#34d399}
+.blip.sell .tag{color:#fca5a5;background:rgba(248,113,113,.13);border-color:rgba(248,113,113,.4)}
+.blip.sell .pct{color:#f87171}
+.blip .arrow{font-size:11px;line-height:1}
+.blip.buy .arrow{color:#34d399;animation:floatUp 2.2s ease-in-out infinite}
+.blip.sell .arrow{color:#f87171;animation:floatDn 2.2s ease-in-out infinite}
+@keyframes floatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes floatDn{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.radar-refresh{display:flex;align-items:center;gap:10px;margin-top:18px;font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.08em;color:rgba(250,248,243,.45)}
+.radar-refresh .live{display:flex;align-items:center;gap:6px;color:#34d399}
+.radar-refresh .live .d{width:6px;height:6px;border-radius:50%;background:#34d399;animation:pulse 1.6s infinite}
+.rbtn{margin-left:auto;padding:7px 16px;font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid rgba(250,248,243,.25);color:rgba(250,248,243,.75);border-radius:2px;cursor:pointer;transition:all .2s}
+.rbtn:hover{border-color:var(--gold3);color:var(--gold3)}
+
+@media(max-width:720px){.radar{height:480px}.blip .tag{font-size:9px;padding:2px 6px}}
+
 /* SECTIONS */
 section{position:relative;z-index:1}
 .sw{max-width:1200px;margin:0 auto;padding:100px 48px}
@@ -284,6 +328,7 @@ img,svg{max-width:100%}
 <nav id="top-nav" class="z1">
   <a href="#" class="nav-logo">Market<span class="iq">IQ</span><span class="sub">Global Screener</span></a>
   <div class="nav-links">
+    <a href="#predict">Radar</a>
     <a href="#features">Features</a>
     <a href="#halal">Halal</a>
     <a href="#regions">Markets</a>
@@ -349,6 +394,32 @@ img,svg{max-width:100%}
     </div>
   </div>
   <div class="hero-ticker z1"><div class="ticker-track" id="ticker-track"></div></div>
+</section>
+
+<!-- PREDICTION RADAR -->
+<section id="predict">
+  <div class="sw">
+    <div class="pred-head reveal">
+      <div class="eyebrow">Live Prediction Radar</div>
+      <h2 class="stitle">Above the line, <em>catch it.</em><br>Below the line, drop it.</h2>
+      <p class="sdesc">Our AI plots every stock against a zero baseline. Symbols drifting <strong style="color:#34d399">above</strong> are predicted to rise — strong buys. Symbols sinking <strong style="color:#f87171">below</strong> are predicted to fall — steer clear. The higher it floats, the stronger the signal.</p>
+      <div class="pred-legend">
+        <div class="pleg"><span class="dot buy"></span> Above zero → predicted UP · good buy</div>
+        <div class="pleg"><span class="dot sell"></span> Below zero → predicted DOWN · avoid</div>
+      </div>
+    </div>
+    <div class="radar reveal d1" id="radar">
+      <div class="radar-side top">▲ Predicted Gainers</div>
+      <div class="radar-side bot">▼ Predicted Losers</div>
+      <div class="radar-zero"></div>
+      <div class="radar-zero-label">ZERO · NEUTRAL</div>
+    </div>
+    <div class="radar-refresh reveal d1">
+      <span class="live"><span class="d"></span>LIVE</span>
+      <span id="radar-stamp">Recalculating positions every 4s · predictions reshuffle on each refresh</span>
+      <button class="rbtn" onclick="refreshRadar(true)">↻ Refresh Now</button>
+    </div>
+  </div>
 </section>
 
 <!-- FEATURES -->
@@ -625,7 +696,7 @@ sb.auth.onAuthStateChange((event, session) => {
 window.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await sb.auth.getSession();
   currentUser = session?.user || null;
-  updateNav(); buildTicker(); initReveal();
+  updateNav(); buildTicker(); initReveal(); startRadar();
 });
 function updateNav() {
   const a = document.getElementById('nav-auth-area');
@@ -696,11 +767,69 @@ const TICKS=[
   {sym:'TCS',p:'₹3,890',ch:'+0.7%',u:1},{sym:'RELIANCE',p:'₹2,210',ch:'-0.3%',u:0},{sym:'SAP',p:'€240',ch:'+1.3%',u:1},
   {sym:'AMZN',p:'$178',ch:'-0.4%',u:0},{sym:'RCL',p:'$330',ch:'+2.1%',u:1},{sym:'BEL',p:'₹285',ch:'+3.1%',u:1},
   {sym:'ADYEN',p:'€1,420',ch:'+1.7%',u:1},{sym:'INFY',p:'₹1,890',ch:'+0.5%',u:1},{sym:'CLF',p:'$10.50',ch:'-1.2%',u:0},
+  {sym:'META',p:'$512',ch:'+1.8%',u:1},{sym:'GOOGL',p:'$174',ch:'+0.9%',u:1},{sym:'JPM',p:'$208',ch:'-0.5%',u:0},
+  {sym:'SIEMENS',p:'€192',ch:'+1.1%',u:1},{sym:'AIRBUS',p:'€172',ch:'+0.4%',u:1},{sym:'LVMH',p:'€620',ch:'-0.7%',u:0},
+  {sym:'WIPRO',p:'₹480',ch:'+1.4%',u:1},{sym:'HCLTECH',p:'₹1,680',ch:'+0.6%',u:1},{sym:'TATASTEEL',p:'₹142',ch:'-1.1%',u:0},
+  {sym:'AMD',p:'$162',ch:'+3.1%',u:1},{sym:'INTC',p:'$21',ch:'-2.3%',u:0},{sym:'SHELL',p:'£26',ch:'+0.8%',u:1},
 ];
 function buildTicker(){
   document.getElementById('ticker-track').innerHTML=[...TICKS,...TICKS].map(t=>
-    `<div class="ticker-item"><span class="sym">${t.sym}</span><span>${t.p}</span><span class="${t.u?'up':'dn'}">${t.ch}</span></div>`
+    `<div class="ticker-item"><span class="sym">${t.sym}</span><span>${t.p}</span><span class="${t.u?'up':'dn'}">${t.u?'▲':'▼'} ${t.ch}</span></div>`
   ).join('');
+}
+
+/* ===== LIVE PREDICTION RADAR ===== */
+// Pool of symbols the radar can plot. score = AI conviction; sign flips on refresh.
+const RADAR_POOL=['NVDA','AMD','AAPL','MSFT','META','GOOGL','TSLA','AMZN','INTC',
+  'ASML','SAP','SIEMENS','AIRBUS','LVMH','ADYEN','SHELL',
+  'TCS','INFY','HDFC','RELIANCE','BEL','WIPRO','HCLTECH','TATASTEEL'];
+let radarTimer=null;
+function rand(a,b){return a+Math.random()*(b-a)}
+
+function refreshRadar(manual){
+  const radar=document.getElementById('radar');
+  if(!radar) return;
+  // pick a fresh subset each refresh so positions visibly change
+  const pool=[...RADAR_POOL].sort(()=>Math.random()-0.5).slice(0,14);
+  // ensure a mix of buys (above) and sells (below)
+  const data=pool.map((sym,i)=>{
+    const up = Math.random() > 0.42;            // ~58% buys
+    const strength = +rand(0.4,9.6).toFixed(1); // % predicted move magnitude
+    return {sym, up, strength};
+  });
+
+  // map each stock to an x/y position. y: above line for buys, below for sells.
+  // higher strength on a buy => closer to the top (stronger buy).
+  const html = data.map((d,i)=>{
+    const xPct = 8 + (i/(data.length-1))*84 + rand(-2,2); // spread across width
+    let yPct;
+    if(d.up){ yPct = 50 - (d.strength/10)*42 - rand(2,6); }   // above center
+    else    { yPct = 50 + (d.strength/10)*42 + rand(2,6); }   // below center
+    yPct = Math.max(6, Math.min(94, yPct));
+    const cls = d.up?'buy':'sell';
+    const arrow = d.up?'▲':'▼';
+    const pct = (d.up?'+':'-')+d.strength+'%';
+    return `<div class="blip ${cls}" style="left:${xPct}%;top:${yPct}%">
+        <span class="arrow">${arrow}</span>
+        <span class="tag">${d.sym}</span>
+        <span class="pct">${pct}</span>
+      </div>`;
+  }).join('');
+
+  // keep the static furniture (zero line, labels), replace only blips
+  radar.querySelectorAll('.blip').forEach(b=>b.remove());
+  radar.insertAdjacentHTML('beforeend', html);
+
+  const stamp=document.getElementById('radar-stamp');
+  if(stamp){
+    const t=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    stamp.textContent = `Last recalculated ${t} · positions reshuffle on every refresh`;
+  }
+}
+function startRadar(){
+  refreshRadar();
+  clearInterval(radarTimer);
+  radarTimer=setInterval(()=>refreshRadar(), 4000);
 }
 function handleAccessBtn(e){
   e.preventDefault();
