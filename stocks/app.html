@@ -96,6 +96,7 @@ body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(
 .rtab.active-us{color:#1d4ed8;border-bottom-color:#1d4ed8;background:rgba(29,78,216,0.05)}
 .rtab.active-eu{color:#15803d;border-bottom-color:#16a34a;background:rgba(22,163,74,0.05)}
 .rtab.active-in{color:#c2410c;border-bottom-color:#ea580c;background:rgba(234,88,12,0.05)}
+.rtab.active-metals{color:#a16207;border-bottom-color:#ca8a04;background:rgba(161,98,7,0.06)}
 .rtab-flag{font-size:18px;display:block;margin-bottom:3px}
 .rtab-count{font-size:8px;color:var(--text3);letter-spacing:0.1em;font-family:"Space Mono",monospace;font-weight:400}
 
@@ -380,33 +381,62 @@ img,svg{max-width:100%}
 .prl .d{width:8px;height:8px;border-radius:50%}
 .prl .d.buy{background:var(--green);box-shadow:0 0 7px rgba(22,163,74,0.5)}
 .prl .d.sell{background:var(--red);box-shadow:0 0 7px rgba(192,57,43,0.5)}
-.pred-radar{position:relative;height:420px;
+.pred-radar{position:relative;height:460px;
+  perspective:1100px;perspective-origin:50% 38%;
   background:
-   linear-gradient(rgba(0,0,0,0.025) 1px,transparent 1px) 0 0/100% 42px,
-   linear-gradient(90deg,rgba(0,0,0,0.025) 1px,transparent 1px) 0 0/56px 100%,
-   radial-gradient(ellipse at 50% 50%, rgba(29,78,216,0.04), transparent 70%),
-   var(--bg3);
-  overflow:hidden}
+   radial-gradient(ellipse at 50% 30%, rgba(29,78,216,0.06), transparent 65%),
+   linear-gradient(180deg, var(--bg2) 0%, var(--bg3) 55%, #e9e4dc 100%);
+  overflow:hidden;border-radius:0}
+/* 3D stage that the plot lives on — tilted back into the screen */
+.pred-stage{position:absolute;inset:0;transform-style:preserve-3d;
+  transform:rotateX(34deg) translateZ(-40px) scale(1.04);
+  transform-origin:50% 62%}
+/* receding 3D grid floor sitting on the zero plane */
+.pred-floor{position:absolute;left:-20%;right:-20%;top:50%;height:340px;transform-origin:top center;
+  transform:rotateX(0deg);
+  background-image:
+    linear-gradient(rgba(29,78,216,0.18) 1px,transparent 1px),
+    linear-gradient(90deg, rgba(29,78,216,0.12) 1px,transparent 1px);
+  background-size:64px 46px, 64px 46px;
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,0.55), transparent 88%);
+  mask-image:linear-gradient(180deg, rgba(0,0,0,0.55), transparent 88%);
+  opacity:0.6;pointer-events:none}
+.pred-ceil{position:absolute;left:-20%;right:-20%;bottom:50%;height:340px;transform-origin:bottom center;
+  background-image:
+    linear-gradient(rgba(22,163,74,0.16) 1px,transparent 1px),
+    linear-gradient(90deg, rgba(22,163,74,0.10) 1px,transparent 1px);
+  background-size:64px 46px, 64px 46px;
+  -webkit-mask-image:linear-gradient(0deg, rgba(0,0,0,0.5), transparent 88%);
+  mask-image:linear-gradient(0deg, rgba(0,0,0,0.5), transparent 88%);
+  opacity:0.55;pointer-events:none}
 .pred-traces{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:visible}
-.pred-traces .trace-drop{stroke-dasharray:2 4;stroke-width:1;fill:none;opacity:0.5;animation:dashFlow 1.4s linear infinite}
-.pred-traces .trace-link{stroke-dasharray:1 6;stroke-width:1.2;fill:none;opacity:0.45;animation:dashFlow 3s linear infinite}
-.pred-traces .trace-node{opacity:0.7}
+.pred-traces .trace-drop{stroke-width:1.4;fill:none;opacity:0.55;stroke-linecap:round;animation:dashFlow 1.4s linear infinite}
+.pred-traces .trace-link{stroke-dasharray:1 7;stroke-width:1.4;fill:none;opacity:0.5;stroke-linecap:round;animation:dashFlow 3s linear infinite}
+.pred-traces .trace-glow{stroke-width:5;fill:none;opacity:0.10;filter:blur(3px)}
+.pred-traces .trace-node{opacity:0.85}
 @keyframes dashFlow{to{stroke-dashoffset:-30}}
-.pred-zero{position:absolute;left:0;right:0;top:50%;height:2px;z-index:3;
-  background:linear-gradient(90deg,transparent,var(--blue2),var(--blue2),transparent);box-shadow:0 0 10px rgba(29,78,216,0.35)}
-.pred-zero-label{position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:4;font-family:"Space Mono",monospace;font-size:8px;letter-spacing:0.16em;color:var(--blue2);background:var(--bg2);padding:2px 7px;border:1px solid rgba(29,78,216,0.3);border-radius:3px}
-.pred-side{position:absolute;right:14px;z-index:2;font-family:"Space Mono",monospace;font-size:8px;letter-spacing:0.16em;text-transform:uppercase;opacity:0.65}
-.pred-side.top{top:9px;color:var(--green2)}
-.pred-side.bot{bottom:9px;color:var(--red)}
-.pblip{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px;transform:translate(-50%,-50%);z-index:6;--scale:1;
-  transition:top 1.5s cubic-bezier(0.45,0.05,0.3,1),left 1.5s linear,opacity 0.5s}
-.pblip .ptag{font-family:"Space Mono",monospace;font-size:calc(9px * var(--scale));font-weight:700;padding:calc(2px * var(--scale)) calc(7px * var(--scale));border-radius:4px;white-space:nowrap;border:1px solid transparent;line-height:1.2;cursor:default}
-.pblip .ppct{font-family:"Space Mono",monospace;font-size:calc(8px * var(--scale));letter-spacing:0.02em}
-.pblip .parrow{font-size:calc(10px * var(--scale));line-height:1}
-.pblip.buy .ptag{color:#0d5028;background:rgba(22,163,74,0.13);border-color:rgba(22,163,74,0.4)}
+/* glowing 3D zero plane */
+.pred-zero{position:absolute;left:0;right:0;top:50%;height:3px;z-index:3;transform:translateZ(0.5px);
+  background:linear-gradient(90deg,transparent, #2563eb 18%, #60a5fa 50%, #2563eb 82%, transparent);
+  box-shadow:0 0 18px rgba(37,99,235,0.55), 0 0 4px rgba(37,99,235,0.8)}
+.pred-zero-label{position:absolute;left:14px;top:50%;transform:translateY(-50%);z-index:5;font-family:"Space Mono",monospace;font-size:8px;font-weight:700;letter-spacing:0.18em;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);padding:3px 10px;border-radius:4px;box-shadow:0 2px 8px rgba(29,78,216,0.4)}
+.pred-side{position:absolute;right:16px;z-index:4;font-family:"Space Mono",monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase}
+.pred-side.top{top:12px;color:var(--green2)}
+.pred-side.bot{bottom:12px;color:var(--red)}
+/* depth ticks: --depth 0(far) .. 1(near) drives size, lift, sharpness */
+.pblip{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px;
+  transform:translate(-50%,-50%) translateZ(calc(var(--depth,0.5) * 60px));z-index:6;--scale:1;--depth:0.5;
+  transition:top 1.5s cubic-bezier(0.45,0.05,0.3,1),left 1.5s linear,transform 1.5s cubic-bezier(0.45,0.05,0.3,1),opacity 0.6s;
+  filter:drop-shadow(0 calc(3px + var(--depth)*5px) calc(3px + var(--depth)*6px) rgba(0,0,0,calc(0.12 + var(--depth)*0.18)))}
+.pblip .ptag{font-family:"Space Mono",monospace;font-size:calc(9px * var(--scale));font-weight:700;padding:calc(2.5px * var(--scale)) calc(8px * var(--scale));border-radius:6px;white-space:nowrap;border:1px solid transparent;line-height:1.2;cursor:pointer;backdrop-filter:blur(3px);transition:transform 0.18s}
+.pblip:hover{z-index:20}
+.pblip:hover .ptag{transform:scale(1.12)}
+.pblip .ppct{font-family:"Space Mono",monospace;font-size:calc(8px * var(--scale));font-weight:700;letter-spacing:0.02em}
+.pblip .parrow{font-size:calc(11px * var(--scale));line-height:1}
+.pblip.buy .ptag{color:#0a3d1f;background:linear-gradient(135deg, rgba(220,252,231,0.95), rgba(187,247,208,0.9));border-color:rgba(22,163,74,0.55);box-shadow:0 0 calc(6px + var(--depth)*10px) rgba(22,163,74,0.35)}
 .pblip.buy .ppct,.pblip.buy .parrow{color:var(--green2)}
 .pblip.buy .parrow{animation:pFloatUp 2.2s ease-in-out infinite}
-.pblip.sell .ptag{color:#8a1c12;background:rgba(192,57,43,0.1);border-color:rgba(192,57,43,0.4)}
+.pblip.sell .ptag{color:#6e1610;background:linear-gradient(135deg, rgba(254,226,226,0.95), rgba(254,202,202,0.9));border-color:rgba(192,57,43,0.5);box-shadow:0 0 calc(6px + var(--depth)*10px) rgba(192,57,43,0.3)}
 .pblip.sell .ppct,.pblip.sell .parrow{color:var(--red)}
 .pblip.sell .parrow{animation:pFloatDn 2.2s ease-in-out infinite}
 @keyframes pFloatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
@@ -414,6 +444,8 @@ img,svg{max-width:100%}
 .pred-radar-foot{display:flex;align-items:center;gap:10px;padding:8px 16px;border-top:1px solid var(--border);background:var(--bg2);font-family:"Space Mono",monospace;font-size:9px;letter-spacing:0.05em;color:var(--text3);flex-wrap:wrap}
 .pred-radar-foot .rbtn{margin-left:auto;padding:5px 13px;font-family:"Space Mono",monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--text2);border-radius:5px;cursor:pointer;transition:all 0.2s}
 .pred-radar-foot .rbtn:hover{border-color:var(--blue2);color:var(--blue2)}
+.pred-radar-foot .rbtn.tilt-btn{margin-left:0}
+.pred-radar-foot .rbtn.active{background:var(--blue2);border-color:var(--blue2);color:#fff}
 /* accuracy meter */
 .acc-meter{display:flex;align-items:center;gap:8px;padding:6px 16px;border-top:1px solid var(--border);background:var(--bg3)}
 .acc-meter .acc-label{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:0.06em;color:var(--text2);white-space:nowrap}
@@ -421,7 +453,7 @@ img,svg{max-width:100%}
 .acc-meter .acc-bar-inner{height:100%;width:0%;background:linear-gradient(90deg,var(--yellow),var(--green));border-radius:4px;transition:width 0.8s cubic-bezier(0.45,0.05,0.3,1)}
 .acc-meter .acc-val{font-family:"Syne",sans-serif;font-size:12px;font-weight:800;color:var(--green2);white-space:nowrap}
 .acc-meter .acc-n{font-family:"Space Mono",monospace;font-size:8px;color:var(--text3);white-space:nowrap}
-@media(max-width:640px){.pred-radar{height:440px}.pblip .ptag{font-size:calc(8px * var(--scale))}.pred-radar-legend{margin-left:0;width:100%}}
+@media(max-width:640px){.pred-radar{height:430px;perspective:800px}.pred-stage{transform:rotateX(28deg) translateZ(-30px) scale(1.02)}.pblip .ptag{font-size:calc(8px * var(--scale))}.pred-radar-legend{margin-left:0;width:100%}}
 
 .split-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
 .split-col{display:flex;flex-direction:column;gap:0}
@@ -568,6 +600,10 @@ img,svg{max-width:100%}
     <span class="rtab-flag">🇮🇳</span>India
     <div class="rtab-count">50 STOCKS · INR ₹</div>
   </div>
+  <div class="rtab" id="tab-metals" onclick="switchRegion('metals')">
+    <span class="rtab-flag">⛏️</span>Metals &amp; Minerals
+    <div class="rtab-count">50 STOCKS · USD $</div>
+  </div>
 </div>
 
 <!-- ══ HALAL BANNER ══ -->
@@ -632,15 +668,20 @@ img,svg{max-width:100%}
       </div>
     </div>
     <div class="pred-radar" id="pred-radar">
-      <svg class="pred-traces" id="pred-traces" preserveAspectRatio="none"></svg>
+      <div class="pred-stage" id="pred-stage">
+        <div class="pred-floor"></div>
+        <div class="pred-ceil"></div>
+        <svg class="pred-traces" id="pred-traces" preserveAspectRatio="none"></svg>
+        <div class="pred-zero"></div>
+      </div>
+      <div class="pred-zero-label">ZERO · TARGET</div>
       <div class="pred-side top">▲ Predicted Gainers · higher = stronger buy</div>
       <div class="pred-side bot">▼ Predicted Losers</div>
-      <div class="pred-zero"></div>
-      <div class="pred-zero-label">ZERO · TARGET</div>
     </div>
     <div class="pred-radar-foot">
       <span id="radar-stamp">Plotting predictions…</span>
       <span id="radar-sync" style="color:var(--blue2)">next sync 60s</span>
+      <button class="rbtn tilt-btn active" id="tilt-btn" onclick="toggleTilt()">◳ 3D</button>
       <button class="rbtn" onclick="refreshRadar(true)">↻ Reshuffle</button>
     </div>
     <div class="acc-meter">
@@ -998,10 +1039,65 @@ const INDIA_STOCKS = [
   {id:50, name:"Bajaj Finserv",      ticker:"BAJAJFINSV.NS",sector:"NBFC/Insurance",  flag:"💳", preWar:1700.0, dropPct:-18.0, warDrop:-2.2, target:2200.0, upside:26.4, rating:"Buy",        stars:4, why:"Financial sector selloff; NBFC risk-off; FII selling basket", bull:"Insurance + lending conglomerate; Bajaj Finance synergies; digital financial services leader", halal:false}
 ];
 
+const METALS_STOCKS = [
+  {id:1,  name:"Freeport-McMoRan",       ticker:"FCX",      sector:"Copper",        flag:"🟠", preWar:48.00,  dropPct:-23.0, warDrop:-9.0,  target:62.00,  upside:48.0, rating:"Strong Buy", stars:5, why:"Materials worst sector on growth fears; copper sold off on demand panic", bull:"Copper for AI data centers, EVs & grid; structural deficit; world-class Grasberg mine", halal:true},
+  {id:2,  name:"Southern Copper",        ticker:"SCCO",     sector:"Copper",        flag:"🟠", preWar:105.00, dropPct:-19.5, warDrop:-6.2,  target:135.00, upside:42.0, rating:"Buy",        stars:4, why:"Copper price dip on China demand fears; EM risk-off rotation", bull:"Lowest-cost copper producer; massive reserves; 5%+ dividend yield; Peru/Mexico assets", halal:true},
+  {id:3,  name:"Barrick Gold",           ticker:"GOLD",     sector:"Gold Mining",   flag:"🥇", preWar:18.50,  dropPct:-15.0, warDrop:-4.5,  target:26.00,  upside:55.0, rating:"Strong Buy", stars:5, why:"Gold miner profit-taking selloff despite record bullion prices", bull:"Gold at $5,300+/oz drives huge margins; low all-in costs; copper optionality", halal:true},
+  {id:4,  name:"Newmont Corporation",    ticker:"NEM",      sector:"Gold Mining",   flag:"🥇", preWar:52.00,  dropPct:-20.4, warDrop:-7.0,  target:68.00,  upside:48.0, rating:"Strong Buy", stars:5, why:"World's largest gold miner sold on output guidance cut + sector rotation", bull:"Record gold prices; portfolio optimization; massive free cash flow; dividend growth", halal:true},
+  {id:5,  name:"Albemarle",              ticker:"ALB",      sector:"Lithium",       flag:"⚡", preWar:90.00,  dropPct:-27.1, warDrop:-12.0, target:130.00, upside:50.0, rating:"Buy",        stars:4, why:"Lithium glut fears; worst materials performer; EV demand slowdown panic", bull:"World's largest lithium producer; battery demand structural; cost-curve advantage", halal:true},
+  {id:6,  name:"Sociedad Química (SQM)",  ticker:"SQM",      sector:"Lithium",       flag:"⚡", preWar:38.00,  dropPct:-30.0, warDrop:-9.5,  target:55.00,  upside:52.0, rating:"Buy",        stars:4, why:"Lithium price collapse; Chile EM risk-off; oversupply concerns", bull:"Atacama brine lowest-cost lithium; specialty plant nutrition cash flow; recovery leverage", halal:true},
+  {id:7,  name:"Vale S.A.",              ticker:"VALE",     sector:"Iron Ore",      flag:"⛰️", preWar:12.00,  dropPct:-20.9, warDrop:-5.5,  target:16.50,  upside:48.0, rating:"Buy",        stars:4, why:"China steel demand fears; iron ore weakness; EM selloff", bull:"World's largest iron ore producer; copper/nickel diversification; $10B+ buyback", halal:true},
+  {id:8,  name:"Rio Tinto",              ticker:"RIO",      sector:"Diversified",   flag:"⛏️", preWar:62.00,  dropPct:-18.0, warDrop:-6.4,  target:82.00,  upside:45.0, rating:"Strong Buy", stars:5, why:"Diversified miner sold on global growth fears; China property drag", bull:"Iron ore, copper, aluminium, lithium mix; AI/EV demand; fortress balance sheet; 6% yield", halal:true},
+  {id:9,  name:"BHP Group",              ticker:"BHP",      sector:"Diversified",   flag:"⛏️", preWar:52.00,  dropPct:-17.5, warDrop:-5.8,  target:70.00,  upside:48.0, rating:"Strong Buy", stars:5, why:"World's largest miner caught in materials rotation; copper demand worry", bull:"Copper growth pivot; iron ore cash machine; potash future; disciplined capital returns", halal:true},
+  {id:10, name:"Cleveland-Cliffs",       ticker:"CLF",      sector:"Steel",         flag:"⚙️", preWar:12.00,  dropPct:-25.7, warDrop:-8.1,  target:17.00,  upside:60.0, rating:"Strong Buy", stars:5, why:"Steel sector hit hardest; auto-grade demand fears on macro shock", bull:"Auto sector revival; US infrastructure spend; tariff protection; vertically integrated", halal:true},
+  {id:11, name:"Nucor Corporation",      ticker:"NUE",      sector:"Steel",         flag:"🔧", preWar:148.00, dropPct:-19.0, warDrop:-6.1,  target:195.00, upside:42.0, rating:"Strong Buy", stars:5, why:"Steel sector growth fears; materials worst-performing sector", bull:"America's largest steel producer; 50yr dividend growth; $10B capex; EAF cost edge", halal:true},
+  {id:12, name:"Steel Dynamics",         ticker:"STLD",     sector:"Steel",         flag:"⚒️", preWar:130.00, dropPct:-18.8, warDrop:-5.8,  target:170.00, upside:40.0, rating:"Buy",        stars:4, why:"Steel/materials selloff on geopolitical growth fears", bull:"EAF technology advantage; 14yr dividend growth; aluminum mill diversification", halal:true},
+  {id:13, name:"Alcoa",                  ticker:"AA",       sector:"Aluminium",     flag:"🔩", preWar:38.00,  dropPct:-26.0, warDrop:-9.2,  target:54.00,  upside:50.0, rating:"Buy",        stars:4, why:"Aluminium price dip; energy-cost & tariff uncertainty; cyclical fear", bull:"Aluminium critical for EVs/aerospace/grid; smelter restarts; energy advantage in supply", halal:true},
+  {id:14, name:"Teck Resources",         ticker:"TECK",     sector:"Copper/Zinc",   flag:"🟠", preWar:42.00,  dropPct:-22.0, warDrop:-7.6,  target:58.00,  upside:50.0, rating:"Strong Buy", stars:5, why:"Base-metals selloff; copper transition uncertainty; coal spin-off noise", bull:"Pure-play copper pivot post-coal; QB2 ramp; zinc cash flow; takeover target appeal", halal:true},
+  {id:15, name:"MP Materials",           ticker:"MP",       sector:"Rare Earths",   flag:"🧲", preWar:18.00,  dropPct:-28.0, warDrop:-6.5,  target:30.00,  upside:62.0, rating:"Strong Buy", stars:5, why:"Rare-earth volatility; China export-control whipsaw; speculative risk-off", bull:"Only scaled US rare-earth mine; magnet plant ramp; defense & EV supply-chain priority", halal:true},
+  {id:16, name:"Cameco",                 ticker:"CCJ",      sector:"Uranium",       flag:"☢️", preWar:48.00,  dropPct:-21.0, warDrop:-5.0,  target:68.00,  upside:55.0, rating:"Strong Buy", stars:5, why:"Uranium pullback on risk-off despite nuclear renaissance", bull:"Nuclear power demand for AI data centers; tight uranium supply; Westinghouse stake", halal:true},
+  {id:17, name:"Wheaton Precious Metals",ticker:"WPM",      sector:"Streaming",     flag:"💎", preWar:65.00,  dropPct:-14.0, warDrop:-3.8,  target:88.00,  upside:50.0, rating:"Strong Buy", stars:5, why:"Precious-metals streamer dipped with gold profit-taking", bull:"Low-risk streaming model; gold+silver leverage at record prices; high-margin growth pipeline", halal:true},
+  {id:18, name:"Agnico Eagle Mines",     ticker:"AEM",      sector:"Gold Mining",   flag:"🥇", preWar:95.00,  dropPct:-16.0, warDrop:-4.2,  target:128.00, upside:48.0, rating:"Strong Buy", stars:5, why:"Senior gold miner sold on sector rotation despite record bullion", bull:"Best-in-class operations in safe jurisdictions; rising production; strong FCF & dividends", halal:true},
+  {id:19, name:"Lithium Americas",       ticker:"LAC",      sector:"Lithium",       flag:"⚡", preWar:5.50,   dropPct:-35.0, warDrop:-11.0, target:9.00,   upside:60.0, rating:"Buy",        stars:4, why:"Lithium price rout; development-stage risk; speculative selloff", bull:"Thacker Pass — largest US lithium resource; GM partnership; DOE loan; supply-security play", halal:true},
+  {id:20, name:"Mosaic Company",         ticker:"MOS",      sector:"Potash",        flag:"🌾", preWar:32.00,  dropPct:-19.0, warDrop:-5.5,  target:44.00,  upside:50.0, rating:"Buy",        stars:4, why:"Fertilizer/potash selloff on demand and price normalization fears", bull:"Global food security demand; potash + phosphate duopoly economics; strong cash returns", halal:true},
+  {id:21, name:"Ivanhoe Mines",          ticker:"IVN.TO",   sector:"Copper",        flag:"🟠", preWar:18.00,  dropPct:-24.0, warDrop:-7.0,  target:26.00,  upside:55.0, rating:"Strong Buy", stars:5, why:"High-growth copper developer sold in base-metals risk-off", bull:"Kamoa-Kakula — world's highest-grade copper; expansion ramp; Platreef PGM optionality", halal:true},
+  {id:22, name:"First Quantum Minerals", ticker:"FM.TO",    sector:"Copper",        flag:"🟠", preWar:15.00,  dropPct:-30.0, warDrop:-9.8,  target:22.00,  upside:58.0, rating:"Buy",        stars:4, why:"Copper miner hit on Panama mine dispute + macro copper fears", bull:"Cobre Panama restart catalyst; copper leverage; deleveraging story; recovery upside", halal:true},
+  {id:23, name:"Pan American Silver",    ticker:"PAAS",     sector:"Silver Mining", flag:"🪙", preWar:28.00,  dropPct:-18.0, warDrop:-5.4,  target:40.00,  upside:52.0, rating:"Buy",        stars:4, why:"Silver miner dipped with precious-metals profit-taking", bull:"Silver industrial + monetary demand; solar/EV usage; rising production; gold byproduct", halal:true},
+  {id:24, name:"Arch Resources / Coal",  ticker:"AMR",      sector:"Met Coal",      flag:"🪨", preWar:130.00, dropPct:-22.0, warDrop:-6.0,  target:175.00, upside:48.0, rating:"Buy",        stars:4, why:"Metallurgical coal sold on steel-demand and cyclical fears", bull:"Premium hard coking coal for steelmaking; disciplined capital returns; supply tightness", halal:true},
+  {id:25, name:"Glencore",               ticker:"GLEN.L",   sector:"Diversified",   flag:"🇬🇧", preWar:4.20,   dropPct:-21.0, warDrop:-7.0,  target:5.80,   upside:48.0, rating:"Strong Buy", stars:5, why:"Diversified miner + trader sold on global growth and coal fears", bull:"Copper growth pipeline; world-class trading arm; energy transition metals leverage", halal:true},
+  {id:26, name:"Anglo American",         ticker:"AAL.L",    sector:"Diversified",   flag:"🇬🇧", preWar:24.00,  dropPct:-23.0, warDrop:-7.8,  target:33.00,  upside:48.0, rating:"Strong Buy", stars:5, why:"Restructuring noise + materials rotation; takeover speculation whipsaw", bull:"Copper-focused breakup unlocking value; De Beers/PGM optionality; premium asset base", halal:true},
+  {id:27, name:"Fortescue Metals",       ticker:"FMG.AX",   sector:"Iron Ore",      flag:"🇦🇺", preWar:18.00,  dropPct:-24.0, warDrop:-8.0,  target:25.00,  upside:46.0, rating:"Buy",        stars:4, why:"Iron ore weakness on China property; green-energy capex concerns", bull:"Lowest-cost iron ore; massive dividends; green hydrogen optionality; debt-free", halal:true},
+  {id:28, name:"Newcrest / Newmont AU",  ticker:"NCM.AX",   sector:"Gold Mining",   flag:"🇦🇺", preWar:28.00,  dropPct:-15.0, warDrop:-4.0,  target:38.00,  upside:48.0, rating:"Strong Buy", stars:5, why:"Australian gold major sold on sector profit-taking", bull:"Tier-1 gold + copper assets; record bullion margins; long mine lives", halal:true},
+  {id:29, name:"South32",                ticker:"S32.AX",   sector:"Diversified",   flag:"🇦🇺", preWar:3.10,   dropPct:-22.0, warDrop:-6.5,  target:4.30,   upside:46.0, rating:"Buy",        stars:4, why:"Base-metals + manganese selloff on growth fears", bull:"Aluminium, manganese, zinc, met coal mix; battery-metals pivot; cash returns", halal:true},
+  {id:30, name:"Pilbara Minerals",       ticker:"PLS.AX",   sector:"Lithium",       flag:"🇦🇺", preWar:3.40,   dropPct:-33.0, warDrop:-10.5, target:5.20,   upside:53.0, rating:"Buy",        stars:4, why:"Spodumene price collapse; lithium glut fears; speculative risk-off", bull:"Largest independent hard-rock lithium; low costs; downstream expansion; EV leverage", halal:true},
+  {id:31, name:"Tata Steel",             ticker:"TATASTEEL.NS",sector:"Steel",      flag:"🇮🇳", preWar:165.00, dropPct:-19.0, warDrop:-5.0,  target:220.00, upside:48.0, rating:"Buy",        stars:4, why:"Steel selloff; Europe operations drag; FII outflows", bull:"India steel demand boom; UK green-steel transition; cost leadership in India ops", halal:true},
+  {id:32, name:"JSW Steel",              ticker:"JSWSTEEL.NS",sector:"Steel",       flag:"🇮🇳", preWar:920.00, dropPct:-17.0, warDrop:-4.2,  target:1200.00,upside:46.0, rating:"Buy",        stars:4, why:"Steel sector growth fears; capacity-expansion capex anxiety", bull:"India's largest steelmaker; aggressive capacity growth; infrastructure tailwind", halal:true},
+  {id:33, name:"Hindalco Industries",    ticker:"HINDALCO.NS",sector:"Aluminium",   flag:"🇮🇳", preWar:680.00, dropPct:-20.0, warDrop:-5.5,  target:920.00, upside:48.0, rating:"Strong Buy", stars:5, why:"Aluminium/copper selloff; Novelis margin worries", bull:"Novelis can-sheet leader; India aluminium demand; copper expansion; cost edge", halal:true},
+  {id:34, name:"Vedanta",               ticker:"VEDL.NS",   sector:"Diversified",   flag:"🇮🇳", preWar:430.00, dropPct:-25.0, warDrop:-6.8,  target:600.00, upside:48.0, rating:"Buy",        stars:4, why:"Diversified resources sold on debt + demerger overhang", bull:"Zinc, aluminium, oil, copper mix; demerger value unlock; high dividend yield", halal:true},
+  {id:35, name:"Coal India",             ticker:"COALINDIA.NS",sector:"Coal",       flag:"🇮🇳", preWar:380.00, dropPct:-18.0, warDrop:-4.0,  target:520.00, upside:46.0, rating:"Buy",        stars:4, why:"PSU resources selloff; energy-transition long-term fears", bull:"Dominant Indian coal supply; power-demand growth; massive dividend yield; cash rich", halal:true},
+  {id:36, name:"NMDC",                   ticker:"NMDC.NS",   sector:"Iron Ore",      flag:"🇮🇳", preWar:62.00,  dropPct:-21.0, warDrop:-5.2,  target:88.00,  upside:48.0, rating:"Buy",        stars:4, why:"Iron-ore miner sold on steel-demand and pricing fears", bull:"India's largest iron-ore producer; low-cost reserves; steel-demand tailwind; high yield", halal:true},
+  {id:37, name:"ArcelorMittal",          ticker:"MT",       sector:"Steel",         flag:"🇪🇺", preWar:30.00,  dropPct:-22.0, warDrop:-7.0,  target:42.00,  upside:48.0, rating:"Strong Buy", stars:5, why:"Global steel selloff on demand and tariff uncertainty", bull:"World's largest non-Chinese steelmaker; green-steel pivot; buybacks; global scale", halal:true},
+  {id:38, name:"Norsk Hydro",            ticker:"NHY.OL",   sector:"Aluminium",     flag:"🇳🇴", preWar:62.00,  dropPct:-20.0, warDrop:-5.8,  target:84.00,  upside:46.0, rating:"Buy",        stars:4, why:"Aluminium price dip; European energy-cost concerns", bull:"Low-carbon aluminium leader; renewable power integration; recycling growth", halal:true},
+  {id:39, name:"Antofagasta",            ticker:"ANTO.L",   sector:"Copper",        flag:"🇬🇧", preWar:18.00,  dropPct:-19.0, warDrop:-6.2,  target:25.00,  upside:46.0, rating:"Strong Buy", stars:5, why:"Pure-play copper sold on China-demand fears", bull:"Chilean copper pure-play; expansion projects; copper deficit leverage; strong balance sheet", halal:true},
+  {id:40, name:"Boliden",                ticker:"BOL.ST",   sector:"Copper/Zinc",   flag:"🇸🇪", preWar:320.00, dropPct:-18.0, warDrop:-5.5,  target:430.00, upside:46.0, rating:"Buy",        stars:4, why:"Nordic base-metals miner + smelter sold on growth fears", bull:"Integrated mining + smelting; copper, zinc, nickel; recycling leadership; low-carbon metals", halal:true},
+  {id:41, name:"Zijin Mining",           ticker:"2899.HK",  sector:"Gold/Copper",   flag:"🇨🇳", preWar:16.00,  dropPct:-20.0, warDrop:-6.0,  target:22.00,  upside:48.0, rating:"Strong Buy", stars:5, why:"Chinese gold+copper giant sold in EM risk-off", bull:"Fast-growing global copper + gold portfolio; lithium expansion; production growth leader", halal:true},
+  {id:42, name:"Ganfeng Lithium",        ticker:"1772.HK",  sector:"Lithium",       flag:"🇨🇳", preWar:24.00,  dropPct:-34.0, warDrop:-10.0, target:38.00,  upside:53.0, rating:"Buy",        stars:4, why:"Lithium price rout; China EV-demand normalization fears", bull:"World's largest lithium compounds maker; upstream resources; battery + recycling integration", halal:true},
+  {id:43, name:"POSCO Holdings",         ticker:"PKX",      sector:"Steel",         flag:"🇰🇷", preWar:62.00,  dropPct:-21.0, warDrop:-6.5,  target:85.00,  upside:48.0, rating:"Buy",        stars:4, why:"Korean steel major sold on demand + KOSPI weakness", bull:"Steel cash machine funding battery-materials pivot; lithium + cathode growth; global scale", halal:true},
+  {id:44, name:"Gold Fields",            ticker:"GFI",      sector:"Gold Mining",   flag:"🇿🇦", preWar:18.00,  dropPct:-16.0, warDrop:-4.5,  target:25.00,  upside:50.0, rating:"Strong Buy", stars:5, why:"South African gold major sold on sector profit-taking", bull:"Diversified safe-jurisdiction gold; record bullion margins; Salares Norte ramp", halal:true},
+  {id:45, name:"AngloGold Ashanti",      ticker:"AU",       sector:"Gold Mining",   flag:"🇿🇦", preWar:32.00,  dropPct:-15.0, warDrop:-4.0,  target:44.00,  upside:48.0, rating:"Strong Buy", stars:5, why:"Gold major dipped with precious-metals profit-taking", bull:"Global gold portfolio; cost discipline; record gold price leverage; rising free cash flow", halal:true},
+  {id:46, name:"Sibanye Stillwater",     ticker:"SBSW",     sector:"PGM/Mining",    flag:"🇿🇦", preWar:5.20,   dropPct:-30.0, warDrop:-8.5,  target:8.00,   upside:54.0, rating:"Buy",        stars:4, why:"Platinum-group metals rout; restructuring + debt concerns", bull:"PGM + gold + battery-metals mix; auto-catalyst demand; recovery + recycling optionality", halal:true},
+  {id:47, name:"Ivanhoe Electric",       ticker:"IE",       sector:"Copper",        flag:"🇺🇸", preWar:9.00,   dropPct:-28.0, warDrop:-7.5,  target:14.00,  upside:55.0, rating:"Buy",        stars:4, why:"Copper exploration developer sold in risk-off; pre-revenue volatility", bull:"US copper exploration with proprietary geophysics; domestic supply-security catalyst", halal:true},
+  {id:48, name:"Lynas Rare Earths",      ticker:"LYC.AX",   sector:"Rare Earths",   flag:"🇦🇺", preWar:6.50,   dropPct:-26.0, warDrop:-7.0,  target:10.00,  upside:54.0, rating:"Strong Buy", stars:5, why:"Rare-earth volatility; China export-control whipsaw", bull:"Largest rare-earth producer outside China; US/AUS govt-backed; magnet supply-chain priority", halal:true},
+  {id:49, name:"Uranium Energy / Cameco peer", ticker:"UEC", sector:"Uranium",     flag:"🇺🇸", preWar:8.00,   dropPct:-24.0, warDrop:-5.5,  target:12.50,  upside:56.0, rating:"Buy",        stars:4, why:"Uranium pullback on risk-off despite nuclear demand", bull:"US in-situ uranium producer; nuclear-for-AI demand; domestic supply-security premium", halal:true},
+  {id:50, name:"Nutrien",               ticker:"NTR",       sector:"Potash",        flag:"🇨🇦", preWar:52.00,  dropPct:-17.0, warDrop:-4.5,  target:70.00,  upside:46.0, rating:"Buy",        stars:4, why:"Fertilizer/potash selloff on price-normalization fears", bull:"World's largest potash producer; global food-security demand; retail network moat; cash returns", halal:true}
+];
+
+
 const REGIONS = {
   us: { stocks: STOCKS,       currency:"USD", symbol:"$",  name:"US",    title:"50 High-Conviction US Recovery Plays",      sub:"S&P 500 · NASDAQ · NYSE · USD PRICES",          badge:"🇺🇸 UNITED STATES", color:"#3b82f6", badge_bg:"rgba(59,130,246,0.1)",  badge_border:"rgba(59,130,246,0.3)"  },
   eu: { stocks: EU_STOCKS,    currency:"EUR", symbol:"€",  name:"EU",    title:"50 High-Conviction European Recovery Plays", sub:"DAX · CAC 40 · FTSE · STOXX 600 · EUR PRICES", badge:"🇪🇺 EUROPE",        color:"#22c55e", badge_bg:"rgba(34,197,94,0.1)",   badge_border:"rgba(34,197,94,0.3)"   },
-  in: { stocks: INDIA_STOCKS, currency:"INR", symbol:"₹",  name:"INDIA", title:"50 High-Conviction India Recovery Plays",   sub:"NIFTY 50 · SENSEX · NSE · BSE · INR PRICES",   badge:"🇮🇳 INDIA",         color:"#f97316", badge_bg:"rgba(249,115,22,0.1)",  badge_border:"rgba(249,115,22,0.3)"  }
+  in: { stocks: INDIA_STOCKS, currency:"INR", symbol:"₹",  name:"INDIA", title:"50 High-Conviction India Recovery Plays",   sub:"NIFTY 50 · SENSEX · NSE · BSE · INR PRICES",   badge:"🇮🇳 INDIA",         color:"#f97316", badge_bg:"rgba(249,115,22,0.1)",  badge_border:"rgba(249,115,22,0.3)"  },
+  metals: { stocks: METALS_STOCKS, currency:"USD", symbol:"$", name:"METALS", title:"Metals & Minerals Recovery Plays", sub:"COPPER · GOLD · LITHIUM · STEEL · RARE EARTHS · URANIUM", badge:"⛏️ METALS & MINERALS", color:"#a16207", badge_bg:"rgba(161,98,7,0.1)", badge_border:"rgba(161,98,7,0.3)" }
 };
 
 const SECTOR_COLORS={
@@ -1020,7 +1116,10 @@ const SECTOR_COLORS={
   "Enterprise Tech":"#3b82f6","Information Services":"#2563eb","Tech/Consumer":"#6366f1","Utilities":"#eab308",
   "Aerospace":"#4f46e5","Consumer Staples":"#14b8a6","Healthcare":"#06d6a0","Automotive/Luxury":"#f472b6",
   "Power Transmission":"#eab308","Energy/Mining":"#f59e0b","Forging/Defence":"#6366f1","FMCG/Hotels":"#14b8a6",
-  "Paints/Consumer":"#f472b6","NBFC/Insurance":"#8b5cf6","Telecom Tech":"#0ea5e9"
+  "Paints/Consumer":"#f472b6","NBFC/Insurance":"#8b5cf6","Telecom Tech":"#0ea5e9",
+  "Iron Ore":"#b45309","Diversified":"#a16207","Aluminium":"#94a3b8","Copper/Zinc":"#d97706","Rare Earths":"#7c3aed",
+  "Uranium":"#16a34a","Streaming":"#eab308","Silver Mining":"#94a3b8","Potash":"#ca8a04","Met Coal":"#57534e","Forging":"#6366f1",
+  "Coal":"#57534e","Gold/Copper":"#d97706","Gold Mining ":"#eab308","PGM/Mining":"#7c3aed"
 };
 const RATING_COLOR={"Strong Buy":"#22c55e","Buy":"#84cc16","Hold":"#f59e0b"};
 
@@ -1254,7 +1353,7 @@ function loadPredModel(){
     const raw = localStorage.getItem(PRED_KEY);
     if(raw) return JSON.parse(raw);
   }catch(e){}
-  return { us:newRegionModel(), eu:newRegionModel(), in:newRegionModel() };
+  return { us:newRegionModel(), eu:newRegionModel(), in:newRegionModel(), metals:newRegionModel() };
 }
 function newRegionModel(){
   // confidence starts neutral (1.0); hits/total track accuracy; pending holds open calls
@@ -1373,9 +1472,11 @@ function renderRadar(){
     nodes.push({ x:xPct, y:yPct, buy:isBuy });
     // SIZE: bigger upside => slightly bigger blip
     const scale = (0.82 + frac*0.6 + (conf-1)*0.12).toFixed(3);
+    // DEPTH (3D): stronger conviction floats nearer the viewer (more lift + glow)
+    const depth = (0.25 + committed*0.75).toFixed(3);
     const cls = isBuy ? 'buy' : 'sell';
     const pct = (isBuy?'+':'') + up.toFixed(1) + '%';
-    return `<div class="pblip ${cls}" style="left:${xPct}%;top:${yPct}%;--scale:${scale}" title="${s.name} · ${pct}">
+    return `<div class="pblip ${cls}" style="left:${xPct}%;top:${yPct}%;--scale:${scale};--depth:${depth}" title="${s.name} · ${pct}">
         <span class="parrow">${isBuy?'▲':'▼'}</span>
         <span class="ptag">${s.ticker}</span>
         <span class="ppct">${pct}</span>
@@ -1385,8 +1486,10 @@ function renderRadar(){
   const lHTML = topL.map((r,i)=>blipHTML(r, xForIndex(i, topL.length))).join('');
   const html = gHTML + lHTML;
 
-  radar.querySelectorAll('.pblip').forEach(b=>b.remove());
-  radar.insertAdjacentHTML('beforeend', html);
+  // blips live inside the tilted 3D stage so they share its perspective
+  const stage = document.getElementById('pred-stage') || radar;
+  stage.querySelectorAll('.pblip').forEach(b=>b.remove());
+  stage.insertAdjacentHTML('beforeend', html);
 
   // ── DOTTED TRACES (creative SVG layer) ──
   drawTraces(nodes);
@@ -1409,7 +1512,7 @@ function renderRadar(){
 function drawTraces(nodes){
   const svg = document.getElementById('pred-traces');
   if(!svg) return;
-  const W = 1000, H = 420; // virtual viewBox; preserveAspectRatio=none stretches to fit
+  const W = 1000, H = 460; // virtual viewBox; preserveAspectRatio=none stretches to fit
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const gx = x => (x/100)*W, gy = y => (y/100)*H;
   const green = getComputedStyle(document.documentElement).getPropertyValue('--green2').trim() || '#15803d';
@@ -1417,15 +1520,16 @@ function drawTraces(nodes){
   const zeroY = gy(50);
 
   let s = '';
-  // drop lines + nodes
+  // soft dashed drop lines from zero plane up/down to each ticker + glowing node
   nodes.forEach(n=>{
     const c = n.buy ? green : red;
     const x = gx(n.x), y = gy(n.y);
-    s += `<line class="trace-drop" x1="${x}" y1="${y}" x2="${x}" y2="${zeroY}" stroke="${c}"/>`;
-    s += `<circle class="trace-node" cx="${x}" cy="${zeroY}" r="2.4" fill="${c}"/>`;
+    s += `<line class="trace-drop" x1="${x}" y1="${y}" x2="${x}" y2="${zeroY}" stroke="${c}" stroke-dasharray="2 5"/>`;
+    s += `<circle class="trace-node" cx="${x}" cy="${zeroY}" r="3" fill="${c}"/>`;
+    s += `<circle class="trace-node" cx="${x}" cy="${zeroY}" r="6" fill="${c}" opacity="0.18"/>`;
   });
 
-  // ridge lines connecting same-side nodes in x order (smooth dotted path)
+  // ridge lines connecting same-side nodes in x order (smooth dotted path + glow under)
   function ridge(side, color){
     const pts = nodes.filter(n=>n.buy===side).sort((a,b)=>a.x-b.x).map(n=>[gx(n.x), gy(n.y)]);
     if(pts.length < 2) return '';
@@ -1435,7 +1539,8 @@ function drawTraces(nodes){
       const mx=(x0+x1)/2; // smooth-ish with quadratic midpoints
       d += ` Q ${mx} ${y0} ${mx} ${(y0+y1)/2} T ${x1} ${y1}`;
     }
-    return `<path class="trace-link" d="${d}" stroke="${color}"/>`;
+    return `<path class="trace-glow" d="${d}" stroke="${color}"/>`
+         + `<path class="trace-link" d="${d}" stroke="${color}"/>`;
   }
   s += ridge(true, green);
   s += ridge(false, red);
@@ -1443,6 +1548,19 @@ function drawTraces(nodes){
   svg.innerHTML = s;
 }
 function refreshRadar(manual){ if(manual) radarCycleArmed = true; renderRadar(); }
+
+// Toggle the 3D perspective tilt on/off (professional flat ↔ 3D view)
+let tilt3D = true;
+function toggleTilt(){
+  tilt3D = !tilt3D;
+  const stage = document.getElementById('pred-stage');
+  const btn = document.getElementById('tilt-btn');
+  if(stage){
+    stage.style.transition = 'transform 0.6s cubic-bezier(0.45,0.05,0.3,1)';
+    stage.style.transform = tilt3D ? '' : 'rotateX(0deg) translateZ(0) scale(1)';
+  }
+  if(btn){ btn.classList.toggle('active', tilt3D); btn.textContent = tilt3D ? '◳ 3D' : '▭ 2D'; }
+}
 
 // The radar no longer runs on its own clock — it is driven by the 60s price cycle.
 // startRadar just primes the very first frame; updateRadarSync mirrors the countdown.
