@@ -312,13 +312,8 @@ mark.v{background:#EEE7FB;color:inherit;border-bottom:1px solid rgba(85,58,153,.
 
 /* app pieces */
 .tabbar,.wizhead,.zoombar{display:none}
-.scanwrap{display:none;grid-column:1/-1}
-body.can-scan .scanwrap{display:block}
-.only-scan,.only-scan-i,.only-scan-b{display:none}
-body.can-scan .only-scan{display:flex}
-body.can-scan .only-scan-i{display:inline}
-body.can-scan .only-scan-b{display:block}
-body.can-scan .only-noscan{display:none}
+.scanwrap{grid-column:1/-1}
+
 .scanbtn{width:100%;display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:center;text-align:left;background:var(--violet-soft);border:1.5px dashed var(--violet);border-radius:16px;padding:12px 14px;cursor:pointer;color:var(--ink)}
 .scanbtn svg{width:52px;height:52px}
 .scanbtn b{display:block;font-size:17px;color:var(--violet-ink);line-height:1.3}
@@ -335,6 +330,8 @@ body.can-scan .only-noscan{display:none}
 .f.fromcard input,.f.fromcard select,.f.fromcard textarea,.f.fromloc input{border-color:var(--leaf);background:var(--leaf-soft)}
 .f.fromcard label::after,.f.fromloc label::after{margin-left:8px;font-size:12px;font-weight:700;color:var(--leaf);background:var(--leaf-soft);padding:1px 8px;border-radius:99px}
 .f.fromcard label::after{content:"From card"}
+.f.fromai input,.f.fromai select,.f.fromai textarea{border-color:var(--violet);background:var(--violet-soft)}
+.f.fromai label::after{content:"From AI";margin-left:8px;font-size:12px;font-weight:700;color:var(--violet-ink);background:var(--violet-soft);padding:1px 8px;border-radius:99px}
 .f.fromloc label::after{content:"From location"}
 .modal{position:fixed;inset:0;z-index:60;background:rgba(15,15,30,.5);display:flex;align-items:center;justify-content:center;padding:16px}
 .modal[hidden]{display:none}
@@ -424,6 +421,87 @@ button,a,label,select,input{touch-action:manipulation;-webkit-tap-highlight-colo
 .inkbox h3{margin:0 0 4px;font-size:18px}
 .inkbox p{margin:0;color:var(--muted);font-size:15.5px}
 
+/* AI, voice, QR, shops, chat */
+.aibox{grid-column:1/-1;display:flex;flex-direction:column;gap:10px;margin-top:2px}
+.microw{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.micbtn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--violet);background:var(--surface);color:var(--violet-ink);border-radius:999px;padding:8px 16px;font-weight:700;cursor:pointer;min-height:44px;font-size:16px}
+.micbtn svg{width:20px;height:20px}
+.micbtn.rec{background:#C62E3A;border-color:#C62E3A;color:#fff;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(198,46,58,.18)}}
+.micbtn.icon{padding:0;width:44px;justify-content:center;border-radius:12px}
+.langsel{padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface2);min-height:44px;font-size:16px}
+.aibox .btn svg{width:20px;height:20px}
+.ainote{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px}
+.ainote ul{margin:4px 0 0;padding-left:18px;color:var(--muted)}
+.aicta{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;max-width:580px;margin-top:14px;padding:12px 16px;border-radius:14px;background:var(--violet-soft);color:var(--ink);text-decoration:none;border:1.5px solid transparent}
+.aicta:hover{border-color:var(--violet)}
+.aicta svg{width:26px;height:26px;color:var(--violet);background:var(--surface);border-radius:50%;padding:9px;box-sizing:content-box}
+.aicta b{display:block;font-size:16.5px}.aicta small{display:block;color:var(--muted);font-size:14.5px;line-height:1.35}
+.scanopt h3{display:flex;gap:8px;align-items:center;font-size:17px;margin:4px 0 4px}
+.scanopt h3 svg{width:22px;height:22px;color:var(--violet)}
+.ms.small{font-size:14px}
+.qrbtns{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.qrbtns .btn svg{width:18px;height:18px}
+.qrbtns label{cursor:pointer}
+.ordiv{display:flex;align-items:center;gap:10px;margin:16px 0 10px;color:var(--muted);font-size:14px}
+.ordiv::before,.ordiv::after{content:"";flex:1;border-top:1px solid var(--line)}
+.livebox{position:relative;border-radius:14px;overflow:hidden;background:#000;margin:8px 0;aspect-ratio:4/3;max-height:52vh}
+.livebox[hidden]{display:none}
+.livebox video{width:100%;height:100%;object-fit:cover;display:block}
+.livebox .aim{position:absolute;inset:14%;border:3px solid rgba(255,255,255,.85);border-radius:14px;box-shadow:0 0 0 999px rgba(0,0,0,.25);pointer-events:none}
+.livebox .btn{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:var(--surface)}
+.qrwrap{display:grid;place-items:center;background:#fff;border-radius:16px;padding:10px;border:1px solid var(--line);margin:4px 0 12px}
+.qrwrap canvas{width:min(300px,78vw);height:auto;image-rendering:pixelated}
+.jobmini{list-style:none;margin:0 0 12px;padding:0;font-size:15px;display:grid;gap:4px}
+.jobmini b{font-weight:700;margin-right:6px}
+.warnli{color:var(--warn)}
+.pinrow{margin:6px 0 10px;max-width:240px}
+.copybox{width:100%;margin-top:6px;padding:8px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface2);font-size:13px}
+.shopgrid{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:24px;align-items:start}
+.shopcard,.jobcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.shopcard h2,.jobcard h2{display:flex;gap:10px;align-items:center;font-size:19px;margin:0 0 10px;font-weight:800}
+.shopcard h2 svg,.jobcard h2 svg{width:24px;height:24px;color:var(--violet);flex:none}
+.paste{margin-top:12px;font-size:15px}.paste summary{cursor:pointer;color:var(--violet-ink);font-weight:600}
+.paste textarea{width:100%;margin:8px 0;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface2);font-size:14px}
+.jobempty{display:grid;place-items:center;text-align:center;gap:8px;padding:48px 20px;border:2px dashed var(--line);border-radius:18px;color:var(--muted)}
+.jobempty svg{width:44px;height:44px;color:var(--violet)}
+.jobdl{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin:8px 0 14px}
+.jobdl div{background:var(--surface2);border-radius:10px;padding:8px 12px}
+.jobdl dt{font-size:13px;color:var(--muted)}.jobdl dd{margin:0;font-weight:700;font-size:16px}
+.jobcard .actions .btn svg{width:18px;height:18px}
+.jobcol .sheet-wrap{padding:18px 0 0}
+.jobcol .jobcard{margin-bottom:6px}
+.shopsec{display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center}
+.shopsec .btn svg{width:20px;height:20px}
+.steps3{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:12px;counter-reset:s}
+.steps3 li{counter-increment:s;display:grid;grid-template-columns:36px 1fr;gap:12px}
+.steps3 li::before{content:counter(s);width:32px;height:32px;border-radius:50%;background:var(--violet-soft);color:var(--violet-ink);font-weight:800;display:grid;place-items:center}
+.steps3 b{display:block}.steps3 span{display:block;color:var(--muted);font-size:15.5px;grid-column:2}
+.shopart svg{width:100%;max-width:400px;display:block;margin:0 auto}
+.chatfab{position:fixed;right:24px;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:40;display:inline-flex;align-items:center;gap:8px;background:var(--violet);color:var(--on-violet);border:0;border-radius:999px;padding:12px 18px;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 8px 24px rgba(40,20,90,.3)}
+.chatfab svg{width:22px;height:22px}
+.chatfab[hidden]{display:none}
+.chatpanel{position:fixed;right:24px;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:55;width:min(400px,calc(100vw - 32px));height:min(620px,calc(100dvh - 120px));display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:0 20px 60px rgba(20,20,50,.28);overflow:hidden}
+.chatpanel[hidden]{display:none}
+.chathead{display:grid;grid-template-columns:40px 1fr 44px;gap:10px;align-items:center;padding:12px 12px 12px 14px;border-bottom:1px solid var(--line);background:var(--surface2)}
+.chatav{width:40px;height:40px;border-radius:50%;background:var(--violet);color:var(--on-violet);display:grid;place-items:center}
+.chatav svg{width:22px;height:22px}
+.chathead b{display:block;font-size:16.5px}.chathead div span{display:block;font-size:13px;color:var(--muted)}
+.chatlog{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 12px;border-radius:14px;font-size:15.5px;line-height:1.45}
+.msg p{margin:0}
+.msg.bot{background:var(--surface2);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.user{background:var(--violet);color:var(--on-violet);align-self:flex-end;border-bottom-right-radius:4px}
+.msg.thinking{color:var(--muted)}
+.msgact{display:block;width:100%;text-align:left;margin-top:8px;background:var(--surface);border:1.5px solid var(--violet);color:var(--violet-ink);border-radius:10px;padding:8px 10px;font-weight:700;cursor:pointer;font-size:14.5px}
+.chatsugg{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px}
+.chatsugg:empty{display:none}
+.chatsugg .chip{cursor:pointer;font-size:14px}
+.chatin{display:grid;grid-template-columns:1fr 44px 48px;gap:6px;padding:10px;border-top:1px solid var(--line);align-items:end}
+.chatin textarea{resize:none;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface2);font-size:16px;min-height:44px;max-height:120px;line-height:1.35}
+.chatin textarea:focus{outline:none;border-color:var(--violet)}
+.sendbtn{min-height:44px;padding:0}.sendbtn svg{width:20px;height:20px}
+
 /* responsive */
 @media (max-width:1060px){
   .cat-grid,.dgrid,.sign-grid{grid-template-columns:repeat(2,1fr)}
@@ -460,6 +538,7 @@ button,a,label,select,input{touch-action:manipulation;-webkit-tap-highlight-colo
   .mbar .btn{min-height:50px;font-size:17px}
   .mbar .mp{font-size:13.5px;color:var(--muted);line-height:1.25;text-align:center;max-width:9em}
   body.docview .toast{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+  body.docview .chatfab{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
   .setup{position:static}
   .setup .actions .btn{display:none}
   .form-foot{justify-content:center}
@@ -474,7 +553,9 @@ button,a,label,select,input{touch-action:manipulation;-webkit-tap-highlight-colo
 @media (max-width:900px){
   .hero-in{grid-template-columns:minmax(0,1fr);padding-top:36px;gap:18px}
   .hero-art{order:-1;max-width:400px;margin:0 auto}
-  .steps,.paper-grid,.help-grid{grid-template-columns:1fr}
+  .steps,.paper-grid,.help-grid,.shopgrid,.shopsec{grid-template-columns:1fr}
+  .chatfab{bottom:calc(84px + env(safe-area-inset-bottom,0px));right:16px}
+  .chatpanel{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .guide-cols,.site-f .in{grid-template-columns:1fr}
   .nav{display:none}
   .site-h .in{justify-content:space-between}
@@ -495,6 +576,9 @@ button,a,label,select,input{touch-action:manipulation;-webkit-tap-highlight-colo
   .grid,.about-grid{grid-template-columns:1fr}
   .duty li{grid-template-columns:1fr;gap:2px}
   .builder{padding-left:12px;padding-right:12px}
+  .chatfab{padding:13px}.chatfab span{display:none}
+  .chatpanel{inset:0;width:auto;height:auto;border-radius:0;border:0;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .jobdl{grid-template-columns:1fr}
   .modal{align-items:flex-end;padding:0}
   .sheetm{border-radius:22px 22px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:92dvh}
   .grab{display:block;width:44px;height:5px;border-radius:99px;background:var(--line);margin:0 auto 12px}
@@ -512,10 +596,13 @@ button,a,label,select,input{touch-action:manipulation;-webkit-tap-highlight-colo
   .st-mark{animation:none}
   .toast,.progress .bar span{transition:none}
   .spin{animation-duration:2s}
+  .micbtn.rec{animation:none}
 }
 @media print{
   @page{margin:2.12cm 2.12cm 2.6cm 2.54cm}
   body{background:#fff}
+  .noprint,.chatfab,.chatpanel{display:none !important}
+  .page-top{padding:0 !important}.shopgrid{display:block}.jobcol .sheet-wrap{padding:0}
   .site-h,.site-f,.wizhead,.mbar,.tabbar,.modal,.zoombar,.form-col,.setup,.signpanel,.pagehint,.toast,.doc-top{display:none !important}
   .herebox{border-color:#999;color:#999}
   .builder[data-m] .preview-col{display:block !important}
@@ -543,6 +630,7 @@ button,a,label,select,input{touch-action:manipulation;-webkit-tap-highlight-colo
       <a href="#/section/how" data-nav="how">How it works</a>
       <a href="#/section/guide" data-nav="guide">Stamp paper guide</a>
       <a href="#/section/faq" data-nav="faq">Questions</a>
+      <a href="#/shop" data-nav="shop">For shops</a>
     </nav>
     <a class="btn small" href="#/docs" id="hCta">Make a document</a>
   </div>
@@ -552,12 +640,12 @@ button,a,label,select,input{touch-action:manipulation;-webkit-tap-highlight-colo
   <div class="wrap in">
     <div>
       <a class="logo" href="#/" aria-label="Mohar home"><svg viewBox="0 0 40 40" aria-hidden="true"><g transform="rotate(-10 20 20)"><circle cx="20" cy="20" r="17" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2.6"/><circle cx="20" cy="20" r="12.5" fill="none" stroke="var(--violet)" stroke-width="1.2" stroke-dasharray="2.4 2.4"/><text x="20" y="25.5" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="800" font-size="15" fill="var(--violet)">₹</text></g></svg><span><b>Mohar</b></span></a>
-      <div class="fl"><a href="#/docs">All documents</a><a href="#/section/guide">Stamp paper guide</a><a href="#/section/faq">Questions</a><a href="#/section/help">Free legal help</a></div>
+      <div class="fl"><a href="#/docs">All documents</a><a href="#/section/guide">Stamp paper guide</a><a href="#/section/faq">Questions</a><a href="#/section/help">Free legal help</a><a href="#/doc/ai-draft">Draft with AI</a><a href="#/shop">For shops</a></div>
     </div>
     <div>
       <p>Mohar provides document templates and general information. It is not a law firm and does not give legal advice. Using this site does not create a lawyer–client relationship.</p>
       <p>Laws, stamp duty rates and office formats differ between states and change over time. Check the rules where you live, and have an advocate review documents involving property, large sums of money or court matters before you sign.</p>
-      <p>What you type stays in your browser on this device. If you scan an ID card, the photo is sent to Claude only to read the printed details; the page does not keep it and never puts the Aadhaar number into your document.</p>
+      <p>What you type stays in your browser on this device, and Aadhaar QR codes are read on the device too. If you use the AI features (reading a card photo, AI drafting or the help chat), what you send is processed by Claude, Anthropic's AI. The Aadhaar number is never put into your document.</p>
     </div>
   </div>
 </footer>
@@ -1573,8 +1661,10 @@ function setNav(key,tab){
 }
 function route(){
   const h=decodeURIComponent(location.hash.replace(/^#/,''))||'/';const p=h.split('/').filter(Boolean);
-  document.body.classList.remove('docview');closeModal(true);
-  if(p[0]==='docs'){viewCatalog(p[1]!==undefined&&CATS[+p[1]]?+p[1]:null);setNav('docs','docs');window.scrollTo(0,0);return}
+  document.body.classList.remove('docview');closeModal(true);stopLive();
+  if(p[0]==='shop'){current=null;viewShop();setNav('shop',null);window.scrollTo(0,0);return}
+  if(p[0]==='print'&&p[1]){current=null;viewShop(p.slice(1).join('/'));setNav('shop',null);window.scrollTo(0,0);return}
+  if(p[0]==='docs'){current=null;viewCatalog(p[1]!==undefined&&CATS[+p[1]]?+p[1]:null);setNav('docs','docs');window.scrollTo(0,0);return}
   if(p[0]==='doc'&&byId(p[1])){viewDoc(p[1]);setNav(null,null);window.scrollTo(0,0);return}
   current=null;viewHome();
   if(p[0]==='section'&&p[1]){setNav(p[1],p[1]==='guide'?'guide':(p[1]==='faq'||p[1]==='help')?'help':'home');requestAnimationFrame(()=>{const el=document.getElementById(p[1]);if(el)el.scrollIntoView({block:'start'})})}
@@ -1591,18 +1681,18 @@ function viewHome(){
    '<h1>Legal papers, made simple for everyone.</h1>'+
    '<p class="lead">Rental agreements, affidavits, wills and '+(DOCS.length-3)+' more documents. Answer a few simple questions and download a PDF that fits Indian stamp paper, ready to sign.</p>'+
    '<div class="hsearch" role="search"><div class="box">'+LI.search+'<input id="hq" type="search" placeholder="Try “rent”, “name change” or “lost”" aria-label="Search documents" autocomplete="off" aria-controls="sugg"><button class="btn" id="hqBtn" type="button">Find</button></div><div class="sugg" id="sugg" hidden></div></div>'+
+   '<a class="aicta" href="#/doc/ai-draft">'+MIC+'<span><b>Can\'t find your document?</b><small>Say or type what you need, in any Indian language, and AI drafts it in legal language.</small></span></a>'+
    '<div class="popular"><span>Popular:</span>'+[['rental','Rental agreement'],['name-change','Name change'],['address-proof','Address proof'],['will','Will'],['gift-deed','Gift deed'],['gpa','Power of attorney']].map(([id,l])=>'<a class="chip" href="#/doc/'+id+'">'+l+'</a>').join('')+'</div>'+
   '</div><div class="hero-art">'+HERO+'</div></div></section>'+
   '<section class="facts" aria-label="Why Mohar"><div class="in">'+
    [[LI.badge,'Free, no sign-up','You pay only for stamp paper and the notary.'],[LI.ruler,'Fits your stamp paper','Text starts below the printed area. You set the gap.'],[LI.lock,'Private by design','What you type stays on this device.']].map(([i,b,s])=>'<div class="fact">'+i+'<div><b>'+b+'</b><span>'+s+'</span></div></div>').join('')+
-   '<div class="fact only-noscan">'+LI.book+'<div><b>Explained in plain words</b><span>Every document says when you need it and what comes next.</span></div></div>'+
-   '<div class="fact only-scan">'+LI.camera+'<div><b>Snap an Aadhaar to fill forms</b><span>Take a photo and the person\'s details fill in for you.</span></div></div>'+
+   '<div class="fact">'+QRI+'<div><b>Scan Aadhaar to fill forms</b><span>The QR code on the card fills in each person\'s details.</span></div></div>'+
   '</div></section>'+
   '<section class="sec" id="cats"><div class="wrap"><h2>What do you need help with?</h2><p class="sub">Choose a topic to see the documents in it. Each one comes with a simple explanation before you start.</p><div class="cat-grid">'+
    CATS.map((c,i)=>{const n=DOCS.filter(d=>d.cat===i).length;return '<a class="ccard" href="#/docs/'+i+'">'+ICONS[i]+'<div><h3>'+esc(c)+'</h3><p>'+esc(CATMETA[i].blurb)+'</p><span class="cnt">'+n+' document'+(n>1?'s':'')+'</span></div></a>'}).join('')+
   '</div></div></section>'+
   '<section class="sec alt" id="how"><div class="wrap"><h2>How it works</h2><p class="sub">Three steps, about ten minutes. No legal language to learn.</p><ol class="steps">'+
-   [['Choose your document','Browse by topic or search in everyday words. Each document explains what it is for and what to keep ready.'],['Answer simple questions','Fill in names, dates and amounts<span class="only-scan-i">, or snap an Aadhaar card to fill them in</span>. Your document writes itself as you go.'],['Download, print and sign','Print page one on stamp paper and the rest on plain paper. Sign every page, add witnesses, and visit a notary if needed.']].map((s,i)=>'<li class="step"><span class="n" aria-hidden="true">'+(i+1)+'</span>'+STEP_ICONS[i]+'<h3>'+s[0]+'</h3><p>'+s[1]+'</p></li>').join('')+
+   [['Choose your document','Browse by topic or search in everyday words. Each document explains what it is for and what to keep ready.'],['Answer simple questions','Fill in names, dates and amounts, scan an Aadhaar card, or just say what you need out loud. Your document writes itself as you go.'],['Download, print and sign','Print page one on stamp paper and the rest on plain paper. Sign every page, add witnesses, and visit a notary if needed.']].map((s,i)=>'<li class="step"><span class="n" aria-hidden="true">'+(i+1)+'</span>'+STEP_ICONS[i]+'<h3>'+s[0]+'</h3><p>'+s[1]+'</p></li>').join('')+
   '</ol></div></section>'+
   '<section class="sec" id="guide"><div class="wrap"><h2>Stamp paper, explained</h2><p class="sub">Most legal documents in India need stamp duty paid on them. Here is what that means in practice.</p>'+
    '<div class="paper-grid">'+
@@ -1623,15 +1713,21 @@ function viewHome(){
     ['esign','Aadhaar eSign (OTP)','Each person confirms with an OTP on their Aadhaar-linked mobile, through a licensed eSign service.','Recognised under the IT Act, 2000',0],
     ['dsc','Digital Signature Certificate','For people with a Class 3 Digital Signature Certificate on a USB token.','Recognised under the IT Act, 2000',0]].map(([k,t,p,l,w])=>'<div class="scard">'+SIGN_ICONS[k]+'<h3>'+t+'</h3><p>'+p+'</p><span class="lg'+(w?' s':'')+'">'+l+'</span></div>').join('')+
    '</div><div class="inkbox">'+LI.pen+'<div><h3>Always sign these in ink</h3><p>Wills and codicils, powers of attorney and property gift or sale deeds, which the IT Act, 2000 leaves out of electronic signing. Also affidavits and bonds sworn before a Notary, and anything you register at the Sub-Registrar office.</p></div></div></div></section>'+
-  '<section class="sec alt" id="faq"><div class="wrap"><h2>Questions people ask</h2><p class="sub">Short, honest answers.</p><div class="faq">'+
+  '<section class="sec alt" id="shops"><div class="wrap shopsec"><div><h2>Print at any shop with a QR code</h2><p class="sub">No emailing files or carrying a pen drive. Mohar makes a QR code that tells the shop exactly what to print, and on which stamp paper.</p>'+
+   '<ol class="steps3"><li><b>Fill in your document</b><span>On your phone, at home.</span></li><li><b>Open the shop QR code</b><span>From the print or signing step. Lock it with a PIN if you like.</span></li><li><b>The shop scans and prints</b><span>On Mohar\'s For shops page, they see the stamp paper you need and print your document on it.</span></li></ol>'+
+   '<a class="btn" href="#/shop">'+SHOPI+'<span>I run a shop: open the scanner</span></a></div>'+
+   '<div class="shopart" aria-hidden="true"><svg viewBox="0 0 340 220"><path d="M30 110C20 40 120 10 200 22s140 60 126 130-90 70-170 62S38 160 30 110z" fill="#DCEDE2"/><rect x="40" y="34" width="92" height="160" rx="16" fill="#fff" stroke="#2B2440" stroke-width="3"/><path d="M74 44h24" stroke="#2B2440" stroke-width="3" stroke-linecap="round"/><g fill="#2B2440"><rect x="56" y="66" width="18" height="18"/><rect x="98" y="66" width="18" height="18"/><rect x="56" y="108" width="18" height="18"/><rect x="80" y="70" width="8" height="8"/><rect x="80" y="88" width="14" height="6"/><rect x="62" y="92" width="10" height="8"/><rect x="98" y="92" width="8" height="12"/><rect x="82" y="104" width="10" height="10"/><rect x="100" y="112" width="16" height="6"/><rect x="82" y="120" width="6" height="8"/><rect x="104" y="122" width="8" height="6"/></g><rect x="60" y="70" width="10" height="10" fill="#fff"/><rect x="102" y="70" width="10" height="10" fill="#fff"/><rect x="60" y="112" width="10" height="10" fill="#fff"/><rect x="56" y="146" width="60" height="8" rx="4" fill="#553A99"/><rect x="56" y="162" width="44" height="6" rx="3" fill="#DADDE4"/><path d="M146 112h40" stroke="#553A99" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/><path d="M182 102l12 10-12 10" fill="none" stroke="#553A99" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="226" y="54" width="70" height="42" fill="#F1ECFB" stroke="#2B2440" stroke-width="3"/><circle cx="261" cy="72" r="11" fill="none" stroke="#553A99" stroke-width="2.4"/><rect x="206" y="92" width="110" height="58" rx="10" fill="#553A99" stroke="#2B2440" stroke-width="3"/><circle cx="296" cy="106" r="4" fill="#7CCBA5"/><rect x="226" y="136" width="70" height="62" fill="#fff" stroke="#2B2440" stroke-width="3"/><path d="M236 152h50M236 162h50M236 172h34" stroke="#DADDE4" stroke-width="4" stroke-linecap="round"/><path d="M308 30l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#F0B357"/></svg></div></div></section>'+
+  '<section class="sec" id="faq"><div class="wrap"><h2>Questions people ask</h2><p class="sub">Short, honest answers.</p><div class="faq">'+
    [['Is this really free?','Yes. There is no sign-up and no payment here. You only pay for the stamp paper, the notary and any registration fees.'],
     ['Will my document be legally valid?','A document becomes binding when it is properly stamped and signed, and, where required, witnessed, notarised or registered. These templates follow common Indian formats but they are general. For property, large sums of money or court matters, ask an advocate to review your document before signing.'],
     ['Why are most rental agreements for 11 months?','Under the Registration Act, 1908, a lease of 12 months or more must be registered at the Sub-Registrar office. An 11-month agreement avoids compulsory registration in most states. Maharashtra is different: every leave and licence agreement there must be registered.'],
     ['Do I need a notary?','Affidavits must be signed before a Notary or Oath Commissioner. Agreements do not strictly need notarising, but many people do it as extra proof of signing. Some documents, such as gift deeds and long leases, must be registered at the Sub-Registrar office instead.'],
     ['Where do I buy stamp paper or an e-stamp?','From licensed stamp vendors near courts and registration offices, SHCIL e-stamping centres and authorised banks, and in some states online. Tell them the document type, the amount and the names of the parties.'],
     ['How do I make the text start in the right place?','Measure the printed part at the top of your stamp paper with a ruler, then set the blank space slider in the preview to match. E-stamp certificates usually need less space. If you are unsure, print a test page on plain paper and hold it against the stamp paper.'],
-    ['Is my information safe?','What you type stays in your browser on this device and is never sent to a server. If you use Scan Aadhaar card, the photos are sent to Claude, Anthropic\'s AI, only to read the printed details. This page does not keep the photos and never puts the Aadhaar number into your document. On a shared phone or computer, press "Clear this form" when you finish.'],
-    ['How does Scan Aadhaar card work?','In each person\'s section, tap Scan Aadhaar card and take a photo of the front (name and date of birth) and the back (address, and the S/O, D/O or W/O line). Claude reads the printed English text and fills in that person\'s name, relation, age and address. Always check the filled details against the card. A masked Aadhaar, PAN card, voter ID or driving licence also works. Only scan the card of someone who has agreed.'],
+    ['Is my information safe?','What you type stays in your browser on this device and is never sent to a server, and Aadhaar QR codes are read on your phone. Only when you use an AI feature (reading a card photo, AI drafting or the AI help chat) is that text or photo sent to Claude, Anthropic\'s AI, to answer you. The page never puts the Aadhaar number into your document. On a shared phone or computer, press "Clear this form" when you finish.'],
+    ['How does Scan Aadhaar card work?','In each person\'s section, tap Scan Aadhaar card. The best way is to scan the QR code on the back of the card, or in the e-Aadhaar PDF or mAadhaar app. It is read on your phone and fills in the name, date of birth, the S/O, D/O or W/O line and the address. If you are using Mohar inside Claude, you can also photograph the printed card and Claude reads it. Always check the details against the card, and only scan the card of someone who has agreed.'],
+    ['Can I speak instead of typing?','Yes. Use the Speak button in Draft anything with AI and in the help chat, and choose your language. If your browser blocks the microphone, tap the microphone on your phone\'s keyboard instead; that works in every box on the site.'],
+    ['How does the shop QR code work?','On any document, open QR code for the print shop. The code holds your filled-in details, the stamp paper value and state, and the paper size. The shop scans it on Mohar\'s For shops page, sees which stamp paper to buy, and prints your document exactly as you made it. Anyone who scans the code can read it, so lock it with a PIN if you like and tell the shop the PIN in person.'],
     ['How does Use my location work?','Tap Use my location in the Signing section and allow location when your phone asks. The page picks the nearest town from a list of over 500 Indian towns built into the page, so your location is never sent anywhere. It fills the city and sets your state. Check the town it picks, especially near a state border.'],
     ['Can I sign online instead of on paper?','For many agreements, yes. You can sign on screen, use Aadhaar eSign with an OTP, or use a Digital Signature Certificate. Aadhaar eSign and DSC are electronic signatures recognised under the IT Act, 2000. Wills, powers of attorney, property gift or sale deeds, notarised affidavits and documents you register must still be signed in ink, and Mohar turns the electronic options off for those.'],
     ['Is a signature drawn on screen legally valid?','A contract is not invalid just because it was made electronically, and Mohar adds a signing record with the time of each signature and a fingerprint of the document. But a drawn signature is not a certified electronic signature, so it is weaker proof if someone later denies signing. For rent, money or anything important, use Aadhaar eSign or a DSC.'],
@@ -1750,52 +1846,13 @@ const SCAN_PROMPT='You are helping fill in an Indian legal document. The attache
 '- Use null for anything you cannot read clearly. Do not guess.\n'+
 '- If the photos do not show an identity card, set "is_id_card" to false and every other value to null.';
 const modal=$('#modal');let scanCtl=null,lastFocus=null,shotURLs=[];
-function closeModal(silent){if(!modal||modal.hidden)return;if(scanCtl){scanCtl.abort();scanCtl=null}shotURLs.forEach(u=>URL.revokeObjectURL(u));shotURLs=[];modal.hidden=true;modal.innerHTML='';document.body.style.overflow='';if(!silent&&lastFocus)lastFocus.focus()}
+function closeModal(silent){stopLive();if(!modal||modal.hidden)return;if(scanCtl){scanCtl.abort();scanCtl=null}shotURLs.forEach(u=>URL.revokeObjectURL(u));shotURLs=[];modal.hidden=true;modal.innerHTML='';document.body.style.overflow='';if(!silent&&lastFocus)lastFocus.focus()}
 modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeModal()});
 async function prepImage(file){
   try{const bmp=await createImageBitmap(file,{imageOrientation:'from-image'});const sc=Math.min(1,2000/Math.max(bmp.width,bmp.height));
     const c=document.createElement('canvas');c.width=Math.round(bmp.width*sc);c.height=Math.round(bmp.height*sc);c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
     const b=await new Promise(r=>c.toBlob(r,'image/jpeg',0.9));return b||file}catch(e){return file}
-}
-function openScan(p,gname){
-  if(!sampleFn){toast('Scanning is not available here. Please type the details.');return}
-  lastFocus=document.activeElement;const shots={front:null,back:null};
-  modal.innerHTML='<div class="sheetm" role="dialog" aria-modal="true" aria-labelledby="scanT"><div class="grab" aria-hidden="true"></div>'+
-   '<h2 id="scanT">Scan ID card: '+esc(gname)+'</h2>'+
-   '<p class="ms">Place the card on a flat surface in good light and fill the frame. The back of an Aadhaar card has the address and the S/O, D/O or W/O line.</p>'+
-   '<div class="slots">'+['front','back'].map(side=>'<div class="slot"><div class="thumb" id="th_'+side+'">'+(side==='front'?'Front side':'Back side')+'<small>'+(side==='front'?'Name and date of birth':'Address and relation')+'</small></div>'+
-     '<div class="sbtns"><label class="btn small" tabindex="0">'+LI.camera+'<span>Take photo</span><input type="file" accept="image/*" capture="environment" data-side="'+side+'" hidden></label><label class="linkbtn" tabindex="0">Choose from gallery<input type="file" accept="image/*" data-side="'+side+'" hidden></label></div></div>').join('')+'</div>'+
-   '<div class="privacy">'+LI.lock+'<span>Photos go to Claude only to read the printed details. This page doesn\'t keep them and never puts the Aadhaar number in your document. Only scan the card of someone who has agreed. A masked Aadhaar works too.</span></div>'+
-   '<div class="mact"><button class="btn line" type="button" id="scanCancel">Cancel</button><button class="btn" type="button" id="scanGo" disabled>Read details</button></div>'+
-   '<div class="mstatus" id="scanStatus" role="status" aria-live="polite"></div></div>';
-  modal.hidden=false;document.body.style.overflow='hidden';
-  $('#scanCancel').onclick=()=>closeModal();
-  $$('.sbtns label',modal).forEach(l=>l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();l.querySelector('input').click()}}));
-  $$('input[type=file]',modal).forEach(inp=>inp.addEventListener('change',async()=>{
-    const f=inp.files&&inp.files[0];if(!f)return;const side=inp.dataset.side;const st=$('#scanStatus');st.className='mstatus';st.textContent='Preparing photo…';
-    const blob=await prepImage(f);shots[side]=blob;const u=URL.createObjectURL(blob);shotURLs.push(u);
-    const th=$('#th_'+side);th.style.backgroundImage='url("'+u+'")';th.classList.add('has');st.textContent='';$('#scanGo').disabled=false;inp.value='';
-  }));
-  $('#scanGo').onclick=async()=>{
-    const imgs=[shots.front,shots.back].filter(Boolean);if(!imgs.length)return;
-    const go=$('#scanGo'),st=$('#scanStatus');go.disabled=true;st.className='mstatus';
-    st.innerHTML='<span class="spin" aria-hidden="true"></span>Reading the card. This can take up to a minute. <button type="button" class="linkbtn" id="scanStop">Stop</button>';
-    scanCtl=new AbortController();$('#scanStop').onclick=()=>scanCtl&&scanCtl.abort();
-    try{
-      const r=await sampleFn.json(SCAN_PROMPT,{images:imgs,signal:scanCtl.signal});scanCtl=null;
-      if(!r||typeof r!=='object'||r.is_id_card===false||!r.name){st.className='mstatus err';st.textContent='The details could not be read. Try a sharper photo in good light with the whole card in the frame.';go.disabled=false;return}
-      const res=applyScan(p,r);closeModal(true);
-      toast('Filled '+res.n+' detail'+(res.n===1?'':'s')+' from the card. Please check them.'+(res.co?' The card says C/O, so choose the relation yourself.':''));
-    }catch(e){scanCtl=null;go.disabled=false;const c=e&&e.code;st.className='mstatus err';
-      if(c==='cancelled'){st.className='mstatus';st.textContent='Stopped.'}
-      else if(c==='not_granted'||c==='images_unavailable'||c==='sampling_disabled'||c==='capability_disabled'){st.textContent='Photo reading is turned off for this page, so please type the details instead.';document.body.classList.remove('can-scan');sampleFn=null}
-      else if(c==='image_rejected')st.textContent='That photo could not be used. Try another photo, in JPEG or PNG.';
-      else if(c==='rate_limited')st.textContent='Too many scans just now. Wait a minute and try again.';
-      else if(c==='refused')st.textContent='This photo could not be read. Please type the details instead.';
-      else st.textContent='The card could not be read this time. Try again, or type the details.'}
-  };
-  setTimeout(()=>{const b=$('.sbtns label',modal);if(b)b.focus()},30);
 }
 function normState(s){if(!s)return'';const t=String(s).toLowerCase().replace(/&/g,' and ').replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim();
   const alias=[['orissa','Odisha'],['nct of delhi','Delhi'],['new delhi','Delhi'],['pondicherry','Puducherry'],['uttaranchal','Uttarakhand'],['jammu and kashmir','Jammu and Kashmir'],['j and k','Jammu and Kashmir'],['andaman','Andaman and Nicobar Islands'],['dadra','Dadra and Nagar Haveli and Daman and Diu'],['daman','Dadra and Nagar Haveli and Daman and Diu']];
@@ -1841,6 +1898,7 @@ const METHODS=[
 const RENTISH=['rental','quick-rental','room','pg','commercial','office-sharing','parking','rent-settlement'];
 function signRule(d){
   const tg=(INFO[d.id]||{}).tg||'';
+  if(d.id==='ai-draft'){const v=(store.vals&&store.vals['ai-draft'])||{};if(v.form==='Affidavit')return{paper:true,why:'An affidavit is signed in front of a Notary or Oath Commissioner, so it has to be signed in ink.'};if(v.ai_ink==='1')return{paper:true,why:'This looks like a will, power of attorney, trust or property transfer. The IT Act, 2000 (First Schedule) leaves these out of electronic signing, so sign it in ink.'};return{paper:false,note:''}}
   if(['gpa','gpa-property','spa','nri-poa'].includes(d.id))return{paper:true,why:'A power of attorney cannot be signed electronically. The IT Act, 2000 (First Schedule) leaves powers of attorney out of electronic signing, so sign it in ink.'};
   if(d.id==='revoke-poa')return{paper:true,why:'This cancels a power of attorney, so sign it in ink before a Notary, just like the original.'};
   if(['will','simple-will','codicil'].includes(d.id))return{paper:true,why:'Wills and codicils cannot be signed electronically. The IT Act, 2000 (First Schedule) leaves them out, so sign in ink in front of two witnesses.'};
@@ -1876,7 +1934,7 @@ const CONSENT='I have read this document and agree to sign it electronically.';
 
 function methodBody(m){
   const d=current;
-  if(m==='paper')return '<ol class="howto"><li>'+(d.note.paper==='stamp'?'Buy stamp paper or an e-stamp certificate for the amount your state charges.':'Print on plain A4 paper.')+'</li><li>Download the PDF'+(d.note.paper==='stamp'?' and print page one on the stamp paper, the rest on plain paper of the same size.':'.')+'</li><li>'+esc(d.note.after)+'</li></ol><button class="btn" type="button" data-act="dl">Download PDF for printing</button>';
+  if(m==='paper')return '<ol class="howto"><li>'+(d.note.paper==='stamp'?'Buy stamp paper or an e-stamp certificate for the amount your state charges.':'Print on plain A4 paper.')+'</li><li>Download the PDF'+(d.note.paper==='stamp'?' and print page one on the stamp paper, the rest on plain paper of the same size.':'.')+'</li><li>'+esc(d.note.after)+'</li></ol><div class="mact left"><button class="btn" type="button" data-act="dl">Download PDF for printing</button><button class="btn line" type="button" data-act="qr">'+QRI+'<span>QR code for the print shop</span></button></div>';
   const est='<div class="estamp">'+LI.stamp+'<span>'+(estampFile?'E-stamp certificate: <b>'+esc(estampFile.name)+'</b>, added as page one.':(d.note.paper==='stamp'?'Stamp duty applies. Add your e-stamp certificate (PDF or photo) and it becomes page one.':'Optional: add an e-stamp or cover page as page one.'))+'</span>'+
     (estampFile?'<button type="button" class="linkbtn" data-act="rmest">Remove</button>':'<label class="btn small line" tabindex="0">Add e-stamp<input type="file" accept="application/pdf,image/*" hidden data-act="est"></label>')+'</div>';
   if(m==='screen'){
@@ -1919,6 +1977,7 @@ function wireSignPanel(){
     const mc=e.target.closest('.mcard');if(mc&&!mc.disabled){store.method=store.method||{};store.method[current.id]=mc.dataset.method;save();renderSetup();renderPreview();applyStep();return}
     const a=e.target.closest('[data-act]');if(!a)return;const act=a.dataset.act;
     if(act==='dl'){download();return}
+    if(act==='qr'){openShopQR();return}
     if(act==='sign'){const {parties}=signersOf(curBlocks);const p=parties[+a.dataset.i];if(p)openSignPad({kind:'party',role:p.role,name:(sigsOf().parties[p.role]||{}).name||p.name});return}
     if(act==='wsign'){const i=+a.dataset.i;openSignPad({kind:'wit',role:'WITNESS '+(i+1),name:(sigsOf().wit[i]||{}).name||'',idx:i});return}
     if(act==='clrsig'){delete store.sigs[current.id];save();renderPreview();toast('All signatures removed.');return}
@@ -1993,6 +2052,395 @@ async function withEstamp(pdf){
   return new Blob([await out.save()],{type:'application/pdf'});
 }
 
+/* ---------------- shared helpers for QR, voice and AI ---------------- */
+const SITE_URL='https://claude.ai/artifact/1wta4o5SQnEEdR64XKGzjX';
+const LIBS={jsqr:'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js',pako:'https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js',qr:'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js'};
+const libP={};
+function loadLib(k){if(libP[k])return libP[k];libP[k]=new Promise((res,rej)=>{const s=document.createElement('script');s.src=LIBS[k];s.async=true;s.onload=()=>res();s.onerror=()=>{libP[k]=null;rej(new Error('Could not load '+k))};document.head.appendChild(s)});return libP[k]}
+const MIC=li('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/>');
+const CHATI=li('<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>');
+const QRI=li('<rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h2.5v2.5H14zM18 14h2.5M14 18h2.5M18.5 18v2.5h2"/>');
+const SPARK=li('<path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/>');
+const SHOPI=li('<path d="M4 9.5 5.5 4h13L20 9.5"/><path d="M4 9.5h16v1.5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-5 0z"/><path d="M5.5 13.5V20h13v-6.5M10 20v-4h4v4"/>');
+const PRINTI=li('<path d="M7 9V3.5h10V9"/><rect x="3.5" y="9" width="17" height="8" rx="1.5"/><path d="M7 14h10v6.5H7z"/>');
+const SENDI=li('<path d="M4 12l16-8-6 16-2.5-6.5z"/><path d="M11.5 13.5 20 4"/>');
+async function pipeBytes(bytes,stream){return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(stream)).arrayBuffer())}
+async function deflateRaw(b){try{if('CompressionStream' in window)return await pipeBytes(b,new CompressionStream('deflate-raw'))}catch(e){}await loadLib('pako');return pako.deflateRaw(b)}
+async function inflateRaw(b){try{if('DecompressionStream' in window)return await pipeBytes(b,new DecompressionStream('deflate-raw'))}catch(e){}await loadLib('pako');return pako.inflateRaw(b)}
+async function gunzip(b){try{if('DecompressionStream' in window)return await pipeBytes(b,new DecompressionStream('gzip'))}catch(e){}await loadLib('pako');return pako.ungzip(b)}
+const b64u={enc:u8=>{let s='';for(let i=0;i<u8.length;i++)s+=String.fromCharCode(u8[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')},
+  dec:str=>{str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';const b=atob(str),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}};
+async function saveFile(filename,blob){
+  if(!hasClaude){const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return true}
+  const dl=await dlPromise;if(!dl){toast('Saving files is not available in this view.');return false}
+  try{await dl.save({filename,data:blob});return true}catch(e){const c=e&&e.code;if(c==='declined')toast('Download cancelled.');else if(c==='rate_limited')toast('A save prompt is already open. Finish that one first.');else toast('Saving is not available here.');return false}
+}
+
+/* ---------------- QR reading (on this device) ---------------- */
+async function toBitmap(src){if(!(src instanceof Blob))return src;try{return await createImageBitmap(src,{imageOrientation:'from-image'})}catch(e){return await new Promise((res,rej)=>{const u=URL.createObjectURL(src);const im=new Image();im.onload=()=>{res(im)};im.onerror=rej;im.src=u})}}
+async function decodeQR(src,fast){
+  const bmp=await toBitmap(src);
+  if('BarcodeDetector' in window){try{const bd=new BarcodeDetector({formats:['qr_code']});const r=await bd.detect(bmp);if(r&&r.length&&r[0].rawValue)return r[0].rawValue}catch(e){}}
+  await loadLib('jsqr');
+  const W=bmp.videoWidth||bmp.naturalWidth||bmp.width,H=bmp.videoHeight||bmp.naturalHeight||bmp.height;if(!W||!H)return null;
+  for(const side of (fast?[1000]:[1600,1100,2400])){const sc=Math.min(1,side/Math.max(W,H));const c=document.createElement('canvas');c.width=Math.round(W*sc);c.height=Math.round(H*sc);
+    const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(bmp,0,0,c.width,c.height);const d=x.getImageData(0,0,c.width,c.height);
+    const code=jsQR(d.data,c.width,c.height,{inversionAttempts:fast?'dontInvert':'attemptBoth'});if(code&&code.data)return code.data;if(sc===1&&!fast)break}
+  return null;
+}
+const latin1=u=>{let s='';for(let i=0;i<u.length;i++)s+=String.fromCharCode(u[i]);return s};
+function normDob(s){let m=/^(\d{2})[-\/.](\d{2})[-\/.](\d{4})$/.exec(s||'');if(m)return m[3]+'-'+m[2]+'-'+m[1];m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?s:''}
+function aadhaarResult(o){
+  const m=/^(S\/O|D\/O|W\/O|H\/O|C\/O)\s*[:,.-]?\s*(.+)$/i.exec((o.co||'').trim());const parts=[];
+  (o.addr||[]).forEach(p=>{p=(p||'').trim();if(p&&!parts.some(x=>x.toLowerCase()===p.toLowerCase()))parts.push(p)});
+  let address=parts.join(', ');if(o.pc)address+=(address?' - ':'')+o.pc;
+  const g={M:'male',F:'female',T:'other',MALE:'male',FEMALE:'female'}[(o.gender||'').trim().toUpperCase()]||null;
+  return{is_id_card:!!o.name,source:'qr',name:o.name||null,relation_type:m?m[1].toUpperCase():(o.co?'C/O':null),relation_name:m?m[2].trim():(o.co||null),dob:o.dob||null,year_of_birth:o.yob?+o.yob:null,gender:g,address:address||null,state:o.state||null};
+}
+async function parseAadhaarQR(text){
+  if(!text)return null;text=String(text).trim();
+  if(/PrintLetterBarcodeData|<\?xml/i.test(text)){const at=k=>{const m=new RegExp('\\b'+k+'="([^"]*)"','i').exec(text);return m?m[1].trim():''};
+    return aadhaarResult({name:at('name'),gender:at('gender'),dob:normDob(at('dob')),yob:at('yob'),co:at('co'),addr:[at('house'),at('street'),at('lm'),at('loc'),at('vtc'),at('po'),at('subdist'),at('dist'),at('state')],pc:at('pc'),state:at('state')})}
+  if(/^\d{200,}$/.test(text)&&typeof BigInt==='function'){
+    let n=BigInt(text);const bytes=[];while(n>0n){bytes.push(Number(n&255n));n>>=8n}bytes.reverse();
+    let raw;try{raw=await gunzip(new Uint8Array(bytes))}catch(e){return null}
+    const f=[];let st=0;for(let i=0;i<raw.length&&f.length<20;i++)if(raw[i]===255){f.push(latin1(raw.subarray(st,i)));st=i+1}
+    const o=/^V\d+$/.test(f[0]||'')?1:0;const g=i=>(f[o+i]||'').trim();
+    return aadhaarResult({name:g(2),dob:normDob(g(3)),gender:g(4),co:g(5),addr:[g(8),g(13),g(7),g(9),g(15),g(11),g(14),g(6),g(12)],pc:g(10),state:g(12)});
+  }
+  return null;
+}
+
+/* live camera scanning */
+let live=null;
+function stopLive(){if(!live)return;live.stop=true;try{live.stream.getTracks().forEach(t=>t.stop())}catch(e){}if(live.box){live.box.hidden=true;const v=live.box.querySelector('video');if(v)v.srcObject=null}live=null}
+async function startLive(box,onText,statusEl){
+  stopLive();
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){statusEl.className='mstatus err';statusEl.textContent='Live camera is not available here. Use Take photo instead.';return}
+  let stream;try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false})}
+  catch(e){statusEl.className='mstatus err';statusEl.textContent=e&&e.name==='NotAllowedError'?'Camera access is blocked for this page. Use Take photo instead, which opens your camera app.':'The camera could not start. Use Take photo instead.';return}
+  const v=box.querySelector('video');v.srcObject=stream;v.setAttribute('playsinline','');v.muted=true;box.hidden=false;try{await v.play()}catch(e){}
+  live={stream,box,stop:false};statusEl.className='mstatus';statusEl.textContent='Point the camera at the QR code and hold steady.';
+  const me=live;let busy=false;
+  const tick=async()=>{if(me.stop)return;if(!busy&&v.readyState>=2){busy=true;try{const t=await decodeQR(v,true);if(t&&!me.stop){const keep=await onText(t);if(!keep){stopLive();return}}}catch(e){}busy=false}setTimeout(tick,220)};tick();
+}
+
+/* ---------------- voice typing ---------------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const VOICE_LANGS=[['en-IN','English'],['hi-IN','हिन्दी'],['mr-IN','मराठी'],['bn-IN','বাংলা'],['ta-IN','தமிழ்'],['te-IN','తెలుగు'],['kn-IN','ಕನ್ನಡ'],['gu-IN','ગુજરાતી'],['ml-IN','മലയാളം'],['pa-IN','ਪੰਜਾਬੀ']];
+let activeRec=null;
+const langSelect=id=>'<select class="langsel" id="'+id+'" aria-label="Language you will speak">'+VOICE_LANGS.map(([c,l])=>'<option value="'+c+'"'+((store.voiceLang||'en-IN')===c?' selected':'')+'>'+l+'</option>').join('')+'</select>';
+function toggleMic(btn,target,lang){
+  if(activeRec){activeRec.stop();return}
+  if(!SR){toast('Voice typing is not built into this browser. Tap the microphone on your phone\'s keyboard to speak instead.');target.focus();return}
+  let rec;try{rec=new SR()}catch(e){toast('Voice typing could not start. Tap the microphone on your keyboard instead.');return}
+  rec.lang=lang||'en-IN';rec.interimResults=true;rec.continuous=true;
+  const base=target.value?target.value.replace(/\s*$/,' '):'';let fin='';
+  rec.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript+' ';else interim+=r[0].transcript}target.value=base+fin+interim;target.dispatchEvent(new Event('input',{bubbles:true}))};
+  rec.onerror=e=>{const c=e.error;if(c==='not-allowed'||c==='service-not-allowed')toast('The microphone is blocked for this page. Tap the microphone on your phone\'s keyboard to speak instead.');else if(c==='no-speech')toast('No speech was heard. Tap Speak and try again.');else if(c==='language-not-supported')toast('That language is not supported for voice typing here. Try English, or use your keyboard\'s microphone.');else if(c!=='aborted')toast('Voice typing stopped. You can also use your keyboard\'s microphone.')};
+  rec.onend=()=>{btn.classList.remove('rec');btn.setAttribute('aria-pressed','false');const sp=btn.querySelector('span');if(sp)sp.textContent='Speak';activeRec=null};
+  try{rec.start()}catch(e){toast('Voice typing could not start. Tap the microphone on your keyboard instead.');return}
+  activeRec=rec;btn.classList.add('rec');btn.setAttribute('aria-pressed','true');const sp=btn.querySelector('span');if(sp)sp.textContent='Listening… tap to stop';
+}
+
+/* ---------------- Scan Aadhaar sheet (QR first, Claude photo reading as backup) ---------------- */
+function openScan(p,gname){
+  lastFocus=document.activeElement;const shots={front:null,back:null};const canAI=!!sampleFn;
+  modal.innerHTML='<div class="sheetm" role="dialog" aria-modal="true" aria-labelledby="scanT"><div class="grab" aria-hidden="true"></div>'+
+   '<h2 id="scanT">Fill from Aadhaar: '+esc(gname)+'</h2>'+
+   '<div class="scanopt"><h3>'+QRI+'Scan the QR code on the card</h3><p class="ms">Most accurate. The QR code is on the back of the Aadhaar card, and in the e-Aadhaar PDF and mAadhaar app. It is read on this device and nothing is uploaded.</p>'+
+   '<div class="livebox" id="liveBox" hidden><video muted playsinline></video><span class="aim" aria-hidden="true"></span><button type="button" class="btn small line" id="liveStop">Stop camera</button></div>'+
+   '<div class="qrbtns"><button type="button" class="btn small" id="liveGo">'+LI.camera+'<span>Scan with camera</span></button>'+
+   '<label class="btn small line" tabindex="0"><span>Take photo of QR</span><input type="file" accept="image/*" capture="environment" data-q="1" hidden></label>'+
+   '<label class="btn small line" tabindex="0"><span>Upload screenshot</span><input type="file" accept="image/*" data-q="1" hidden></label></div></div>'+
+   (canAI?'<div class="ordiv"><span>or read the printed card with Claude</span></div><div class="scanopt">'+
+   '<div class="slots">'+['front','back'].map(side=>'<div class="slot"><div class="thumb" id="th_'+side+'">'+(side==='front'?'Front side':'Back side')+'<small>'+(side==='front'?'Name and date of birth':'Address and relation')+'</small></div>'+
+     '<div class="sbtns"><label class="btn small" tabindex="0">'+LI.camera+'<span>Take photo</span><input type="file" accept="image/*" capture="environment" data-side="'+side+'" hidden></label><label class="linkbtn" tabindex="0">Choose from gallery<input type="file" accept="image/*" data-side="'+side+'" hidden></label></div></div>').join('')+'</div>'+
+   '<button class="btn" type="button" id="scanGo" disabled>Read details</button></div>'
+   :'<p class="ms small">Reading the printed text with AI works when this page is open in the Claude app or on claude.ai. The QR code works everywhere.</p>')+
+   '<div class="mstatus" id="scanStatus" role="status" aria-live="polite"></div>'+
+   '<div class="privacy">'+LI.lock+'<span>The Aadhaar number is never put into your document. '+(canAI?'Photos sent for reading by Claude are not kept by this page. ':'')+'Only scan the card of someone who has agreed.</span></div>'+
+   '<div class="mact"><button class="btn line" type="button" id="scanCancel">Close</button></div></div>';
+  modal.hidden=false;document.body.style.overflow='hidden';
+  const st=$('#scanStatus');
+  const useQR=async text=>{const r=await parseAadhaarQR(text);
+    if(!r||!r.name){if(/M1P?\./.test(text)){st.className='mstatus err';st.textContent='That is a Mohar document code, not an Aadhaar QR code.'}else{st.className='mstatus err';st.textContent='That QR code is not an Aadhaar QR code. Try the code on the Aadhaar card itself.'}return true}
+    const res=applyScan(p,r);stopLive();closeModal(true);toast('Filled '+res.n+' detail'+(res.n===1?'':'s')+' from the Aadhaar QR code. Please check them.'+(res.co?' The card says C/O, so choose the relation yourself.':''));return false};
+  $('#liveGo').onclick=()=>startLive($('#liveBox'),useQR,st);
+  $('#liveStop').onclick=()=>{stopLive();st.textContent=''};
+  $('#scanCancel').onclick=()=>closeModal();
+  $$('label[tabindex]',modal).forEach(l=>l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();l.querySelector('input').click()}}));
+  $$('input[data-q]',modal).forEach(inp=>inp.addEventListener('change',async()=>{const f=inp.files&&inp.files[0];inp.value='';if(!f)return;stopLive();
+    st.className='mstatus';st.innerHTML='<span class="spin" aria-hidden="true"></span>Looking for the QR code…';
+    let t=null;try{t=await decodeQR(f)}catch(e){}
+    if(!t){st.className='mstatus err';st.textContent='No QR code was found. Take the photo closer, so the QR code fills most of the picture, in good light and without glare.';return}
+    await useQR(t)}));
+  if(canAI){
+    $$('input[data-side]',modal).forEach(inp=>inp.addEventListener('change',async()=>{const f=inp.files&&inp.files[0];if(!f)return;const side=inp.dataset.side;st.className='mstatus';st.textContent='Preparing photo…';
+      const blob=await prepImage(f);shots[side]=blob;const u=URL.createObjectURL(blob);shotURLs.push(u);const th=$('#th_'+side);th.style.backgroundImage='url("'+u+'")';th.classList.add('has');st.textContent='';$('#scanGo').disabled=false;inp.value=''}));
+    $('#scanGo').onclick=async()=>{
+      const imgs=[shots.front,shots.back].filter(Boolean);if(!imgs.length)return;const go=$('#scanGo');go.disabled=true;
+      st.className='mstatus';st.innerHTML='<span class="spin" aria-hidden="true"></span>Checking for a QR code first…';
+      for(const im of imgs){let t=null;try{t=await decodeQR(im)}catch(e){}if(t){const r=await parseAadhaarQR(t);if(r&&r.name){await useQR(t);return}}}
+      st.innerHTML='<span class="spin" aria-hidden="true"></span>Reading the card with Claude. This can take up to a minute. <button type="button" class="linkbtn" id="scanStop">Stop</button>';
+      scanCtl=new AbortController();$('#scanStop').onclick=()=>scanCtl&&scanCtl.abort();
+      try{const r=await sampleFn.json(SCAN_PROMPT,{images:imgs,signal:scanCtl.signal});scanCtl=null;
+        if(!r||typeof r!=='object'||r.is_id_card===false||!r.name){st.className='mstatus err';st.textContent='The details could not be read. Try a sharper photo in good light with the whole card in the frame, or scan the QR code.';go.disabled=false;return}
+        const res=applyScan(p,r);closeModal(true);toast('Filled '+res.n+' detail'+(res.n===1?'':'s')+' from the card. Please check them.'+(res.co?' The card says C/O, so choose the relation yourself.':''));
+      }catch(e){scanCtl=null;go.disabled=false;const c=e&&e.code;st.className='mstatus err';
+        if(c==='cancelled'){st.className='mstatus';st.textContent='Stopped.'}
+        else if(c==='not_granted')st.textContent='Claude was not allowed to read photos, so this option is off. Scan the QR code instead.';
+        else if(c==='images_unavailable'||c==='sampling_disabled'||c==='capability_disabled')st.textContent='Photo reading is not available for your account here. Scan the QR code instead.';
+        else if(c==='image_rejected')st.textContent='That photo could not be used. Try another photo, in JPEG or PNG.';
+        else if(c==='rate_limited')st.textContent='Too many requests just now. Wait a minute, or scan the QR code instead.';
+        else if(c==='refused')st.textContent='This photo could not be read. Scan the QR code, or type the details.';
+        else st.textContent='The card could not be read this time ('+(c||'unknown error')+'). Scan the QR code instead, or try again.'}
+    };
+  }
+  setTimeout(()=>{const b=$('#liveGo');if(b)b.focus()},30);
+}
+
+/* ---------------- Draft anything with AI ---------------- */
+INFO['ai-draft']={tg:'',what:'Describe the document you need in your own words, by speaking or typing, in English or an Indian language. AI writes a first draft in formal legal English, and you can then edit every line.',when:['A declaration, undertaking, letter or agreement that is not in the list','Unusual terms that the ready-made documents do not cover'],keep:['Names, addresses and amounts you want in the document','Anything the parties have already agreed']};
+CATMETA[8].blurb='Draft anything with AI, file a consumer complaint, or write your own affidavit.';
+DOCS.push({id:'ai-draft',cat:8,title:'Draft anything with AI',desc:'Speak or type what you need. AI writes it in legal language, and you edit it.',kw:'ai custom draft voice speak write own any document agreement letter undertaking declaration',
+ note:{paper:'stamp',duty:'It depends on what the document is. Agreements usually carry a small fixed duty, while transfers of property are charged on their value. Ask the stamp vendor, or an advocate.',after:'Read every clause and fill every blank before signing. AI drafts can contain mistakes, so for property, money or court matters ask an advocate to review it.'},
+ fields:[...G('Describe it',[A('brief','What do you need?',{req:false,hint:'Use your own words, in any Indian language. For example: my neighbour will pay me 2,000 rupees a month to park his car in my garage for one year.'}),S('kind','Format',['Let AI decide','Affidavit','Agreement','Letter or notice'],{def:'Let AI decide',req:false})]),
+  ...G('Your draft',[T('title','Title'),T('subtitle','Subtitle',{req:false}),A('intro','Opening paragraph',{hint:'{PLACE} and {DATE} are filled in from the Signing section.'}),A('clauses','Clauses, one per line',{hint:'Words in [square brackets] print as blanks to fill in by hand.'}),A('signers','Who signs, one per line',{hint:'Role: Name, for example FIRST PARTY: Anil Kumar'}),S('form','Layout',['Agreement','Affidavit','Letter or notice'],{half:1,def:'Agreement'}),S('wit','Witnesses',['2','0'],{half:1,def:'2'})]),
+  ...EXEC()],
+ build:c=>{
+  const ph=s=>String(s||'').replace(/\{PLACE\}/g,c.v('place')).replace(/\{DATE\}/g,c.v('date')).replace(/\{STATE\}/g,c.st).replace(/\[([^\]\n]{1,80})\]/g,(m,l)=>E1+l+E2);
+  const form=c.raw('form')||'Agreement';
+  const cl=String(c.raw('clauses')||'').split('\n').map(s=>s.trim().replace(/^\d+[.)]\s*/,'')).filter(Boolean).map(ph);
+  const sg=String(c.raw('signers')||'').split('\n').map(s=>s.trim()).filter(Boolean).map(s=>{const i=s.indexOf(':');return i>0?{role:ph(s.slice(0,i).trim().toUpperCase()),name:ph(s.slice(i+1).trim())}:{role:ph(s.toUpperCase()),name:''}});
+  const out=[B.title(c.has('title')?ph(c.raw('title').toUpperCase()):E1+'Title'+E2,c.has('subtitle')?ph(c.raw('subtitle')):undefined)];
+  out.push(B.p(c.has('intro')?ph(c.raw('intro')):E1+'Opening paragraph'+E2));
+  out.push(B.ol(cl.length?cl:[E1+'Clauses'+E2]));
+  if(form==='Affidavit'){out.push(B.dep(),B.h('VERIFICATION'),B.p('Verified at '+c.v('place')+' on '+c.v('date')+' that the contents of paragraphs 1 to '+Math.max(cl.length,1)+' of the above affidavit are true and correct to the best of my knowledge and belief, and that nothing material has been concealed therefrom.'),B.dep())}
+  else if(form==='Letter or notice'){out.push(B.kv(['Place: '+c.v('place'),'Date: '+c.v('date')]),B.sign(sg.length?sg:[{role:'SIGNATURE',name:''}],0))}
+  else{out.push(B.p('IN WITNESS WHEREOF the parties have signed this document at '+c.v('place')+' on '+c.v('date')+'.'),B.sign(sg.length?sg:[{role:'FIRST PARTY',name:''},{role:'SECOND PARTY',name:''}],c.raw('wit')==='0'?0:2))}
+  return out}
+});
+function draftPrompt(v){
+  const kind=v.kind&&v.kind!=='Let AI decide'?v.kind:'choose what fits best';
+  return 'You are drafting a legal document for an ordinary person in India. Write it in clear, formal legal English, in the style Indian advocates use.\n\n'+
+  'What the person wants, in their own words (it may be Hindi, another Indian language, or voice typing, so ignore filler words):\n"""\n'+String(v.brief||'').slice(0,4000)+'\n"""\n\n'+
+  'Format wanted: '+kind+'. State: '+(store.set.state||'not given')+'. Place of signing: '+(v.place||'not given')+'.\n\nRules:\n'+
+  '- Use only the facts given. Never invent names, ages, addresses, amounts, dates or ID numbers. Put each missing fact in square brackets as a short label, such as [Full name of tenant] or [Monthly rent in rupees].\n'+
+  '- Write the exact tokens {PLACE} and {DATE} wherever the place and date of signing belong.\n'+
+  '- For an affidavit or declaration, the intro is "I, [Full name], son/daughter/wife of [Name], aged about [Age] years, residing at [Address], do hereby solemnly affirm and declare as under:" with known facts filled in, and every clause starts with "That".\n'+
+  '- For an agreement, the intro names the parties and the purpose, and the clauses cover the term, payment, duties, termination, dispute resolution and that the laws of India govern it, as relevant.\n'+
+  '- Write 4 to 15 clauses, each one paragraph, without numbers or markdown. Do not add signature lines or a verification paragraph; the page adds them.\n'+
+  '- If the purpose is unlawful, fraudulent or meant to mislead an authority, set "refuse" to one short sentence explaining why and leave the other fields empty.\n'+
+  '- Set "ink_only" to true for a will, codicil, power of attorney, trust deed, or any sale, gift, mortgage or other transfer of immovable property.\n'+
+  '- Set "format" to "affidavit" if it must be sworn before a Notary or Oath Commissioner.\n\n'+
+  'Reply with only this JSON object:\n{"refuse": null or string, "format": "agreement" | "affidavit" | "letter", "title": string in capitals, "subtitle": string or "", "intro": string, "clauses": [string], "signers": [{"role": string in capitals such as "FIRST PARTY", "LANDLORD" or "DEPONENT", "name": string or "[...]"}], "witnesses": 0 or 2, "paper": "stamp" or "plain", "ink_only": true or false, "needs_registration": true or false, "notes": [up to 4 short sentences about stamp duty, notarisation, registration or other next steps], "questions": [up to 5 short questions about facts that are still missing]}';
+}
+let aiCtl=null;
+function aiBoxHTML(){
+  const v=vals();let extra='';try{const n=JSON.parse(v.ai_notes||'null');if(n){
+    if(n.questions&&n.questions.length)extra+='<div class="ainote"><b>Details still needed</b><ul>'+n.questions.map(q=>'<li>'+esc(q)+'</li>').join('')+'</ul></div>';
+    if(n.notes&&n.notes.length)extra+='<div class="ainote"><b>Before you sign</b><ul>'+n.notes.map(q=>'<li>'+esc(q)+'</li>').join('')+'</ul></div>'}}catch(e){}
+  return '<div class="aibox"><div class="microw"><button type="button" class="micbtn" id="aiMic" aria-pressed="false">'+MIC+'<span>Speak</span></button>'+langSelect('aiLang')+'</div>'+
+    '<button type="button" class="btn" id="aiGo">'+SPARK+'<span>'+(v.title?'Draft it again':'Draft it with AI')+'</span></button>'+
+    '<div class="mstatus" id="aiStatus" role="status" aria-live="polite"></div>'+extra+
+    '<p class="legal">AI drafts can contain mistakes. Check every clause, and fill each blank, before signing.</p></div>';
+}
+async function aiDraft(){
+  const v=vals(),st=$('#aiStatus');const brief=String(v.brief||'').trim();
+  if(brief.length<10){st.className='mstatus err';st.textContent='Tell me a little more about what you need first.';$('#f_brief')&&$('#f_brief').focus();return}
+  const s=await samplePromise;
+  if(!s){st.className='mstatus err';st.textContent='AI drafting works when this page is open in the Claude app or on claude.ai. You can still write the draft yourself in the next section.';return}
+  const go=$('#aiGo');go.disabled=true;aiCtl=new AbortController();
+  st.className='mstatus';st.innerHTML='<span class="spin" aria-hidden="true"></span>Writing your draft. This usually takes under a minute. <button type="button" class="linkbtn" id="aiStop">Stop</button>';
+  $('#aiStop').onclick=()=>aiCtl&&aiCtl.abort();
+  try{
+    const r=await s.json(draftPrompt(v),{signal:aiCtl.signal,cache:false});aiCtl=null;
+    if(r&&r.refuse){st.className='mstatus err';st.textContent=String(r.refuse);go.disabled=false;return}
+    if(!r||!r.clauses||!r.clauses.length){st.className='mstatus err';st.textContent='The draft came back empty. Add a few more details and try again.';go.disabled=false;return}
+    const fm={affidavit:'Affidavit',letter:'Letter or notice'}[String(r.format||'').toLowerCase()]||'Agreement';
+    Object.assign(v,{title:String(r.title||''),subtitle:String(r.subtitle||''),intro:String(r.intro||''),clauses:r.clauses.map(String).join('\n'),
+      signers:(r.signers||[]).map(x=>String(x.role||'').toUpperCase()+': '+String(x.name||'')).join('\n'),form:fm,wit:fm==='Agreement'&&+r.witnesses!==0?'2':'0',
+      ai_ink:r.ink_only?'1':'',ai_notes:JSON.stringify({notes:(r.notes||[]).map(String).slice(0,4),questions:(r.questions||[]).map(String).slice(0,5)})});
+    if(r.paper==='plain'&&methodOf(current)==='paper')store.set.mode='plain';
+    save();renderForm();renderPreview();renderSetup();
+    const gi=groups.findIndex(g=>g.g==='Your draft');if(isNarrow()&&gi>=0)setStep(gi+1);else applyStep();
+    flash(['title','subtitle','intro','clauses','signers','form','wit'],'fromai');
+    toast('Your draft is ready. Read every clause and fill in the blanks.');
+  }catch(e){aiCtl=null;go.disabled=false;const c=e&&e.code;st.className='mstatus err';
+    if(c==='cancelled'){st.className='mstatus';st.textContent='Stopped.'}
+    else if(c==='not_granted'||c==='sampling_disabled'||c==='capability_disabled')st.textContent='AI is turned off for this page, so please write the draft yourself in the next section.';
+    else if(c==='rate_limited')st.textContent='Too many requests just now. Wait a minute and try again.';
+    else if(c==='refused')st.textContent='This request could not be drafted. Try describing it differently.';
+    else st.textContent='The draft could not be written this time. Try again.'}
+}
+
+/* ---------------- shop QR code ---------------- */
+async function shopPayload(pin){
+  const v={},vv=vals();
+  current.fields.forEach(f=>{let x=vv[f.k];if(x===undefined)x=defVal(f);if(x===''||x==null||(Array.isArray(x)&&!x.length))return;if(f.def!==undefined&&f.def!=='today'&&JSON.stringify(x)===JSON.stringify(f.def))return;if(f.k==='brief'||f.k==='kind')return;v[f.k]=x});
+  const s=store.set;const obj={d:current.id,v,s:{st:s.state,m:s.mode,sv:s.stampVal,b:s.blank,z:s.size,f:s.fs,ft:s.footer?1:0},t:Math.floor(Date.now()/1000)};
+  let bytes=await deflateRaw(new TextEncoder().encode(JSON.stringify(obj)));
+  if(pin){const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));const k=await pinKey(pin,salt);const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},k,bytes));
+    const o=new Uint8Array(28+ct.length);o.set(salt,0);o.set(iv,16);o.set(ct,28);return 'M1P.'+b64u.enc(o)}
+  return 'M1.'+b64u.enc(bytes);
+}
+async function pinKey(pin,salt){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pin),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+function drawQR(canvas,text){const ecc=text.length>1400?'L':'M';const q=qrcode(0,ecc);q.addData(text);q.make();const n=q.getModuleCount(),qz=4,px=Math.max(3,Math.floor(560/(n+qz*2)));
+  canvas.width=canvas.height=(n+qz*2)*px;const x=canvas.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,canvas.width,canvas.height);x.fillStyle='#000';
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))x.fillRect((c+qz)*px,(r+qz)*px,px,px);return n}
+function paperLine(s){const kind=s.mode==='stamp'?'non-judicial stamp paper':s.mode==='estamp'?'e-stamp certificate':'plain paper';return (s.mode!=='plain'&&s.stampVal?'₹'+fmtINR(s.stampVal)+' ':'')+kind+(s.state?' ('+s.state+')':'')}
+async function openShopQR(){
+  if(!current)return;lastFocus=document.activeElement;
+  const {parties}=signersOf(curBlocks);const first=parties.find(p=>p.name);
+  modal.innerHTML='<div class="sheetm" role="dialog" aria-modal="true" aria-labelledby="qrT"><div class="grab" aria-hidden="true"></div><h2 id="qrT">QR code for the print shop</h2>'+
+   '<p class="ms">Show this at any print or stamp-paper shop. They open Mohar\'s For shops page, scan it and print your document.</p>'+
+   '<div class="qrwrap"><canvas id="qrCanvas" aria-label="QR code for this document"></canvas></div>'+
+   '<ul class="jobmini"><li><b>Print on</b> '+esc(paperLine(store.set))+(store.set.mode!=='plain'?', page one; the rest on plain '+(store.set.size==='legal'?'legal-size':'A4')+' paper':'')+'</li>'+(store.set.mode!=='plain'?'<li><b>Stamp paper in the name of</b> '+esc(first?first.name:'one of the people signing')+'</li>':'')+(store.set.mode!=='plain'&&!store.set.stampVal?'<li class="warnli">Add the stamp paper value in Print setup so the shop knows what to buy.</li>':'')+'</ul>'+
+   '<label class="check-inline"><input type="checkbox" id="qrPinOn"> Lock with a PIN you tell the shop</label><div class="f pinrow" hidden><label for="qrPin">PIN (4 to 8 digits)</label><input id="qrPin" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off"></div>'+
+   '<div class="privacy">'+LI.lock+'<span>Anyone who scans this code can see the document, including names and addresses, unless you lock it with a PIN. Changes you make later are not in this code, so make a new one after editing.</span></div>'+
+   '<div class="mact"><button class="btn line" type="button" id="qrClose">Close</button><button class="btn line" type="button" id="qrCopy">Copy shop link</button><button class="btn" type="button" id="qrSave">Save QR image</button></div><div class="mstatus" id="qrStatus" role="status"></div></div>';
+  modal.hidden=false;document.body.style.overflow='hidden';
+  let link='';const st=$('#qrStatus');
+  const make=async()=>{const on=$('#qrPinOn').checked,pin=$('#qrPin').value.trim();
+    if(on&&!/^\d{4,8}$/.test(pin)){st.className='mstatus';st.textContent='Enter a PIN of 4 to 8 digits to lock the code.';return}
+    st.className='mstatus';st.innerHTML='<span class="spin" aria-hidden="true"></span>Making the code…';
+    try{await loadLib('qr');const pl=await shopPayload(on?pin:'');link=SITE_URL+'#/print/'+pl;window.__lastShopLink=link;drawQR($('#qrCanvas'),link);st.textContent=on?'Locked. Tell the shop your PIN in person.':''}
+    catch(e){st.className='mstatus err';st.textContent=/overflow|length/i.test(String(e&&e.message||e))?'This document is too long for one QR code. Send the PDF to the shop instead.':'The QR code could not be made. Check your connection and try again.'}};
+  $('#qrPinOn').onchange=e=>{$('.pinrow',modal).hidden=!e.target.checked;if(e.target.checked)$('#qrPin').focus();else make()};
+  $('#qrPin').addEventListener('input',()=>{if(/^\d{4,8}$/.test($('#qrPin').value.trim()))make()});
+  $('#qrClose').onclick=()=>closeModal();
+  $('#qrCopy').onclick=async()=>{if(!link)return;try{await navigator.clipboard.writeText(link);toast('Shop link copied. You can send it on WhatsApp.')}catch(e){st.className='mstatus';st.innerHTML='Copy this link: <input class="copybox" readonly value="'+esc(link)+'">';const i=$('.copybox',modal);i.focus();i.select()}};
+  $('#qrSave').onclick=()=>{const c=$('#qrCanvas');if(!link||!c.width)return;c.toBlob(async b=>{if(b&&await saveFile(current.title.replace(/[^A-Za-z0-9]+/g,'-').toLowerCase()+'-shop-qr.png',b))toast('QR image saved.')},'image/png')};
+  make();
+}
+
+/* ---------------- For shops page ---------------- */
+let shopJob=null;
+function viewShop(prefill){
+  shopJob=null;
+  app.innerHTML='<div class="wrap page-top"><div class="noprint"><nav class="crumbs" aria-label="Breadcrumb"><a href="#/">Home</a><span aria-hidden="true">/</span><span>For shops</span></nav>'+
+   '<h1 class="ph">For print and stamp-paper shops</h1><p class="sub" style="color:var(--muted);margin:0 0 22px;font-size:18px;max-width:60ch">Customers bring a Mohar QR code. Scan it to see which stamp paper they need, then print their document on it. Nothing is stored on this device.</p></div>'+
+   '<div class="shopgrid"><div class="shopcard noprint"><h2>'+QRI+'Scan the customer\'s code</h2>'+
+    '<div class="livebox" id="shopLive" hidden><video muted playsinline></video><span class="aim" aria-hidden="true"></span><button type="button" class="btn small line" id="shopStop">Stop camera</button></div>'+
+    '<div class="qrbtns"><button type="button" class="btn small" id="shopCam">'+LI.camera+'<span>Scan with camera</span></button><label class="btn small line" tabindex="0"><span>Take photo of code</span><input type="file" accept="image/*" capture="environment" hidden data-s="1"></label><label class="btn small line" tabindex="0"><span>Upload image</span><input type="file" accept="image/*" hidden data-s="1"></label></div>'+
+    '<details class="paste"><summary>Or paste the shop link the customer sent</summary><textarea id="shopPaste" rows="3" placeholder="Paste the link or code here"></textarea><button type="button" class="btn small" id="shopOpen">Open</button></details>'+
+    '<div class="mstatus" id="shopStatus" role="status" aria-live="polite"></div></div>'+
+   '<div id="job" class="jobcol"><div class="jobempty noprint">'+PRINTI+'<p>The customer\'s document and print instructions will appear here.</p></div></div></div></div>';
+  const st=$('#shopStatus');
+  const onText=async t=>{if(!/M1P?\./.test(t)){st.className='mstatus err';st.textContent=/^\d{200,}$|PrintLetterBarcodeData/.test(t)?'That is an Aadhaar QR code. Ask for the Mohar document code instead.':'That is not a Mohar document code.';return true}await openPayload(t);return false};
+  $('#shopCam').onclick=()=>startLive($('#shopLive'),onText,st);$('#shopStop').onclick=()=>{stopLive();st.textContent=''};
+  $$('input[data-s]',app).forEach(inp=>inp.addEventListener('change',async()=>{const f=inp.files&&inp.files[0];inp.value='';if(!f)return;stopLive();st.className='mstatus';st.innerHTML='<span class="spin" aria-hidden="true"></span>Reading the code…';
+    let t=null;try{t=await decodeQR(f)}catch(e){}if(!t){st.className='mstatus err';st.textContent='No QR code was found. Take the photo closer, in good light.';return}st.textContent='';await onText(t)}));
+  $$('label[tabindex]',app).forEach(l=>l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();l.querySelector('input').click()}}));
+  $('#shopOpen').onclick=()=>openPayload($('#shopPaste').value);
+  if(prefill)openPayload(prefill);
+}
+async function openPayload(str,pin){
+  const st=$('#shopStatus');const m=/(M1P?)\.([A-Za-z0-9_-]+)/.exec(String(str||''));
+  if(!m){st.className='mstatus err';st.textContent='This is not a Mohar document code.';return}
+  let bytes;try{bytes=b64u.dec(m[2])}catch(e){st.className='mstatus err';st.textContent='The code is damaged. Scan it again.';return}
+  if(m[1]==='M1P'){
+    if(!pin){$('#job').innerHTML='<div class="jobcard noprint"><h2>'+LI.lock+'This code is locked</h2><p class="ms">Ask the customer for their PIN.</p><div class="f"><label for="jobPin">PIN</label><input id="jobPin" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div><button class="btn" type="button" id="jobUnlock">Unlock</button><div class="mstatus" id="pinStatus"></div></div>';
+      const go=()=>openPayload(str,$('#jobPin').value.trim());$('#jobUnlock').onclick=go;$('#jobPin').addEventListener('keydown',e=>{if(e.key==='Enter')go()});$('#jobPin').focus();return}
+    try{const k=await pinKey(pin,bytes.slice(0,16));bytes=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(16,28)},k,bytes.slice(28)))}
+    catch(e){const ps=$('#pinStatus');if(ps){ps.className='mstatus err';ps.textContent='That PIN is not right. Check with the customer.'}return}
+  }
+  let J;try{J=JSON.parse(new TextDecoder().decode(await inflateRaw(bytes)))}catch(e){st.className='mstatus err';st.textContent='The code could not be read. Ask the customer to make a new one.';return}
+  const d=byId(J.d);if(!d){st.className='mstatus err';st.textContent='This document type is not available in this version of Mohar.';return}
+  st.textContent='';stopLive();
+  shopJob={d,v:J.v||{},t:J.t,set:{state:J.s&&J.s.st||'',mode:J.s&&J.s.m||'stamp',stampVal:J.s&&J.s.sv||'',blank:J.s&&J.s.b!=null?+J.s.b:11,size:J.s&&J.s.z||'a4',fs:J.s&&+J.s.f||12,footer:!!(J.s&&J.s.ft)}};
+  renderJob();
+}
+function renderJob(){
+  const J=shopJob;if(!J)return;const s=J.set;let blocks;
+  try{blocks=J.d.build(makeCtx(J.d,J.v,s))}catch(e){$('#job').innerHTML='<p class="mstatus err">This document could not be drawn.</p>';return}
+  J.blocks=blocks;let pages='?';try{pages=makePDF(blocks,s,{title:J.d.title}).getNumberOfPages()}catch(e){}
+  const {parties}=signersOf(blocks);const first=parties.find(p=>p.name);
+  const made=J.t?new Date(J.t*1000):null;const PVsave={...PV};PV.sigs=null;PV.wit=null;PV.ready=null;
+  const pw=s.size==='legal'?21.59:21;
+  const zone=s.mode==='plain'?'':'<div class="stampzone'+(s.mode==='estamp'?' estamp':'')+(s.blank<4?' short':'')+'"><div><div class="ring">'+(s.stampVal?'₹'+esc(s.stampVal):'₹')+'</div><div class="zl">'+(s.mode==='estamp'?'E-stamp certificate area':'Non-judicial stamp paper area')+(s.state?', '+esc(s.state):'')+'</div><div class="zs">Kept blank. Text starts below the dashed line.</div></div><span class="cut">'+s.blank+' cm</span></div>';
+  $('#job').innerHTML='<div class="jobcard noprint"><h2>'+PRINTI+esc(J.d.title)+'</h2>'+(made?'<p class="ms">Code made on '+made.getDate()+' '+MONTHS[made.getMonth()]+' '+made.getFullYear()+'</p>':'')+
+   '<dl class="jobdl"><div><dt>Paper for page one</dt><dd>'+esc(s.mode==='stamp'?'Non-judicial stamp paper':s.mode==='estamp'?'E-stamp certificate':'Plain paper')+'</dd></div>'+
+   (s.mode!=='plain'?'<div><dt>Stamp value</dt><dd>'+(s.stampVal?'₹'+esc(fmtINR(s.stampVal)):'<span class="warnli">Not given. Ask the customer; it depends on the state and the document.</span>')+'</dd></div><div><dt>State</dt><dd>'+esc(s.state||'Not given')+'</dd></div><div><dt>In the name of</dt><dd>'+esc(first?first.name:'Ask the customer')+'</dd></div>':'')+
+   '<div><dt>Paper size</dt><dd>'+(s.size==='legal'?'Legal (8.5 × 14 in)':'A4')+'</dd></div><div><dt>Pages</dt><dd>'+pages+(s.mode!=='plain'?', page one on the stamp paper and the rest on plain paper':'')+'</dd></div></dl>'+
+   (s.mode!=='plain'?'<div class="ctl"><span>Blank space at the top of page one, to clear the stamp paper\'s printed area</span><div class="range"><input id="jobBlank" type="range" min="0" max="18" step="0.5" value="'+s.blank+'" aria-label="Blank space at top in centimetres"><output id="jobBlankO">'+s.blank+' cm</output></div></div>':'')+
+   '<div class="actions"><button class="btn" type="button" id="jobPrint">'+PRINTI+'<span>Print</span></button><button class="btn line" type="button" id="jobPdf">Download PDF</button><button class="btn line" type="button" id="jobClear">Clear</button></div>'+
+   '<p class="legal">Check the text with the customer before printing. Mohar does not keep a copy of this document.</p></div>'+
+   '<div class="sheet-wrap"><div class="sheet"><div class="page" style="--pw:'+pw+';--fs:'+s.fs+';--blank:'+(s.mode==='plain'?0:s.blank)+'">'+zone+blocks.map(blockHTML).join('')+'</div></div></div>';
+  Object.assign(PV,PVsave);
+  if($('#jobBlank'))$('#jobBlank').oninput=e=>{s.blank=+e.target.value;$('#jobBlankO').textContent=s.blank+' cm';clearTimeout(J._t);J._t=setTimeout(renderJob,150)};
+  $('#jobPrint').onclick=()=>{try{window.print()}catch(e){toast('Printing is not available here. Use Download PDF.')}};
+  $('#jobPdf').onclick=async()=>{if(!window.jspdf){toast('The PDF tool is still loading.');return}const pdf=makePDF(J.blocks,s,{title:J.d.title});if(await saveFile(J.d.title.replace(/[^A-Za-z0-9]+/g,'-').toLowerCase()+'.pdf',pdf.output('blob')))toast('PDF saved.')};
+  $('#jobClear').onclick=()=>{shopJob=null;viewShop()};
+  $('#job').scrollIntoView({block:'start'});
+}
+
+/* ---------------- help chat ---------------- */
+const chat={turns:[],busy:false,ctl:null,inited:false};
+function pageContext(){if(current&&document.body.classList.contains('docview'))return 'the "'+current.title+'" page ('+(wStep===0?'reading about it':wStep<=groups.length?'filling in details, step '+wStep+' of '+groups.length:'preview and signing')+')';
+  const h=location.hash;if(h.startsWith('#/docs'))return 'the document list';if(h.startsWith('#/shop')||h.startsWith('#/print'))return 'the For shops page';return 'the home page'}
+function chatRules(){return 'You are the help assistant inside "Mohar", a website where people in India make legal documents (affidavits, agreements, wills and more), print them on stamp paper, or sign them electronically. Help the person find the right document and use the site. Speak simply and kindly, like a helpful clerk. Reply in the language the person writes in (English, Hindi or Hinglish), but keep document names in English.\n\n'+
+ 'You are not a lawyer. Give general information only. For advice on a specific dispute, suggest an advocate or free legal help: Tele-Law on 14454, or the NALSA helpline on 15100.\n\n'+
+ 'Site features: ready-made documents (listed below); "Draft anything with AI" (id ai-draft) for anything not listed, by voice or typing; a Scan Aadhaar button in each person\'s section that reads the Aadhaar QR code to fill in details; Use my location to fill in the city and state; four ways to sign (ink, on screen, Aadhaar eSign with OTP through a licensed provider, and DSC); a shop QR code on each document page that a print shop scans to print it on the right stamp paper; and a For shops page where shops scan that code. Home page sections: how (How it works), guide (Stamp paper guide), sign (Ways to sign), shops (Printing at a shop), faq (Questions), help (Free legal help).\n\n'+
+ 'The person is now on '+pageContext()+'.\n\nDocuments (id: title, what it is for):\n'+DOCS.map(d=>d.id+': '+d.title+', '+d.desc).join('\n')+'\n\n'+
+ 'Reply with only a JSON object: {"reply": string under 90 words, plain text without markdown, "actions": [up to 3 of {"type":"open_doc","id":"<document id>"} or {"type":"open_section","id":"how|guide|sign|shops|faq|help"} or {"type":"open_catalog","cat":<number 0 to 8>} or {"type":"ai_draft","brief":"<what the person wants, in their words>"} or {"type":"open_shop"}]}. Use only document ids from the list. Offer an action whenever it would help the person get there.'}
+const SECT={how:'How it works',guide:'Stamp paper guide',sign:'Ways to sign',shops:'Printing at a shop',faq:'Questions',help:'Free legal help'};
+function cleanActions(a){return (Array.isArray(a)?a:[]).map(x=>{if(!x||typeof x!=='object')return null;
+  if(x.type==='open_doc'&&byId(x.id))return{label:'Open '+byId(x.id).title,go:()=>{location.hash='#/doc/'+x.id}};
+  if(x.type==='open_section'&&SECT[x.id])return{label:SECT[x.id],go:()=>{location.hash='#/section/'+x.id}};
+  if(x.type==='open_catalog'&&CATS[+x.cat])return{label:'See '+CATS[+x.cat],go:()=>{location.hash='#/docs/'+(+x.cat)}};
+  if(x.type==='ai_draft')return{label:'Draft it with AI',go:()=>{store.vals['ai-draft']=Object.assign(store.vals['ai-draft']||{},{brief:String(x.brief||'')});save();location.hash='#/doc/ai-draft'}};
+  if(x.type==='open_shop')return{label:'Open For shops',go:()=>{location.hash='#/shop'}};return null}).filter(Boolean).slice(0,3)}
+const STOP=new Set('i me my we our you your a an the to of for and or in on at is are was be it this that with want need make do how can get some please help about from have has what which who mobile hai ka ki ke ko mujhe mera meri kya kaise'.split(' '));
+function offlineReply(text){const t=text.toLowerCase();
+  if(/shop|print(ing)? (centre|center|shop)|xerox/.test(t))return{reply:'Print shops can scan a customer\'s Mohar QR code to print their document on the right stamp paper.',actions:[{type:'open_shop'},{type:'open_section',id:'shops'}]};
+  if(/stamp|e-?stamp|duty/.test(t))return{reply:'The stamp paper guide explains physical stamp paper, e-stamps, and how stamp duty is worked out.',actions:[{type:'open_section',id:'guide'}]};
+  if(/sign|esign|otp|dsc|digital signature/.test(t))return{reply:'There are four ways to sign: ink, on screen, Aadhaar eSign with an OTP, or a DSC. Some documents must be signed in ink.',actions:[{type:'open_section',id:'sign'}]};
+  if(/lawyer|advocate|legal aid|free legal|vakil/.test(t))return{reply:'Free legal advice is available through Tele-Law (call 14454) and your District Legal Services Authority (NALSA helpline 15100).',actions:[{type:'open_section',id:'help'}]};
+  const words=t.split(/[^a-z0-9]+/).filter(w=>w.length>2&&!STOP.has(w));
+  const sc=DOCS.map(d=>{const hay=(d.title+' '+d.desc+' '+(d.kw||'')).toLowerCase();let s=0;words.forEach(w=>{if(hay.includes(w))s+=d.title.toLowerCase().includes(w)?3:1});return[d,s]}).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);const top=sc.length?sc[0][1]:0;sc.splice(0,sc.length,...sc.filter(x=>x[1]>=top*0.6).slice(0,3));
+  if(sc.length)return{reply:'These documents look closest to what you need:',actions:sc.map(([d])=>({type:'open_doc',id:d.id}))};
+  return{reply:'I could not find a ready-made document for that. Describe it and AI can draft it for you, or browse all documents.',actions:[{type:'ai_draft',brief:text},{type:'open_catalog',cat:8}]}}
+function chatInit(){
+  if(chat.inited)return;chat.inited=true;
+  const fab=document.createElement('button');fab.className='chatfab noprint';fab.type='button';fab.id='chatFab';fab.innerHTML=CHATI+'<span>Ask Mohar</span>';fab.setAttribute('aria-label','Open the help chat');
+  const pn=document.createElement('section');pn.className='chatpanel noprint';pn.id='chatPanel';pn.hidden=true;pn.setAttribute('aria-label','Help chat');pn.setAttribute('role','dialog');
+  pn.innerHTML='<header class="chathead"><span class="chatav" aria-hidden="true">'+CHATI+'</span><div><b>Ask Mohar</b><span id="chatSub">Finds documents and explains the steps</span></div><button type="button" class="wbtn" id="chatClose" aria-label="Close chat">'+XI+'</button></header>'+
+   '<div class="chatlog" id="chatLog" aria-live="polite"></div><div class="chatsugg" id="chatSugg"></div>'+
+   '<div class="chatin"><textarea id="chatInput" rows="1" placeholder="Type or speak your question" aria-label="Your question" enterkeyhint="send"></textarea><button type="button" class="micbtn icon" id="chatMic" aria-label="Speak your question" aria-pressed="false">'+MIC+'</button><button type="button" class="btn small sendbtn" id="chatSend" aria-label="Send">'+SENDI+'</button></div>';
+  document.body.append(fab,pn);
+  const open=()=>{pn.hidden=false;fab.hidden=true;document.body.classList.add('chatopen');if(!$('#chatLog').children.length)greet();setTimeout(()=>$('#chatInput').focus(),30)};
+  const close=()=>{pn.hidden=true;fab.hidden=false;document.body.classList.remove('chatopen');if(activeRec)activeRec.stop();fab.focus()};
+  fab.onclick=open;$('#chatClose').onclick=close;
+  pn.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  const inp=$('#chatInput');
+  inp.addEventListener('input',()=>{inp.style.height='auto';inp.style.height=Math.min(120,inp.scrollHeight)+'px'});
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();chatSend(inp.value)}});
+  $('#chatSend').onclick=()=>chatSend(inp.value);
+  $('#chatMic').onclick=e=>toggleMic(e.currentTarget,inp,store.voiceLang||'en-IN');
+  samplePromise.then(s=>{if(!s)$('#chatSub').textContent='Quick answers (AI chat works inside Claude)'});
+}
+function greet(){addMsg('bot','Namaste! Tell me what you need, like "I want to rent out my flat" or "I lost my driving licence", and I\'ll take you to the right document. I can also explain stamp paper, signing and printing.');
+  $('#chatSugg').innerHTML=['Rent out my flat','Change my name','Which stamp paper do I need?','Draft something custom','I run a print shop'].map(t=>'<button type="button" class="chip">'+esc(t)+'</button>').join('');
+  $$('#chatSugg .chip').forEach(b=>b.onclick=()=>chatSend(b.textContent))}
+function addMsg(who,text,actions,thinking){const log=$('#chatLog');const m=document.createElement('div');m.className='msg '+who+(thinking?' thinking':'');
+  m.innerHTML=thinking?'<span class="spin" aria-hidden="true"></span>Thinking…':'<p>'+esc(text)+'</p>';
+  (actions||[]).forEach(a=>{const b=document.createElement('button');b.type='button';b.className='msgact';b.textContent=a.label;b.onclick=()=>{a.go();if(window.matchMedia('(max-width:640px)').matches){$('#chatClose').click()}};m.appendChild(b)});
+  log.appendChild(m);log.scrollTop=log.scrollHeight;return m}
+async function chatSend(text){
+  text=String(text||'').trim();if(!text||chat.busy)return;$('#chatSugg').innerHTML='';const inp=$('#chatInput');inp.value='';inp.style.height='auto';if(activeRec)activeRec.stop();
+  addMsg('user',text);chat.turns.push({role:'user',content:text});
+  const s=await samplePromise;
+  if(!s){const r=offlineReply(text);addMsg('bot',r.reply,cleanActions(r.actions));chat.turns.push({role:'assistant',content:r.reply});return}
+  chat.busy=true;const th=addMsg('bot','',[],true);chat.ctl=new AbortController();
+  try{const r=await s.json([{role:'user',content:chatRules()},...chat.turns.slice(-10)],{modelTier:'quick',cache:false,signal:chat.ctl.signal});
+    const reply=String(r&&r.reply||'').slice(0,900)||'Sorry, I could not answer that. Try asking another way.';th.remove();addMsg('bot',reply,cleanActions(r&&r.actions));chat.turns.push({role:'assistant',content:reply})}
+  catch(e){th.remove();const r=offlineReply(text);const c=e&&e.code;
+    addMsg('bot',(c==='not_granted'||c==='sampling_disabled'?'AI chat is turned off here, so here is a quick answer. ':c==='rate_limited'?'I am getting too many questions just now, so here is a quick answer. ':'')+r.reply,cleanActions(r.actions));chat.turns.push({role:'assistant',content:r.reply})}
+  finally{chat.busy=false;chat.ctl=null}
+}
+
 /* ---------------- document builder ---------------- */
 const vals=()=>(store.vals[current.id]=store.vals[current.id]||{});
 function missing(){const v=vals();return current.fields.filter(f=>{if(f.req===false)return false;let x=v[f.k];if(x===undefined)x=defVal(f);return Array.isArray(x)?x.length===0:String(x).trim()===''})}
@@ -2031,7 +2479,9 @@ function viewDoc(id){
     b.textContent='Press again to clear';armed=setTimeout(()=>{armed=null;b.textContent='Clear this form'},4000)};
   const form=$('#form');
   form.addEventListener('input',onInput);form.addEventListener('change',onInput);
-  form.addEventListener('click',e=>{const sb=e.target.closest('.scanbtn');if(sb){openScan(sb.dataset.p,sb.dataset.g);return}const lb=e.target.closest('.locbtn');if(lb)useLocation(lb)});
+  form.addEventListener('click',e=>{const sb=e.target.closest('.scanbtn');if(sb){openScan(sb.dataset.p,sb.dataset.g);return}const lb=e.target.closest('.locbtn');if(lb){useLocation(lb);return}
+    if(e.target.closest('#aiGo')){aiDraft();return}const mb=e.target.closest('#aiMic');if(mb){toggleMic(mb,$('#f_brief'),($('#aiLang')||{}).value||'en-IN')}});
+  form.addEventListener('change',e=>{if(e.target.id==='aiLang'){store.voiceLang=e.target.value;save()}});
   form.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.target.tagName==='TEXTAREA'||e.target.tagName==='BUTTON')return;if(!e.target.matches('input,select'))return;e.preventDefault();
     const scope=isNarrow()?$('#form .wstep.cur'):$('#form');const list=$$('input:not([type=checkbox]),select,textarea',scope);const i=list.indexOf(e.target);
     if(i>=0&&i<list.length-1)list[i+1].focus();else if(isNarrow())setStep(wStep+1)});
@@ -2081,17 +2531,19 @@ function renderForm(){
   const canGeo='geolocation' in navigator;
   $('#form').innerHTML=groups.map((g,i)=>{
     const rk=(g.fs.find(f=>/_rel_name$/.test(f.k))||{}).k;const p=rk?rk.replace(/_rel_name$/,''):null;
-    const scan=p?'<div class="scanwrap"><button type="button" class="scanbtn" data-p="'+p+'" data-g="'+esc(g.g)+'">'+CARD_ICON+'<span><b>Scan Aadhaar card</b><small>Take a photo to fill in the name, relation, age and address.</small></span></button><span class="or">or type the details below</span></div>':'';
+    const scan=p?'<div class="scanwrap"><button type="button" class="scanbtn" data-p="'+p+'" data-g="'+esc(g.g)+'">'+CARD_ICON+'<span><b>Scan Aadhaar card</b><small>Scan the QR code on the card to fill in the name, relation, age and address.</small></span></button><span class="or">or type the details below</span></div>':'';
     const loc=(canGeo&&g.fs.some(f=>f.k==='place'))?'<button type="button" class="locbtn">'+LI.pin+'<span>Use my location</span></button>':'';
-    return '<fieldset class="wstep" data-step="'+(i+1)+'"><legend>'+esc(g.g)+'</legend><div class="grid">'+scan+loc+g.fs.map(fieldHTML).join('')+'</div></fieldset>'}).join('');
+    const ai=g.fs.some(f=>f.k==='brief')?aiBoxHTML():'';
+    return '<fieldset class="wstep" data-step="'+(i+1)+'"><legend>'+esc(g.g)+'</legend><div class="grid">'+scan+loc+g.fs.map(fieldHTML).join('')+ai+'</div></fieldset>'}).join('');
   updateProgress();
 }
 let deb;
 function onInput(e){
+  if(!current||!document.body.classList.contains('docview'))return;
   const el=e.target;const k=el.dataset&&el.dataset.k;if(!k)return;const v=vals();
   if(el.type==='checkbox')v[k]=$$('input[type=checkbox][data-k="'+k+'"]').filter(x=>x.checked).map(x=>x.value);else v[k]=el.value;
   const w=$('[data-words="'+k+'"]');if(w)w.textContent=el.value!==''?'Rupees '+inWords(el.value)+' only':'';
-  const fd=el.closest('.f');if(fd)fd.classList.remove('missing','fromcard','fromloc');
+  const fd=el.closest('.f');if(fd)fd.classList.remove('missing','fromcard','fromloc','fromai');
   save();updateProgress();clearTimeout(deb);deb=setTimeout(renderPreview,140);
 }
 function updateProgress(){
@@ -2112,7 +2564,7 @@ function renderSetup(){
     '<label class="ctl">Paper size<select id="sSize"><option value="a4"'+(s.size==='a4'?' selected':'')+'>A4</option><option value="legal"'+(s.size==='legal'?' selected':'')+'>Legal (8.5 × 14 in)</option></select></label>'+
     '<label class="ctl">Text size<select id="sFs">'+[11,12,13].map(n=>'<option value="'+n+'"'+(+s.fs===n?' selected':'')+'>'+n+' pt</option>').join('')+'</select></label>'+
     (meth==='paper'?'<label class="check-inline"><input id="sFoot" type="checkbox"'+(s.footer?' checked':'')+'> Signature line on every page</label>':'')+
-   '</div><div class="actions"><button class="btn" type="button" id="dlBtn">'+dlLabel+'</button><button class="btn line" type="button" id="printBtn">Print</button><span class="status" id="status"></span></div>';
+   '</div><div class="actions"><button class="btn" type="button" id="dlBtn">'+dlLabel+'</button><button class="btn line" type="button" id="printBtn">Print</button>'+(meth==='paper'?'<button class="btn line" type="button" id="qrBtn">'+QRI+'<span>Shop QR</span></button>':'')+'<span class="status" id="status"></span></div>';
   const upd=()=>{save();renderPreview()};
   $('#sState').onchange=e=>{s.state=e.target.value;save();renderStateNote();renderPreview()};
   if($('#sLoc'))$('#sLoc').onclick=e=>useLocation(e.currentTarget);
@@ -2124,6 +2576,7 @@ function renderSetup(){
   if($('#sFoot'))$('#sFoot').onchange=e=>{s.footer=e.target.checked;save()};
   $('#dlBtn').onclick=download;
   $('#printBtn').onclick=()=>{try{window.print()}catch(e){toast('Printing is not available here. Use Download PDF instead.')}};
+  if($('#qrBtn'))$('#qrBtn').onclick=openShopQR;
   updateStatus();
 }
 function blockHTML(b){
@@ -2197,7 +2650,7 @@ async function download(){
   try{await dl.save({filename,data:blob});toast('Saved '+filename+'. '+done)}
   catch(e){const c=e&&e.code;if(c==='declined')toast('Download cancelled.');else if(c==='rate_limited')toast('A save prompt is already open. Finish that one first.');else toast('Saving is not available here. Use Print and choose “Save as PDF”.')}
 }
-route();
+chatInit();route();
 })();
 </script>
 </body>
